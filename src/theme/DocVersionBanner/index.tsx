@@ -9,10 +9,8 @@ import {
   type GlobalVersion,
 } from "@docusaurus/plugin-content-docs/client";
 import { ThemeClassNames } from "@docusaurus/theme-common";
-import {
-  useDocsPreferredVersion,
-  useDocsVersion,
-} from "@docusaurus/theme-common/internal";
+import { useDocsPreferredVersion } from "@docusaurus/theme-common/internal";
+import { useDocsVersion } from "@docusaurus/plugin-content-docs/client";
 import type { Props } from "@theme/DocVersionBanner";
 import type {
   VersionBanner,
