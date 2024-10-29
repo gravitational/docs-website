@@ -2,19 +2,15 @@
 	path = content/14.x
 	url = https://github.com/gravitational/teleport/
 	branch = branch/v14
-	shallow = true
 [submodule "content/15.x"]
 	path = content/15.x
 	url = https://github.com/gravitational/teleport/
 	branch = branch/v15
-	shallow = true
 [submodule "content/16.x"]
 	path = content/16.x
 	url = https://github.com/gravitational/teleport/
 	branch = branch/v16
-	shallow = true
 [submodule "content/17.x"]
 	path = content/17.x
 	url = https://github.com/gravitational/teleport/
 	branch = master
-	shallow = true
