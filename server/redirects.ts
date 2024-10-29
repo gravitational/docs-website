@@ -29,8 +29,8 @@ export const getRedirects = () => {
     }
 
     return {
-      from: `/docs${redirect.source}`,
-      to: `/docs${redirect.destination}`,
+      from: redirect.source,
+      to: redirect.destination,
     };
   });
 };
