@@ -101,8 +101,8 @@ const config: Config = {
 
   title: "Teleport",
   favicon: "/favicon.ico",
-  url: "https://goteleport.com",
-  baseUrl: "/",
+  url: process.env.DOCUSAURUS_CONFIG_URL || "https://goteleport.com",
+  baseUrl: process.env.DOCUSAURUS_CONFIG_BASE_URL || "/",
 
   markdown: {
     parseFrontMatter: async (params) => {
@@ -126,7 +126,6 @@ const config: Config = {
     defaultLocale: "en",
     locales: ["en"],
   },
-
   plugins: [
     [
       "@docusaurus/plugin-client-redirects",
@@ -146,6 +145,10 @@ const config: Config = {
     [
       "@docusaurus/plugin-content-docs",
       {
+        // Host docs on the root page, later it will be exposed on goteleport.com/docs 
+        // next to the website and blog
+        // https://docusaurus.io/docs/docs-introduction#docs-only-mode
+        routeBasePath: "/",
         sidebarPath: "./sidebars.json",
         lastVersion: latestVersion,
         versions: getDocusaurusConfigVersionOptions(),
