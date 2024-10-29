@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "spellcheck": "bash scripts/check-spelling.sh",
-    "git-update": "git submodule update --init --remote --progress --depth 1",
+    "git-update": "git submodule update --init --remote --progress --depth 1 --single-branch",
     "prepare-files": "npx vite-node ./scripts/prepare-files.mts",
     "prepare-sanity-data": "npx vite-node ./scripts/prepare-sanity-data.mts",
     "docusaurus": "docusaurus",
