@@ -25,6 +25,7 @@ import { extendedPostcssConfigPlugin } from "./server/postcss";
 const latestVersion = getLatestVersion();
 
 const config: Config = {
+  onBrokenMarkdownLinks: "throw",
   customFields: {
     innkeepConfig: {
       apiKey: process.env.INKEEP_API_KEY,
@@ -145,7 +146,7 @@ const config: Config = {
     [
       "@docusaurus/plugin-content-docs",
       {
-        // Host docs on the root page, later it will be exposed on goteleport.com/docs 
+        // Host docs on the root page, later it will be exposed on goteleport.com/docs
         // next to the website and blog
         // https://docusaurus.io/docs/docs-introduction#docs-only-mode
         routeBasePath: "/",
