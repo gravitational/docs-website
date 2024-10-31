@@ -4,7 +4,6 @@ import type {
   Node as UnistNode,
   Parent as UnistParent,
 } from "unist";
-import type { RootContent as MdastContent } from "mdast";
 import type { Node as AcornNode } from "acorn";
 
 export interface YamlNode extends UnistNode {
@@ -57,7 +56,7 @@ export type EsmNode = PlainEsmNode | ProgramEsmNode;
 
 export type MdxAnyElement = MdxJsxFlowElement | MdxJsxTextElement;
 
-export type MdxastNode = MdastContent | MdxAnyElement | EsmNode;
+export type MdxastNode = MdxAnyElement | EsmNode;
 
 // MDXPage types
 

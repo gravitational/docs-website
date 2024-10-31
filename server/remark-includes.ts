@@ -9,8 +9,8 @@
  */
 
 import type { Transformer } from "unified";
-import type { Parent } from "unist";
-import type { Root, RootContent, Code, Text } from "mdast";
+import type { Node, Parent } from "unist";
+import type { Root, Code, Text } from "mdast";
 import type { VFile } from "vfile";
 
 import { join } from "path";
@@ -260,7 +260,7 @@ const isInclude = (node: Code | Text): node is Code | Text =>
   typeof node.value === "string" && includeRegexp.test(node.value);
 
 type UpdatePathsOptions = {
-  node: Root | RootContent;
+  node: Node;
   versionRootDir: string;
   includePath: string;
   vfile: VFile;
@@ -279,7 +279,7 @@ export default function remarkIncludes({
   resolve = true,
   updatePaths,
 }: RemarkIncludesOptions = {}): Transformer {
-  return (root: RootContent, vfile: VFile) => {
+  return (root: Root, vfile: VFile) => {
     let resolvedRootDir: string;
 
     if (typeof rootDir === "function") {
@@ -290,18 +290,19 @@ export default function remarkIncludes({
 
     const lastErrorIndex = vfile.messages.length;
 
-    visitParents(root, [isInclude], (node, ancestors: Parent[]) => {
+    visitParents(root, [isInclude], (node: Node, ancestors: Parent[]) => {
       if (node.type === "code") {
-        const noIncludes = numIncludes(node.value);
+        let code = node as Code;
+        const noIncludes = numIncludes(code.value);
         for (let i = 0; i < noIncludes; i++) {
           const { result, error } = resolveIncludes({
-            value: node.value,
+            value: code.value,
             filePath: vfile.path,
             rootDir: resolvedRootDir,
           });
 
           if (resolve) {
-            node.value = result;
+            code.value = result;
           }
 
           if (lint && error) {
@@ -312,15 +313,16 @@ export default function remarkIncludes({
         const parent = ancestors[ancestors.length - 1];
 
         if (parent.type === "paragraph") {
+          const txt = node as Text;
           if (parent.children && parent.children.length === 1) {
-            if (exactIncludeRegexp.test(node.value.trim())) {
+            if (exactIncludeRegexp.test(txt.value.trim())) {
               const { result, error } = resolveIncludes({
-                value: node.value,
+                value: txt.value,
                 filePath: vfile.path,
                 rootDir: resolvedRootDir,
               });
 
-              const path = node.value.match(exactIncludeRegexp)[1];
+              const path = txt.value.match(exactIncludeRegexp)[1];
 
               if (resolve) {
                 if (path.split(" ")[0].match(/\.mdx?$/)) {
@@ -334,7 +336,7 @@ export default function remarkIncludes({
                   });
 
                   updatePaths({
-                    node: tree,
+                    node: tree as Root,
                     versionRootDir: resolvedRootDir,
                     includePath: path,
                     vfile,
@@ -343,9 +345,9 @@ export default function remarkIncludes({
                   const grandParent = ancestors[ancestors.length - 2] as Parent;
                   const parentIndex = grandParent.children.indexOf(parent);
 
-                  grandParent.children.splice(parentIndex, 1, ...tree.children);
+                  grandParent.children.splice(parentIndex, 1, ...(tree as Root).children);
                 } else {
-                  node.value = result;
+                  txt.value = result;
                 }
               }
 

@@ -1,6 +1,6 @@
 import { copyFileSync, rmSync, existsSync, mkdirSync } from "fs";
 import { resolve, dirname } from "path";
-import glob from "glob";
+import { glob } from "glob";
 import { docusaurusifyNavigation } from "../server/config-docs";
 import {
   getCurrentVersion,

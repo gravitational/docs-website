@@ -1,4 +1,5 @@
-import type { Root, RootContent } from "mdast";
+import type { Parent, Image, Link, Definition } from "mdast";
+import type { Node } from "unist";
 import type { VFile } from "vfile";
 import { resolve, relative, dirname } from "path";
 import { getCurrentVersion, getLatestVersion } from "./config-site";
@@ -7,7 +8,12 @@ import { isLocalAssetFile } from "../src/utils/url";
 const current = getCurrentVersion();
 const latest = getLatestVersion();
 
-const REGEXP_VERSION = /^\/versioned_docs\/version-([^\/]+)\//;
+// The directory path pattern for versioned content transformed by the migration
+// script
+const REGEXP_POST_PREPARE_VERSION = /^\/versioned_docs\/version-([^\/]+)\//;
+// The directory path pattern for versioned content not yet transformed by the
+// migration script
+const REGEXP_PRE_PREPARE_VERSION = /^\/?content\/([^\/]+)\//;
 const REGEXP_EXTENSION = /(\/index)?\.mdx$/;
 
 export type DocsMeta = {
@@ -27,20 +33,42 @@ const getProjectPath = (vfile: VFile) => vfile.path.replace(process.cwd(), "");
 
 const isCurrent = (vfile: VFile) => getProjectPath(vfile).startsWith("/docs/");
 
+// getVersionFromVFile extracts the docs version of a post-migration docs page
+// so we can find the appropriate pre-migration version. If the docs page is
+// already in the pre-migration directory, return the version number of that
+// directory.
 export const getVersionFromVFile = (vfile: VFile): string => {
-  return isCurrent(vfile)
-    ? current
-    : REGEXP_VERSION.exec(getProjectPath(vfile))[1];
+  if (isCurrent(vfile)) {
+    return current;
+  }
+  const projectPath = getProjectPath(vfile);
+
+  const postPrepVersion = REGEXP_POST_PREPARE_VERSION.exec(projectPath);
+  if (!!postPrepVersion) {
+    return postPrepVersion[1];
+  }
+
+  const prePrepVersion = REGEXP_PRE_PREPARE_VERSION.exec(projectPath);
+  if (!!prePrepVersion) {
+    return prePrepVersion[1];
+  }
+
+  throw new Error(`unable to extract a version from filepath ${projectPath}`);
 };
 
 export const getRootDir = (vfile: VFile): string => {
   return resolve("content", getVersionFromVFile(vfile));
 };
 
-const getCurrentDir = (vfile: VFile) =>
-  isCurrent(vfile)
+const getCurrentDir = (vfile: VFile) => {
+  // The page is in the pre-migration directory, i.e., we're linting it
+  if (vfile.path.startsWith("content")) {
+    return resolve(`content/${getVersionFromVFile(vfile)}/docs/pages`);
+  }
+  return isCurrent(vfile)
     ? resolve("docs")
     : resolve(`versioned_docs/version-${getVersionFromVFile(vfile)}`);
+};
 
 const getPagesDir = (vfile: VFile): string =>
   resolve(getRootDir(vfile), "docs/pages");
@@ -85,7 +113,7 @@ export const updatePathsInIncludes = ({
   includePath,
   vfile,
 }: {
-  node: Root | RootContent;
+  node: Node;
   versionRootDir: string;
   includePath: string;
   vfile: VFile;
@@ -95,7 +123,7 @@ export const updatePathsInIncludes = ({
     node.type === "link" ||
     node.type === "definition"
   ) {
-    const href = node.url;
+    const href = (node as Link | Image | Definition).url;
 
     // Ignore non-strings, absolute paths, web URLs, and links consisting only
     // of anchors (these will end up pointing to the containing page).
@@ -117,18 +145,24 @@ export const updatePathsInIncludes = ({
         href
       ).replace(getPagesDir(vfile), getCurrentDir(vfile));
 
-      node.url = relative(absMdxPath, absTargetPath);
+      (node as Link | Image | Definition).url = relative(
+        absMdxPath,
+        absTargetPath
+      );
     } else {
       const absMdxPath = resolve(getOriginalPath(vfile));
 
       const absTargetPath = resolve(versionRootDir, dirname(includePath), href);
 
-      node.url = relative(dirname(absMdxPath), absTargetPath);
+      (node as Link | Image | Definition).url = relative(
+        dirname(absMdxPath),
+        absTargetPath
+      );
     }
   }
 
   if ("children" in node) {
-    node.children?.forEach?.((child) =>
+    (node as Parent).children?.forEach?.((child) =>
       updatePathsInIncludes({ node: child, versionRootDir, includePath, vfile })
     );
   }

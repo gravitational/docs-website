@@ -35,3 +35,6 @@ data/*
 
 # Migration node dependencies
 .build
+
+# remark node dependencies
+.remark-build

@@ -14,10 +14,11 @@ import type { Transformer } from "unified";
 import type { Literal as MdastLiteral, Link as MdastLink } from "mdast";
 import type { VFile } from "vfile";
 import type { MdxJsxElement } from "./types-unist";
-
+import type { Root } from "mdast";
 import { visit } from "unist-util-visit";
 import updateMessages from "./update-vfile-messages";
 import { isMdxNode } from "./mdx-helpers";
+import type { Node } from "unist";
 
 type NameMap = Record<string, string>;
 
@@ -67,11 +68,9 @@ const lintVars = (
   });
 };
 
-type LocalNode = MdastLink | MdastLiteral | MdxJsxElement;
-
-const nodeHasValue = (node: LocalNode): node is MdastLiteral =>
+const nodeHasValue = (node: Node): node is MdastLiteral =>
   typeof (node as MdastLiteral).value === "string";
-const nodeIsLink = (node: LocalNode): node is MdastLink => node.type === "link";
+const nodeIsLink = (node: Node): node is MdastLink => node.type === "link";
 
 type Variables = Record<string, unknown>;
 
@@ -86,7 +85,7 @@ export default function remarkVariables({
   lint,
   variables = {} as Variables,
 }: RemarkVariablesOptions = {}): Transformer {
-  return (root, vfile) => {
+  return (root: Root, vfile) => {
     let resolvedVariables: Variables;
 
     if (typeof variables === "function") {
@@ -100,7 +99,7 @@ export default function remarkVariables({
     const nameMap = generateNameMap(resolvedVariables);
     const names = Object.keys(nameMap);
 
-    visit(root, (node: LocalNode) => {
+    visit(root, (node: Node) => {
       if (nodeHasValue(node)) {
         if (resolve) {
           node.value = replaceVars(node.value, nameMap);

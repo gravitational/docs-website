@@ -3,7 +3,8 @@
 
 import type { VFile } from "vfile";
 import type { Transformer } from "unified";
-import type { Root, Node, Image, Definition, Link } from "mdast";
+import type { Node } from "unist";
+import type { Root, Image, Definition, Link } from "mdast";
 import type {
   MdxJsxFlowElement,
   MdxJsxTextElement,
@@ -21,13 +22,17 @@ type Updater = (href: string, options: UpdaterOptions) => string;
 const defaultUpdater: Updater = (href: string): string => href;
 const defaultAttributes = ["poster", "src", "href", "value"];
 
-const isNodeWithUrl = (node: Node): node is Image | Link | Definition =>
-  ["image", "link", "definition"].includes(node.type);
+const isNodeWithUrl = (node: unknown): node is Image | Link | Definition =>
+  node.hasOwnProperty("type") &&
+  ["image", "link", "definition"].includes(
+    (node as Image | Link | Definition).type
+  );
 
-const isMdxJsxElement = (
-  node: Node
-): node is MdxJsxFlowElement | MdxJsxTextElement =>
-  ["mdxJsxFlowElement", "mdxJsxTextElement"].includes(node.type);
+const isMdxJsxElement = (node: unknown) =>
+  node.hasOwnProperty("type") &&
+  ["mdxJsxFlowElement", "mdxJsxTextElement"].includes(
+    (node as MdxJsxFlowElement | MdxJsxTextElement).type
+  );
 
 type PluginOptions = {
   attributes?: string[];
@@ -39,20 +44,23 @@ export default function remarkUpdateAssetPaths({
   updater = defaultUpdater,
 }: PluginOptions): Transformer<Root> {
   return (root: Root, vfile) => {
-    visit(root, (node) => {
+    visit(root, (node: unknown) => {
       if (isNodeWithUrl(node)) {
-        node.url = updater(node.url, { vfile });
+        let urlNode = node as Image | Link | Definition;
+        urlNode.url = updater(urlNode.url, { vfile });
       }
 
-      if (isMdxJsxElement(node)) {
-        node.attributes.forEach((attribute) => {
-          if (
-            attributes.includes((attribute as MdxJsxAttribute).name) &&
-            typeof attribute.value === "string"
-          ) {
-            attribute.value = updater(attribute.value, { vfile });
+      if (isMdxJsxElement(node as MdxJsxFlowElement | MdxJsxTextElement)) {
+        (node as MdxJsxFlowElement | MdxJsxTextElement).attributes.forEach(
+          (attribute) => {
+            if (
+              attributes.includes((attribute as MdxJsxAttribute).name) &&
+              typeof attribute.value === "string"
+            ) {
+              attribute.value = updater(attribute.value, { vfile });
+            }
           }
-        });
+        );
       }
     });
   };

@@ -4,7 +4,7 @@
 
 import type { Transformer } from "unified";
 import type { Node, Parent } from "unist";
-import type { Text as MdastText, Code as MdastCode } from "mdast";
+import type { Root, Text as MdastText, Code as MdastCode } from "mdast";
 import type { MdxJsxElement } from "./types-unist";
 
 import { nanoid } from "nanoid";
@@ -20,7 +20,7 @@ import { isMdxNode, getAttribute, getAttributeValue } from "./mdx-helpers";
 const isCodeNode = (node: Node): node is MdastCode => node.type === "code";
 
 export default function remarkMigrationUpdateTags(): Transformer {
-  return (root) => {
+  return (root: Root) => {
     visit(root, (node, index, parent: Parent) => {
       // TabItem
       if (isMdxNode(node) && ["TabItem", "TabsItem"].includes(node.name)) {

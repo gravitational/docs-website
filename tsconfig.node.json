@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom"],
     "target": "esnext",
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "resolveJsonModule": true,
-    "outDir": ".build"
+    "outDir": ".remark-build"
   },
   "include": ["@types/**/*.d.ts", "server/**/*.ts"],
   "exclude": ["node_modules", "server/**/*.test.ts"]

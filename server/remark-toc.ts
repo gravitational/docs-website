@@ -5,7 +5,7 @@ import { visitParents } from "unist-util-visit-parents";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import type { Parent } from "unist";
 import type { VFile } from "vfile";
-import type { Content } from "mdast";
+import type { Root, Content } from "mdast";
 import type { Transformer } from "unified";
 
 // relativePathToFile takes a filepath and returns a path we can use in links
@@ -114,7 +114,7 @@ export default function remarkTOC(): Transformer {
       const grandParent = ancestors[ancestors.length - 2] as Parent;
       const parentIndex = grandParent.children.indexOf(parent);
 
-      grandParent.children.splice(parentIndex, 1, ...tree.children);
+      grandParent.children.splice(parentIndex, 1, ...(tree as Root).children);
     });
   };
 }
