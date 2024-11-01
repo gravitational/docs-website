@@ -53,6 +53,7 @@ export const filterTextForXSS = (text: string): string => {
 };
 
 export const getFromSecretOrEnv = (name: string): string => {
+  // https://docs.aws.amazon.com/amplify/latest/userguide/environment-secrets.html#access-environment-secrets
   const configVars = process.env.secrets ? JSON.parse(process.env.secrets) : process.env;
   return configVars[name]
 };
