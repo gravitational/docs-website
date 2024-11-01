@@ -68,19 +68,17 @@ Everything else is more or less straightforward Docusaurus code.
 
 ### Folder structure
 
-`content` – folder for docs content.
-`scripts` – helper CLI scripts.
-`server` – code for plugins, and config parsing.
-`src` - forntend-related files.
-`src/component` – components ported from the old site, mostly header-related.
-`src/styles` – css used in header.
-`src/theme` – overrides for default theme files of Docusaurus
-`src/utls` – client-side utils.
-`staitc` - static files for the site: manifests, favicons, etc.
-
-`docs`, `versioned_docs` are `versioned_sidebars` – folders for docs content that will be automatically populated by script.
-
-`data` is a folder for sanity content.
+- `content` – folder for docs content.
+- `scripts` – helper CLI scripts.
+- `server` – code for plugins, and config parsing.
+- `src` - forntend-related files.
+- `src/component` – components ported from the old site, mostly header-related.
+- `src/styles` – css used in header.
+- `src/theme` – overrides for default theme files of Docusaurus
+- `src/utls` – client-side utils.
+- `staitc` - static files for the site: manifests, favicons, etc.
+- `docs`, `versioned_docs` are `versioned_sidebars` – folders for docs content that will be automatically populated by script.
+- `data` is a folder for sanity content.
 
 ### `config.json` format
 
@@ -104,13 +102,13 @@ If no versions are marked as `current`/`latest`, last version in alphabetical or
 
 ### CLI commands
 
-`yarn git-update` – update git modules.
-`yarn prepare-files` – copy files from `content` to docusaurus folders.
-`yarn prepare-sanity-data` - fetching and saving data form navigation for Sanity.
-`yarn start` – start server in dev mode.
-`yarn build` - buld static site.
-`yarn swizzle` - used to eject files from default Docusaurus theme to `src/theme` folder. `see [swizzling](https://docusaurus.io/docs/swizzling).
-`yarn serve` – server static files.
-`yarn typecheck` - check types.
+- `yarn git-update` – update git modules.
+- `yarn prepare-files` – copy files from `content` to docusaurus folders.
+- `yarn prepare-sanity-data` - fetching and saving data form navigation for Sanity.
+- `yarn start` – start server in dev mode.
+- `yarn build` - buld static site.
+- `yarn swizzle` - used to eject files from default Docusaurus theme to `src/theme` folder. `see [swizzling](https://docusaurus.io/docs/swizzling).
+- `yarn serve` – server static files.
+- `yarn typecheck` - check types.
 
 For other commands see [Docusaurus docs](https://docusaurus.io/docs/cli#docusaurus-cli-commands).
