@@ -27,18 +27,12 @@ const latestVersion = getLatestVersion();
 const config: Config = {
   customFields: {
     inkeepConfig: (() => {
-      var config = {
-        apiKey: process.env.INKEEP_API_KEY,
-        integrationId: process.env.INKEEP_INTEGRATION_ID,
-        organizationId: process.env.INKEEP_ORGANIZATION_ID,
+      const configVars = process.env.secrets ? JSON.parse(process.env.secrets) : process.env;
+      return {
+        apiKey: configVars.INKEEP_API_KEY,
+        integrationId: configVars.INKEEP_INTEGRATION_ID,
+        organizationId: configVars.INKEEP_ORGANIZATION_ID,
       }
-      if (process.env.secrets) {
-        const secretJson = JSON.parse(process.env.secrets);
-        config.apiKey = secretJson.INKEEP_API_KEY;
-        config.integrationId = secretJson.INKEEP_INTEGRATION_ID;
-        config.organizationId = secretJson.INKEEP_ORGANIZATION_ID;
-      }
-      return config
     })(),
   },
   clientModules: [
