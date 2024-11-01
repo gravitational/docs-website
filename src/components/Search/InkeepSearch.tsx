@@ -41,16 +41,16 @@ export function InkeepSearch() {
 
   const { siteConfig } = useDocusaurusContext();
 
-  const innkeepConfig = siteConfig.customFields.innkeepConfig as {
+  const inkeepConfig = siteConfig.customFields.inkeepConfig as {
     apiKey: string;
     integrationId: string;
     organizationId: string;
   };
 
   const inkeepBaseSettings: InkeepWidgetBaseSettings = {
-    apiKey: innkeepConfig.apiKey,
-    integrationId: innkeepConfig.integrationId,
-    organizationId: innkeepConfig.organizationId,
+    apiKey: inkeepConfig.apiKey,
+    integrationId: inkeepConfig.integrationId,
+    organizationId: inkeepConfig.organizationId,
     organizationDisplayName: "Teleport",
     primaryBrandColor: "#512FC9",
     chatApiProxyDomain: "goteleport.com/inkeep-proxy",

@@ -25,13 +25,21 @@ import { extendedPostcssConfigPlugin } from "./server/postcss";
 const latestVersion = getLatestVersion();
 
 const config: Config = {
-  onBrokenMarkdownLinks: "throw",
   customFields: {
-    innkeepConfig: {
-      apiKey: process.env.INKEEP_API_KEY,
-      integrationId: process.env.INKEEP_INTEGRATION_ID,
-      organizationId: process.env.INKEEP_ORGANIZATION_ID,
-    },
+    inkeepConfig: (() => {
+      var config = {
+        apiKey: process.env.INKEEP_API_KEY,
+        integrationId: process.env.INKEEP_INTEGRATION_ID,
+        organizationId: process.env.INKEEP_ORGANIZATION_ID,
+      }
+      if (process.env.secret) {
+        const secretJson = JSON.parse(process.env.secret);
+        config.apiKey = secretJson.INKEEP_API_KEY;
+        config.integrationId = secretJson.INKEEP_INTEGRATION_ID;
+        config.organizationId = secretJson.INKEEP_ORGANIZATION_ID;
+      }
+      return config
+    })(),
   },
   clientModules: [
     "./src/styles/variables.css",
@@ -121,7 +129,7 @@ const config: Config = {
   },
 
   onBrokenLinks: "warn",
-  onBrokenMarkdownLinks: "warn",
+  onBrokenMarkdownLinks: "throw",
 
   i18n: {
     defaultLocale: "en",
