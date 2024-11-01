@@ -2,6 +2,7 @@ import "dotenv/config";
 import type { Config } from "@docusaurus/types";
 import type { VFile } from "vfile";
 
+import { getFromSecretOrEnv } from "./utils/general";
 import { loadConfig } from "./server/config-docs";
 import {
   getDocusaurusConfigVersionOptions,
@@ -26,14 +27,11 @@ const latestVersion = getLatestVersion();
 
 const config: Config = {
   customFields: {
-    inkeepConfig: (() => {
-      const configVars = process.env.secrets ? JSON.parse(process.env.secrets) : process.env;
-      return {
-        apiKey: configVars.INKEEP_API_KEY,
-        integrationId: configVars.INKEEP_INTEGRATION_ID,
-        organizationId: configVars.INKEEP_ORGANIZATION_ID,
+    inkeepConfig: {
+        apiKey: getFromSecretOrEnv("INKEEP_API_KEY"),
+        integrationId: getFromSecretOrEnv("INKEEP_INTEGRATION_ID"),
+        organizationId: getFromSecretOrEnv("INKEEP_ORGANIZATION_ID"),
       }
-    })(),
   },
   clientModules: [
     "./src/styles/variables.css",

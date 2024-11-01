@@ -51,3 +51,8 @@ export const filterTextForXSS = (text: string): string => {
   }
   return text;
 };
+
+export const getFromSecretOrEnv = (name: string): string => {
+  const configVars = process.env.secrets ? JSON.parse(process.env.secrets) : process.env;
+  return configVars[name]
+};

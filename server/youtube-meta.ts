@@ -2,7 +2,9 @@
  * Gets YouTube video metadate given video ID.
  */
 
-const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
+import { getFromSecretOrEnv } from "../utils/general";
+
+const YOUTUBE_API_KEY = getFromSecretOrEnv("YOUTUBE_API_KEY");
 
 const REQUEST_PATH = "videos";
 const YOUTUBE_URL = "https://www.youtube.com/watch";
