@@ -32,8 +32,8 @@ const config: Config = {
         integrationId: process.env.INKEEP_INTEGRATION_ID,
         organizationId: process.env.INKEEP_ORGANIZATION_ID,
       }
-      if (process.env.secret) {
-        const secretJson = JSON.parse(process.env.secret);
+      if (process.env.secrets) {
+        const secretJson = JSON.parse(process.env.secrets);
         config.apiKey = secretJson.INKEEP_API_KEY;
         config.integrationId = secretJson.INKEEP_INTEGRATION_ID;
         config.organizationId = secretJson.INKEEP_ORGANIZATION_ID;
