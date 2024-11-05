@@ -3,6 +3,7 @@ on:
 
 permissions:
   pull-requests: write
+  id-token: write
 
 jobs:
   amplify-preview:
@@ -52,7 +53,7 @@ jobs:
       run: |
         job_info=$(aws amplify get-job --app-id ${APP_ID} --branch-name ${BRANCH_NAME} --job-id ${JOB_ID} --query 'job.summary')
         echo "JOB_STATUS=$(jq '.status' <<< "$branch_info")" >> $GITHUB_OUTPUT
-        
+
     - uses: actions/github-script@v7
       env:
         PREVIEW_URL: ${{ steps.get_amplify_branch.outputs.PREVIEW_URL }}
