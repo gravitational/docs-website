@@ -1,3 +1,4 @@
+name: Amplify Preview
 on:
   pull_request:
 
@@ -7,7 +8,7 @@ permissions:
 
 jobs:
   amplify-preview:
-    name: Amplify Preview
+    name: Get and post Amplify preview URL
     runs-on: ubuntu-latest
     environment: docs-amplify
     steps:
