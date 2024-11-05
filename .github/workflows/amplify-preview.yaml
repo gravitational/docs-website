@@ -66,33 +66,37 @@ jobs:
           const jobId = process.env.JOB_ID;
           const jobStatus = process.env.JOB_STATUS || "unknown";
           const updatedAt = process.env.UPDATE_TIME;
-          const commentId = process.env.COMMENT_ID;
 
           const commentBody = `![🤖](https://a0.awsstatic.com/libra-css/images/site/fav/favicon.ico) Amplify preview here: ${previewUrl}
 
           <details><summary>Preview details</summary>
+
           - **LAST_UPDATED_AT**: ${updatedAt}
           - **JOB_ID**: ${jobId}
           - **JOB_STATUS**: ${jobStatus}
-          </details>
-          `
 
-          const comments = (await github.rest.issues.listComments({ context.repo.owner, context.repo.repo, issue_number: context.payload.pull_request.number }))?.data;
-          const existingComment = comments?.find((comment) => 
-              comment.user.login === "github-actions[bot]" && comment.body.includes("Amplify preview here"));
+          </details>
+          `;
+
+          const prProps = {
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          };
+
+          const comments = (await github.rest.issues.listComments(prProps))?.data;
+
+          const existingComment = comments?.find((comment) =>
+            comment.user.login === "github-actions[bot]" && comment.body.includes("Amplify preview here"));
 
           if (existingComment != null) {
             github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: commentBody
+              ...prProps,
+              body: commentBody,
             })
           } else {
             github.rest.issues.updateComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              ...prProps,
               body: commentBody,
               comment_id: existingComment.id,
             })
