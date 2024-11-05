@@ -256,8 +256,10 @@ const resolveIncludes = ({
 
 const numIncludes = (value: string) => value.match(globalIncludeRegexp)?.length;
 
-const isInclude = (node: Code | Text): node is Code | Text =>
-  typeof node.value === "string" && includeRegexp.test(node.value);
+const isInclude = (node: Node) => {
+  const valNode = node as Code | Text;
+  return typeof valNode.value === "string" && includeRegexp.test(valNode.value);
+};
 
 type UpdatePathsOptions = {
   node: Node;
@@ -290,7 +292,7 @@ export default function remarkIncludes({
 
     const lastErrorIndex = vfile.messages.length;
 
-    visitParents(root, [isInclude], (node: Node, ancestors: Parent[]) => {
+    visitParents(root, isInclude, (node: Node, ancestors: Parent[]) => {
       if (node.type === "code") {
         let code = node as Code;
         const noIncludes = numIncludes(code.value);
@@ -345,7 +347,11 @@ export default function remarkIncludes({
                   const grandParent = ancestors[ancestors.length - 2] as Parent;
                   const parentIndex = grandParent.children.indexOf(parent);
 
-                  grandParent.children.splice(parentIndex, 1, ...(tree as Root).children);
+                  grandParent.children.splice(
+                    parentIndex,
+                    1,
+                    ...(tree as Root).children
+                  );
                 } else {
                   txt.value = result;
                 }
