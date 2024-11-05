@@ -23,8 +23,7 @@
     "base:prettier": "prettier '**/*.{js,jsx,ts,tsx,json}'",
     "lint": "yarn base:eslint --fix && yarn base:prettier --write -l",
     "lint-check": "yarn base:eslint && yarn base:prettier --check",
-    "markdown-lint": "yarn build-remark && remark --rc-path .remarkrc.mjs 'content/**/docs/pages/**/*.mdx' --quiet --frail --ignore-pattern '**/includes/**' --silently-ignore",
-    "markdown-lint-external-links": "WITH_EXTERNAL_LINKS=true yarn markdown-lint"
+    "markdown-lint": "yarn build-remark && remark --rc-path .remarkrc.mjs 'content/**/docs/pages/**/*.mdx' --quiet --frail --ignore-pattern '**/includes/**' --silently-ignore"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -81,7 +80,6 @@
     "remark-copy-linked-files": "^1.5.0",
     "remark-frontmatter": "^4.0.1",
     "remark-gfm": "^3.0.1",
-    "remark-lint-no-dead-urls": "^1.1.0",
     "remark-mdx": "^2.1.1",
     "remark-parse": "^10.0.1",
     "remark-preset-lint-markdown-style-guide": "^5.1.2",

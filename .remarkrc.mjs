@@ -78,19 +78,4 @@ const configLint = {
   ],
 };
 
-if (process.env.WITH_EXTERNAL_LINKS) {
-  configLint.plugins.push([
-    "lint-no-dead-urls",
-    {
-      skipLocalhost: true,
-      skipUrlPatterns: [
-        /teleport\.example\.com/,
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname",
-        "https://github.com/gravitational/teleport/blob/v{{teleport_version}}/examples/chart/teleport-cluster/templates/clusterrole.yaml",
-        "https://linuxize.com/post/linux-chown-command/",
-      ],
-    },
-  ]);
-}
-
 export default process.env.FIX ? configFix : configLint;
