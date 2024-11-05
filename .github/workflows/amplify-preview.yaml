@@ -93,12 +93,14 @@ jobs:
           const existingComment = comments?.find((comment) =>
             comment.user.login === "github-actions[bot]" && comment.body.includes("Amplify preview here"));
 
-          if (existingComment != null) {
+          if (existingComment == null) {
+            console.log("Posting new comment ${existingComment.id}")
             github.rest.issues.createComment({
               ...prProps,
               body: commentBody,
             })
           } else {
+            console.log("Found existing comment ${existingComment.id}")
             github.rest.issues.updateComment({
               ...prProps,
               body: commentBody,
