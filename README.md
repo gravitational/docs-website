@@ -82,7 +82,7 @@ Everything else is more or less straightforward Docusaurus code.
 
 ### `config.json` format
 
-```
+```typescript
 type Version = {
     name: string; // should be the same as the folder in `content`
     branch: string; // name of the original git branch
