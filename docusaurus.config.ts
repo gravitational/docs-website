@@ -101,7 +101,7 @@ const config: Config = {
   },
 
   title: "Teleport",
-  favicon: "/favicon.ico",
+  favicon: "/favicon.svg",
   url: process.env.DOCUSAURUS_CONFIG_URL || "https://goteleport.com",
   baseUrl: process.env.DOCUSAURUS_CONFIG_BASE_URL || "/",
 
