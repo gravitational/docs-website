@@ -5,6 +5,8 @@ import HeadlessButton from "/src/components/HeadlessButton";
 import { toCopyContent } from "/utils/general";
 import styles from "./Pre.module.css";
 import codeBlockStyles from "./CodeBlock.module.css";
+import commandStyles from "/src/components/Command/Command.module.css";
+import codeBlockStyles from "./CodeBlock.module.css";
 
 const TIMEOUT = 1000;
 
@@ -40,6 +42,15 @@ const Pre = ({ children, className }: CodeProps) => {
         // highlighting syntax in code snippets
         ".hljs",
       ];
+
+      // If copyText includes at least one CommandLine, the intention is for
+      // users to copy commands and not example outputs (CodeLines). If there
+      // are no CommandLines, it is fine to copy the CodeLines.
+      if (copyText.getElementsByClassName(commandStyles.line).length > 0) {
+        classesToCopy.push("." + commandStyles.line);
+      } else {
+        classesToCopy.push("." + codeBlockStyles.line);
+      }
 
       document.body.appendChild(copyText);
       const processedInnerText = toCopyContent(copyText, classesToCopy);

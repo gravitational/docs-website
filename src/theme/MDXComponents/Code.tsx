@@ -1,9 +1,10 @@
 import cn from "classnames";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 import styles from "./Code.module.css";
+import codeBlockStyles from "./CodeBlock.module.css";
 
 export const CodeLine = (props: CodeLineProps) => {
-  return <span className={styles.line} {...props} />;
+  return <span className={codeBlockStyles.line} {...props} />;
 };
 
 const isHLJSNode = (className?: string) =>

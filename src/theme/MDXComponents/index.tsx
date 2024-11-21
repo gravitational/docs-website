@@ -13,6 +13,8 @@ import MDXUl from "@theme/MDXComponents/Ul";
 import MDXLi from "@theme/MDXComponents/Li";
 import MDXImg from "@theme/MDXComponents/Img";
 import Mermaid from "@theme/Mermaid";
+import Command, { CommandLine, CommandComment } from "/src/components/Command";
+import Snippet from "/src/components/Snippet";
 
 import type { MDXComponentsObject } from "@theme/MDXComponents";
 
@@ -26,6 +28,9 @@ const MDXComponents: MDXComponentsObject = {
   Admonition,
   code: Code,
   codeline: CodeLine,
+  command: Command,
+  commandcomment: CommandComment,
+  commandline: CommandLine,
   details: MDXDetails, // For MD mode support, see https://github.com/facebook/docusaurus/issues/9092#issuecomment-1602902274
   h1: (props: ComponentProps<"h1">) => <MDXHeading as="h1" {...props} />,
   h2: (props: ComponentProps<"h2">) => <MDXHeading as="h2" {...props} />,
@@ -37,6 +42,7 @@ const MDXComponents: MDXComponentsObject = {
   li: MDXLi,
   mermaid: Mermaid,
   pre: MDXPre,
+  snippet: Snippet,
   ul: MDXUl,
 };
 

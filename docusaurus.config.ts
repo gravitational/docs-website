@@ -13,6 +13,7 @@ import remarkIncludes from "./server/remark-includes";
 import remarkVariables from "./server/remark-variables";
 import remarkUpdateTags from "./server/remark-update-tags";
 import remarkTOC from "./server/remark-toc";
+import remarkCodeSnippet from "./server/remark-code-snippet";
 import { fetchVideoMeta } from "./server/youtube-meta";
 import { getRedirects } from "./server/redirects";
 import {
@@ -174,6 +175,12 @@ const config: Config = {
             {
               variables: (vfile: VFile) =>
                 loadConfig(getVersionFromVFile(vfile)).variables,
+            },
+          ],
+          [
+            remarkCodeSnippet,
+            {
+              langs: ["code"],
             },
           ],
           [
