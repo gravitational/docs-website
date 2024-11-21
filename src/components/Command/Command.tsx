@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback, ReactNode } from "react";
-import Icon from "components/Icon";
-import HeadlessButton from "components/HeadlessButton";
-import { toCopyContent } from "utils/general";
+import Icon from "/src/components/Icon";
+import HeadlessButton from "/src/components/HeadlessButton";
+import { toCopyContent } from "/utils/general";
 import styles from "./Command.module.css";
 
 const TIMEOUT = 1000;
