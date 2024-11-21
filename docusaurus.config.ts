@@ -22,16 +22,19 @@ import {
   updatePathsInIncludes,
 } from "./server/asset-path-helpers";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
+import remarkCodeSnippet from "./server/remark-code-snippet";
+import { rehypeHLJS } from "./server/rehype-hljs";
+import { definer as hcl } from "highlightjs-terraform";
 
 const latestVersion = getLatestVersion();
 
 const config: Config = {
   customFields: {
     inkeepConfig: {
-        apiKey: getFromSecretOrEnv("INKEEP_API_KEY"),
-        integrationId: getFromSecretOrEnv("INKEEP_INTEGRATION_ID"),
-        organizationId: getFromSecretOrEnv("INKEEP_ORGANIZATION_ID"),
-      }
+      apiKey: getFromSecretOrEnv("INKEEP_API_KEY"),
+      integrationId: getFromSecretOrEnv("INKEEP_INTEGRATION_ID"),
+      organizationId: getFromSecretOrEnv("INKEEP_ORGANIZATION_ID"),
+    },
   },
   clientModules: [
     "./src/styles/variables.css",
@@ -170,6 +173,12 @@ const config: Config = {
             },
           ],
           [
+            remarkCodeSnippet,
+            {
+              langs: ["code"],
+            },
+          ],
+          [
             remarkUpdateAssetPaths,
             {
               updater: updateAssetPath,
@@ -179,6 +188,18 @@ const config: Config = {
           // table of contents links will be malformed.
           remarkTOC,
           remarkUpdateTags,
+        ],
+        beforeDefaultRehypePlugins: [
+          [
+            rehypeHLJS,
+            {
+              aliases: {
+                bash: ["bsh", "systemd", "code", "powershell"],
+                yaml: ["conf", "toml"],
+              },
+              languages: { hcl: hcl },
+            },
+          ],
         ],
       },
     ],

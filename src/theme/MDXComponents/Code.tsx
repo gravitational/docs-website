@@ -1,24 +1,18 @@
-import type {ComponentProps} from 'react';
-import React from 'react';
-import CodeBlock from '@theme/CodeBlock';
-import CodeInline from '@theme/CodeInline';
-import type {Props} from '@theme/MDXComponents/Code';
+import cn from "classnames";
+import { DetailedHTMLProps, HTMLAttributes } from "react";
+import styles from "./Code.module.css";
 
-function shouldBeInline(props: Props) {
-  return (
-    // empty code blocks have no props.children,
-    // see https://github.com/facebook/docusaurus/pull/9704
-    typeof props.children !== 'undefined' &&
-    React.Children.toArray(props.children).every(
-      (el) => typeof el === 'string' && !el.includes('\n'),
-    )
-  );
-}
+const isHLJSNode = (className?: string) =>
+  Boolean(className) && className.indexOf("hljs") !== -1;
 
-export default function MDXCode(props: Props): JSX.Element {
-  return shouldBeInline(props) ? (
-    <CodeInline {...props} />
-  ) : (
-    <CodeBlock {...(props as ComponentProps<typeof CodeBlock>)} />
-  );
-}
+const Code = (
+  props: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>
+) => {
+  if (isHLJSNode(props.className)) {
+    return <code {...props} />;
+  }
+
+  return <code {...props} className={cn(styles.wrapper, props.className)} />;
+};
+
+export default Code;
