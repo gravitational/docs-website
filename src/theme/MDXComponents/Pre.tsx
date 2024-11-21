@@ -1,10 +1,10 @@
 import cn from "classnames";
 import { useRef, useState, useCallback, ReactNode } from "react";
-import Icon from "../../components/Icon";
-import HeadlessButton from "../../components/HeadlessButton";
-import { toCopyContent } from "../../../utils/general";
+import Icon from "/src/components/Icon";
+import HeadlessButton from "/src/components/HeadlessButton";
+import { toCopyContent } from "/utils/general";
 import styles from "./Pre.module.css";
-import commandStyles from "../../components/Command/Command.module.css";
+import commandStyles from "/src/components/Command/Command.module.css";
 import codeStyles from "./Code.module.css";
 
 const TIMEOUT = 1000;
