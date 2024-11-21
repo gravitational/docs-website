@@ -22,6 +22,8 @@ import {
   updatePathsInIncludes,
 } from "./server/asset-path-helpers";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
+import { rehypeHLJS } from "./server/rehype-hljs";
+import { definer as hcl } from "highlightjs-terraform";
 
 const latestVersion = getLatestVersion();
 
@@ -184,6 +186,18 @@ const config: Config = {
           // table of contents links will be malformed.
           remarkTOC,
           remarkUpdateTags,
+        ],
+        beforeDefaultRehypePlugins: [
+          [
+            rehypeHLJS,
+            {
+              aliases: {
+                bash: ["bsh", "systemd", "code", "powershell"],
+                yaml: ["conf", "toml"],
+              },
+              languages: { hcl: hcl },
+            },
+          ],
         ],
       },
     ],

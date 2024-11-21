@@ -1,0 +1,111 @@
+/* stylelint-disable selector-class-pattern */
+/* stylelint-disable no-descending-specificity */
+
+/* theme taken from https://github.com/highlightjs/highlight.js/blob/master/src/styles/monokai.css */
+
+.wrapper {
+  display: block;
+  overflow-x: auto;
+  margin: 0;
+  padding: var(--m-1) var(--m-2);
+  border-radius: var(--r-default);
+  color: #ddd;
+  font-family: var(--font-monospace);
+  line-height: var(--lh-md);
+  white-space: pre;
+  background-color: var(--color-code);
+
+  @media (--sm-scr) {
+    font-size: var(--fs-text-sm);
+  }
+
+  @media (--md-scr) {
+    font-size: var(--fs-text-md);
+  }
+
+  & code {
+    font-family: inherit;
+  }
+
+  /* We use attribute selectors to select hljs- classes because Docusaurus
+   * hashes them in production builds.*/
+  & :global {
+    & [class^="hljs-tag"],
+    & [class^="hljs-keyword"],
+    & [class^="hljs-selector-tag"],
+    & [class^="hljs-literal"],
+    & [class^="hljs-strong"],
+    & [class^="hljs-name"] {
+      color: #f92672;
+    }
+
+    & [class^="hljs-code"] {
+      color: #66d9ef;
+    }
+
+    & [class^="hljs-class"] [class^="hljs-title"] {
+      color: white;
+    }
+
+    & [class^="hljs-attribute"],
+    & [class^="hljs-symbol"],
+    & [class^="hljs-regexp"],
+    & [class^="hljs-link"] {
+      color: #bf79db;
+    }
+
+    & [class^="hljs-string"],
+    & [class^="hljs-bullet"],
+    & [class^="hljs-subst"],
+    & [class^="hljs-title"],
+    & [class^="hljs-section"],
+    & [class^="hljs-emphasis"],
+    & [class^="hljs-type"],
+    & [class^="hljs-built_in"],
+    & [class^="hljs-builtin-name"],
+    & [class^="hljs-selector-attr"],
+    & [class^="hljs-selector-pseudo"],
+    & [class^="hljs-addition"],
+    & [class^="hljs-variable"],
+    & [class^="hljs-template-tag"],
+    & [class^="hljs-template-variable"] {
+      color: #a6e22e;
+    }
+
+    & [class^="hljs-comment"],
+    & [class^="hljs-quote"],
+    & [class^="hljs-deletion"],
+    & [class^="hljs-meta"] {
+      color: #75715e;
+    }
+
+    & [class^="hljs-keyword"],
+    & [class^="hljs-selector-tag"],
+    & [class^="hljs-literal"],
+    & [class^="hljs-doctag"],
+    & [class^="hljs-title"],
+    & [class^="hljs-section"],
+    & [class^="hljs-type"],
+    & [class^="hljs-selector-id"] {
+      font-weight: bold;
+    }
+  }
+}
+
+.line {
+  display: block;
+  & :global {
+    & .wrapper-input input {
+      color: var(--color-light-blue);
+      background-color: transparent;
+    }
+
+    & .wrapper-input input::placeholder {
+      color: var(--color-light-gray);
+    }
+
+    & .wrapper-input svg {
+      color: var(--color-light-blue);
+    }
+  }
+}
