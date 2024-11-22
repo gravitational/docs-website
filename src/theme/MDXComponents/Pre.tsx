@@ -77,7 +77,7 @@ const Pre = ({ children, className }: CodeProps) => {
         {isCopied && <div className={styles.copied}>Copied!</div>}
       </HeadlessButton>
       <div ref={codeRef}>
-        <pre className={cn(styles.wrapper, styles.code)}>{children}</pre>;
+        <pre className={cn(codeStyles.wrapper, styles.code)}>{children}</pre>;
       </div>
     </div>
   );
