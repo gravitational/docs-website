@@ -1,4 +1,4 @@
-import Pre from "components/MDX/Pre";
+import Pre from "/src/theme/MDXComponents/Pre";
 import styles from "./Snippet.module.css";
 
 export interface SnippetProps {
