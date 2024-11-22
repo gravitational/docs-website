@@ -304,11 +304,11 @@ export default function remarkCodeSnippet({
       }
     );
 
-    if (vfile.path.includes("test.mdx")) {
-      console.log(
-        "vfile in remark code snippet:",
-        JSON.stringify(root, undefined, 2)
-      );
-    }
+//    if (vfile.path.includes("test.mdx")) {
+//      console.log(
+//        "vfile in remark code snippet:",
+//        JSON.stringify(root, undefined, 2)
+//      );
+//    }
   };
 }

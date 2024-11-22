@@ -3,6 +3,7 @@ import type { VFile } from "vfile";
 import rehypeHighlight, {
   Options as RehypeHighlightOptions,
 } from "rehype-highlight";
+import { common } from "lowlight";
 import { visit, CONTINUE, SKIP } from "unist-util-visit";
 import { v4 as uuid } from "uuid";
 import remarkParse from "remark-parse";
@@ -18,12 +19,10 @@ const makePlaceholder = (): string => {
 
 const placeholderPattern = "var[a-z0-9]{32}";
 
-export const rehypeHLJS = (
-  options?: RehypeHighlightOptions
-): Transformer => {
+export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
   return (root: Parent, file: VFile) => {
+    options.languages = { ...options.languages, ...common };
     const highlighter = rehypeHighlight(options);
-
     let placeholdersToVars: Record<string, Node> = {};
 
     // In a code snippet, Var elements are parsed as text. Replace these with
