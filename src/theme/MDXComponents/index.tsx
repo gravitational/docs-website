@@ -11,6 +11,7 @@ import MDXImg from "@theme/MDXComponents/Img";
 import Admonition from "@theme/Admonition";
 import Mermaid from "@theme/Mermaid";
 import Command, { CommandLine, CommandComment } from "/src/components/Command";
+import Snippet from "/src/components/Snippet";
 
 import type { MDXComponentsObject } from "@theme/MDXComponents";
 
@@ -35,6 +36,7 @@ const MDXComponents: MDXComponentsObject = {
   li: MDXLi,
   mermaid: Mermaid,
   pre: MDXPre,
+  snippet: Snippet,
   ul: MDXUl,
 };
 

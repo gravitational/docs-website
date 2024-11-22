@@ -54,7 +54,7 @@ const getVariableNode = (
 
   return {
     type: "mdxJsxFlowElement",
-    name: "Var",
+    name: "var",
     attributes: [
       { type: "mdxJsxAttribute", name: "name", value },
       {
@@ -116,12 +116,12 @@ const getCommandNode = (content: string, prefix = "$"): MdxJsxFlowElement => {
 
   return {
     type: "mdxJsxFlowElement",
-    name: "Command",
+    name: "command",
     attributes: [],
     children: [
       {
         type: "mdxJsxFlowElement",
-        name: "CommandLine",
+        name: "commandline",
         attributes: [
           {
             type: "mdxJsxAttribute",
@@ -140,7 +140,7 @@ const getLineNode = (content: string, attributes = []): MdxJsxFlowElement => {
 
   return {
     type: "mdxJsxFlowElement",
-    name: "CommandLine",
+    name: "commandline",
     attributes,
     children: children,
   };
@@ -151,7 +151,7 @@ const getCommentNode = (
   attributes: MdxJsxAttribute[] = []
 ): MdxJsxFlowElement => ({
   type: "mdxJsxFlowElement",
-  name: "CommandComment",
+  name: "commandcomment",
   attributes,
   children: [
     {
@@ -169,7 +169,7 @@ const getCodeLine = (
 
   return {
     type: "mdxJsxFlowElement",
-    name: "CodeLine",
+    name: "codeline",
     attributes,
     children: children,
   };
@@ -297,11 +297,18 @@ export default function remarkCodeSnippet({
 
         parent.children[index] = {
           type: "mdxJsxFlowElement",
-          name: "Snippet",
+          name: "snippet",
           attributes: [],
           children,
         } as MdxJsxFlowElement;
       }
     );
+
+    if (vfile.path.includes("test.mdx")) {
+      console.log(
+        "vfile in remark code snippet:",
+        JSON.stringify(root, undefined, 2)
+      );
+    }
   };
 }
