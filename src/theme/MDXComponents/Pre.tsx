@@ -5,7 +5,7 @@ import HeadlessButton from "/src/components/HeadlessButton";
 import { toCopyContent } from "/utils/general";
 import styles from "./Pre.module.css";
 import commandStyles from "/src/components/Command/Command.module.css";
-import codeStyles from "./Code.module.css";
+import codeBlockStyles from "./CodeBlock.module.css";
 
 const TIMEOUT = 1000;
 
@@ -48,7 +48,7 @@ const Pre = ({ children, className }: CodeProps) => {
       if (copyText.getElementsByClassName(commandStyles.line).length > 0) {
         classesToCopy.push("." + commandStyles.line);
       } else {
-        classesToCopy.push("." + codeStyles.line);
+        classesToCopy.push("." + codeBlockStyles.line);
       }
 
       document.body.appendChild(copyText);
@@ -77,7 +77,7 @@ const Pre = ({ children, className }: CodeProps) => {
         {isCopied && <div className={styles.copied}>Copied!</div>}
       </HeadlessButton>
       <div ref={codeRef}>
-        <pre className={cn(codeStyles.wrapper, styles.code)}>{children}</pre>
+        <pre className={cn(codeBlockStyles.wrapper, styles.code)}>{children}</pre>
       </div>
     </div>
   );
