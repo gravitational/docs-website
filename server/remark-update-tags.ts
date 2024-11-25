@@ -109,7 +109,7 @@ export default function remarkMigrationUpdateTags(): Transformer {
       }
 
       // Replace Var with uppercase content
-      if (isMdxNode(node) && node.name === "Var") {
+      if (isMdxNode(node) && node.name === "var") {
         parent.children[index] = {
           type: "text",
           value:
@@ -120,7 +120,7 @@ export default function remarkMigrationUpdateTags(): Transformer {
 
       // Replace Var in clode blocks
       if (isCodeNode(node)) {
-        const regexNode = /(\<\s*Var\s+(.*?)\s*\/\>)/g;
+        const regexNode = /(\<\s*var\s+(.*?)\s*\/\>)/g;
         const regexProperty = /([a-z]+)\s*=\s*"([^"]*?)"/gi;
 
         node.value = node.value.replaceAll(regexNode, (match) => {
