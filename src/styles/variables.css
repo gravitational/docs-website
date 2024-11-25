@@ -22,6 +22,8 @@
   --color-note: #009cf1;
 
   /* fonts */
+  --font-ubunt: "Ubuntu Mono";
+  --font-lato: Lato;
   --font-base: Lato, sans-serif;
   --font-body: var(--font-base);
   --font-serif: "Georgia", serif;

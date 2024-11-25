@@ -1,3 +1,7 @@
+import OriginalMDXComponents from "@theme-original/MDXComponents";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Admonition from "@theme/Admonition";
 import React, { type ComponentProps } from "react";
 import Head from "@docusaurus/Head";
 import { Code, CodeLine } from "@theme/MDXComponents/Code";
@@ -8,7 +12,6 @@ import MDXHeading from "@theme/MDXComponents/Heading";
 import MDXUl from "@theme/MDXComponents/Ul";
 import MDXLi from "@theme/MDXComponents/Li";
 import MDXImg from "@theme/MDXComponents/Img";
-import Admonition from "@theme/Admonition";
 import Mermaid from "@theme/Mermaid";
 import Command, { CommandLine, CommandComment } from "/src/components/Command";
 import Snippet from "/src/components/Snippet";
@@ -16,10 +19,13 @@ import Snippet from "/src/components/Snippet";
 import type { MDXComponentsObject } from "@theme/MDXComponents";
 
 const MDXComponents: MDXComponentsObject = {
+  ...OriginalMDXComponents,
   Details: MDXDetails,
   Head,
+  TabItem,
+  Tabs,
   a: MDXA,
-  admonition: Admonition,
+  Admonition,
   code: Code,
   codeline: CodeLine,
   command: Command,
