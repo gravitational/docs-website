@@ -54,7 +54,7 @@ const getVariableNode = (
 
   return {
     type: "mdxJsxFlowElement",
-    name: "var",
+    name: "Var",
     attributes: [
       { type: "mdxJsxAttribute", name: "name", value },
       {

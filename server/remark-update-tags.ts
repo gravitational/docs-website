@@ -108,40 +108,6 @@ export default function remarkMigrationUpdateTags(): Transformer {
         return index; // index of the next element to traverse, in this case repeat the same index again
       }
 
-      // Replace Var with uppercase content
-      if (isMdxNode(node) && node.name.toLowerCase() === "var") {
-        parent.children[index] = {
-          type: "text",
-          value:
-            getAttributeValue(node, "initial") ||
-            getAttributeValue(node, "name"),
-        } as MdastText;
-      }
-
-      // Replace Var in clode blocks
-      if (isCodeNode(node)) {
-        const regexNode = /(\<\s*[vV]ar\s+(.*?)\s*\/\>)/g;
-        const regexProperty = /([a-z]+)\s*=\s*"([^"]*?)"/gi;
-
-        node.value = node.value.replaceAll(regexNode, (match) => {
-          const propsHash = Array.from(match.matchAll(regexProperty)).reduce(
-            (result, value) => {
-              return { ...result, [value[1]]: value[2] };
-            },
-            {} as { initial: string; name: string }
-          );
-
-          return propsHash.initial || propsHash.name;
-        });
-      }
-
-      // Remove "code" code type
-      if (isCodeNode(node)) {
-        if (node.lang === "code") {
-          node.lang = "bash";
-        }
-      }
-
       // Remove string styles from nodes
       if (isMdxNode(node)) {
         node.attributes = node.attributes.filter(

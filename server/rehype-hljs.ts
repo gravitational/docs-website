@@ -19,26 +19,39 @@ const makePlaceholder = (): string => {
 
 const placeholderPattern = "var[a-z0-9]{32}";
 
-// We only visit text nodes inside code snippets
-const isVarContainer = (node: Node) => {
-  if (node.type === "text") {
-    return node.value.includes("<Var");
-  }
-
-  if (
-    node.type === "element" &&
-    node.children.length === 1 &&
-    node.children[0].type === "text"
-  ) {
-    return node.children[0].value.includes("<Var");
-  }
-
-  return false;
-};
-
 export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
   return (root: Parent, file: VFile) => {
+    // We only visit text nodes inside code snippets that include either the
+    // <Var tag or (if we have already swapped out Vars with placeholders) a
+    // placeholder.
+    const isVarContainer = (node: Node) => {
+      let textValue;
+      if (node.type === "text") {
+        textValue = node.value;
+      } else if (
+        node.type === "element" &&
+        node.children.length === 1 &&
+        node.children[0].type === "text"
+      ) {
+        textValue = node.children[0].value;
+      } else {
+        return false;
+      }
+
+      const placeHolderRE = new RegExp(placeholderPattern);
+
+      return textValue.includes("<Var") || placeHolderRE.test(textValue);
+    };
+
+    // Highlight common languages in addition to any additional configured ones.
     options.languages = { ...options.languages, ...common };
+
+    // Configure the highlighter to treat unlabeled code snippets as having the
+    // "text" language by enabling detection and making "text" the only
+    // possible language.
+    options.detect = true;
+    options.subset = ["text"];
+
     const highlighter = rehypeHighlight(options);
     let placeholdersToVars: Record<string, Node> = {};
 
