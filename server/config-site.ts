@@ -12,15 +12,13 @@ interface Config {
   versions: {
     name: string;
     branch: string;
-    latest?: true;
-    current?: true;
+    isDefault?: boolean;
     deprecated?: boolean;
   }[];
 }
 
 interface NormalizedConfig {
-  latest: string;
-  current: string;
+  isDefault: string;
   versions: string[];
   branches: Record<string, string>;
 }
@@ -47,8 +45,7 @@ const validator = ajv.compile({
         properties: {
           name: { type: "string" },
           branch: { type: "string" },
-          latest: { type: "boolean", nullable: true },
-          current: { type: "boolean", nullable: true },
+          isDefault: { type: "boolean", nullable: true },
           deprecated: { type: "boolean", nullable: true },
         },
         additionalProperties: false,
@@ -60,32 +57,6 @@ const validator = ajv.compile({
   },
   required: ["versions"],
 });
-
-/*
- * Config format for storing data and config format for using data not nescessary the same.
- * Storing version data as a singe array is convenient, but for usage, having separate
- * "latest", "versions" and "branches" fileds are easier, so we transform them here.
- */
-
-export const normalize = ({ versions }: Config): NormalizedConfig => {
-  const supportedVersions = versions.filter((version) => !version.deprecated);
-  const result: NormalizedConfig = {
-    latest: (
-      supportedVersions.find(({ latest }) => latest === true) ||
-      versions[supportedVersions.length - 1]
-    ).name,
-    current: (
-      supportedVersions.find(({ current }) => current === true) ||
-      versions[supportedVersions.length - 1]
-    ).name,
-    versions: supportedVersions.map(({ name }) => name),
-    branches: supportedVersions.reduce((result, { name, branch }) => {
-      return { ...result, [name]: branch };
-    }, {}),
-  };
-
-  return result;
-};
 
 /* Load and validate config. */
 
@@ -111,7 +82,7 @@ export const getLatestVersion = () => {
   const versions = getSupportedVersions();
 
   return (
-    versions.find(({ latest }) => latest === true) ||
+    versions.find(({ isDefault }) => isDefault === true) ||
     versions[versions.length - 1]
   ).name;
 };
@@ -122,7 +93,6 @@ export const getCurrentVersion = () => {
   const versions = getSupportedVersions();
 
   return (
-    versions.find(({ current }) => current === true) ||
     versions[versions.length - 1]
   ).name;
 };
@@ -135,20 +105,22 @@ export const getDocusaurusConfigVersionOptions = (): Record<
 > => {
   const versions = getSupportedVersions();
 
-  return versions.reduce((result, { name, latest, current }) => {
-    // Use "current" as a name for the current version. This way Docusaurus
-    // will look for it in the `docs` folder instead of `versioned_docs`.
-    const versionName = current ? "current" : name;
+  return versions.reduce((result, { name, isDefault, branch }, idx) => {
+    // Use "current" as the name for the current version (i.e., the edge
+    // version), the highest-numbered version in the configuration. This way
+    // Docusaurus will look for it in the `docs` folder instead of
+    // `versioned_docs`.
+    const isCurrent = idx === versions.length - 1;
+    const versionName = isCurrent ? "current" : name;
 
     const versionOptions: VersionOptions = {
-      // Mark latest version as unreleased.
-      label: current ? `${name} (unreleased)` : name,
+      label: isCurrent ? `${name} (unreleased)` : name,
       // Configure root path for the version. Latest in the root, others in the `ver/XX.x` folder.
-      path: latest ? "" : `ver/${name}`,
+      path: isDefault ? "" : `ver/${name}`,
     };
 
     // Banner will show message for the current version that it is still WIP.
-    if (current) {
+    if (isCurrent) {
       versionOptions.banner = "unreleased";
     }
 

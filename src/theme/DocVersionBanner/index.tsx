@@ -1,7 +1,6 @@
 import React, { type ComponentType } from "react";
 import clsx from "clsx";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import Link from "@docusaurus/Link";
 import Translate from "@docusaurus/Translate";
 import {
   useActivePlugin,
@@ -22,22 +21,50 @@ type BannerLabelComponentProps = {
   versionMetadata: PropVersionMetadata;
 };
 
+const unreleasedMessage =
+  "This documentation is for an unreleased version of Teleport.";
+const selfHostedMessage =
+  "This documentation is for a version of Teleport that is only available for self-hosted clusters.";
+
 function UnreleasedVersionLabel({
   siteTitle,
   versionMetadata,
 }: BannerLabelComponentProps) {
+  const { versions, lastVersion } =
+    useDocusaurusContext().siteConfig.plugins.find((p) => {
+      return p[0] == "@docusaurus/plugin-content-docs";
+    })[1];
+  const verToOrder = new Map();
+  const vers = Object.keys(versions);
+  for (let i = 0; i < vers.length; i++) {
+    verToOrder.set(vers[i], i);
+  }
+
+  const { version } = useDocsVersion();
+  let message: string;
+  const thisIdx = verToOrder.get(version);
+  // Set a version banner. Indicate if the version is the edge version or
+  // only available for self-hosted users. The latter situation happens when
+  // the latest release is not yet the latest version in the docs.
+  if (
+    verToOrder.get(lastVersion) < thisIdx &&
+    verToOrder.get("current") > thisIdx
+  ) {
+    message = selfHostedMessage;
+  } else {
+    message = unreleasedMessage;
+  }
+
   return (
     <Translate
       id="theme.docs.versions.unreleasedVersionLabel"
-      description="The label used to tell the user that he's browsing an unreleased doc version"
+      description="Indicates that the user is browsing an unreleased docs version"
       values={{
         siteTitle,
         versionLabel: <b>{versionMetadata.label}</b>,
       }}
     >
-      {
-        "This is unreleased documentation for {siteTitle} {versionLabel} version."
-      }
+      {message}
     </Translate>
   );
 }
@@ -49,13 +76,13 @@ function UnmaintainedVersionLabel({
   return (
     <Translate
       id="theme.docs.versions.unmaintainedVersionLabel"
-      description="The label used to tell the user that he's browsing an older doc version"
+      description="Indicates that the user is browsing a previous (but still maintained)  docs version"
       values={{
         siteTitle,
         versionLabel: <b>{versionMetadata.label}</b>,
       }}
     >
-      {"This is documentation for {siteTitle} {versionLabel}."}
+      {"This is documentation for {siteTitle} {versionLabel}, a previous version of Teleport."}
     </Translate>
   );
 }
@@ -71,42 +98,6 @@ function BannerLabel(props: BannerLabelComponentProps) {
   const BannerLabelComponent =
     BannerLabelComponents[props.versionMetadata.banner!];
   return <BannerLabelComponent {...props} />;
-}
-
-function LatestVersionSuggestionLabel({
-  versionLabel,
-  to,
-  onClick,
-}: {
-  to: string;
-  onClick: () => void;
-  versionLabel: string;
-}) {
-  return (
-    <Translate
-      id="theme.docs.versions.latestVersionSuggestionLabel"
-      description="The label used to tell the user to check the latest version"
-      values={{
-        versionLabel,
-        latestVersionLink: (
-          <b>
-            <Link to={to} onClick={onClick}>
-              <Translate
-                id="theme.docs.versions.latestVersionLinkLabel"
-                description="The label used for the latest version suggestion link label"
-              >
-                latest version
-              </Translate>
-            </Link>
-          </b>
-        ),
-      }}
-    >
-      {
-        "For up-to-date documentation, see the {latestVersionLink} ({versionLabel})."
-      }
-    </Translate>
-  );
 }
 
 function DocVersionBannerEnabled({
@@ -144,13 +135,6 @@ function DocVersionBannerEnabled({
     >
       <div>
         <BannerLabel siteTitle={siteTitle} versionMetadata={versionMetadata} />
-      </div>
-      <div className="margin-top--md">
-        <LatestVersionSuggestionLabel
-          versionLabel={latestVersionSuggestion.label}
-          to={latestVersionSuggestedDoc.path}
-          onClick={() => savePreferredVersionName(latestVersionSuggestion.name)}
-        />
       </div>
     </div>
   );
