@@ -24,7 +24,8 @@
  */
 
 import type { Transformer } from "unified";
-import type { Code as MdastCode } from "mdast";
+import type { Code as MdastCode, Text } from "mdast";
+import type { Node } from "unist";
 import type {
   MdxastNode,
   MdxJsxAttribute,
@@ -37,10 +38,10 @@ const RULE_ID = "code-snippet";
 
 const isCode =
   (langs: string[]) =>
-  (node: MdxastNode): node is MdastCode =>
-    node.type === "code" && langs.includes(node.lang);
+  (node: Node): node is MdastCode =>
+    node.type === "code" && langs.includes((node as MdastCode).lang);
 
-const getTextChildren = (contentValue: string): MdxastNode => ({
+const getTextChildren = (contentValue: string): Text => ({
   type: "text",
   value: contentValue,
 });
@@ -72,9 +73,9 @@ const getVariableNode = (
   };
 };
 
-const getChildrenNode = (content: string): MdxastNode[] => {
+const getChildrenNode = (content: string): Array<Text | MdxJsxFlowElement> => {
   const hasVariable = content?.includes("<Var");
-  const nodeChildren: MdxastNode[] = [];
+  const nodeChildren: Array<Text | MdxJsxFlowElement> = [];
 
   if (hasVariable) {
     const contentVars = content.match(/(?:\<Var .+?\/\>)/gm);
@@ -111,7 +112,7 @@ const getChildrenNode = (content: string): MdxastNode[] => {
   return nodeChildren;
 };
 
-const getCommandNode = (content: string, prefix = "$"): MdxJsxFlowElement => {
+const getCommandNode = (content: string, prefix = "$") => {
   const children = getChildrenNode(content);
 
   return {
@@ -135,7 +136,7 @@ const getCommandNode = (content: string, prefix = "$"): MdxJsxFlowElement => {
   };
 };
 
-const getLineNode = (content: string, attributes = []): MdxJsxFlowElement => {
+const getLineNode = (content: string, attributes = []) => {
   const children = getChildrenNode(content);
 
   return {
@@ -149,7 +150,7 @@ const getLineNode = (content: string, attributes = []): MdxJsxFlowElement => {
 const getCommentNode = (
   content: string,
   attributes: MdxJsxAttribute[] = []
-): MdxJsxFlowElement => ({
+) => ({
   type: "mdxJsxFlowElement",
   name: "commandcomment",
   attributes,
@@ -161,10 +162,7 @@ const getCommentNode = (
   ],
 });
 
-const getCodeLine = (
-  content: string,
-  attributes: MdxJsxAttribute[] = []
-): MdxJsxFlowElement => {
+const getCodeLine = (content: string, attributes: MdxJsxAttribute[] = []) => {
   const children = getChildrenNode(content);
 
   return {
@@ -185,7 +183,7 @@ export default function remarkCodeSnippet({
   langs = ["code"],
   lint = false,
 }: RemarkCodeSnippetOptions): Transformer {
-  return (root, vfile) => {
+  return (root: Node, vfile) => {
     visit(
       root,
       isCode(langs),

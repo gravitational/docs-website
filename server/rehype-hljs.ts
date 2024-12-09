@@ -4,6 +4,7 @@ import rehypeHighlight, {
   Options as RehypeHighlightOptions,
 } from "rehype-highlight";
 import { common } from "lowlight";
+import type { Node as UnistNode, Parent as UnistParent } from "unist";
 import { visit, CONTINUE, SKIP } from "unist-util-visit";
 import { v4 as uuid } from "uuid";
 import remarkParse from "remark-parse";
@@ -20,11 +21,11 @@ const makePlaceholder = (): string => {
 const placeholderPattern = "var[a-z0-9]{32}";
 
 export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
-  return (root: Parent, file: VFile) => {
+  return (root: UnistNode, file: VFile) => {
     // We only visit text nodes inside code snippets that include either the
     // <Var tag or (if we have already swapped out Vars with placeholders) a
     // placeholder.
-    const isPossibleVarContainer = (node: Node) => {
+    const isPossibleVarContainer = (node: UnistParent) => {
       let textValue;
       if (
         node.type === "text" ||
@@ -56,14 +57,15 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     visit(
       root,
       isPossibleVarContainer,
-      (node: Node, index: number, parent: Parent) => {
+      (node: UnistNode, index: number, parent: Parent) => {
         const varPattern = new RegExp("<Var [^>]+/>", "g");
+        const unknownText = node as unknown;
         let txt: Text;
         if (node.type == "text") {
-          txt = node;
+          txt = unknownText as Text;
         } else {
           // isPossibleVarContainer enforces having a single child text node
-          txt = node.children[0];
+          txt = (unknownText as Parent).children[0] as Text;
         }
 
         const newVal = txt.value.replace(varPattern, (match) => {
@@ -72,18 +74,18 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
           // its properties. The result should be a small HTML AST with a root
           // node and one child, the Var node.
           const varElement = unified()
-            .use(remarkParse)
+	    // Converting to "any" since, for some reason, the type of
+	    // remarkParse doesn't match the signature of "use" despite this
+	    // being a common use case in the unified documentation.
+            .use(remarkParse as any)
             .use(remarkMDX)
             .parse(match);
 
-          placeholdersToVars[placeholder] = varElement.children[0];
+          placeholdersToVars[placeholder] = (varElement as Parent).children[0];
           return placeholder;
         });
-        if (node.type == "text") {
-          node.value = newVal;
-        } else {
-          node.children[0].value = newVal;
-        }
+
+        txt.value = newVal;
       }
     );
 

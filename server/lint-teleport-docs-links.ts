@@ -1,9 +1,9 @@
-import type { Node } from "unist";
-import type { Transformer } from "unified";
-import type { Root, Link as MdastLink } from "mdast";
-import type { EsmNode, MdxAnyElement } from "./types-unist";
-
+import { lintRule } from "unified-lint-rule";
 import { visit } from "unist-util-visit";
+import type { Link } from "mdast";
+import type { EsmNode, MdxAnyElement, MdxastNode } from "./types-unist";
+import type { Node } from "unist";
+
 import { isExternalLink, isHash, isPage } from "../utils/url";
 
 interface ObjectHref {
@@ -29,17 +29,13 @@ const isAnAbsoluteDocsLink = (href: string): boolean => {
   );
 };
 
-export function remarkLintTeleportDocsLinks(): Transformer {
-  return (root: Root, vfile) => {
-    visit(root, (node: Node) => {
-      if (
-        node.type == "link" &&
-        isAnAbsoluteDocsLink((node as MdastLink).url)
-      ) {
+export const remarkLintTeleportDocsLinks = lintRule(
+  "remark-lint:absolute-docs-links",
+  (root: Node, vfile) => {
+    visit(root, undefined, (node: Node) => {
+      if (node.type == "link" && isAnAbsoluteDocsLink((node as Link).url)) {
         vfile.message(
-          `Link reference ${
-            (node as MdastLink).url
-          } must be a relative link to an *.mdx page`,
+          `Link reference ${(node as Link).url} must be a relative link to an *.mdx page`,
           node.position
         );
         return;
@@ -58,5 +54,5 @@ export function remarkLintTeleportDocsLinks(): Transformer {
         }
       }
     });
-  };
-}
+  }
+);
