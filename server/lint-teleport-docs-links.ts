@@ -1,9 +1,9 @@
-import type { Node } from "unist";
-import type { Transformer } from "unified";
-import type { Root, Link as MdastLink } from "mdast";
-import type { EsmNode, MdxAnyElement } from "./types-unist";
-
+import { lintRule } from "unified-lint-rule";
 import { visit } from "unist-util-visit";
+import type { Link as MdastLink } from "mdast";
+import type { EsmNode, MdxAnyElement, MdxastNode } from "./types-unist";
+import type { Node } from "unist";
+
 import { isExternalLink, isHash, isPage } from "../utils/url";
 
 interface ObjectHref {
@@ -14,7 +14,7 @@ type Href = string | ObjectHref;
 
 const mdxNodeTypes = new Set(["mdxJsxFlowElement", "mdxJsxTextElement"]);
 
-const isMdxComponentWithHref = (node: Node): node is MdxAnyElement => {
+const isMdxComponentWithHref = (node: MdxastNode): node is MdxAnyElement => {
   return (
     mdxNodeTypes.has(node.type) &&
     (node as MdxAnyElement).attributes.some(
@@ -29,17 +29,13 @@ const isAnAbsoluteDocsLink = (href: string): boolean => {
   );
 };
 
-export function remarkLintTeleportDocsLinks(): Transformer {
-  return (root: Root, vfile) => {
-    visit(root, (node: Node) => {
-      if (
-        node.type == "link" &&
-        isAnAbsoluteDocsLink((node as MdastLink).url)
-      ) {
+export const remarkLintTeleportDocsLinks = lintRule(
+  "remark-lint:absolute-docs-links",
+  (root: Node, vfile) => {
+    visit(root, undefined, (node: MdxastNode) => {
+      if (node.type == "link" && isAnAbsoluteDocsLink(node.url)) {
         vfile.message(
-          `Link reference ${
-            (node as MdastLink).url
-          } must be a relative link to an *.mdx page`,
+          `Link reference ${node.url} must be a relative link to an *.mdx page`,
           node.position
         );
         return;
@@ -58,5 +54,5 @@ export function remarkLintTeleportDocsLinks(): Transformer {
         }
       }
     });
-  };
-}
+  }
+);
