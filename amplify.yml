@@ -4,6 +4,13 @@ frontend:
     preBuild:
       commands:
         - yarn
+        - echo "Setting up swap space..."
+        - sudo fallocate -l 40G /swapfile
+        - sudo chmod 600 /swapfile
+        - sudo mkswap /swapfile
+        - sudo swapon /swapfile
+        - sudo swapon -s
+        - echo "✅  Done setting up swap space!"
     build:
       commands:
         - yarn build --out-dir build//docusaurus
