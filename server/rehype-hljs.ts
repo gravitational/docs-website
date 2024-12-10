@@ -63,7 +63,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
           txt = node as Text;
         } else {
           // isPossibleVarContainer enforces having a single child text node
-          txt = node.children[0];
+          txt = (node as Parent).children[0] as Text;
         }
 
         const newVal = txt.value.replace(varPattern, (match) => {
@@ -76,14 +76,11 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
             .use(remarkMDX)
             .parse(match);
 
-          placeholdersToVars[placeholder] = varElement.children[0];
+          placeholdersToVars[placeholder] = (varElement as Parent).children[0];
           return placeholder;
         });
-        if (node.type == "text") {
-          node.value = newVal;
-        } else {
-          node.children[0].value = newVal;
-        }
+
+        txt.value = newVal;
       }
     );
 
