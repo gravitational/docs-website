@@ -73,9 +73,9 @@ const getVariableNode = (
   };
 };
 
-const getChildrenNode = (content: string): MdxastNode[] => {
+const getChildrenNode = (content: string): Array<Text | MdxJsxFlowElement> => {
   const hasVariable = content?.includes("<Var");
-  const nodeChildren: MdxastNode[] = [];
+  const nodeChildren: Array<Text | MdxJsxFlowElement> = [];
 
   if (hasVariable) {
     const contentVars = content.match(/(?:\<Var .+?\/\>)/gm);
