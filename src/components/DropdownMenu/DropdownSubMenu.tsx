@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { clsx } from "clsx";
 
 import type { NavigationItem } from "../../../server/sanity-types";
 import Icon from "../Icon";
 import Link from "../Link";
 
 import DropdownMenuItem from "./DropdownMenuItem";
+import cn from "classnames";
 import DropdownSection from "./DropdownSection";
 import styles from "./DropdownSubMenu.module.css";
 
@@ -33,11 +33,19 @@ const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
             return (
               <div
                 key={`submenu-${submenuTitle}-${index}`}
-                className={clsx(
+                className={cn(
                   styles.subMenu,
                   index === activeTab ? styles.active : ""
                 )}
                 onClick={() => setActiveTab(index)}
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveTab(index);
+                  }
+                }}
+                aria-expanded={activeTab === index}
               >
                 {submenuTitle}
                 <Icon name="arrowRight" size="sm" />
@@ -51,36 +59,47 @@ const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
         .map(({ submenuSections, submenuTitle }, i) => (
           <div
             key={`wrapper${submenuTitle}-${i}`}
-            className={clsx(
-              styles.wrapper,
-              i === activeTab ? styles.active : ""
-            )}
+            className={cn(styles.wrapper, i === activeTab ? styles.active : "")}
           >
-            {submenuSections?.map((section, index) => (
-              <DropdownSection
-                key={`drsection${section.title}-${index}`}
-                titleLink={false}
-                isImageLink={false}
-                title={section.title || undefined}
-                subtitle={section.subtitle}
-                isFirst={index === 0}
-                className={clsx(
-                  styles.dropdownSection,
-                  section.sectionItems.find(
-                    ({ itemType }) => itemType === "normal"
-                  ) && styles.normal,
-                  index === submenuSections.length - 1 && styles.last
-                )}
-              >
-                {section.sectionItems.map((sectionItemProps, i) => (
-                  <DropdownMenuItem
-                    key={`${sectionItemProps.title}-item${i}`}
-                    title={sectionItemProps.title || undefined}
-                    {...sectionItemProps}
-                  />
-                ))}
-              </DropdownSection>
-            ))}
+            {submenuSections?.map((section, index) => {
+              const middleIndex = Math.ceil(section.sectionItems.length / 2);
+              const items = section.inTwoColumns
+                ? [
+                    section.sectionItems.slice(0, middleIndex),
+                    section.sectionItems.slice(middleIndex),
+                  ]
+                : [section.sectionItems];
+              return (
+                <DropdownSection
+                  key={`drsection${section.title}-${index}`}
+                  titleLink={false}
+                  isImageLink={false}
+                  title={section.title || undefined}
+                  subtitle={section.subtitle}
+                  isFirst={index === 0}
+                  inTwoColumns={section?.inTwoColumns}
+                  className={cn(
+                    styles.dropdownSection,
+                    section.sectionItems.find(
+                      ({ itemType }) => itemType === "normal"
+                    ) && styles.normal,
+                    index === submenuSections.length - 1 && styles.last
+                  )}
+                >
+                  {items.map((item, j) => (
+                    <div key={`submenu-items-${item[0]?.title}-${j}`}>
+                      {item.map((sectionItemProps, i) => (
+                        <DropdownMenuItem
+                          title={sectionItemProps?.title || undefined}
+                          key={`${sectionItemProps?.title}-item${i}`}
+                          {...sectionItemProps}
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </DropdownSection>
+              );
+            })}
           </div>
         ))}
     </div>

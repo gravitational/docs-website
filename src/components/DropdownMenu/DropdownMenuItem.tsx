@@ -3,7 +3,7 @@ import { clsx } from "clsx";
 import Link from "../Link";
 
 import styles from "./DropdownMenuItem.module.css";
-
+import cn from "classnames";
 export interface MenuItemProps {
   itemType: string | "normal" | "image";
   icon?: string | null;
@@ -59,7 +59,7 @@ const DropdownMenuItem = ({
               alt=""
             />
           </div>
-          <div className={clsx(styles.item, styles.imageItemText)} {...props}>
+          <div className={cn(styles.item, styles.imageItemText)} {...props}>
             <p className={styles.imageItemTitle}>{customImage?.itemTitle}</p>
             {customImage?.imageDate && (
               <p className={styles.dateText}>{customImage?.imageDate}</p>
