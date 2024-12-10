@@ -24,7 +24,8 @@
  */
 
 import type { Transformer } from "unified";
-import type { Code as MdastCode } from "mdast";
+import type { Code as MdastCode, Text } from "mdast";
+import type { Node } from "unist";
 import type {
   MdxastNode,
   MdxJsxAttribute,
@@ -37,10 +38,10 @@ const RULE_ID = "code-snippet";
 
 const isCode =
   (langs: string[]) =>
-  (node: MdxastNode): node is MdastCode =>
-    node.type === "code" && langs.includes(node.lang);
+  (node: Node): node is MdastCode =>
+    node.type === "code" && langs.includes((node as MdastCode).lang);
 
-const getTextChildren = (contentValue: string): MdxastNode => ({
+const getTextChildren = (contentValue: string): Text => ({
   type: "text",
   value: contentValue,
 });
