@@ -4,6 +4,7 @@ import rehypeHighlight, {
   Options as RehypeHighlightOptions,
 } from "rehype-highlight";
 import { common } from "lowlight";
+import type { Node as UnistNode, Parent as UnistParent } from "unist";
 import { visit, CONTINUE, SKIP } from "unist-util-visit";
 import { v4 as uuid } from "uuid";
 import remarkParse from "remark-parse";
@@ -20,11 +21,11 @@ const makePlaceholder = (): string => {
 const placeholderPattern = "var[a-z0-9]{32}";
 
 export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
-  return (root: Parent, file: VFile) => {
+  return (root: UnistNode, file: VFile) => {
     // We only visit text nodes inside code snippets that include either the
     // <Var tag or (if we have already swapped out Vars with placeholders) a
     // placeholder.
-    const isPossibleVarContainer = (node: Parent) => {
+    const isPossibleVarContainer = (node: UnistParent) => {
       let textValue;
       if (
         node.type === "text" ||
@@ -56,14 +57,15 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     visit(
       root,
       isPossibleVarContainer,
-      (node: Node, index: number, parent: Parent) => {
+      (node: UnistNode, index: number, parent: Parent) => {
         const varPattern = new RegExp("<Var [^>]+/>", "g");
+        const unknownText = node as unknown;
         let txt: Text;
         if (node.type == "text") {
-          txt = node as Text;
+          txt = unknownText as Text;
         } else {
           // isPossibleVarContainer enforces having a single child text node
-          txt = (node as Parent).children[0] as Text;
+          txt = (unknownText as Parent).children[0] as Text;
         }
 
         const newVal = txt.value.replace(varPattern, (match) => {
