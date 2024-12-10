@@ -1,6 +1,6 @@
 import { lintRule } from "unified-lint-rule";
 import { visit } from "unist-util-visit";
-import type { Link as MdastLink } from "mdast";
+import type { Link } from "mdast";
 import type { EsmNode, MdxAnyElement, MdxastNode } from "./types-unist";
 import type { Node } from "unist";
 
@@ -14,7 +14,7 @@ type Href = string | ObjectHref;
 
 const mdxNodeTypes = new Set(["mdxJsxFlowElement", "mdxJsxTextElement"]);
 
-const isMdxComponentWithHref = (node: MdxastNode): node is MdxAnyElement => {
+const isMdxComponentWithHref = (node: Node): node is MdxAnyElement => {
   return (
     mdxNodeTypes.has(node.type) &&
     (node as MdxAnyElement).attributes.some(
@@ -32,10 +32,10 @@ const isAnAbsoluteDocsLink = (href: string): boolean => {
 export const remarkLintTeleportDocsLinks = lintRule(
   "remark-lint:absolute-docs-links",
   (root: Node, vfile) => {
-    visit(root, undefined, (node: MdxastNode) => {
-      if (node.type == "link" && isAnAbsoluteDocsLink(node.url)) {
+    visit(root, undefined, (node: Node) => {
+      if (node.type == "link" && isAnAbsoluteDocsLink((node as Link).url)) {
         vfile.message(
-          `Link reference ${node.url} must be a relative link to an *.mdx page`,
+          `Link reference ${(node as Link).url} must be a relative link to an *.mdx page`,
           node.position
         );
         return;
