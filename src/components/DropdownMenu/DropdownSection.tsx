@@ -1,6 +1,5 @@
-import { clsx } from "clsx";
-
 import styles from "./DropdownSection.module.css";
+import cn from "classnames";
 
 export interface DropdownMenuProps {
   title?: string;
@@ -11,6 +10,7 @@ export interface DropdownMenuProps {
   isImageLink?: boolean;
   childLength?: number;
   isFirst: boolean;
+  inTwoColumns?: boolean;
 }
 
 const DropdownSection = ({
@@ -23,12 +23,13 @@ const DropdownSection = ({
   childLength = 3,
   isFirst,
   className,
+  inTwoColumns = false,
   ...props
 }: DropdownMenuProps & React.HTMLAttributes<HTMLDivElement>) => {
   const textExists = title || subtitle ? true : false;
   return (
     <div
-      className={clsx(
+      className={cn(
         styles.dropdownSection,
         isFirst && styles.first,
         className && className
@@ -41,7 +42,13 @@ const DropdownSection = ({
           {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
         </div>
       )}
-      <div className={clsx(styles.sectionBox, textExists && styles.hasText)}>
+      <div
+        className={cn(
+          styles.sectionBox,
+          textExists && styles.hasText,
+          inTwoColumns && styles.inTwoColumns
+        )}
+      >
         {children}
       </div>
     </div>
