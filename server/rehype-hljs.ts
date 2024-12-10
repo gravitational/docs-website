@@ -24,7 +24,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     // We only visit text nodes inside code snippets that include either the
     // <Var tag or (if we have already swapped out Vars with placeholders) a
     // placeholder.
-    const isPossibleVarContainer = (node: Node) => {
+    const isPossibleVarContainer = (node: Parent) => {
       let textValue;
       if (
         node.type === "text" ||
@@ -60,7 +60,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
         const varPattern = new RegExp("<Var [^>]+/>", "g");
         let txt: Text;
         if (node.type == "text") {
-          txt = node;
+          txt = node as Text;
         } else {
           // isPossibleVarContainer enforces having a single child text node
           txt = node.children[0];
