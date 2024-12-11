@@ -186,7 +186,7 @@ export default function remarkCodeSnippet({
   langs = ["code"],
   lint = false,
 }: RemarkCodeSnippetOptions): Transformer {
-  return (root, vfile) => {
+  return (root: Node, vfile) => {
     visit(
       root,
       isCode(langs),
