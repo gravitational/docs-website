@@ -55,7 +55,7 @@ export function InkeepSearch() {
     primaryBrandColor: "#512FC9",
     chatApiProxyDomain: "goteleport.com/inkeep-proxy",
     remoteErrorLogsLevel: 1,
-    optOutAllAnalytics: true,
+    optOutAllAnalytics: false,
     consoleDebugLevel: 0,
     customCardSettings: [
       {
