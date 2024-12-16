@@ -31,3 +31,4 @@ jobs:
       with:
         app_ids: ${{ vars.AMPLIFY_APP_IDS }}
         create_branches: "false"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
