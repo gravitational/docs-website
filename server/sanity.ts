@@ -106,6 +106,7 @@ const navQuery = `
         }
       }
     }
+    inTwoColumns
   },
   rightSide {
     search {
