@@ -27,7 +27,8 @@ jobs:
         aws-region: us-west-2
         role-to-assume: ${{ vars.IAM_ROLE }}
 
-    - uses: ./tools/amplify-preview
+    - name: Amplify preview
+      uses: ./tools/amplify-preview
       with:
         app_ids: ${{ vars.AMPLIFY_APP_IDS }}
         create_branches: "false"
