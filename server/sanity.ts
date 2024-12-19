@@ -103,10 +103,10 @@ const navQuery = `
               imageDate
             }
           }
-        }
+        },
+        inTwoColumns
       }
     }
-    inTwoColumns
   },
   rightSide {
     search {
@@ -117,10 +117,7 @@ const navQuery = `
     mobileBtn
   }
 },
-"bannerButtons": *[_type == "topBanner"][0] {
-  "first": sideButtons.first,
-   "second": sideButtons.second
-  }
+"bannerButtons": *[_type == "topBanner"][0] {"first": sideButtons.first, "second": sideButtons.second}
 }`;
 
 export const getNavData = async () => {
