@@ -27,7 +27,7 @@
     "storybook:build": "storybook build",
     "storybook:test-ci": "npx concurrently --kill-others --success first --names \"STORYBOOK,TESTS\" -c \"magenta,blue\" \"npx http-server -a 127.0.0.1 --silent storybook-static --port 6006\" \"npx wait-on tcp:127.0.0.1:6006 && yarn storybook:test --url http://127.0.0.1:6006/storybook-static \"",
     "storybook:test": "test-storybook",
-    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --trace-warnings --experimental-vm-modules\" jest --config ./jest.server.config.mjs server/*.test.ts"
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --trace-warnings --experimental-vm-modules\" jest --config ./jest.config.mjs server/*.test.ts src/theme/**/*.test.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

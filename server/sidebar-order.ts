@@ -3,7 +3,6 @@ import type {
   SidebarItemDoc,
   NormalizedSidebarItemCategory,
 } from "@docusaurus/plugin-content-docs/src/sidebars/types.ts";
-import type { PropVersionDoc } from "@docusaurus/plugin-content-docs";
 
 export interface docPage {
   title: string;
