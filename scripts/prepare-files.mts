@@ -4,6 +4,7 @@ import { glob } from "glob";
 import { docusaurusifyNavigation } from "../server/config-docs";
 import {
   getCurrentVersion,
+  getLatestVersion,
   getVersionNames,
   getDocusaurusVersions,
 } from "../server/config-site";
@@ -17,6 +18,7 @@ const GET_VERSION_SIDEBAR_FILENAME = (version) =>
 
 const docusaurusVersions = getDocusaurusVersions();
 const currentVersion = getCurrentVersion();
+const defaultVersion = getLatestVersion();
 const versions = getVersionNames();
 
 const writeSidebar = (version: string) => {
@@ -66,3 +68,14 @@ versions.forEach((version) => {
 });
 
 writeVersions();
+
+// Make sure the upcoming releases page is the same on all 3 branches.
+const versionsToOverride = getVersionNames().filter(v => v !== defaultVersion);
+const defaultUpcomingReleases = resolve("content", defaultVersion, "docs/pages/upcoming-releases.mdx");
+versionsToOverride.forEach((version) => {
+  const destination = version === currentVersion
+    ? resolve("docs", "upcoming-releases.mdx")
+    : resolve(DOCS_PAGES_ROOT, `version-${version}`, "upcoming-releases.mdx");
+
+  copyFileSync(defaultUpcomingReleases, destination);
+})
