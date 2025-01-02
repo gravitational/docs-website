@@ -36,10 +36,10 @@ const config: Config = {
   },
   customFields: {
     inkeepConfig: {
-        apiKey: getFromSecretOrEnv("INKEEP_API_KEY"),
-        integrationId: getFromSecretOrEnv("INKEEP_INTEGRATION_ID"),
-        organizationId: getFromSecretOrEnv("INKEEP_ORGANIZATION_ID"),
-      }
+      apiKey: getFromSecretOrEnv("INKEEP_API_KEY"),
+      integrationId: getFromSecretOrEnv("INKEEP_INTEGRATION_ID"),
+      organizationId: getFromSecretOrEnv("INKEEP_ORGANIZATION_ID"),
+    },
   },
   clientModules: [
     "./src/styles/variables.css",
@@ -112,6 +112,10 @@ const config: Config = {
   favicon: "/favicon.svg",
   url: process.env.DOCUSAURUS_CONFIG_URL || "https://goteleport.com",
   baseUrl: process.env.DOCUSAURUS_CONFIG_BASE_URL || "/",
+  // Our hosting infrastructure redirects requests to a docs page that do not
+  // contain a trailing slash in the URL, so add trailing slashes to sitemap
+  // URLs to prevent clients from receiving non-200 responses.
+  trailingSlash: true,
 
   markdown: {
     parseFrontMatter: async (params) => {
