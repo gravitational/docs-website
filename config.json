@@ -71,12 +71,12 @@
     },
     {
       "name": "16.x",
-      "branch": "branch/v16",
-      "isDefault": true
+      "branch": "branch/v16"
     },
     {
       "name": "17.x",
-      "branch": "branch/v17"
+      "branch": "branch/v17",
+      "isDefault": true
     },
     {
       "name": "18.x",
