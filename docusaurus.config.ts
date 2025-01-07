@@ -153,13 +153,6 @@ const config: Config = {
         },
       },
     ],
-    [
-      '@docusaurus/plugin-google-gtag',
-      {
-        trackingID: 'G-Z1BMQRVFH3',
-        anonymizeIP: true,
-      },
-    ],
     "@docusaurus/theme-classic",
     "@docusaurus/plugin-sitemap",
     [

@@ -40,7 +40,6 @@
     "@docusaurus/faster": "^3.6.3",
     "@docusaurus/plugin-content-docs": "^3.6.3",
     "@docusaurus/plugin-debug": "^3.6.3",
-    "@docusaurus/plugin-google-gtag": "^3.6.3",
     "@docusaurus/plugin-sitemap": "^3.6.3",
     "@docusaurus/theme-classic": "^3.6.3",
     "@inkeep/widgets": "^0.2.288",
