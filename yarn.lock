@@ -7966,7 +7966,7 @@ highlight.js@~11.10.0:
   resolved "https://registry.npmjs.org/highlight.js/-/highlight.js-11.10.0.tgz"
   integrity sha512-SYVnVFswQER+zu1laSya563s+F8VDGt7o35d4utbamowvUNLLMovFqwCLSocpZTz3MgaSRA1IbqRWZv97dtErQ==
 
-"highlightjs-terraform@https://github.com/highlightjs/highlightjs-terraform":
+"highlightjs-terraform@https://github.com/highlightjs/highlightjs-terraform#eb1b9661e143a43dff6b58b391128ce5cdad31d4":
   version "1.0.6"
   resolved "https://github.com/highlightjs/highlightjs-terraform#eb1b9661e143a43dff6b58b391128ce5cdad31d4"
 
