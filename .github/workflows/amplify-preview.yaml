@@ -8,7 +8,6 @@ permissions:
 
 jobs:
   amplify-preview:
-    name: Prepare Amplify Preview
     runs-on: ubuntu-22.04-2core-arm64
     environment: docs-amplify
     steps:
