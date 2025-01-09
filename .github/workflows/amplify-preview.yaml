@@ -1,4 +1,4 @@
-name: Amplify Preview
+name: Docs Preview
 on:
   pull_request:
 
@@ -8,6 +8,7 @@ permissions:
 
 jobs:
   amplify-preview:
+    name: Amplify Preview
     runs-on: ubuntu-22.04-2core-arm64
     environment: docs-amplify
     steps:
