@@ -1,15 +1,15 @@
 [submodule "content/15.x"]
 	path = content/15.x
-	url = https://github.com/gravitational/teleport/
+	url = ssh://git@github.com/gravitational/teleport.git
 	branch = branch/v15
 [submodule "content/16.x"]
 	path = content/16.x
-	url = https://github.com/gravitational/teleport/
+	url = ssh://git@github.com/gravitational/teleport.git
 	branch = branch/v16
 [submodule "content/17.x"]
 	path = content/17.x
-	url = https://github.com/gravitational/teleport/
+	url = ssh://git@github.com/gravitational/teleport.git
 	branch = branch/v17
 [submodule "content/18.x"]
 	path = content/18.x
-	url = https://github.com/gravitational/teleport
+	url = ssh://git@github.com/gravitational/teleport.git
