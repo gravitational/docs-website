@@ -8,7 +8,7 @@ github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+V
 EOF
 
 # For debugging SSH transport. Delete when no longer needed.
-export GIT_SSH_COMMAND="ssh -vvv"
+git submodule foreach 'git config set core.sshCommand "ssh -vvv"'
 
 # Fetch all submodule refs on a local machine. On the AWS Amplify build runner,
 # only execute a shallow fetch with a single branch.
