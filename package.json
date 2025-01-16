@@ -58,7 +58,6 @@
     "react-use": "^17.5.0"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.26.0",
     "@csstools/postcss-global-data": "^2.1.1",
     "@docusaurus/module-type-aliases": "^3.6.3",
     "@docusaurus/plugin-client-redirects": "^3.6.3",
@@ -94,10 +93,9 @@
     "remark-rehype": "^10.1.0",
     "remark-validate-links": "^11.0.2",
     "to-vfile": "^8.0.0",
-    "ts-node": "^10.9.2",
     "tsc-esm-fix": "^3.1.0",
     "tsm": "^2.3.0",
-    "typescript": "^5.7.3",
+    "typescript": "~5.5.2",
     "unified": "^11.0.5",
     "unified-lint-rule": "^3.0.0",
     "unist": "^0.0.1",
