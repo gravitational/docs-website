@@ -22,7 +22,8 @@
     "base:prettier": "prettier '**/*.{js,jsx,ts,tsx,json}'",
     "lint": "yarn base:eslint --fix && yarn base:prettier --write -l",
     "lint-check": "yarn base:eslint && yarn base:prettier --check",
-    "markdown-lint": "yarn build-remark && remark --rc-path .remarkrc.mjs 'content/**/docs/pages/**/*.mdx' --quiet --frail --ignore-pattern '**/includes/**' --silently-ignore"
+    "markdown-lint": "yarn build-remark && remark --rc-path .remarkrc.mjs 'content/**/docs/pages/**/*.mdx' --quiet --frail --ignore-pattern '**/includes/**' --silently-ignore",
+    "test": "jest server/*.test.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
