@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "spellcheck": "bash scripts/check-spelling.sh",
-    "build-remark": "rm -rf .remark-build && tsc --build tsconfig.node.json && tsc-esm-fix --target='.remark-build' --ext='.mjs'",
+    "build-remark": "rm -rf .remark-build && tsc --build --outdir .remark-build && tsc-esm-fix --target='.remark-build' --ext='.mjs'",
     "git-update": "scripts/update_submodules.sh",
     "prepare-files": "npx vite-node ./scripts/prepare-files.mts",
     "prepare-sanity-data": "npx vite-node ./scripts/prepare-sanity-data.mts",

@@ -2,9 +2,13 @@
   // This file is not used in compilation. It is here just for a nice editor experience.
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
     "baseUrl": ".",
-    "lib": ["dom", "ES2021.String"]
+    "lib": ["dom", "ES2021.String", "esnext"]
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.mts" ],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.mts"],
   "exclude": ["node_modules", "content/**"]
 }
