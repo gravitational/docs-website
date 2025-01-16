@@ -1,0 +1,61 @@
+<snippet>
+  <command>
+    <commandline data-content="$ ">
+      tsh request search --kind node
+    </commandline>
+  </command>
+
+  <codeline>
+    Name                                 Hostname    Labels       Resource ID
+  </codeline>
+
+  <codeline>
+    \------------------------------------ ----------- ------------
+  </codeline>
+
+  <codeline>
+    \------------------------------------------------------
+  </codeline>
+
+  <codeline>
+    b1168402-9340-421a-a344-af66a6675738 iot         test=test
+  </codeline>
+
+  <codeline>
+    /teleport.example.com/node/b1168402-9340-421a-a344-af66a6675738
+  </codeline>
+
+  <codeline>
+    bbb56211-7b54-4f9e-bee9-b68ea156be5f node        test=test
+  </codeline>
+
+  <codeline>
+    /teleport.example.com/node/bbb56211-7b54-4f9e-bee9-b68ea156be5f
+  </codeline>
+
+  <codeline>
+
+  </codeline>
+
+  <br />
+
+  <codeline>
+    To request access to these resources, run
+  </codeline>
+
+  <codeline>
+    \> tsh request create --resource
+  </codeline>
+
+  <codeline>
+    \> /teleport.example.com/node/b1168402-9340-421a-a344-af66a6675738 --resource
+  </codeline>
+
+  <codeline>
+    \> /teleport.example.com/node/bbb56211-7b54-4f9e-bee9-b68ea156be5f \
+  </codeline>
+
+  <codeline>
+    \>     --reason <request reason>
+  </codeline>
+</snippet>
