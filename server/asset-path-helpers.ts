@@ -15,6 +15,9 @@ const REGEXP_POST_PREPARE_VERSION = /^\/versioned_docs\/version-([^\/]+)\//;
 // migration script
 const REGEXP_PRE_PREPARE_VERSION = /^\/?content\/([^\/]+)\//;
 const REGEXP_EXTENSION = /(\/index)?\.mdx$/;
+// Matches content directory paths we use for building the docs site (versus for
+// testing).
+const REGEXP_CONTENT_DIR_PATH = /^(\/(versioned_)?docs|\/?content)\//;
 
 export type DocsMeta = {
   isCurrent: boolean;
@@ -73,8 +76,12 @@ const getCurrentDir = (vfile: VFile) => {
 const getPagesDir = (vfile: VFile): string =>
   resolve(getRootDir(vfile), "docs/pages");
 
-const getOriginalPath = (vfile: VFile) =>
-  vfile.path.replace(getCurrentDir(vfile), getPagesDir(vfile));
+const getOriginalPath = (vfile: VFile) => {
+  if (vfile.path.match(REGEXP_CONTENT_DIR_PATH)) {
+    return vfile.path.replace(getCurrentDir(vfile), getPagesDir(vfile));
+  }
+  return vfile.path;
+};
 
 const extBlackList = ["md", "mdx"];
 
@@ -136,14 +143,16 @@ export const updatePathsInIncludes = ({
       return href;
     }
 
+    let absTargetPath = resolve(versionRootDir, dirname(includePath), href);
     if (node.type === "link") {
       const absMdxPath = dirname(vfile.path);
 
-      const absTargetPath = resolve(
-        versionRootDir,
-        dirname(includePath),
-        href
-      ).replace(getPagesDir(vfile), getCurrentDir(vfile));
+      if (vfile.path.match(REGEXP_CONTENT_DIR_PATH)) {
+        absTargetPath = absTargetPath.replace(
+          getPagesDir(vfile),
+          getCurrentDir(vfile)
+        );
+      }
 
       (node as Link | Image | Definition).url = relative(
         absMdxPath,
@@ -151,9 +160,6 @@ export const updatePathsInIncludes = ({
       );
     } else {
       const absMdxPath = resolve(getOriginalPath(vfile));
-
-      const absTargetPath = resolve(versionRootDir, dirname(includePath), href);
-
       (node as Link | Image | Definition).url = relative(
         dirname(absMdxPath),
         absTargetPath

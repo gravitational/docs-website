@@ -261,7 +261,7 @@ const isInclude = (node: Node) => {
   return typeof valNode.value === "string" && includeRegexp.test(valNode.value);
 };
 
-type UpdatePathsOptions = {
+export type UpdatePathsOptions = {
   node: Node;
   versionRootDir: string;
   includePath: string;

@@ -1,0 +1,11 @@
+name: Test
+on:
+  pull_request:
+
+jobs:
+  run-tests:
+    name: Run tests
+    runs-on: ubuntu-22.04-2core-arm64
+    steps:
+    - uses: actions/checkout@v4
+    - run: yarn && yarn test
