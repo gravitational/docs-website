@@ -103,7 +103,7 @@
     "unist": "^0.0.1",
     "unist-util-find": "^3.0.0",
     "unist-util-visit-parents": "^6.0.1",
-    "vfile": "^6.0.1",
+    "vfile": "^6.0.3",
     "vite-node": "^1.6.0"
   },
   "browserslist": {

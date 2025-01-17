@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 import { resolve } from "path";
 import { suite } from "uvu";
 import * as assert from "uvu/assert";
-import { VFile, VFileOptions } from "vfile";
+import { Compatible, VFile, VFileOptions } from "vfile";
 import remarkMdx from "remark-mdx";
 import remarkGFM from "remark-gfm";
 import { remark } from "remark";
@@ -153,13 +153,13 @@ description: "Using the API."
 });
 
 const transformer = (vfileOptions: VFileOptions) => {
-  const file = new VFile(vfileOptions);
+  const file: VFile = new VFile(vfileOptions);
 
   return remark()
-    .use(remarkMdx)
+    .use(remarkMdx as any)
     .use(remarkGFM)
     .use(remarkTOC)
-    .processSync(file);
+    .processSync(file as any);
 };
 
 Suite("replaces inclusion expressions", () => {
