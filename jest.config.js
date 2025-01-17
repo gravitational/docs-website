@@ -1,11 +1,11 @@
-// Created using yarn ts-jest config:init
-// See:
-// https://kulshekhar.github.io/ts-jest/docs/getting-started/installation#jest-config-file
-//
-/** @type {import('ts-jest').JestConfigWithTsJest} **/
-export default {
-  testEnvironment: "node",
-  transform: {
-    "^.+.tsx?$": ["ts-jest",{}],
-  },
+// Config pasted from:
+// https://kulshekhar.github.io/ts-jest/docs/guides/esm-support/
+import { createDefaultEsmPreset } from "ts-jest";
+
+const presetConfig = createDefaultEsmPreset();
+
+const jestConfig = {
+  ...presetConfig,
 };
+
+export default jestConfig;

@@ -3,11 +3,10 @@
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
     "target": "esnext",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "esnext",
     "esModuleInterop": true,
     "baseUrl": ".",
-    "lib": ["dom", "ES2021.String", "esnext"]
+    "lib": ["dom", "esnext"]
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.mts"],
   "exclude": ["node_modules", "content/**"]

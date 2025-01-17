@@ -1,7 +1,7 @@
 {
   "name": "docusaurus",
-  "type": "module",
   "version": "0.0.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "spellcheck": "bash scripts/check-spelling.sh",
@@ -24,7 +24,7 @@
     "lint": "yarn base:eslint --fix && yarn base:prettier --write -l",
     "lint-check": "yarn base:eslint && yarn base:prettier --check",
     "markdown-lint": "yarn build-remark && remark --rc-path .remarkrc.mjs 'content/**/docs/pages/**/*.mdx' --quiet --frail --ignore-pattern '**/includes/**' --silently-ignore",
-    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest --config ./jest.config.js server/*.test.ts"
+    "test": "jest --config ./jest.config.js server/*.test.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
