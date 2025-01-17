@@ -4,9 +4,9 @@
 # only execute a shallow fetch with a single branch.
 function fetch_submodules () {
   if [[ -n ${AWS_APP_ID} ]]; then
-      return $(git submodule update --init --remote --progress --depth 1 --single-branch)
+      git submodule update --init --remote --progress --depth 1 --single-branch
   else
-      return $(git submodule update --init --remote --progress)
+      git submodule update --init --remote --progress
   fi
 }
 
