@@ -1,4 +1,4 @@
-# Website
+# Website <br> ![goteleportcomdocs hosted by AWS Amplify](https://cronitor.io/badges/hnmp7r/production/TFpnWbbLZZMb7vaCrRjbyHjS2Bo.svg)
 
 This a port of the Teleport docs from the original custom engine to [Docusaurus](https://docusaurus.io/).
 
