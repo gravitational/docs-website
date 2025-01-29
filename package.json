@@ -43,7 +43,7 @@
     "@docusaurus/plugin-google-gtag": "3.6.3",
     "@docusaurus/plugin-sitemap": "^3.6.3",
     "@docusaurus/theme-classic": "^3.6.3",
-    "@inkeep/widgets": "^0.2.288",
+    "@inkeep/widgets": "^0.2.290",
     "@mdx-js/react": "^3.0.0",
     "classnames": "^2.3.1",
     "clsx": "^2.1.1",

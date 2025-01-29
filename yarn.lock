@@ -2514,10 +2514,10 @@
   resolved "https://registry.npmjs.org/@inkeep/styled-system/-/styled-system-0.0.46.tgz"
   integrity sha512-nL3jywgLkiDPTbIgi195AEgw7W/JvLGw5FDqTVI+o28syjgqvEohCSSpiIBDYkUEoz1XRZDImva1jNg17qzfXw==
 
-"@inkeep/widgets@^0.2.288":
-  version "0.2.289"
-  resolved "https://registry.npmjs.org/@inkeep/widgets/-/widgets-0.2.289.tgz"
-  integrity sha512-M4bET7C6ZAX1jlMoUkVcl8Rc/17J909sgeCP+KC3lBouf4H7MVUvtRUYypdIm1W3A7df/MjkbaAYFWUJsM22iQ==
+"@inkeep/widgets@^0.2.290":
+  version "0.2.290"
+  resolved "https://registry.yarnpkg.com/@inkeep/widgets/-/widgets-0.2.290.tgz#fc2d46256ef0bee0d3dbeeca12d39731985019ce"
+  integrity sha512-Ex0aBGZutavI0qdAiMCk7IRHBNKZ8sEGXu1gMdY8W6bIpojknOCfNDw+f9P7auXFKnkwEIcBF8xWQtPgzx3YYA==
   dependencies:
     "@apollo/client" "^3.8.1"
     "@ark-ui/react" "^0.15.0"
