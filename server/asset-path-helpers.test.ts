@@ -20,6 +20,15 @@ describe("server/asset-path-helpers: retargetHref", () => {
       contentRootDir: "/",
       expected: "../../admin-guides/database-access/introduction.mdx",
     },
+    {
+      description: "href in lower directory than including page",
+      originalPath: "../../admin-guides/database-access/introduction.mdx",
+      includerPath:
+        "/docs/pages/admin-guides/database-access/azure-databases/sql-server.mdx",
+      partialPath: "/docs/pages/includes/database-access/standard-intro.mdx",
+      contentRootDir: "/",
+      expected: "../../../admin-guides/database-access/introduction.mdx",
+    },
   ];
 
   test.each(testCases)("$description", (tc) => {
