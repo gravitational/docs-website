@@ -60,27 +60,19 @@ export const getRootDir = (vfile: VFile): string => {
   return resolve("content", getVersionFromPath(vfile.path));
 };
 
-const getCurrentDir = (vfile: VFile) => {
-  // The page is in the pre-migration directory, i.e., we're linting it
-  if (vfile.path.startsWith("content")) {
-    return resolve(`content/${getVersionFromPath(vfile.path)}/docs/pages`);
-  }
-  return isCurrent(vfile.path)
+const getPreMigrationPath = (vfile: VFile) => {
+  const preMigrationRoot = resolve(getRootDir(vfile), "docs/pages");
+  const postMigrationRoot = isCurrent(vfile.path)
     ? resolve("docs")
     : resolve(`versioned_docs/version-${getVersionFromPath(vfile.path)}`);
+  return vfile.path.replace(postMigrationRoot, preMigrationRoot);
 };
-
-const getPagesDir = (vfile: VFile): string =>
-  resolve(getRootDir(vfile), "docs/pages");
-
-const getOriginalPath = (vfile: VFile) =>
-  vfile.path.replace(getCurrentDir(vfile), getPagesDir(vfile));
 
 const extBlackList = ["md", "mdx"];
 
 export const updateAssetPath = (href: string, { vfile }: { vfile: VFile }) => {
   if (isLocalAssetFile(href, { extBlackList })) {
-    const assetPath = resolve(dirname(getOriginalPath(vfile)), href);
+    const assetPath = resolve(dirname(getPreMigrationPath(vfile)), href);
 
     return relative(dirname(vfile.path), assetPath);
   }
@@ -174,8 +166,14 @@ export const updatePathsInIncludes = ({
 
     let docPagePath = resolve(vfile.path);
     if (vfile.path.match(REGEXP_POST_PREPARE_VERSION)) {
-      docPagePath = getOriginalPath(vfile);
+      docPagePath = getPreMigrationPath(vfile);
     }
+
+    console.log("--updatePathsInIncludes--");
+    console.log("includePath:", includePath);
+    console.log("docPagePath:", docPagePath);
+    console.log("versionRootDir:", versionRootDir);
+    console.log("\n\n");
 
     const newHref = retargetHref(
       href,
