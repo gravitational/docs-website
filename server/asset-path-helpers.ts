@@ -107,16 +107,6 @@ export const retargetHref = (
   includerPath: string,
   contentRootDir: string
 ): string => {
-  console.log(
-    "original path:",
-    originalPath,
-    "\npartialPath:",
-    partialPath,
-    "\nincluderPath",
-    includerPath,
-    "\ncontentRootDir",
-    contentRootDir
-  );
   // Construct an absolute path out of the root directory for all partials,
   // the directory containing the partial (within the root directory for all
   // partials) and the relative path to the target asset, e.g.,
@@ -170,7 +160,6 @@ export const updatePathsInIncludes = ({
     node.type === "definition"
   ) {
     const href = (node as Link | Image | Definition).url;
-    console.log("includePath in updatePathsInIncludes:", includePath);
 
     // Ignore non-strings, absolute paths, web URLs, and links consisting only
     // of anchors (these will end up pointing to the containing page).

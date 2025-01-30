@@ -72,7 +72,7 @@ describe("server/remark-includes: including partials", () => {
 
     const expectedErrors = [
       "Includes only works if they are the only content on the line",
-      "Wrong import path non-existing.mdx in file /content/4.0/docs/pages/filename.mdx.",
+      "Wrong import path includes/non-existing.mdx in file /content/4.0/docs/pages/filename.mdx.",
     ];
 
     expect(errors).toEqual(expectedErrors);
