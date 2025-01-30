@@ -99,6 +99,38 @@ export const updateAssetPath = (href: string, { vfile }: { vfile: VFile }) => {
   return href;
 };
 
+// retargetHref adjusts a link reference path found in a partial file. Since
+// a page can include a partial regardless of the page or the partial's location
+// in a directory tree, we need to update link paths in partials so relative
+// link references work as expected.
+// @param {string} originalPath the link reference included in the partial
+// @param {string} partialPath the absolute path of the partial
+// @param {string} includerPath the absolute path of the including docs page
+// @param {string} contentRootDir the absolute path of the
+// gravitational/teleport clone that contains partialPath and includerPath
+export const retargetHref = (
+  originalPath: string,
+  partialPath: string,
+  includerPath: string
+  contentRootDir: string
+): string => {
+    // Construct an absolute path out of the root directory for all partials,
+    // the directory containing the partial (within the root directory for all
+    // partials) and the relative path to the target asset, e.g.,
+    // "docs/pages/includes", "kubernetes", and
+    // "../../target.png".
+    const absTargetPath = resolve(contentRootDir, dirname(partialPath), originalPath);
+    // Make the reference path relative to the place where the partial doc was
+    // inserted.
+    return relative(
+      // relative() counts all path segments, even the file itself, when
+      // comparing path segments between the "from" and "to" paths, so we
+      // start from the directory containing the file that includes the partial.
+      dirname(includerPath),
+      absTargetPath
+    );
+};
+
 /**
  * correct relative paths resolving in partial docs
  * i.e. start realtive paths from the partial file directory, not from place where it is being inserted
