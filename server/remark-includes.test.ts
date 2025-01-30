@@ -28,7 +28,7 @@ const transformer = (
     .use(remarkMdx as any)
     .use(remarkGFM)
     .use(remarkIncludes, {
-      rootDir: "server/fixtures/includes/",
+      rootDir: "server/fixtures/",
       ...pluginOptions,
     })
     .processSync(file as any);
@@ -487,7 +487,7 @@ boundary" section.
 `,
     },
     {
-      includingPage: "(!includes-relative-link-def.mdx!)",
+      includingPage: "(!includes/includes-relative-link-def.mdx!)",
       description: "relative definition path",
       path: "server/fixtures/definition.mdx",
       expected: `This partial has a relative link [definition].
