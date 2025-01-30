@@ -1,19 +1,25 @@
 import type { Parent, Image, Link, Definition } from "mdast";
 import type { Node } from "unist";
 import type { VFile } from "vfile";
-import { resolve, relative, dirname } from "path";
-import { getCurrentVersion, getLatestVersion } from "./config-site";
+import { resolve, relative, dirname, join } from "path";
+import { getLatestVersion, getCurrentVersion } from "./config-site";
 import { isLocalAssetFile } from "../src/utils/url";
 
-const current = getCurrentVersion();
-const latest = getLatestVersion();
+// In Docusaurus parlance, the latest version is the default version of the docs
+// site. The current version is the unreleased version.
+//
+// TODO(ptgott): There should not be a need to read this value from config.json
+// in this package, since that makes the code more difficult to test. Instead,
+// pass this as a parameter and read config.json in the initial Docusaurus
+// config (docusaurus.config.ts).
+const unreleasedVersion = getCurrentVersion();
 
 // The directory path pattern for versioned content transformed by the migration
 // script
-const REGEXP_POST_PREPARE_VERSION = /^\/versioned_docs\/version-([^\/]+)\//;
+const REGEXP_POST_PREPARE_VERSION = /\/(versioned_)?docs\/version-([^\/]+)\//;
 // The directory path pattern for versioned content not yet transformed by the
 // migration script
-const REGEXP_PRE_PREPARE_VERSION = /^\/?content\/([^\/]+)\//;
+const REGEXP_PRE_PREPARE_VERSION = /(\/|^)content\/([^\/]+)\//;
 const REGEXP_EXTENSION = /(\/index)?\.mdx$/;
 // Matches content directory paths we use for building the docs site (versus for
 // testing).
@@ -32,62 +38,101 @@ export type DocsMeta = {
   originalPath: string;
 };
 
-const getProjectPath = (vfile: VFile) => vfile.path.replace(process.cwd(), "");
+// getProjectPath converts an absolute path to a docs page to a relative path,
+// removing the path of the gravitational/docs-website repo clone.
+const getProjectPath = (path: string) => path.replace(process.cwd(), "");
 
-const isCurrent = (vfile: VFile) => getProjectPath(vfile).startsWith("/docs/");
+const isLatest = (path: string) => getProjectPath(path).startsWith("/docs/");
 
-// getVersionFromVFile extracts the docs version of a post-migration docs page
-// so we can find the appropriate pre-migration version. If the docs page is
+// getVersionFromPath extracts the docs version of a post-migration docs page so
+// we can find the appropriate pre-migration version. If the docs page is
 // already in the pre-migration directory, return the version number of that
 // directory.
-export const getVersionFromVFile = (vfile: VFile): string => {
-  if (isCurrent(vfile)) {
-    return current;
+// @param {string} path an absolute path to a docs page.
+// @param {string} latestVersion the latest version of Teleport reflected on
+// the docs site.
+// @param {string} projectPath the absolute path to the current
+// gravitational/docs-website repo clone.
+export const getVersionFromPath = (
+  path: string,
+  latestVersion: string,
+  projectPath: string
+): string => {
+  const relPath = path.replace(projectPath, "");
+  if (isLatest(relPath)) {
+    return latestVersion;
   }
-  const projectPath = getProjectPath(vfile);
-
-  const postPrepVersion = REGEXP_POST_PREPARE_VERSION.exec(projectPath);
+  const postPrepVersion = REGEXP_POST_PREPARE_VERSION.exec(relPath);
   if (!!postPrepVersion) {
-    return postPrepVersion[1];
+    return postPrepVersion[2];
   }
 
-  const prePrepVersion = REGEXP_PRE_PREPARE_VERSION.exec(projectPath);
+  const prePrepVersion = REGEXP_PRE_PREPARE_VERSION.exec(relPath);
   if (!!prePrepVersion) {
-    return prePrepVersion[1];
+    return prePrepVersion[2];
   }
 
-  throw new Error(`unable to extract a version from filepath ${projectPath}`);
+  throw new Error(
+    `unable to extract a version from filepath ${path} in project ${projectPath} with latest version ${latestVersion}`
+  );
 };
 
 export const getRootDir = (vfile: VFile): string => {
-  return resolve("content", getVersionFromVFile(vfile));
+  return resolve(
+    "content",
+    // TODO(ptgott): Replace process.cwd() with a project path parameter like
+    // we do in getVersionFromPath to make this easier to test.
+    getVersionFromPath(vfile.path, unreleasedVersion, process.cwd())
+  );
 };
 
-const getCurrentDir = (vfile: VFile) => {
-  // The page is in the pre-migration directory, i.e., we're linting it
-  if (vfile.path.startsWith("content")) {
-    return resolve(`content/${getVersionFromVFile(vfile)}/docs/pages`);
-  }
-  return isCurrent(vfile)
-    ? resolve("docs")
-    : resolve(`versioned_docs/version-${getVersionFromVFile(vfile)}`);
-};
-
-const getPagesDir = (vfile: VFile): string =>
-  resolve(getRootDir(vfile), "docs/pages");
-
-const getOriginalPath = (vfile: VFile) => {
-  if (vfile.path.match(REGEXP_CONTENT_DIR_PATH)) {
-    return vfile.path.replace(getCurrentDir(vfile), getPagesDir(vfile));
-  }
-  return vfile.path;
+// getPreMigrationPath returns the docs page path in the pre-migration content
+// directory that corresponds with the given absolute path.  @param {string}
+// path an absolute path to a docs page.  @param {string} latest the latest
+// Teleport version supported on the docs site.
+// @param {string} path an absolute path to a docs page.
+// @param {string} latestVersion the latest version of Teleport reflected on
+// the docs site.
+// @param {string} projectPath the absolute path to the current
+// gravitational/docs-website repo clone.
+export const getPreMigrationPath = (
+  path: string,
+  latestVersion: string,
+  projectPath: string
+) => {
+  const preMigrationRoot = join(
+    projectPath,
+    "content",
+    getVersionFromPath(path, latestVersion, projectPath),
+    "docs/pages"
+  );
+  const postMigrationRoot = isLatest(path.replace(projectPath, ""))
+    ? join(projectPath, "docs")
+    : join(
+        projectPath,
+        `versioned_docs/version-${getVersionFromPath(
+          path,
+          latestVersion,
+          projectPath
+        )}`
+      );
+  return path.replace(postMigrationRoot, preMigrationRoot);
 };
 
 const extBlackList = ["md", "mdx"];
 
 export const updateAssetPath = (href: string, { vfile }: { vfile: VFile }) => {
   if (isLocalAssetFile(href, { extBlackList })) {
-    const assetPath = resolve(dirname(getOriginalPath(vfile)), href);
+    const assetPath = resolve(
+      dirname(
+        getPreMigrationPath(
+          vfile.path,
+          unreleasedVersion,
+          process.cwd()
+        )
+      ),
+      href
+    );
 
     return relative(dirname(vfile.path), assetPath);
   }
@@ -97,6 +142,42 @@ export const updateAssetPath = (href: string, { vfile }: { vfile: VFile }) => {
   }
 
   return href;
+};
+
+// retargetHref adjusts a link reference path found in a partial file. Since
+// a page can include a partial regardless of the page or the partial's location
+// in a directory tree, we need to update link paths in partials so relative
+// link references work as expected.
+// @param {string} originalPath the link reference included in the partial
+// @param {string} partialPath the absolute path of the partial
+// @param {string} includerPath the absolute path of the including docs page
+// @param {string} contentRootDir the absolute path of the
+// gravitational/teleport clone that contains partialPath and includerPath
+export const retargetHref = (
+  originalPath: string,
+  partialPath: string,
+  includerPath: string,
+  contentRootDir: string
+): string => {
+  // Construct an absolute path out of the root directory for all partials,
+  // the directory containing the partial (within the root directory for all
+  // partials) and the relative path to the target asset, e.g.,
+  // "docs/pages/includes", "kubernetes", and
+  // "../../target.png".
+  const absTargetPath = resolve(
+    contentRootDir,
+    dirname(partialPath),
+    originalPath
+  );
+  // Make the reference path relative to the place where the partial doc was
+  // inserted.
+  return relative(
+    // relative() counts all path segments, even the file itself, when
+    // comparing path segments between the "from" and "to" paths, so we
+    // start from the directory containing the file that includes the partial.
+    dirname(includerPath),
+    absTargetPath
+  );
 };
 
 /**
@@ -119,11 +200,15 @@ export const updatePathsInIncludes = ({
   versionRootDir,
   includePath,
   vfile,
+  latestVersion,
+  projectPath,
 }: {
   node: Node;
   versionRootDir: string;
   includePath: string;
   vfile: VFile;
+  latestVersion: string;
+  projectPath: string;
 }) => {
   if (
     node.type === "image" ||
@@ -140,36 +225,36 @@ export const updatePathsInIncludes = ({
       /^http/.test(href) ||
       href[0] === "#"
     ) {
-      return href;
+      return;
     }
 
-    let absTargetPath = resolve(versionRootDir, dirname(includePath), href);
-    if (node.type === "link") {
-      const absMdxPath = dirname(vfile.path);
-
-      if (vfile.path.match(REGEXP_CONTENT_DIR_PATH)) {
-        absTargetPath = absTargetPath.replace(
-          getPagesDir(vfile),
-          getCurrentDir(vfile)
-        );
-      }
-
-      (node as Link | Image | Definition).url = relative(
-        absMdxPath,
-        absTargetPath
-      );
-    } else {
-      const absMdxPath = resolve(getOriginalPath(vfile));
-      (node as Link | Image | Definition).url = relative(
-        dirname(absMdxPath),
-        absTargetPath
-      );
+    let docPagePath = resolve(vfile.path);
+    if (vfile.path.match(REGEXP_POST_PREPARE_VERSION)) {
+      docPagePath = getPreMigrationPath(vfile.path, latestVersion, projectPath);
     }
+
+    const newHref = retargetHref(
+      href,
+      // In the (!include/path!) syntax, we don't include versionRootDir, so we
+      // need to add that here.
+      resolve(versionRootDir, includePath),
+      docPagePath,
+      resolve(versionRootDir)
+    );
+
+    (node as Link | Image | Definition).url = newHref;
   }
 
   if ("children" in node) {
     (node as Parent).children?.forEach?.((child) =>
-      updatePathsInIncludes({ node: child, versionRootDir, includePath, vfile })
+      updatePathsInIncludes({
+        node: child,
+        versionRootDir,
+        includePath,
+        vfile,
+        latestVersion,
+        projectPath,
+      })
     );
   }
 };

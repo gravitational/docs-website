@@ -20,6 +20,8 @@ const transformer = (
   pluginOptions: RemarkIncludesOptions = {
     resolve: true,
     updatePaths: updatePathsInIncludes,
+    projectPath: "",
+    latestVersion: "",
   }
 ) => {
   const file: VFile = new VFile(vfileOptions);
@@ -28,7 +30,7 @@ const transformer = (
     .use(remarkMdx as any)
     .use(remarkGFM)
     .use(remarkIncludes, {
-      rootDir: "server/fixtures/includes/",
+      rootDir: "server/fixtures/",
       ...pluginOptions,
     })
     .processSync(file as any);
@@ -65,14 +67,14 @@ describe("server/remark-includes: including partials", () => {
         value,
         path: "/content/4.0/docs/pages/filename.mdx",
       },
-      { lint: true, resolve: false }
+      { lint: true, resolve: false, latestVersion: "", projectPath: "" }
     );
 
     const errors = result.messages.map(({ message }) => message);
 
     const expectedErrors = [
       "Includes only works if they are the only content on the line",
-      "Wrong import path non-existing.mdx in file /content/4.0/docs/pages/filename.mdx.",
+      "Wrong import path includes/non-existing.mdx in file /content/4.0/docs/pages/filename.mdx.",
     ];
 
     expect(errors).toEqual(expectedErrors);
@@ -89,7 +91,7 @@ describe("server/remark-includes: including partials", () => {
         value,
         path: "/content/4.0/docs/pages/filename.mdx",
       },
-      { lint: false, resolve: false }
+      { lint: true, resolve: false, latestVersion: "", projectPath: "" }
     ).toString();
 
     expect(value).toBe(result);
@@ -118,7 +120,7 @@ describe("server/remark-includes: including partials", () => {
     const actual = transformer({
       value: `Here is the outer page.
 
-(!anchor-links.mdx!)
+(!includes/anchor-links.mdx!)
 
 `,
       path: "server/fixtures/mypage.mdx",
@@ -271,7 +273,7 @@ describe("server/remark-includes: parsePartialParams", () => {
     {
       description: "exclamation point",
       shouldThrow: false,
-      input: `(!error-message.mdx message="Installation has failed!"!)`,
+      input: `(!includes/error-message.mdx message="Installation has failed!"!)`,
       expected: {
         message: `"Installation has failed!"`,
       },
@@ -279,7 +281,7 @@ describe("server/remark-includes: parsePartialParams", () => {
     {
       description: "escaped quotes",
       shouldThrow: false,
-      input: `(!error-message.mdx message="Type \\"final\\" to see the final screen."!)`,
+      input: `(!includes/error-message.mdx message="Type \\"final\\" to see the final screen."!)`,
       expected: {
         message: `"Type \\"final\\" to see the final screen."`,
       },
@@ -287,7 +289,7 @@ describe("server/remark-includes: parsePartialParams", () => {
     {
       description: "single quotes",
       shouldThrow: true,
-      input: `(!error-message.mdx message='Type "Hello"'!)`,
+      input: `(!includes/error-message.mdx message='Type "Hello"'!)`,
     },
     {
       description: "superfluous spaces around an equals sign",
@@ -416,7 +418,7 @@ test("Resolves template variables in includes", () => {
 describe("server/remark-includes: relative links in partials", () => {
   const includingRelativeLink = `Here are instructions on installing the software:
 
-(!include-relative-link.mdx!)
+(!includes/include-relative-link.mdx!)
 `;
   interface testCase {
     includingPage: string;
@@ -467,7 +469,7 @@ Here is an image showing a successful installation:
     {
       includingPage: `Here's how to attach an IAM policy for DB Access:
 
-(!database-access/attach-iam-policies.mdx!)
+(!includes/database-access/attach-iam-policies.mdx!)
 `,
       description: "relative image path",
       path: "server/fixtures/includes/db-policy.mdx",
@@ -487,7 +489,7 @@ boundary" section.
 `,
     },
     {
-      includingPage: "(!includes-relative-link-def.mdx!)",
+      includingPage: "(!includes/includes-relative-link-def.mdx!)",
       description: "relative definition path",
       path: "server/fixtures/definition.mdx",
       expected: `This partial has a relative link [definition].
