@@ -2,10 +2,9 @@ import type { Parent, Image, Link, Definition } from "mdast";
 import type { Node } from "unist";
 import type { VFile } from "vfile";
 import { resolve, relative, dirname, join } from "path";
-import { getCurrentVersion, getLatestVersion } from "./config-site";
+import { getLatestVersion } from "./config-site";
 import { isLocalAssetFile } from "../src/utils/url";
 
-const current = getCurrentVersion();
 const latest = getLatestVersion();
 
 // The directory path pattern for versioned content transformed by the migration
@@ -29,52 +28,93 @@ export type DocsMeta = {
   originalPath: string;
 };
 
+// getProjectPath converts an absolute path to a docs page to a relative path,
+// removing the path of the gravitational/docs-website repo clone.
 const getProjectPath = (path: string) => path.replace(process.cwd(), "");
 
-const isCurrent = (path: string) => getProjectPath(path).startsWith("/docs/");
+const isLatest = (path: string) => getProjectPath(path).startsWith("/docs/");
 
 // getVersionFromPath extracts the docs version of a post-migration docs page so
 // we can find the appropriate pre-migration version. If the docs page is
 // already in the pre-migration directory, return the version number of that
 // directory.
-export const getVersionFromPath = (path: string): string => {
-  if (isCurrent(path)) {
-    return current;
+// @param {string} path an absolute path to a docs page.
+// @param {string} latestVersion the latest version of Teleport reflected on
+// the docs site.
+// @param {string} projectPath the absolute path to the current
+// gravitational/docs-website repo clone.
+export const getVersionFromPath = (
+  path: string,
+  latestVersion: string,
+  projectPath: string
+): string => {
+  const relPath = path.replace(projectPath, "");
+  if (isLatest(relPath)) {
+    return latestVersion;
   }
-  const projectPath = getProjectPath(path);
-
-  const postPrepVersion = REGEXP_POST_PREPARE_VERSION.exec(projectPath);
+  const postPrepVersion = REGEXP_POST_PREPARE_VERSION.exec(relPath);
   if (!!postPrepVersion) {
     return postPrepVersion[2];
   }
 
-  const prePrepVersion = REGEXP_PRE_PREPARE_VERSION.exec(projectPath);
+  const prePrepVersion = REGEXP_PRE_PREPARE_VERSION.exec(relPath);
   if (!!prePrepVersion) {
     return prePrepVersion[2];
   }
 
-  throw new Error(`unable to extract a version from filepath ${projectPath}`);
+  throw new Error(`unable to extract a version from filepath ${path}`);
 };
 
 export const getRootDir = (vfile: VFile): string => {
-  return resolve("content", getVersionFromPath(vfile.path));
+  return resolve(
+    "content",
+    getVersionFromPath(vfile.path, latest, getProjectPath(vfile.path))
+  );
 };
 
 // getPreMigrationPath returns the docs page path in the pre-migration content
-// directory that corresponds with the given absolute path.
-export const getPreMigrationPath = (path: string) => {
-  const preMigrationRoot = join("content", getVersionFromPath(path));
-  const postMigrationRoot = isCurrent(path)
-    ? "docs"
-    : `versioned_docs/version-${getVersionFromPath(path)}`;
-  return resolve(path.replace(postMigrationRoot, preMigrationRoot));
+// directory that corresponds with the given absolute path.  @param {string}
+// path an absolute path to a docs page.  @param {string} latest the latest
+// Teleport version supported on the docs site.
+// @param {string} path an absolute path to a docs page.
+// @param {string} latestVersion the latest version of Teleport reflected on
+// the docs site.
+// @param {string} projectPath the absolute path to the current
+// gravitational/docs-website repo clone.
+export const getPreMigrationPath = (
+  path: string,
+  latestVersion: string,
+  projectPath: string
+) => {
+  const preMigrationRoot = join(
+    projectPath,
+    "content",
+    getVersionFromPath(path, latestVersion, projectPath),
+    "docs/pages"
+  );
+  const postMigrationRoot = isLatest(path.replace(projectPath, ""))
+    ? join(projectPath, "docs")
+    : join(
+        projectPath,
+        `versioned_docs/version-${getVersionFromPath(
+          path,
+          latestVersion,
+          projectPath
+        )}`
+      );
+  return path.replace(postMigrationRoot, preMigrationRoot);
 };
 
 const extBlackList = ["md", "mdx"];
 
 export const updateAssetPath = (href: string, { vfile }: { vfile: VFile }) => {
   if (isLocalAssetFile(href, { extBlackList })) {
-    const assetPath = resolve(dirname(getPreMigrationPath(vfile.path)), href);
+    const assetPath = resolve(
+      dirname(
+        getPreMigrationPath(vfile.path, latest, getProjectPath(vfile.path))
+      ),
+      href
+    );
 
     return relative(dirname(vfile.path), assetPath);
   }
@@ -142,11 +182,15 @@ export const updatePathsInIncludes = ({
   versionRootDir,
   includePath,
   vfile,
+  latestVersion,
+  projectPath,
 }: {
   node: Node;
   versionRootDir: string;
   includePath: string;
   vfile: VFile;
+  latestVersion: string;
+  projectPath: string;
 }) => {
   if (
     node.type === "image" ||
@@ -168,7 +212,7 @@ export const updatePathsInIncludes = ({
 
     let docPagePath = resolve(vfile.path);
     if (vfile.path.match(REGEXP_POST_PREPARE_VERSION)) {
-      docPagePath = getPreMigrationPath(vfile.path);
+      docPagePath = getPreMigrationPath(vfile.path, latestVersion, projectPath);
     }
 
     //    console.log("--updatePathsInIncludes--");
@@ -191,7 +235,14 @@ export const updatePathsInIncludes = ({
 
   if ("children" in node) {
     (node as Parent).children?.forEach?.((child) =>
-      updatePathsInIncludes({ node: child, versionRootDir, includePath, vfile })
+      updatePathsInIncludes({
+        node: child,
+        versionRootDir,
+        includePath,
+        vfile,
+        latestVersion,
+        projectPath,
+      })
     );
   }
 };
