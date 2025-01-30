@@ -2,10 +2,17 @@ import type { Parent, Image, Link, Definition } from "mdast";
 import type { Node } from "unist";
 import type { VFile } from "vfile";
 import { resolve, relative, dirname, join } from "path";
-import { getLatestVersion } from "./config-site";
+import { getLatestVersion, getCurrentVersion } from "./config-site";
 import { isLocalAssetFile } from "../src/utils/url";
 
-const latest = getLatestVersion();
+// In Docusaurus parlance, the latest version is the default version of the docs
+// site. The current version is the unreleased version.
+//
+// TODO(ptgott): There should not be a need to read this value from config.json
+// in this package, since that makes the code more difficult to test. Instead,
+// pass this as a parameter and read config.json in the initial Docusaurus
+// config (docusaurus.config.ts).
+const unreleasedVersion = getCurrentVersion();
 
 // The directory path pattern for versioned content transformed by the migration
 // script
@@ -62,13 +69,17 @@ export const getVersionFromPath = (
     return prePrepVersion[2];
   }
 
-  throw new Error(`unable to extract a version from filepath ${path}`);
+  throw new Error(
+    `unable to extract a version from filepath ${path} in project ${projectPath} with latest version ${latestVersion}`
+  );
 };
 
 export const getRootDir = (vfile: VFile): string => {
   return resolve(
     "content",
-    getVersionFromPath(vfile.path, latest, getProjectPath(vfile.path))
+    // TODO(ptgott): Replace process.cwd() with a project path parameter like
+    // we do in getVersionFromPath to make this easier to test.
+    getVersionFromPath(vfile.path, unreleasedVersion, process.cwd())
   );
 };
 
@@ -111,7 +122,11 @@ export const updateAssetPath = (href: string, { vfile }: { vfile: VFile }) => {
   if (isLocalAssetFile(href, { extBlackList })) {
     const assetPath = resolve(
       dirname(
-        getPreMigrationPath(vfile.path, latest, getProjectPath(vfile.path))
+        getPreMigrationPath(
+          vfile.path,
+          unreleasedVersion,
+          process.cwd()
+        )
       ),
       href
     );

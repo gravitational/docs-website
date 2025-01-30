@@ -7,6 +7,7 @@ import { loadConfig } from "./server/config-docs";
 import {
   getDocusaurusConfigVersionOptions,
   getLatestVersion,
+  getCurrentVersion,
 } from "./server/config-site";
 import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkIncludes from "./server/remark-includes";
@@ -26,7 +27,10 @@ import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
 
+// In Docusaurus parlance, the latest version is the default version of the docs
+// site. The current version is the unreleased version.
 const latestVersion = getLatestVersion();
+const unreleasedVersion = getCurrentVersion();
 
 const config: Config = {
   future: {
@@ -179,7 +183,7 @@ const config: Config = {
             {
               rootDir: (vfile: VFile) => getRootDir(vfile),
               updatePaths: updatePathsInIncludes,
-              latestVersion: latestVersion,
+              latestVersion: unreleasedVersion,
               projectPath: process.cwd(),
             },
           ],
@@ -187,7 +191,7 @@ const config: Config = {
             remarkVariables,
             {
               variables: (vfile: VFile) =>
-                loadConfig(getVersionFromPath(vfile.path, latestVersion))
+                loadConfig(getVersionFromPath(vfile.path, unreleasedVersion))
                   .variables,
             },
           ],
