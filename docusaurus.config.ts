@@ -18,7 +18,7 @@ import { fetchVideoMeta } from "./server/youtube-meta";
 import { getRedirects } from "./server/redirects";
 import {
   updateAssetPath,
-  getVersionFromVFile,
+  getVersionFromPath,
   getRootDir,
   updatePathsInIncludes,
 } from "./server/asset-path-helpers";
@@ -185,7 +185,7 @@ const config: Config = {
             remarkVariables,
             {
               variables: (vfile: VFile) =>
-                loadConfig(getVersionFromVFile(vfile)).variables,
+                loadConfig(getVersionFromPath(vfile.path)).variables,
             },
           ],
           [

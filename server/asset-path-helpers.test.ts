@@ -63,6 +63,11 @@ describe("server/asset-path-helpers: getVersionFromPath", () => {
       path: "content/18.x/docs/pages/installation.mdx",
       expected: "18.x",
     },
+    {
+      description: "post-migration versioned directory",
+      path: "/versioned_docs/version-17.x/admin-guides/access-controls/guides/mfa-for-admin-actions.mdx",
+      expected: "17.x",
+    },
   ];
 
   test.each(testCases)("$description", (tc) => {

@@ -45,7 +45,7 @@ export const getVersionFromPath = (path: string): string => {
 
   const postPrepVersion = REGEXP_POST_PREPARE_VERSION.exec(projectPath);
   if (!!postPrepVersion) {
-    return postPrepVersion[1];
+    return postPrepVersion[2];
   }
 
   const prePrepVersion = REGEXP_PRE_PREPARE_VERSION.exec(projectPath);
