@@ -118,7 +118,7 @@ describe("server/remark-includes: including partials", () => {
     const actual = transformer({
       value: `Here is the outer page.
 
-(!anchor-links.mdx!)
+(!includes/anchor-links.mdx!)
 
 `,
       path: "server/fixtures/mypage.mdx",
@@ -271,7 +271,7 @@ describe("server/remark-includes: parsePartialParams", () => {
     {
       description: "exclamation point",
       shouldThrow: false,
-      input: `(!error-message.mdx message="Installation has failed!"!)`,
+      input: `(!includes/error-message.mdx message="Installation has failed!"!)`,
       expected: {
         message: `"Installation has failed!"`,
       },
@@ -279,7 +279,7 @@ describe("server/remark-includes: parsePartialParams", () => {
     {
       description: "escaped quotes",
       shouldThrow: false,
-      input: `(!error-message.mdx message="Type \\"final\\" to see the final screen."!)`,
+      input: `(!includes/error-message.mdx message="Type \\"final\\" to see the final screen."!)`,
       expected: {
         message: `"Type \\"final\\" to see the final screen."`,
       },
@@ -287,7 +287,7 @@ describe("server/remark-includes: parsePartialParams", () => {
     {
       description: "single quotes",
       shouldThrow: true,
-      input: `(!error-message.mdx message='Type "Hello"'!)`,
+      input: `(!includes/error-message.mdx message='Type "Hello"'!)`,
     },
     {
       description: "superfluous spaces around an equals sign",
@@ -416,7 +416,7 @@ test("Resolves template variables in includes", () => {
 describe("server/remark-includes: relative links in partials", () => {
   const includingRelativeLink = `Here are instructions on installing the software:
 
-(!include-relative-link.mdx!)
+(!includes/include-relative-link.mdx!)
 `;
   interface testCase {
     includingPage: string;
@@ -467,7 +467,7 @@ Here is an image showing a successful installation:
     {
       includingPage: `Here's how to attach an IAM policy for DB Access:
 
-(!database-access/attach-iam-policies.mdx!)
+(!includes/database-access/attach-iam-policies.mdx!)
 `,
       description: "relative image path",
       path: "server/fixtures/includes/db-policy.mdx",
