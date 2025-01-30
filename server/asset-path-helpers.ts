@@ -73,12 +73,8 @@ const getCurrentDir = (vfile: VFile) => {
 const getPagesDir = (vfile: VFile): string =>
   resolve(getRootDir(vfile), "docs/pages");
 
-const getOriginalPath = (vfile: VFile) => {
-  if (vfile.path.match(REGEXP_CONTENT_DIR_PATH)) {
-    return vfile.path.replace(getCurrentDir(vfile), getPagesDir(vfile));
-  }
-  return vfile.path;
-};
+const getOriginalPath = (vfile: VFile) =>
+  vfile.path.replace(getCurrentDir(vfile), getPagesDir(vfile));
 
 const extBlackList = ["md", "mdx"];
 
