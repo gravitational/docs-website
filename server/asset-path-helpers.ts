@@ -10,14 +10,11 @@ const latest = getLatestVersion();
 
 // The directory path pattern for versioned content transformed by the migration
 // script
-const REGEXP_POST_PREPARE_VERSION = /^\/versioned_docs\/version-([^\/]+)\//;
+const REGEXP_POST_PREPARE_VERSION = /^\/(versioned_)?docs\/version-([^\/]+)\//;
 // The directory path pattern for versioned content not yet transformed by the
 // migration script
 const REGEXP_PRE_PREPARE_VERSION = /^\/?content\/([^\/]+)\//;
 const REGEXP_EXTENSION = /(\/index)?\.mdx$/;
-// Matches content directory paths we use for building the docs site (versus for
-// testing).
-const REGEXP_CONTENT_DIR_PATH = /^(\/(versioned_)?docs|\/?content)\//;
 
 export type DocsMeta = {
   isCurrent: boolean;
@@ -176,31 +173,22 @@ export const updatePathsInIncludes = ({
       /^http/.test(href) ||
       href[0] === "#"
     ) {
-      return href;
+      return;
     }
 
-    let absTargetPath = resolve(versionRootDir, dirname(includePath), href);
-    if (node.type === "link") {
-      const absMdxPath = dirname(vfile.path);
-
-      if (vfile.path.match(REGEXP_CONTENT_DIR_PATH)) {
-        absTargetPath = absTargetPath.replace(
-          getPagesDir(vfile),
-          getCurrentDir(vfile)
-        );
-      }
-
-      (node as Link | Image | Definition).url = relative(
-        absMdxPath,
-        absTargetPath
-      );
-    } else {
-      const absMdxPath = resolve(getOriginalPath(vfile));
-      (node as Link | Image | Definition).url = relative(
-        dirname(absMdxPath),
-        absTargetPath
-      );
+    let docPagePath = resolve(vfile.path);
+    if (vfile.path.match(REGEXP_POST_PREPARE_VERSION)) {
+      docPagePath = getOriginalPath(vfile);
     }
+
+    const newHref = retargetHref(
+      href,
+      resolve(includePath),
+      docPagePath,
+      resolve(versionRootDir)
+    );
+
+    (node as Link | Image | Definition).url = newHref;
   }
 
   if ("children" in node) {

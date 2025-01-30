@@ -272,7 +272,7 @@ export interface RemarkIncludesOptions {
   rootDir?: string | ((vfile: VFile) => string);
   lint?: boolean;
   resolve?: boolean;
-  updatePaths?: (options: UpdatePathsOptions) => string;
+  updatePaths?: (options: UpdatePathsOptions) => void;
 }
 
 export default function remarkIncludes({
