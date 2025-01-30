@@ -1,7 +1,7 @@
 import type { Parent, Image, Link, Definition } from "mdast";
 import type { Node } from "unist";
 import type { VFile } from "vfile";
-import { resolve, relative, dirname } from "path";
+import { resolve, relative, dirname, join } from "path";
 import { getCurrentVersion, getLatestVersion } from "./config-site";
 import { isLocalAssetFile } from "../src/utils/url";
 
@@ -10,10 +10,10 @@ const latest = getLatestVersion();
 
 // The directory path pattern for versioned content transformed by the migration
 // script
-const REGEXP_POST_PREPARE_VERSION = /^\/(versioned_)?docs\/version-([^\/]+)\//;
+const REGEXP_POST_PREPARE_VERSION = /\/(versioned_)?docs\/version-([^\/]+)\//;
 // The directory path pattern for versioned content not yet transformed by the
 // migration script
-const REGEXP_PRE_PREPARE_VERSION = /^\/?content\/([^\/]+)\//;
+const REGEXP_PRE_PREPARE_VERSION = /(\/|^)content\/([^\/]+)\//;
 const REGEXP_EXTENSION = /(\/index)?\.mdx$/;
 
 export type DocsMeta = {
@@ -50,7 +50,7 @@ export const getVersionFromPath = (path: string): string => {
 
   const prePrepVersion = REGEXP_PRE_PREPARE_VERSION.exec(projectPath);
   if (!!prePrepVersion) {
-    return prePrepVersion[1];
+    return prePrepVersion[2];
   }
 
   throw new Error(`unable to extract a version from filepath ${projectPath}`);
@@ -60,19 +60,21 @@ export const getRootDir = (vfile: VFile): string => {
   return resolve("content", getVersionFromPath(vfile.path));
 };
 
-const getPreMigrationPath = (vfile: VFile) => {
-  const preMigrationRoot = resolve(getRootDir(vfile), "docs/pages");
-  const postMigrationRoot = isCurrent(vfile.path)
-    ? resolve("docs")
-    : resolve(`versioned_docs/version-${getVersionFromPath(vfile.path)}`);
-  return vfile.path.replace(postMigrationRoot, preMigrationRoot);
+// getPreMigrationPath returns the docs page path in the pre-migration content
+// directory that corresponds with the given absolute path.
+export const getPreMigrationPath = (path: string) => {
+  const preMigrationRoot = join("content", getVersionFromPath(path));
+  const postMigrationRoot = isCurrent(path)
+    ? "docs"
+    : `versioned_docs/version-${getVersionFromPath(path)}`;
+  return resolve(path.replace(postMigrationRoot, preMigrationRoot));
 };
 
 const extBlackList = ["md", "mdx"];
 
 export const updateAssetPath = (href: string, { vfile }: { vfile: VFile }) => {
   if (isLocalAssetFile(href, { extBlackList })) {
-    const assetPath = resolve(dirname(getPreMigrationPath(vfile)), href);
+    const assetPath = resolve(dirname(getPreMigrationPath(vfile.path)), href);
 
     return relative(dirname(vfile.path), assetPath);
   }
@@ -166,14 +168,14 @@ export const updatePathsInIncludes = ({
 
     let docPagePath = resolve(vfile.path);
     if (vfile.path.match(REGEXP_POST_PREPARE_VERSION)) {
-      docPagePath = getPreMigrationPath(vfile);
+      docPagePath = getPreMigrationPath(vfile.path);
     }
 
-    console.log("--updatePathsInIncludes--");
-    console.log("includePath:", includePath);
-    console.log("docPagePath:", docPagePath);
-    console.log("versionRootDir:", versionRootDir);
-    console.log("\n\n");
+    //    console.log("--updatePathsInIncludes--");
+    //    console.log("includePath:", includePath);
+    //    console.log("docPagePath:", docPagePath);
+    //    console.log("versionRootDir:", versionRootDir);
+    //    console.log("\n\n");
 
     const newHref = retargetHref(
       href,

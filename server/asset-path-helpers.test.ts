@@ -1,5 +1,9 @@
 import { describe, expect, test } from "@jest/globals";
-import { retargetHref, getVersionFromPath } from "./asset-path-helpers";
+import {
+  retargetHref,
+  getVersionFromPath,
+  getPreMigrationPath,
+} from "./asset-path-helpers";
 
 describe("server/asset-path-helpers: retargetHref", () => {
   interface testCase {
@@ -68,10 +72,39 @@ describe("server/asset-path-helpers: getVersionFromPath", () => {
       path: "/versioned_docs/version-17.x/admin-guides/access-controls/guides/mfa-for-admin-actions.mdx",
       expected: "17.x",
     },
+    {
+      description: "full absolute path",
+      path: "/Users/myuser/docs-website/versioned_docs/version-16.x/docs/pages/installation.mdx",
+      expected: "16.x",
+    },
   ];
 
   test.each(testCases)("$description", (tc) => {
     const actual = getVersionFromPath(tc.path);
+    expect(actual).toEqual(tc.expected);
+  });
+});
+
+describe("server/asset-path-helpers: getPreMigrationPath", () => {
+  interface testCase {
+    description: string;
+    path: string;
+    expected: string;
+  }
+
+  const testCases: Array<testCase> = [
+    {
+      description: "versioned docs path",
+      path: "/Users/myuser/docs-website/versioned_docs/version-16.x/docs/pages/installation.mdx",
+      expected:
+        "/Users/myuser/docs-website/content/16.x/docs/pages/installation.mdx",
+    },
+    // TODO: docs path
+    // TODO: path is already pre-migration
+  ];
+
+  test.each(testCases)("$description", (tc) => {
+    const actual = getPreMigrationPath(tc.path);
     expect(actual).toEqual(tc.expected);
   });
 });
