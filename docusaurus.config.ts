@@ -154,9 +154,9 @@ const config: Config = {
       },
     ],
     [
-      '@docusaurus/plugin-google-gtag',
+      "@docusaurus/plugin-google-gtag",
       {
-        trackingID: 'G-Z1BMQRVFH3',
+        trackingID: "G-Z1BMQRVFH3",
         anonymizeIP: true,
       },
     ],
@@ -179,13 +179,16 @@ const config: Config = {
             {
               rootDir: (vfile: VFile) => getRootDir(vfile),
               updatePaths: updatePathsInIncludes,
+              latestVersion: latestVersion,
+              projectPath: process.cwd(),
             },
           ],
           [
             remarkVariables,
             {
               variables: (vfile: VFile) =>
-                loadConfig(getVersionFromPath(vfile.path)).variables,
+                loadConfig(getVersionFromPath(vfile.path, latestVersion))
+                  .variables,
             },
           ],
           [

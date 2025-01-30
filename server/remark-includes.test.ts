@@ -20,6 +20,8 @@ const transformer = (
   pluginOptions: RemarkIncludesOptions = {
     resolve: true,
     updatePaths: updatePathsInIncludes,
+    projectPath: "",
+    latestVersion: "",
   }
 ) => {
   const file: VFile = new VFile(vfileOptions);
@@ -65,7 +67,7 @@ describe("server/remark-includes: including partials", () => {
         value,
         path: "/content/4.0/docs/pages/filename.mdx",
       },
-      { lint: true, resolve: false }
+      { lint: true, resolve: false, latestVersion: "", projectPath: "" }
     );
 
     const errors = result.messages.map(({ message }) => message);
@@ -89,7 +91,7 @@ describe("server/remark-includes: including partials", () => {
         value,
         path: "/content/4.0/docs/pages/filename.mdx",
       },
-      { lint: false, resolve: false }
+      { lint: true, resolve: false, latestVersion: "", projectPath: "" }
     ).toString();
 
     expect(value).toBe(result);

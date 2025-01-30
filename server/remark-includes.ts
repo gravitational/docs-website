@@ -266,6 +266,8 @@ export type UpdatePathsOptions = {
   versionRootDir: string;
   includePath: string;
   vfile: VFile;
+  projectPath: string;
+  latestVersion: string;
 };
 
 export interface RemarkIncludesOptions {
@@ -273,6 +275,8 @@ export interface RemarkIncludesOptions {
   lint?: boolean;
   resolve?: boolean;
   updatePaths?: (options: UpdatePathsOptions) => void;
+  projectPath: string;
+  latestVersion: string;
 }
 
 export default function remarkIncludes({
@@ -280,7 +284,9 @@ export default function remarkIncludes({
   lint,
   resolve = true,
   updatePaths,
-}: RemarkIncludesOptions = {}): Transformer {
+  projectPath,
+  latestVersion,
+}: RemarkIncludesOptions): Transformer {
   return (root: Root, vfile: VFile) => {
     let resolvedRootDir: string;
 
@@ -342,6 +348,8 @@ export default function remarkIncludes({
                     versionRootDir: resolvedRootDir,
                     includePath: path,
                     vfile,
+                    latestVersion,
+                    projectPath,
                   });
 
                   const grandParent = ancestors[ancestors.length - 2] as Parent;
