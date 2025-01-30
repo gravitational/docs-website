@@ -85,7 +85,11 @@ describe("server/asset-path-helpers: getVersionFromPath", () => {
   ];
 
   test.each(testCases)("$description", (tc) => {
-    const actual = getVersionFromPath(tc.path, "17.x", "/Users/myuser/docs-website");
+    const actual = getVersionFromPath(
+      tc.path,
+      "17.x",
+      "/Users/myuser/docs-website"
+    );
     expect(actual).toEqual(tc.expected);
   });
 });
@@ -100,7 +104,7 @@ describe("server/asset-path-helpers: getPreMigrationPath", () => {
   const testCases: Array<testCase> = [
     {
       description: "versioned docs path",
-      path: "/Users/myuser/docs-website/versioned_docs/version-16.x/docs/pages/installation.mdx",
+      path: "/Users/myuser/docs-website/versioned_docs/version-16.x/installation.mdx",
       expected:
         "/Users/myuser/docs-website/content/16.x/docs/pages/installation.mdx",
     },
@@ -110,11 +114,20 @@ describe("server/asset-path-helpers: getPreMigrationPath", () => {
       expected:
         "/Users/myuser/docs-website/content/17.x/docs/pages/installation.mdx",
     },
-    // TODO: path is already pre-migration
+    {
+      description: "path is already pre-migration",
+      path: "/Users/myuser/docs-website/content/16.x/docs/pages/installation.mdx",
+      expected:
+        "/Users/myuser/docs-website/content/16.x/docs/pages/installation.mdx",
+    },
   ];
 
   test.each(testCases)("$description", (tc) => {
-    const actual = getPreMigrationPath(tc.path, "17.x", "/Users/myuser/docs-website");
+    const actual = getPreMigrationPath(
+      tc.path,
+      "17.x",
+      "/Users/myuser/docs-website"
+    );
     expect(actual).toEqual(tc.expected);
   });
 });
