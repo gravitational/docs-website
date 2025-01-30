@@ -18,24 +18,32 @@ describe("server/asset-path-helpers: retargetHref", () => {
       includerPath: "/docs/pages/admin-guides/database-access/sql-server.mdx",
       partialPath: "/docs/pages/includes/database-access/standard-intro.mdx",
       contentRootDir: "/",
-      expected: "../../admin-guides/database-access/introduction.mdx",
+      expected: "introduction.mdx",
     },
     {
-      description: "href in lower directory than including page",
+      description: "partial in higher directory level than including page",
       originalPath: "../../admin-guides/database-access/introduction.mdx",
       includerPath:
         "/docs/pages/admin-guides/database-access/azure-databases/sql-server.mdx",
       partialPath: "/docs/pages/includes/database-access/standard-intro.mdx",
       contentRootDir: "/",
-      expected: "../../../admin-guides/database-access/introduction.mdx",
+      expected: "../introduction.mdx",
+    },
+    {
+      description: "partial in lower directory level than including page",
+      originalPath: "../../../installation.mdx",
+      includerPath: "/docs/pages/admin-guides/getting-started.mdx",
+      partialPath: "/docs/pages/includes/tool-intros/clients/tctl.mdx",
+      contentRootDir: "/",
+      expected: "../installation.mdx",
     },
   ];
 
   test.each(testCases)("$description", (tc) => {
     const actual = retargetHref(
       tc.originalPath,
-      tc.includerPath,
       tc.partialPath,
+      tc.includerPath,
       tc.contentRootDir
     );
     expect(actual).toEqual(tc.expected);
