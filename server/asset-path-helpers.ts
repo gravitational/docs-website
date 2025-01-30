@@ -29,19 +29,19 @@ export type DocsMeta = {
   originalPath: string;
 };
 
-const getProjectPath = (vfile: VFile) => vfile.path.replace(process.cwd(), "");
+const getProjectPath = (path: string) => path.replace(process.cwd(), "");
 
-const isCurrent = (vfile: VFile) => getProjectPath(vfile).startsWith("/docs/");
+const isCurrent = (path: string) => getProjectPath(path).startsWith("/docs/");
 
-// getVersionFromVFile extracts the docs version of a post-migration docs page
-// so we can find the appropriate pre-migration version. If the docs page is
+// getVersionFromPath extracts the docs version of a post-migration docs page so
+// we can find the appropriate pre-migration version. If the docs page is
 // already in the pre-migration directory, return the version number of that
 // directory.
-export const getVersionFromVFile = (vfile: VFile): string => {
-  if (isCurrent(vfile)) {
+export const getVersionFromPath = (path: string): string => {
+  if (isCurrent(path)) {
     return current;
   }
-  const projectPath = getProjectPath(vfile);
+  const projectPath = getProjectPath(path);
 
   const postPrepVersion = REGEXP_POST_PREPARE_VERSION.exec(projectPath);
   if (!!postPrepVersion) {
@@ -57,17 +57,17 @@ export const getVersionFromVFile = (vfile: VFile): string => {
 };
 
 export const getRootDir = (vfile: VFile): string => {
-  return resolve("content", getVersionFromVFile(vfile));
+  return resolve("content", getVersionFromPath(vfile.path));
 };
 
 const getCurrentDir = (vfile: VFile) => {
   // The page is in the pre-migration directory, i.e., we're linting it
   if (vfile.path.startsWith("content")) {
-    return resolve(`content/${getVersionFromVFile(vfile)}/docs/pages`);
+    return resolve(`content/${getVersionFromPath(vfile.path)}/docs/pages`);
   }
-  return isCurrent(vfile)
+  return isCurrent(vfile.path)
     ? resolve("docs")
-    : resolve(`versioned_docs/version-${getVersionFromVFile(vfile)}`);
+    : resolve(`versioned_docs/version-${getVersionFromPath(vfile.path)}`);
 };
 
 const getPagesDir = (vfile: VFile): string =>

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { retargetHref } from "./asset-path-helpers";
+import { retargetHref, getVersionFromPath } from "./asset-path-helpers";
 
 describe("server/asset-path-helpers: retargetHref", () => {
   interface testCase {
@@ -46,6 +46,27 @@ describe("server/asset-path-helpers: retargetHref", () => {
       tc.includerPath,
       tc.contentRootDir
     );
+    expect(actual).toEqual(tc.expected);
+  });
+});
+
+describe("server/asset-path-helpers: getVersionFromPath", () => {
+  interface testCase {
+    description: string;
+    path: string;
+    expected: string;
+  }
+
+  const testCases: Array<testCase> = [
+    {
+      description: "pre-migration content directory",
+      path: "content/18.x/docs/pages/installation.mdx",
+      expected: "18.x",
+    },
+  ];
+
+  test.each(testCases)("$description", (tc) => {
+    const actual = getVersionFromPath(tc.path);
     expect(actual).toEqual(tc.expected);
   });
 });
