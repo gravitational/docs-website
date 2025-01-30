@@ -111,24 +111,28 @@ export const updateAssetPath = (href: string, { vfile }: { vfile: VFile }) => {
 export const retargetHref = (
   originalPath: string,
   partialPath: string,
-  includerPath: string
+  includerPath: string,
   contentRootDir: string
 ): string => {
-    // Construct an absolute path out of the root directory for all partials,
-    // the directory containing the partial (within the root directory for all
-    // partials) and the relative path to the target asset, e.g.,
-    // "docs/pages/includes", "kubernetes", and
-    // "../../target.png".
-    const absTargetPath = resolve(contentRootDir, dirname(partialPath), originalPath);
-    // Make the reference path relative to the place where the partial doc was
-    // inserted.
-    return relative(
-      // relative() counts all path segments, even the file itself, when
-      // comparing path segments between the "from" and "to" paths, so we
-      // start from the directory containing the file that includes the partial.
-      dirname(includerPath),
-      absTargetPath
-    );
+  // Construct an absolute path out of the root directory for all partials,
+  // the directory containing the partial (within the root directory for all
+  // partials) and the relative path to the target asset, e.g.,
+  // "docs/pages/includes", "kubernetes", and
+  // "../../target.png".
+  const absTargetPath = resolve(
+    contentRootDir,
+    dirname(partialPath),
+    originalPath
+  );
+  // Make the reference path relative to the place where the partial doc was
+  // inserted.
+  return relative(
+    // relative() counts all path segments, even the file itself, when
+    // comparing path segments between the "from" and "to" paths, so we
+    // start from the directory containing the file that includes the partial.
+    dirname(includerPath),
+    absTargetPath
+  );
 };
 
 /**
