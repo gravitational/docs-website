@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/testing-library";
-import { expect } from "@storybook/jest";
+import { userEvent, within } from "@storybook/test";
+import { expect } from "@storybook/test";
 import { default as Pre } from "./Pre";
 import { replaceClipboardWithCopyBuffer } from "utils/clipboard";
 import { Var } from "../Variables/Var";
@@ -52,7 +52,7 @@ key2: value
 key3:
  - value
  - value2
- - value3`
+ - value3`,
       );
     });
   },
@@ -95,7 +95,7 @@ key2: value
 key3:
  - value
  - value2
- - value3`
+ - value3`,
       );
     });
   },

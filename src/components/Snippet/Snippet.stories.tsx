@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/testing-library";
-import { expect } from "@storybook/jest";
+import { userEvent, within } from "@storybook/test";
+import { expect } from "@storybook/test";
 
 import { Var } from "../Variables/Var";
 import { default as Snippet } from "./Snippet";
@@ -45,11 +45,11 @@ export const CopyCommandVar: Story = {
       await userEvent.hover(canvas.getByText("example.com"));
       await userEvent.click(canvas.getByTestId("copy-button"));
       expect(navigator.clipboard.readText()).toEqual(
-        "curl https://example.com/v1/webapi/saml/acs/azure-saml"
+        "curl https://example.com/v1/webapi/saml/acs/azure-saml",
       );
       await userEvent.click(canvas.getByTestId("copy-button-all"));
       expect(navigator.clipboard.readText()).toEqual(
-        "curl https://example.com/v1/webapi/saml/acs/azure-saml"
+        "curl https://example.com/v1/webapi/saml/acs/azure-saml",
       );
     });
   },
@@ -80,7 +80,7 @@ export const CopyCommandVarWithOutput: Story = {
     await step("Copy the content", async () => {
       await userEvent.click(canvas.getByTestId("copy-button-all"));
       expect(navigator.clipboard.readText()).toEqual(
-        "curl https://example.com/v1/webapi/saml/acs/azure-saml"
+        "curl https://example.com/v1/webapi/saml/acs/azure-saml",
       );
     });
   },
@@ -108,7 +108,7 @@ export const CopyCodeLineVar: Story = {
       await userEvent.hover(canvas.getByText("example.com"));
       await userEvent.click(canvas.getByTestId("copy-button-all"));
       expect(navigator.clipboard.readText()).toEqual(
-        "curl https://example.com/v1/webapi/saml/acs/azure-saml"
+        "curl https://example.com/v1/webapi/saml/acs/azure-saml",
       );
     });
   },
