@@ -23,6 +23,10 @@
     "lint": "yarn base:eslint --fix && yarn base:prettier --write -l",
     "lint-check": "yarn base:eslint && yarn base:prettier --check",
     "markdown-lint": "yarn build-remark && remark --rc-path .remarkrc.mjs 'content/**/docs/pages/**/*.mdx' --quiet --frail --ignore-pattern '**/includes/**' --silently-ignore",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build",
+    "storybook:test": "yarn storybook:build --quiet && npx concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npx http-server storybook-static --port 6006 --silent\" \"npx wait-on tcp:6006 && yarn storybook:test\"",
+
     "test": "NODE_OPTIONS=\"$NODE_OPTIONS --trace-warnings --experimental-vm-modules\" jest --config ./jest.server.config.mjs server/*.test.ts"
   },
   "lint-staged": {
