@@ -3,7 +3,7 @@ import { userEvent, within } from "@storybook/test";
 import { expect } from "@storybook/test";
 import { default as Pre } from "./Pre";
 import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
-import { Var } from "../Variables/Var";
+import { Var } from "/src/components/Variables/Var";
 
 export const SimplePre = () => (
   <Pre>
