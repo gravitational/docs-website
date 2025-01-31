@@ -1,38 +1,64 @@
-import type { StorybookConfig } from "@storybook/react";
+import type { StorybookConfig } from "@storybook/nextjs";
 
-// Explanation of the framework config:
-// https://storybook.js.org/docs/configure/integration/compilers#the-swc-compiler-doesnt-work-with-react
 const config: StorybookConfig = {
-  framework: {
-    name: "@storybook/react-webpack5",
-    options: {
-      builder: {
-        useSWC: true,
-      },
-    },
-  },
-  swc: () => ({
-    jsc: {
-      transform: {
-        react: {
-          runtime: "automatic",
-        },
-      },
-    },
-  }),
-  stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
     "@storybook/addon-essentials",
-    "@storybook/addon-webpack5-compiler-swc",
+    "@storybook/addon-interactions",
+    "@storybook/addon-viewport",
   ],
+  framework: {
+    name: "@storybook/react-webpack5",
+    options: {},
+  },
 
-  docs: {},
+  webpackFinal: async (config) => {
+    config.module?.rules?.push({
+      test: /\.css$/,
+      use: {
+        loader: "postcss-loader",
+        options: {
+          postcssOptions: {
+            plugins: [
+              "postcss-flexbugs-fixes",
+              [
+                "postcss-preset-env",
+                {
+                  autoprefixer: {
+                    flexbox: "no-2009",
+                  },
+                  stage: 1,
+                  features: {
+                    "custom-properties": false,
+                    "nesting-rules": true,
+                  },
+                  importFrom: ["styles/media.css"],
+                },
+              ],
+            ],
+          },
+        },
+      },
+    });
 
-  staticDirs: [],
+    const imageRule = config.module?.rules?.find((rule) => {
+      const test = (rule as { test: RegExp }).test;
 
-  typescript: {
-    reactDocgen: "react-docgen-typescript",
+      if (!test) {
+        return false;
+      }
+
+      return test.test(".svg");
+    }) as { [key: string]: any };
+
+    imageRule.exclude = /\.svg$/;
+
+    config.module?.rules?.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
+
+    return config;
   },
 };
-
 export default config;
