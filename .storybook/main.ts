@@ -2,16 +2,11 @@ import type { StorybookConfig } from "@storybook/nextjs";
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  addons: [
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
-    "@storybook/addon-viewport",
-  ],
+  addons: ["@storybook/addon-interactions", "@storybook/addon-viewport"],
   framework: {
     name: "@storybook/react-webpack5",
     options: {},
   },
-
   webpackFinal: async (config) => {
     config.module?.rules?.push({
       test: /\.css$/,
@@ -56,6 +51,12 @@ const config: StorybookConfig = {
     config.module?.rules?.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
+    });
+
+    config.module?.rules?.push({
+      test: /\.tsx?$/,
+      use: ["ts-loader"],
+      exclude: /node_modules/,
     });
 
     return config;

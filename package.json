@@ -104,6 +104,7 @@
     "storybook": "^8.5.2",
     "to-vfile": "^8.0.0",
     "ts-jest": "^29.2.5",
+    "ts-loader": "^9.5.2",
     "tsc-esm-fix": "^3.1.0",
     "tsm": "^2.3.0",
     "typescript": "~5.5.2",
