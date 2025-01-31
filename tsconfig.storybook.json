@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "/src/*": ["./src/*"],
+      "/utils/*": ["./utils/*"]
+    }
+  },
+  "include": [
+    ".storybook/@types/**/*.d.ts",
+    "./src/components/**/*.stories.tsx"
+  ],
+  "exclude": ["node_modules", "content/**"]
+}
