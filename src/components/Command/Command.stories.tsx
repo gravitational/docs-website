@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { userEvent, within } from "@storybook/test";
-import { replaceClipboardWithCopyBuffer } from "utils/clipboard";
+import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
 
 import Command from "./Command";
 
