@@ -26,7 +26,6 @@
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
     "storybook:test": "yarn storybook:build --quiet && npx concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npx http-server storybook-static --port 6006 --silent\" \"npx wait-on tcp:6006 && yarn storybook:test\"",
-
     "test": "NODE_OPTIONS=\"$NODE_OPTIONS --trace-warnings --experimental-vm-modules\" jest --config ./jest.server.config.mjs server/*.test.ts"
   },
   "lint-staged": {
@@ -72,6 +71,9 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.6.3",
     "@docusaurus/types": "^3.6.3",
+    "@storybook/react": "^8.5.2",
+    "@storybook/test-runner": "^0.21.0",
+    "@storybook/testing-library": "^0.2.2",
     "@types/react": "^18.3.3",
     "ajv": "^8.16.0",
     "hast": "^1.0.0",
@@ -96,6 +98,7 @@
     "remark-preset-lint-markdown-style-guide": "^5.1.2",
     "remark-rehype": "^10.1.0",
     "remark-validate-links": "^11.0.2",
+    "storybook": "^8.5.2",
     "to-vfile": "^8.0.0",
     "ts-jest": "^29.2.5",
     "tsc-esm-fix": "^3.1.0",
