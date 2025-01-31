@@ -5,8 +5,8 @@ import { expect } from "@storybook/test";
 import { Var } from "../Variables/Var";
 import { default as Snippet } from "./Snippet";
 import Command, { CommandLine, CommandComment } from "../Command/Command";
-import { CodeLine } from "../Code";
-import { replaceClipboardWithCopyBuffer } from "utils/clipboard";
+import { CodeLine } from "/src/theme/MDXComponents/Code";
+import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
 
 export const SimpleCommand = () => (
   <Snippet>
