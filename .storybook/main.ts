@@ -1,12 +1,9 @@
-import type { StorybookConfig } from "@storybook/nextjs";
+import type { StorybookConfig } from "@storybook/react-webpack5";
 
 const config: StorybookConfig = {
+  framework: "@storybook/react-webpack5",
   stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  addons: ["@storybook/addon-interactions", "@storybook/addon-viewport"],
-  framework: {
-    name: "@storybook/react-webpack5",
-    options: {},
-  },
+  addons: ["@storybook/addon-essentials"],
   webpackFinal: async (config) => {
     config.module?.rules?.push({
       test: /\.css$/,
@@ -59,7 +56,7 @@ const config: StorybookConfig = {
         {
           loader: "ts-loader",
           options: {
-            configFile: "tsconfig.json",
+            configFile: "tsconfig.storybook.json",
           },
         },
       ],
