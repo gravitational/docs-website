@@ -9,27 +9,6 @@ const config: StorybookConfig = {
       test: /\.css$/,
       use: {
         loader: "postcss-loader",
-        options: {
-          postcssOptions: {
-            plugins: [
-              "postcss-flexbugs-fixes",
-              [
-                "postcss-preset-env",
-                {
-                  autoprefixer: {
-                    flexbox: "no-2009",
-                  },
-                  stage: 1,
-                  features: {
-                    "custom-properties": false,
-                    "nesting-rules": true,
-                  },
-                  importFrom: ["styles/media.css"],
-                },
-              ],
-            ],
-          },
-        },
       },
     });
 
