@@ -3,6 +3,10 @@ import { DetailedHTMLProps, HTMLAttributes } from "react";
 import styles from "./Code.module.css";
 import codeBlockStyles from "./CodeBlock.module.css";
 
+export interface CodeLineProps {
+  children: React.ReactNode;
+}
+
 export const CodeLine = (props: CodeLineProps) => {
   return <span className={codeBlockStyles.line} {...props} />;
 };
