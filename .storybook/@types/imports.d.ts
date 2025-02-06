@@ -1,9 +1,11 @@
 // Declare modules so Storybook can import assets as expected. Docusaurus
 // handles this on its own, so we need to redeclare these modules here for
 // Storybook.
+
+declare module "*.css";
+
 declare module "*.svg" {
   const value: string;
-
   export default value;
 }
 
