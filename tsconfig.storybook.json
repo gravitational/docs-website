@@ -21,7 +21,7 @@
     }
   },
   "include": [
-    "@types/**/*.d.ts",
+    ".storybook/@types/**/*.d.ts",
     "./src/components/**/*.ts",
     "./src/components/**/*.tsx"
   ],
