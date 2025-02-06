@@ -22,8 +22,7 @@
   },
   "include": [
     ".storybook/@types/**/*.d.ts",
-    "./src/components/**/*.ts",
-    "./src/components/**/*.tsx"
+    "./src/components/**/*.stories.tsx"
   ],
   "exclude": ["node_modules", "content/**"]
 }
