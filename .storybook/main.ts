@@ -56,6 +56,8 @@ const config: StorybookConfig = {
         {
           loader: "ts-loader",
           options: {
+            logLevel: "INFO",
+            logInfoToStdOut: true,
             configFile: "tsconfig.storybook.json",
           },
         },
