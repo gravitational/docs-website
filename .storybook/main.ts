@@ -38,6 +38,9 @@ const config: StorybookConfig = {
             logLevel: "INFO",
             logInfoToStdOut: true,
             configFile: "tsconfig.storybook.json",
+            // Otherwise, properties added by Storybook trip the TypeScript
+            // checker.
+            transpileOnly: true,
           },
         },
       ],
