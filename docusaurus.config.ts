@@ -2,6 +2,7 @@ import "dotenv/config";
 import type { Config } from "@docusaurus/types";
 import type { VFile } from "vfile";
 
+import { useDocById } from "@docusaurus/plugin-content-docs/client";
 import { getFromSecretOrEnv } from "./utils/general";
 import { loadConfig } from "./server/config-docs";
 import {
@@ -22,6 +23,7 @@ import {
   getRootDir,
   updatePathsInIncludes,
 } from "./server/asset-path-helpers";
+import { orderSidebarItems } from "./server/sidebar-order";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
@@ -154,9 +156,9 @@ const config: Config = {
       },
     ],
     [
-      '@docusaurus/plugin-google-gtag',
+      "@docusaurus/plugin-google-gtag",
       {
-        trackingID: 'G-Z1BMQRVFH3',
+        trackingID: "G-Z1BMQRVFH3",
         anonymizeIP: true,
       },
     ],
@@ -165,6 +167,33 @@ const config: Config = {
     [
       "@docusaurus/plugin-content-docs",
       {
+        async sidebarItemsGenerator({
+          defaultSidebarItemsGenerator,
+          numberPrefixParser,
+          item,
+          version,
+          docs,
+          categoriesMetadata,
+          isCategoryIndex,
+        }) {
+          const items = await defaultSidebarItemsGenerator({
+            defaultSidebarItemsGenerator,
+            numberPrefixParser,
+            item,
+            version,
+            docs,
+            categoriesMetadata,
+            isCategoryIndex,
+          });
+          const idToDocPage = new Map();
+          docs.forEach((d) => {
+            idToDocPage.set(d.id, d);
+          });
+          const getDocPageByID = (id: string) => {
+            return idToDocPage.get(id);
+          };
+          return orderSidebarItems(items, getDocPageByID);
+        },
         // Host docs on the root page, later it will be exposed on goteleport.com/docs
         // next to the website and blog
         // https://docusaurus.io/docs/docs-introduction#docs-only-mode
