@@ -220,7 +220,7 @@ const config: Config = {
       },
     ],
     extendedPostcssConfigPlugin,
-    process.env.NODE_ENV === "production" && "@docusaurus/plugin-debug",
+    process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
   ].filter(Boolean),
 };
 
