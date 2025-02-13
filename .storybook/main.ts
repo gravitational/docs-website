@@ -5,6 +5,13 @@ const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: ["@storybook/addon-essentials"],
   webpackFinal: async (config) => {
+    config.module?.rules?.push({
+      test: /\.css$/,
+      use: {
+        loader: "postcss-loader",
+      },
+    });
+
     const imageRule = config.module?.rules?.find((rule) => {
       const test = (rule as { test: RegExp }).test;
 
@@ -20,25 +27,6 @@ const config: StorybookConfig = {
     config.module?.rules?.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
-    });
-
-    const styleRule = config.module?.rules?.find((rule) => {
-      const test = (rule as { test: RegExp }).test;
-
-      if (!test) {
-        return false;
-      }
-
-      return test.test(".css");
-    }) as { [key: string]: any };
-
-    styleRule.exclude = /\.css$/;
-
-    config.module?.rules?.push({
-      test: /\.css$/,
-      use: {
-        loader: "postcss-loader",
-      },
     });
 
     config.module?.rules?.push({
