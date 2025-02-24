@@ -37,3 +37,29 @@ body {
     display: block;
   }
 }
+
+article {
+  /* Support mobile devices without scaling if a component exceeds the article
+     * width, e.g., for tables 
+    */
+  overflow-x: scroll;
+}
+
+/* For tables, use a fixed table layout so a page that features multiple tables
+ * with the same columns can display all columns with the same alignment.
+ * Specify both a cell width and a table width so the columns are always
+ * aligned. If there are fewer than three cells per row, use a wider cell.
+ If there are more than three cells per row, use a narrower cell */
+table {
+  table-layout: fixed;
+  width: 675px;
+  max-width: 675px;
+}
+
+table:not(table:has(td:nth-of-type(3))) td {
+  width: 300px;
+}
+
+table:has(td:nth-of-type(3)) td {
+  width: 150px;
+}
