@@ -36,7 +36,7 @@
     "pre-commit": "yarn lint-staged"
   },
   "resolutions": {
-    "@rspack/core": "1.2.5"
+    "@rspack/core": "1.1.8"
   },
   "dependencies": {
     "@csstools/postcss-global-data": "^2.1.1",
