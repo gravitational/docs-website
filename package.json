@@ -36,7 +36,7 @@
     "pre-commit": "yarn lint-staged"
   },
   "resolutions": {
-    "@swc/core": "1.10.16"
+    "@rspack/core": "1.2.5"
   },
   "dependencies": {
     "@csstools/postcss-global-data": "^2.1.1",
