@@ -164,6 +164,7 @@ const config: Config = {
     ],
     "@docusaurus/theme-classic",
     "@docusaurus/plugin-sitemap",
+    "@docusaurus/plugin-svgr",
     [
       "@docusaurus/plugin-content-docs",
       {
