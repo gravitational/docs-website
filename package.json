@@ -36,7 +36,7 @@
     "pre-commit": "yarn lint-staged"
   },
   "resolutions": {
-    "@rspack/core": "1.1.8"
+    "@rspack/core": "1.2.5"
   },
   "dependencies": {
     "@csstools/postcss-global-data": "^2.1.1",
@@ -47,6 +47,7 @@
     "@docusaurus/plugin-debug": "^3.7.0",
     "@docusaurus/plugin-google-gtag": "^3.7.0",
     "@docusaurus/plugin-sitemap": "^3.7.0",
+    "@docusaurus/plugin-svgr": "^3.7.0",
     "@docusaurus/theme-classic": "^3.7.0",
     "@docusaurus/tsconfig": "^3.7.0",
     "@inkeep/widgets": "^0.2.290",
@@ -61,10 +62,10 @@
     "nanoid": "^5.0.9",
     "postcss-preset-env": "^9.5.14",
     "prism-react-renderer": "^2.3.0",
+    "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-loadable": "^5.5.0",
     "react-use": "^17.5.0",
-    "react": "^18.3.1",
     "rehype-highlight": "^7.0.2",
     "remark-mdx": "^2.1.1",
     "vite-node": "^3.0.5"
@@ -121,5 +122,6 @@
   },
   "engines": {
     "node": ">=18.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
