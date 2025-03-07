@@ -39,17 +39,21 @@
   "simple-git-hooks": {
     "pre-commit": "yarn lint-staged"
   },
+  "resolutions": {
+    "@rspack/core": "1.2.5"
+  },
   "dependencies": {
     "@csstools/postcss-global-data": "^2.1.1",
-    "@docusaurus/core": "^3.6.3",
-    "@docusaurus/faster": "^3.6.3",
-    "@docusaurus/plugin-client-redirects": "^3.6.3",
-    "@docusaurus/plugin-content-docs": "^3.6.3",
-    "@docusaurus/plugin-debug": "^3.6.3",
-    "@docusaurus/plugin-google-gtag": "3.6.3",
-    "@docusaurus/plugin-sitemap": "^3.6.3",
-    "@docusaurus/theme-classic": "^3.6.3",
-    "@docusaurus/tsconfig": "^3.6.3",
+    "@docusaurus/core": "^3.7.0",
+    "@docusaurus/faster": "^3.7.0",
+    "@docusaurus/plugin-client-redirects": "^3.7.0",
+    "@docusaurus/plugin-content-docs": "^3.7.0",
+    "@docusaurus/plugin-debug": "^3.7.0",
+    "@docusaurus/plugin-google-gtag": "^3.7.0",
+    "@docusaurus/plugin-sitemap": "^3.7.0",
+    "@docusaurus/plugin-svgr": "^3.7.0",
+    "@docusaurus/theme-classic": "^3.7.0",
+    "@docusaurus/tsconfig": "^3.7.0",
     "@inkeep/widgets": "^0.2.290",
     "@mdx-js/react": "^3.0.0",
     "classnames": "^2.3.1",
@@ -58,6 +62,7 @@
     "dotenv": "^16.4.5",
     "highlightjs-terraform": "https://github.com/highlightjs/highlightjs-terraform#eb1b9661e143a43dff6b58b391128ce5cdad31d4",
     "lowlight": "^3.1.0",
+    "mdast-util-from-markdown": "^2.0.1",
     "nanoid": "^5.1.0",
     "postcss-preset-env": "^9.5.14",
     "prism-react-renderer": "^2.3.0",
@@ -70,8 +75,8 @@
     "vite-node": "^3.0.5"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.6.3",
-    "@docusaurus/types": "^3.6.3",
+    "@docusaurus/module-type-aliases": "^3.7.0",
+    "@docusaurus/types": "^3.7.0",
     "@storybook/addon-essentials": "^8.5.2",
     "@storybook/addon-webpack5-compiler-swc": "^2.0.0",
     "@storybook/react": "^8.5.2",
@@ -88,7 +93,6 @@
     "js-yaml": "^4.1.0",
     "loadr": "^0.1.1",
     "mdast": "^3.0.0",
-    "mdast-util-from-markdown": "^2.0.1",
     "mdast-util-frontmatter": "^2.0.1",
     "mdast-util-gfm": "^3.0.0",
     "mdast-util-mdx": "^3.0.0",
