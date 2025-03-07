@@ -358,6 +358,10 @@ export interface DocusaurusCategory {
   [propName: string]: unknown;
 }
 
+export const getIndexPageID = (category: NavigationCategory): string => {
+  return "";
+};
+
 export const makeDocusaurusNavigationCategory = (
   category: NavigationCategory,
   version: string
