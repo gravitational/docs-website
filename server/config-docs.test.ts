@@ -32,7 +32,16 @@ describe("getIndexPageID", () => {
       },
       expected: "connect-your-client/connect-your-client",
     },
-    //TODO: category that uses generateFrom
+    {
+      description: "generated",
+      category: {
+        icon: "wrench",
+        title: "Admin Guides",
+        entries: [],
+        generateFrom: "admin-guides",
+      },
+      expected: "admin-guides/admin-guides",
+    },
   ];
 
   test.each(testCases)("$description", (c) => {

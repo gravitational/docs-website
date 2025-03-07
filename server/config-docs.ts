@@ -6,7 +6,7 @@
 
 import Ajv from "ajv";
 import { validateConfig } from "./config-common";
-import { resolve } from "path";
+import { resolve, sep } from "path";
 import { existsSync, readFileSync } from "fs";
 import { isExternalLink, isHash, splitPath } from "../src/utils/url";
 import { getLatestVersion } from "./config-site";
@@ -358,8 +358,37 @@ export interface DocusaurusCategory {
   [propName: string]: unknown;
 }
 
+const categoryDirPattern = `(/ver/[0-9]+\.x/)?([^/]*)`;
+
 export const getIndexPageID = (category: NavigationCategory): string => {
-  return "";
+  if (category.entries.length == 0 && !category.generateFrom) {
+    throw new Error(
+      `a navigation category with no generateFrom property must have entries`
+    );
+  }
+
+  // Base the ID on the directory we generated the sidebar from in the legacy
+  // docs site.
+  if (!!category.generateFrom) {
+    return category.generateFrom + "/" + category.generateFrom;
+  }
+
+  // The sidebar is manually defined, so base the category index page ID on
+  // the first-level directory that contains all entries in the category.
+  let categoryIndexDir: string;
+  for (let i = 0; i < category.entries.length; i++) {
+    const rootDirName = category.entries[i].slug.match(categoryDirPattern)[2];
+    if (!categoryIndexDir) {
+      categoryIndexDir = rootDirName;
+      continue;
+    }
+    if (rootDirName != categoryIndexDir) {
+      throw new Error(
+        `cannot determine a category index page ID for top-level category ${category.title} because not all of its entries are in the same first-level directory`
+      );
+    }
+  }
+  return categoryIndexDir + "/" + categoryIndexDir;
 };
 
 export const makeDocusaurusNavigationCategory = (
