@@ -23,6 +23,10 @@
     "lint": "yarn base:eslint --fix && yarn base:prettier --write -l",
     "lint-check": "yarn base:eslint && yarn base:prettier --check",
     "markdown-lint": "yarn build-remark && remark --rc-path .remarkrc.mjs 'content/**/docs/pages/**/*.mdx' --quiet --frail --ignore-pattern '**/includes/**' --silently-ignore",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build",
+    "storybook:test-ci": "npx concurrently --kill-others --success first --names \"STORYBOOK,TESTS\" -c \"magenta,blue\" \"npx http-server -a 127.0.0.1 --silent storybook-static --port 6006\" \"npx wait-on tcp:127.0.0.1:6006 && yarn storybook:test --url http://127.0.0.1:6006/storybook-static \"",
+    "storybook:test": "test-storybook",
     "test": "NODE_OPTIONS=\"$NODE_OPTIONS --trace-warnings --experimental-vm-modules\" jest --config ./jest.server.config.mjs server/*.test.ts"
   },
   "lint-staged": {
@@ -59,7 +63,7 @@
     "highlightjs-terraform": "https://github.com/highlightjs/highlightjs-terraform#eb1b9661e143a43dff6b58b391128ce5cdad31d4",
     "lowlight": "^3.1.0",
     "mdast-util-from-markdown": "^2.0.1",
-    "nanoid": "^5.0.9",
+    "nanoid": "^5.1.0",
     "postcss-preset-env": "^9.5.14",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.3.1",
@@ -73,9 +77,18 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.7.0",
     "@docusaurus/types": "^3.7.0",
+    "@storybook/addon-essentials": "^8.5.2",
+    "@storybook/addon-webpack5-compiler-swc": "^2.0.0",
+    "@storybook/react": "^8.5.2",
+    "@storybook/react-webpack5": "^8.5.2",
+    "@storybook/test": "^8.5.2",
+    "@storybook/test-runner": "^0.21.0",
+    "@svgr/webpack": "^8.1.0",
     "@types/react": "^18.3.3",
     "ajv": "^8.16.0",
+    "concurrently": "9.1.2",
     "hast": "^1.0.0",
+    "http-server": "14.1.1",
     "jest": "^29.7.0",
     "js-yaml": "^4.1.0",
     "loadr": "^0.1.1",
@@ -87,6 +100,7 @@
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-mdxjs": "^3.0.0",
     "postcss": "^8.4.38",
+    "postcss-loader": "^8.1.1",
     "rehype-stringify": "^10.0.1",
     "remark-cli": "10.0.1",
     "remark-copy-linked-files": "^1.5.0",
@@ -96,8 +110,10 @@
     "remark-preset-lint-markdown-style-guide": "^5.1.2",
     "remark-rehype": "^10.1.0",
     "remark-validate-links": "^11.0.2",
+    "storybook": "^8.5.2",
     "to-vfile": "^8.0.0",
     "ts-jest": "^29.2.5",
+    "ts-loader": "^9.5.2",
     "tsc-esm-fix": "^3.1.0",
     "tsm": "^2.3.0",
     "typescript": "~5.5.2",
@@ -106,7 +122,8 @@
     "unist": "^0.0.1",
     "unist-util-find": "^3.0.0",
     "unist-util-visit-parents": "^6.0.1",
-    "vfile": "^6.0.1"
+    "vfile": "^6.0.1",
+    "wait-on": "^8.0.2"
   },
   "browserslist": {
     "production": [

@@ -62,29 +62,6 @@ export default function remarkMigrationUpdateTags(): Transformer {
         return index; // to traverse children
       }
 
-      // Notice and Admonition
-      if (isMdxNode(node) && node.name === "Notice") {
-        node.name = "Admonition";
-      }
-
-      if (isMdxNode(node) && node.name === "Admonition") {
-        const type = getAttribute(node, "type");
-
-        if (!type) {
-          node.attributes.push({
-            type: "mdxJsxAttribute",
-            name: "type",
-            value: "info",
-          });
-        } else {
-          type.value = (type.value as string).toLowerCase();
-
-          if (type.value === "notice") {
-            type.value = "note";
-          }
-        }
-      }
-
       // Unwrap Component
       if (
         isMdxNode(node) &&
