@@ -358,7 +358,7 @@ export interface DocusaurusCategory {
   [propName: string]: unknown;
 }
 
-const categoryDirPattern = `(/ver/[0-9]+\.x/)?([^/]*)`;
+const categoryDirPattern = `(/ver/[0-9]+\.x)?/([^/]*)`;
 
 export const getIndexPageID = (category: NavigationCategory): string => {
   if (category.entries.length == 0 && !category.generateFrom) {
@@ -373,6 +373,10 @@ export const getIndexPageID = (category: NavigationCategory): string => {
     return category.generateFrom + "/" + category.generateFrom;
   }
 
+  // Check if the entries contain the root index page. If they do, use that ID
+  if (category.entries.some((e) => e.slug.match(categoryDirPattern)[2] == "")) {
+    return "index";
+  }
   // The sidebar is manually defined, so base the category index page ID on
   // the first-level directory that contains all entries in the category.
   let categoryIndexDir: string;

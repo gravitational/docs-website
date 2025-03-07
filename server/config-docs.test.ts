@@ -15,7 +15,7 @@ describe("getIndexPageID", () => {
 
   const testCases: Array<testCase> = [
     {
-      description: "Non-generated",
+      description: "non-generated",
       category: {
         icon: "connect",
         title: "User Guides",
@@ -31,6 +31,42 @@ describe("getIndexPageID", () => {
         ],
       },
       expected: "connect-your-client/connect-your-client",
+    },
+    {
+      description: "includes root index page with versioned path",
+      category: {
+        icon: "home",
+        title: "Get Started",
+        entries: [
+          {
+            title: "Docs Home",
+            slug: "/ver/18.x/",
+          },
+          {
+            title: "Installation",
+            slug: "/ver/18.x/installation/",
+          },
+        ],
+      },
+      expected: "index",
+    },
+    {
+      description: "includes root index page with root path",
+      category: {
+        icon: "home",
+        title: "Get Started",
+        entries: [
+          {
+            title: "Docs Home",
+            slug: "/",
+          },
+          {
+            title: "Installation",
+            slug: "/installation/",
+          },
+        ],
+      },
+      expected: "index",
     },
     {
       description: "generated",
@@ -58,7 +94,7 @@ describe("makeDocusaurusNavigationCategory", () => {
 
   const testCases: Array<testCase> = [
     {
-      description: "Non-generated",
+      description: "non-generated",
       category: {
         icon: "connect",
         title: "User Guides",
