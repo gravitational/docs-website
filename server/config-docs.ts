@@ -350,8 +350,13 @@ const makeDocusaurusCategoryFromEntry = (
   return category;
 };
 
-// TODO: fill this in
-export interface DocusaurusCategory {};
+// Docusaurus doesn't export the types it uses internally for sidebar
+// categories, and these are a little involved, so we'll accept any object.
+// See:
+// https://github.com/facebook/docusaurus/blob/main/packages/docusaurus-plugin-content-docs/src/sidebars/types.ts
+export interface DocusaurusCategory {
+ [propName: string]: unknown;
+};
 
 export const makeDocusaurusNavigationCategory = (
   category: NavigationCategory,
