@@ -395,9 +395,6 @@ export const makeDocusaurusNavigationCategory = (
   category: NavigationCategory,
   version: string
 ) => {
-  console.log("CATEGORY:", JSON.stringify(category, null, 2));
-  console.log("VERSION:", version);
-  console.log("-------");
   if (category.generateFrom) {
     return {
       type: "category",
