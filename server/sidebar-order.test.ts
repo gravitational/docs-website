@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { basename, dirname } from "node:path";
-import { orderSidebarItems } from "./sidebar-order";
+import { orderSidebarItems, removeRedundantItems } from "./sidebar-order";
 import type { docPage } from "./sidebar-order";
 import type { NormalizedSidebarItem } from "@docusaurus/plugin-content-docs/src/sidebars/types.ts";
 
@@ -24,7 +24,7 @@ function getDocPageForId(id: string): docPage {
   };
 }
 
-describe.only("orderSidebarItems", () => {
+describe("orderSidebarItems", () => {
   interface testCase {
     description: string;
     input: Array<NormalizedSidebarItem>;
@@ -500,6 +500,74 @@ describe.only("orderSidebarItems", () => {
 
   test.each(testCases)("$description", (c) => {
     const actual = orderSidebarItems(c.input, getDocPageForId);
+    expect(actual).toEqual(c.expected);
+  });
+});
+
+describe("removeRedundantItems", () => {
+  interface testCase {
+    description: string;
+    input: Array<NormalizedSidebarItem>;
+    dirname: string;
+    expected: Array<NormalizedSidebarItem>;
+  }
+
+  // To write a test case, you can print the items array returned by
+  // defaultSidebarItemsGenerator in docusaurus.config.ts and find the
+  // subarray of items you would like to include.
+  const testCases: Array<testCase> = [
+    {
+      description: "Removes top-level category index pages",
+      dirname: "reference",
+      input: [
+        {
+          type: "doc",
+          id: "reference/reference",
+        },
+        {
+          type: "category",
+          label: "My Docs Category",
+          items: [
+            {
+              type: "doc",
+              id: "reference/my-category/page-c",
+            },
+            {
+              type: "doc",
+              id: "reference/my-category/page-a",
+            },
+            {
+              type: "doc",
+              id: "reference/my-category/page-b",
+            },
+          ],
+        },
+      ],
+      expected: [
+        {
+          type: "category",
+          label: "My Docs Category",
+          items: [
+            {
+              type: "doc",
+              id: "reference/my-category/page-c",
+            },
+            {
+              type: "doc",
+              id: "reference/my-category/page-a",
+            },
+            {
+              type: "doc",
+              id: "reference/my-category/page-b",
+            },
+          ],
+        },
+      ],
+    },
+  ];
+
+  test.each(testCases)("$description", (c) => {
+    const actual = removeRedundantItems(c.input, c.dirname);
     expect(actual).toEqual(c.expected);
   });
 });
