@@ -23,7 +23,10 @@ import {
   getRootDir,
   updatePathsInIncludes,
 } from "./server/asset-path-helpers";
-import { orderSidebarItems } from "./server/sidebar-order";
+import {
+  orderSidebarItems,
+  removeRedundantItems,
+} from "./server/sidebar-order";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
@@ -186,14 +189,20 @@ const config: Config = {
             categoriesMetadata,
             isCategoryIndex,
           });
+
           const idToDocPage = new Map();
           docs.forEach((d) => {
             idToDocPage.set(d.id, d);
           });
+
           const getDocPageByID = (id: string) => {
             return idToDocPage.get(id);
           };
-          return orderSidebarItems(items, getDocPageByID);
+
+          return orderSidebarItems(
+            removeRedundantItems(items, item.dirName),
+            getDocPageByID
+          );
         },
         // Host docs on the root page, later it will be exposed on goteleport.com/docs
         // next to the website and blog

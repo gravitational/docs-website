@@ -103,3 +103,26 @@ export const orderSidebarItems = (
     }
   });
 };
+
+// removeRedundantItems removes top-level category index pages from the sidebar,
+// since we expect these to be defined as links within each top-level category.
+export const removeRedundantItems = (
+  items: Array<NormalizedSidebarItem>,
+  dirname: string
+): Array<NormalizedSidebarItem> => {
+  // Return all items except for the one with the ID of the index page to
+  // remove from the body of the sidebar section. We expect the top-level category index
+  // page to be in, and named after, the section's root directory, e.g.:
+  //
+  // - "reference/reference"
+  // - "admin-guides/admin-guides"
+  return items.filter((item) => {
+    if (!item.hasOwnProperty("id")) {
+      return true;
+    }
+    return (
+      (item as { id: string; [propName: string]: unknown }).id !==
+      dirname + "/" + dirname
+    );
+  });
+};
