@@ -54,7 +54,7 @@
     "@docusaurus/plugin-svgr": "^3.7.0",
     "@docusaurus/theme-classic": "^3.7.0",
     "@docusaurus/tsconfig": "^3.7.0",
-    "@inkeep/widgets": "^0.2.290",
+    "@inkeep/widgets": "^0.2.292",
     "@mdx-js/react": "^3.0.0",
     "classnames": "^2.3.1",
     "clsx": "^2.1.1",
