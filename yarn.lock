@@ -2793,67 +2793,67 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@inkeep/color-mode@^0.0.25":
-  version "0.0.25"
-  resolved "https://registry.yarnpkg.com/@inkeep/color-mode/-/color-mode-0.0.25.tgz#58a9dfbbdf14e38faf824e6aa6588cc925ed4256"
-  integrity sha512-VtfmIGVqOYrk2a0SfpeaZe6A2p4yOOknWj5tgZ7KGAJH4y9hi5rxVip4/8cJbCgM5BaLng5BDtSzrPZ1Ot9Y4Q==
+"@inkeep/color-mode@^0.0.26":
+  version "0.0.26"
+  resolved "https://registry.yarnpkg.com/@inkeep/color-mode/-/color-mode-0.0.26.tgz#7c4aaea0ef7273a7afa3eb168e1dc500222ff794"
+  integrity sha512-zONJxr2NnAMeg8ohSWfd7qXbdOKJUaWRQAXYSTKwDTU4IEfeXNk5Y4rje4pQKlT0Nmi+qeiWbJilYZb3aHFKGA==
 
-"@inkeep/components@^0.0.25":
-  version "0.0.25"
-  resolved "https://registry.yarnpkg.com/@inkeep/components/-/components-0.0.25.tgz#46add539e92f66d960780a27f2cf9692cb565ca2"
-  integrity sha512-VIShLLaHy9BYdd6RQa+Vhe6FYxGLqQGBUgrNv3WOx9AFuQmi2LkiErtPt/nbCYHreUJqkB/gsQrb1gSTCpqB2Q==
+"@inkeep/components@^0.0.26":
+  version "0.0.26"
+  resolved "https://registry.yarnpkg.com/@inkeep/components/-/components-0.0.26.tgz#47048ef47b05ddc38f11bfae1cc1afd5255f04e7"
+  integrity sha512-0PqYSMvSkD/b4fV4FeoJj3AAZkREiAkJoICIIr7x4YaZYelDuJwcCane0TCKR9xMQt+CkwgTlvw5wi5K4003pQ==
   dependencies:
     "@ark-ui/react" "^0.15.0"
-    "@inkeep/preset" "^0.0.25"
-    "@inkeep/preset-chakra" "^0.0.25"
-    "@inkeep/shared" "^0.0.26"
-    "@inkeep/styled-system" "^0.0.47"
+    "@inkeep/preset" "^0.0.26"
+    "@inkeep/preset-chakra" "^0.0.26"
+    "@inkeep/shared" "^0.0.27"
+    "@inkeep/styled-system" "^0.0.48"
     "@pandacss/dev" "^0.22.0"
     framer-motion "^10.16.1"
 
-"@inkeep/preset-chakra@^0.0.25":
-  version "0.0.25"
-  resolved "https://registry.yarnpkg.com/@inkeep/preset-chakra/-/preset-chakra-0.0.25.tgz#42ce0654db272e20e1f09749a7b6863413565922"
-  integrity sha512-LsonMcYQguJSObJvXtH4KrlkC9g0fyYgUD5oP+v/QflzIOxKU9OttzSo93PH9rI2JZp7kMcpANUNsWwicgy+yA==
+"@inkeep/preset-chakra@^0.0.26":
+  version "0.0.26"
+  resolved "https://registry.yarnpkg.com/@inkeep/preset-chakra/-/preset-chakra-0.0.26.tgz#5b79aa82a7d608da052d4fe4911f3a9c76a730e2"
+  integrity sha512-XOmi7/KAkLNUI2KxjReVIm74ku8ZhWCvVccvxqzPKBdTaNCdNn3cDaQomnjkOXEyhRYOkynX0451qjyn3iIS1Q==
   dependencies:
     "@ark-ui/anatomy" "^0.1.0"
-    "@inkeep/shared" "^0.0.26"
+    "@inkeep/shared" "^0.0.27"
     "@pandacss/dev" "^0.22.0"
 
-"@inkeep/preset@^0.0.25":
-  version "0.0.25"
-  resolved "https://registry.yarnpkg.com/@inkeep/preset/-/preset-0.0.25.tgz#2153e0ce450372780621fa540c9287ae1f4d8454"
-  integrity sha512-oaJoSm0IASh4z1UO2ZD8lfjqQllunQewaBnkcRJhCrRSmQWs1Ex4u28cQY1QLtj932X5A9+YAoXpl4e/1MOyuA==
+"@inkeep/preset@^0.0.26":
+  version "0.0.26"
+  resolved "https://registry.yarnpkg.com/@inkeep/preset/-/preset-0.0.26.tgz#ec9a64679b4f12575c95c10c1c00ae1971867518"
+  integrity sha512-pIyMIKBIE3uMMBMSycv06prNqn80Y4dU+bV1KJBTv7skRxwo3t9It+ll+zIBBRUrBOMIEpBEQ1hAJnTb8ILuMg==
   dependencies:
     "@ark-ui/anatomy" "^0.1.0"
-    "@inkeep/preset-chakra" "^0.0.25"
-    "@inkeep/shared" "^0.0.26"
+    "@inkeep/preset-chakra" "^0.0.26"
+    "@inkeep/shared" "^0.0.27"
     "@pandacss/dev" "^0.22.0"
     colorjs.io "^0.4.5"
 
-"@inkeep/shared@^0.0.26":
-  version "0.0.26"
-  resolved "https://registry.yarnpkg.com/@inkeep/shared/-/shared-0.0.26.tgz#f72d34cc41e26ef6f6fb7a739d869772d1d5b11a"
-  integrity sha512-Js/cYbqC84ryjLyK/7NI5LzpnZWUPyLIcPeFM9vqb087k/5Fhi7d1JwakuUnx2U0yK5Q+B7ym2OzVjc2WXjKfQ==
+"@inkeep/shared@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@inkeep/shared/-/shared-0.0.27.tgz#5005ab604cbf91cc26c731f51a297387202c7937"
+  integrity sha512-1tRc+vsAsB4cJRKQNncrSu2tckPaLHYZB7YDYhNpROcM1SjegjoZc9NiWFtDCeHloHjYPA5E9gdzc+mbzyf5KQ==
 
-"@inkeep/styled-system@^0.0.47":
-  version "0.0.47"
-  resolved "https://registry.yarnpkg.com/@inkeep/styled-system/-/styled-system-0.0.47.tgz#45b132c476fba247850aae07ae52fdf2cb9b46b4"
-  integrity sha512-bu5lE+H+LZDJR5gyasJxCUoJLIqjfxc6O9zPfvhyNqOoj25pZGlXbFXq8uvlbqyIp/mQXWza3atMl4toqgzyLw==
+"@inkeep/styled-system@^0.0.48":
+  version "0.0.48"
+  resolved "https://registry.yarnpkg.com/@inkeep/styled-system/-/styled-system-0.0.48.tgz#df3d09afc9bf4b011d24158092f9b2dc8b2876d1"
+  integrity sha512-m0vklHzWS972T8lmVc1ue5EZcELUYgtWofzWC//Q1Q/DjD2Kn7j87DUEgzNdnBNRvQpHtYwD7HfjoVwAuZrKbA==
 
-"@inkeep/widgets@^0.2.291":
-  version "0.2.291"
-  resolved "https://registry.yarnpkg.com/@inkeep/widgets/-/widgets-0.2.291.tgz#6a5944c4ebca0e2592c5480a70c9d57f5240ce7f"
-  integrity sha512-9+xDrzncQk06jVeb/PwBszY/pldJqqN1Kp5ckGO6GH5YFhKY5rvR1PjaNZoijHE+k777SLVBeC+RlGYo50dCog==
+"@inkeep/widgets@^0.2.292":
+  version "0.2.292"
+  resolved "https://registry.yarnpkg.com/@inkeep/widgets/-/widgets-0.2.292.tgz#87ca39a0775c8b60369c98b96dd43c3638460484"
+  integrity sha512-0rykumvl5ufNjhBpWvd+plXV+5x/wNZw6G/VUFRTY/dk2Ot2E7RzMMsYlDCjeGoaEkQBlISJ4NDhbQpyr/RjPg==
   dependencies:
     "@apollo/client" "^3.8.1"
     "@ark-ui/react" "^0.15.0"
-    "@inkeep/color-mode" "^0.0.25"
-    "@inkeep/components" "^0.0.25"
-    "@inkeep/preset" "^0.0.25"
-    "@inkeep/preset-chakra" "^0.0.25"
-    "@inkeep/shared" "^0.0.26"
-    "@inkeep/styled-system" "^0.0.47"
+    "@inkeep/color-mode" "^0.0.26"
+    "@inkeep/components" "^0.0.26"
+    "@inkeep/preset" "^0.0.26"
+    "@inkeep/preset-chakra" "^0.0.26"
+    "@inkeep/shared" "^0.0.27"
+    "@inkeep/styled-system" "^0.0.48"
     "@types/lodash.isequal" "^4.5.7"
     graphql "^16.8.1"
     graphql-ws "^5.14.0"
