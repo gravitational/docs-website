@@ -13,16 +13,6 @@ import type {
 import styles from "./InkeepSearch.module.css";
 import InkeepSearchIconSvg from "./inkeepIcon.svg";
 
-const cssOverrides = `
-  .ikp-modal-widget-content {
-    border: 2px solid #512FC9;
-    border-radius: 12px;
-    top: 88px;
-    left: 12px;
-  }
-`;
-
-const stylesheets = [<style key="inkeep-overrides">{cssOverrides}</style>];
 
 export function InkeepSearch() {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,15 +40,17 @@ export function InkeepSearch() {
     privacyPreferences: {
       optOutAllAnalytics: true,
     },
-    // customCardSettings: [
-    //   {
-    //     filters: {
-    //       ContentType: "docs",
-    //     },
-    //     searchTabLabel: "Docs",
-    //     icon: { builtIn: "IoDocumentTextOutline" },
-    //   },
-    // ],
+    transformSource: (source) => {
+      const isDocs =
+        source.contentType === 'docs' ||
+        source.type === 'documentation' ||
+        source.breadcrumbs.some((breadcrumb) => breadcrumb.toLowerCase().includes('docs'))
+      return {
+        ...source,
+        tabs: isDocs ? ['Docs', ...(source.tabs ?? [])] : source.tabs,
+        icon: isDocs ? { builtIn: 'IoDocumentTextOutline' } : undefined,
+      }
+    },
     colorMode: {
       forcedColorMode: "light",
     },
@@ -82,7 +74,9 @@ export function InkeepSearch() {
       chatCallableFunctionsRef.current?.updateInputMessage(str);
       searchCallableFunctionsRef.current?.updateQuery(str);
       setMessage(str);
-      setIsOpen(true);
+      if (str) {
+        setIsOpen(true);
+      }
     },
     []
   );
