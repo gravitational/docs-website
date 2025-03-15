@@ -35,7 +35,7 @@ Settings for AWS Amplify are following:
 1. `nodejs` 20 and `yarn` v1.22.22.
 2. Build command `yarn build`
 4. Build results folder `build`
-5. Following env variables should be set: `INKEEP_API_KEY`, `INKEEP_INTEGRATION_ID`, `INKEEP_ORGANIZATION_ID`, `YOUTUBE_API_KEY`, `SANITY_PROJECT_ID`, `SANITY_DATASET`.
+5. Following env variables should be set: `INKEEP_API_KEY`, `YOUTUBE_API_KEY`, `SANITY_PROJECT_ID`, `SANITY_DATASET`.
 6. This variable should be set increase nodejs memory `NODE_OPTIONS=--max-old-space-size=8192`
 7. Add the following redirect to make 404 work:
     - Source address: `/<*>` 

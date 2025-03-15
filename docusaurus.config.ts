@@ -42,8 +42,6 @@ const config: Config = {
   customFields: {
     inkeepConfig: {
       apiKey: getFromSecretOrEnv("INKEEP_API_KEY"),
-      integrationId: getFromSecretOrEnv("INKEEP_INTEGRATION_ID"),
-      organizationId: getFromSecretOrEnv("INKEEP_ORGANIZATION_ID"),
     },
   },
   clientModules: [
