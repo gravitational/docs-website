@@ -42,14 +42,17 @@ export function InkeepSearch() {
     },
     transformSource: (source) => {
       const isDocs =
-        source.contentType === 'docs' ||
-        source.type === 'documentation' ||
-        source.breadcrumbs.some((breadcrumb) => breadcrumb.toLowerCase().includes('docs'))
-      return {
-        ...source,
-        tabs: isDocs ? ['Docs', ...(source.tabs ?? [])] : source.tabs,
-        icon: isDocs ? { builtIn: 'IoDocumentTextOutline' } : undefined,
+      source.contentType === 'docs' ||
+      source.type === 'documentation' ||
+      source.breadcrumbs.some((breadcrumb) => breadcrumb.toLowerCase().includes('docs'))
+      if (!isDocs) {
+        return source
       }
+    return {
+      ...source,
+      tabs: ['Docs', ...(source.tabs ?? [])],
+      icon: { builtIn: 'IoDocumentTextOutline' },
+    }
     },
     colorMode: {
       forcedColorMode: "light",
