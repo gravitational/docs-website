@@ -43,8 +43,7 @@ export function InkeepSearch() {
     transformSource: (source) => {
       const isDocs =
       source.contentType === 'docs' ||
-      source.type === 'documentation' ||
-      source.breadcrumbs.some((breadcrumb) => breadcrumb.toLowerCase().includes('docs'))
+      source.type === 'documentation'
       if (!isDocs) {
         return source
       }
