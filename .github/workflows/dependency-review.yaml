@@ -9,4 +9,11 @@ jobs:
     permissions:
       contents: read
     with:
-      allow-dependencies-licenses: 'pkg:npm/%40inkeep/widgets, pkg:npm/domain-browser'
+      allow-dependencies-licenses: >
+        pkg:npm/%40inkeep/cxkit-color-mode,
+        pkg:npm/%40inkeep/cxkit-primitives,
+        pkg:npm/%40inkeep/cxkit-react,
+        pkg:npm/%40inkeep/cxkit-styled,
+        pkg:npm/%40inkeep/cxkit-theme,
+        pkg:npm/%40inkeep/cxkit-types,
+        pkg:npm/domain-browser
