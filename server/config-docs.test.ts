@@ -6,7 +6,7 @@ import {
   DocusaurusCategory,
 } from "./config-docs";
 
-describe("getIndexPageID", () => {
+describe("getIndexPageID with valid entries", () => {
   interface testCase {
     description: string;
     category: NavigationCategory;
@@ -82,6 +82,59 @@ describe("getIndexPageID", () => {
 
   test.each(testCases)("$description", (c) => {
     expect(getIndexPageID(c.category)).toEqual(c.expected);
+  });
+});
+
+describe("getIndexPageID with invalid entries", () => {
+  interface testCase {
+    description: string;
+    category: NavigationCategory;
+    errorSubstring: string;
+  }
+
+  const testCases: Array<testCase> = [
+    {
+      description: "non-generated with malformed slugs",
+      category: {
+        icon: "connect",
+        title: "User Guides",
+        entries: [
+          {
+            title: "Introduction",
+            slug: "",
+          },
+          {
+            title: "Using tsh",
+            slug: "/docs/connect-your-client/tsh/",
+          },
+        ],
+      },
+      errorSubstring: `malformed slug in docs sidebar configuration: ""`,
+    },
+    {
+      description: "slugs with different top-level segments",
+      category: {
+        icon: "connect",
+        title: "User Guides",
+        entries: [
+          {
+            title: "Introduction",
+            slug: "/ver/12.x/enroll-resources/introduction/",
+          },
+          {
+            title: "Using tsh",
+            slug: "/ver/12.x/connect-your-client/tsh/",
+          },
+        ],
+      },
+      errorSubstring: `cannot determine a category index page ID for top-level category User Guides because not all of its entries are in the same first-level directory`,
+    },
+  ];
+
+  test.each(testCases)("$description", (c) => {
+    expect(() => {
+      getIndexPageID(c.category);
+    }).toThrow(c.errorSubstring);
   });
 });
 

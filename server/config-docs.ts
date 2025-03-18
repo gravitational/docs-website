@@ -362,7 +362,7 @@ export interface DocusaurusCategory {
 // version, or the default version. Examples:
 // - /ver/10.x/installation/
 // - /database-access/introduction/
-const categoryDirPattern = `(/ver/[0-9]+\.x)?/([^/]*)`;
+const categoryDirPattern = `(/ver/[0-9]+\\.x)?/([^/]*)`;
 
 // getIndexPageID infers the Docusaurus page ID of a category index page based
 // on the slugs of pages within the category. The legacy config.json format does
@@ -378,25 +378,34 @@ export const getIndexPageID = (category: NavigationCategory): string => {
 
   // Base the ID on the directory we generated the sidebar from in the legacy
   // docs site.
-  if (!!category.generateFrom) {
+  if (category.generateFrom) {
     return category.generateFrom + "/" + category.generateFrom;
   }
 
+  const slugSegments = category.entries.map((e) => {
+    const parts = e.slug.match(categoryDirPattern);
+    if (!parts) {
+      throw new Error(
+        `malformed slug in docs sidebar configuration: "${e.slug}"`
+      );
+    }
+    return parts[2];
+  });
+
   // Check if the entries contain the root index page. If they do, use that ID
-  if (category.entries.some((e) => e.slug.match(categoryDirPattern)[2] == "")) {
+  if (slugSegments.some((e) => e == "")) {
     return "index";
   }
 
   // The sidebar is manually defined, so base the category index page ID on
   // the first-level directory that contains all entries in the category.
   let categoryIndexDir: string;
-  for (let i = 0; i < category.entries.length; i++) {
-    const rootDirName = category.entries[i].slug.match(categoryDirPattern)[2];
+  for (let i = 0; i < slugSegments.length; i++) {
     if (!categoryIndexDir) {
-      categoryIndexDir = rootDirName;
+      categoryIndexDir = slugSegments[i];
       continue;
     }
-    if (rootDirName != categoryIndexDir) {
+    if (slugSegments[i] != categoryIndexDir) {
       throw new Error(
         `cannot determine a category index page ID for top-level category ${category.title} because not all of its entries are in the same first-level directory`
       );
