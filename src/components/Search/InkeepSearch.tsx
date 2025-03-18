@@ -36,7 +36,7 @@ export function InkeepSearch() {
     apiKey: inkeepConfig.apiKey || '',
     organizationDisplayName: "Teleport",
     primaryBrandColor: "#512FC9",
-    aiApiBaseUrl: "https://goteleport.dev/inkeep-proxy",
+    aiApiBaseUrl: "https://goteleport.com/inkeep-proxy",
     privacyPreferences: {
       optOutAllAnalytics: true,
     },
