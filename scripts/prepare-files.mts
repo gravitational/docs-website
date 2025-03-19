@@ -22,7 +22,7 @@ const defaultVersion = getLatestVersion();
 const versions = getVersionNames();
 
 const writeSidebar = (version: string) => {
-  const docs = docusaurusifyNavigation(version);
+  const docs = docusaurusifyNavigation(version, ".");
 
   writeFileSync(
     version === currentVersion

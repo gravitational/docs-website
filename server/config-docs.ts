@@ -6,8 +6,9 @@
 
 import Ajv from "ajv";
 import { validateConfig } from "./config-common";
-import { resolve, sep } from "path";
+import { join, sep } from "path";
 import { existsSync, readFileSync } from "fs";
+import * as nodefs from "fs";
 import { isExternalLink, isHash, splitPath } from "../src/utils/url";
 import { getLatestVersion } from "./config-site";
 
@@ -71,23 +72,22 @@ export interface NavigationCategory {
 const latest = getLatestVersion();
 
 export interface Config {
-  navigation: NavigationCategory[];
+  navigation?: NavigationCategory[];
   variables?: Record<string, unknown>;
   redirects?: Redirect[];
 }
 
 const getConfigPath = (version: string) =>
-  resolve("content", version, "docs/config.json");
+  join("content", version, "docs/config.json");
 
-/*
- * Try to load config file and throw error if it does not exist.
- */
+// load loads the docs configuration for the given version at the
+// gravitational/docs clone in clonePath. fs can be reassigned from the "fs"
+// standard library package for testing.
+export const load = (version: string, clonePath: string, fs = nodefs) => {
+  const path = join(clonePath, "content", version, "docs", "config.json");
 
-export const load = (version: string) => {
-  const path = getConfigPath(version);
-
-  if (existsSync(path)) {
-    const content = readFileSync(path, "utf-8");
+  if (fs.existsSync(path)) {
+    const content = fs.readFileSync(path, "utf-8");
 
     return JSON.parse(content) as Config;
   } else {
@@ -183,7 +183,7 @@ const validator = ajv.compile({
       },
     },
   },
-  required: ["navigation"],
+  required: [],
   additionalProperties: false,
 });
 
@@ -253,13 +253,17 @@ const normalizeDocsUrls = (
 const normalizeNavigation = (
   version: string,
   navigation: NavigationCategory[]
-): NavigationCategory[] =>
-  navigation.map((category) => {
+): NavigationCategory[] => {
+  if (!navigation) {
+    return [];
+  }
+  return navigation.map((category) => {
     return {
       ...category,
       entries: normalizeDocsUrls(version, category.entries),
     };
   });
+};
 
 /*
  * Here we normalize urls in the "redirects" section.
@@ -294,13 +298,18 @@ export const normalize = (config: Config, version: string): Config => {
     config.variables = {};
   }
 
+  if (!config.navigation) {
+    config.navigation = [];
+  }
+
   return config;
 };
 
-/* Load, validate and normalize config. */
-
-export const loadConfig = (version: string) => {
-  const config = load(version);
+// loadConfig loads, validates, and normalizes the docs configuration for the
+// given version at the gravitational/docs clone in clonePath. fs can be
+// reassigned from the "fs" standard library package for testing.
+export const loadConfig = (version: string, clonePath: string, fs = nodefs) => {
+  const config = load(version, clonePath, fs);
 
   validateConfig<Config>(validator, config);
 
@@ -447,8 +456,32 @@ export const makeDocusaurusNavigationCategory = (
   };
 };
 
-export const docusaurusifyNavigation = (version: string) => {
-  const config: Config = loadConfig(version);
+// docusaurusifyNavigation converts the legacy config.json format of the sidebar
+// navigation config to use the Docusaurus sidebar configuration schema. 
+//
+// docusaurusifyNavigation first attempts to load a Docusaurus sidebar
+// configuration file called docs/sidebar.json within the content directory at
+// version within the gravitational/docs clone at clonePath. If no such file
+// exists, it converts the legacy configuration file at docs/config.json.
+// 
+// fs can be reassigned from the "fs" standard library package for testing.
+export const docusaurusifyNavigation = (
+  version: string,
+  clonePath: string,
+  fs = nodefs
+) => {
+  const sidebarJSONPath = join(
+    clonePath,
+    "content",
+    version,
+    "docs",
+    "sidebar.json"
+  );
+  if (fs.existsSync(sidebarJSONPath)) {
+    const content = fs.readFileSync(sidebarJSONPath, "utf-8");
+    return JSON.parse(content);
+  }
+  const config = loadConfig(version, clonePath, fs);
 
   return {
     docs: config.navigation.map((category) => {

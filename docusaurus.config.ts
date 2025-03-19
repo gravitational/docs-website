@@ -224,7 +224,7 @@ const config: Config = {
             remarkVariables,
             {
               variables: (vfile: VFile) =>
-                loadConfig(getVersionFromVFile(vfile)).variables,
+                loadConfig(getVersionFromVFile(vfile), ".").variables,
             },
           ],
           [

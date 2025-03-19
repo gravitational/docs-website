@@ -7,7 +7,7 @@ const versions = getVersionNames();
 
 export const getRedirects = () => {
   const result = versions.flatMap((version) => {
-    const config = loadDocsConfig(version);
+    const config = loadDocsConfig(version, ".");
 
     return config.redirects || [];
   });
