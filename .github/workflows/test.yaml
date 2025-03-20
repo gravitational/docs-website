@@ -7,12 +7,16 @@ jobs:
     name: Run tests
     runs-on: ubuntu-22.04-2core-arm64
     steps:
-    - uses: actions/checkout@v4
-    - name: Install deps
-      run: yarn && yarn playwright install --with-deps
-    - name: Run unit tests
-      run: yarn test
-    - name: Build Storybook
-      run: yarn storybook:build
-    - name: Run Storybook tests
-      run: yarn storybook:test-ci
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: yarn && yarn playwright install --with-deps
+      - name: Run unit tests
+        run: yarn test
+      - name: Build Storybook
+        run: yarn storybook:build
+      - name: Run Storybook tests
+        run: yarn storybook:test-ci
+        # Changes to server code can break the formatting linter by mistake, so run it to
+        # make sure this hasn't happened.
+      - name: Run the docs formatting linter
+        run: yarn markdown-lint

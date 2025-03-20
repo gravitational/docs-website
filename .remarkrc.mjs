@@ -65,7 +65,7 @@ const configLint = {
       {
         lint: true,
         variables: (vfile) => {
-          return loadConfig(getVersion(vfile.path)).variables || {};
+          return loadConfig(getVersion(vfile.path), ".").variables || {};
         },
       },
     ],
