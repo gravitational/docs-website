@@ -32,59 +32,6 @@ export default function remarkMigrationUpdateTags(): Transformer {
         });
       }
 
-      // Details
-      if (isMdxNode(node) && node.name === "Details") {
-        parent.children[index] = {
-          type: "mdxJsxFlowElement",
-          name: "details",
-          attributes: [],
-          children: [
-            {
-              type: "mdxJsxFlowElement",
-              name: "summary",
-              attributes: [],
-              children: [
-                {
-                  type: "text",
-                  value: getAttributeValue(node, "title"),
-                },
-              ],
-            },
-            {
-              type: "mdxJsxFlowElement",
-              name: "div",
-              attributes: [],
-              children: node.children,
-            },
-          ],
-        } as MdxJsxElement;
-
-        return index; // to traverse children
-      }
-
-      // Unwrap Component
-      if (
-        isMdxNode(node) &&
-        [
-          "Figure",
-          "TileSet",
-          "TileList",
-          "TileListItem",
-          "ScopedBlock",
-        ].includes(node.name)
-      ) {
-        parent.children.splice(index, 1, ...node.children); // unwrap children
-
-        return index; // to traverse children
-      }
-
-      // Remove components
-      if (isMdxNode(node) && ["Icon", "VarList"].includes(node.name)) {
-        parent.children.splice(index, 1);
-
-        return index; // index of the next element to traverse, in this case repeat the same index again
-      }
-
       // Remove string styles from nodes
       if (isMdxNode(node)) {
         node.attributes = node.attributes.filter(
