@@ -41,38 +41,10 @@ type Redirect = {
       permanent?: never;
     }
 );
-export const scopeValues = ["oss", "enterprise", "cloud", "team"] as const;
-
-export type ScopeType = (typeof scopeValues)[number];
-export type ScopesType = ScopeType | ScopeType[];
-
-export type ScopesInMeta = [""] | ["noScope"] | ScopeType[];
-
-interface BaseNavigationItem {
-  title: string;
-  slug: string;
-  entries?: NavigationItem[];
-  generateFrom?: string;
-}
-export interface RawNavigationItem extends BaseNavigationItem {
-  forScopes?: ScopeType[];
-}
-
-export interface NavigationItem extends BaseNavigationItem {
-  forScopes?: ScopesInMeta;
-}
-
-export interface NavigationCategory {
-  icon: string;
-  title: string;
-  entries: NavigationItem[];
-  generateFrom?: string;
-}
 
 const latest = getLatestVersion();
 
 export interface Config {
-  navigation?: NavigationCategory[];
   variables?: Record<string, unknown>;
   redirects?: Redirect[];
 }
@@ -108,53 +80,6 @@ const validator = ajv.compile({
   properties: {
     variables: {
       type: "object",
-    },
-    navigation: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          icon: { type: "string" },
-          title: { type: "string" },
-          entries: {
-            type: "array",
-            items: {
-              type: "object",
-              $id: "navigation-item",
-              properties: {
-                title: { type: "string" },
-                slug: { type: "string" },
-                forScopes: {
-                  anyOf: [
-                    {
-                      type: "string",
-                    },
-                    {
-                      type: "array",
-                      items: {
-                        type: "string",
-                      },
-                    },
-                  ],
-                },
-                entries: {
-                  type: "array",
-                  items: { $ref: "navigation-item" },
-                },
-              },
-              required: ["title", "slug"],
-              additionalProperties: false,
-            },
-          },
-          generateFrom: {
-            type: "string",
-          },
-        },
-        required: ["title", "icon", "entries"],
-        additionalProperties: false,
-      },
-      minItems: 1,
-      uniqueItems: true,
     },
     redirects: {
       type: "array",
@@ -217,58 +142,6 @@ export const normalizeDocsUrl = (version: string, url: string) => {
   return prefix + url;
 };
 
-const getPathsForNavigationEntries = (entries: NavigationItem[]): string[] => {
-  return entries.reduce((allSlugs, currentEntry) => {
-    let slugs = [currentEntry.slug];
-    if (currentEntry.entries) {
-      const moreSlugs = getPathsForNavigationEntries(currentEntry.entries);
-      slugs.push(...moreSlugs);
-    }
-    allSlugs.push(...slugs);
-    return allSlugs;
-  }, [] as string[]);
-};
-
-const normalizeDocsUrls = (
-  version: string,
-  entries: NavigationItem[]
-): NavigationItem[] => {
-  return entries.map((entry) => {
-    const newEntry = Object.assign(entry);
-
-    newEntry.slug = normalizeDocsUrl(version, entry.slug);
-
-    if (entry.entries) {
-      newEntry.entries = normalizeDocsUrls(version, entry.entries);
-    }
-
-    return newEntry;
-  });
-};
-
-/*
- * Here we normalize urls in the "navigation" section.
- */
-
-const normalizeNavigation = (
-  version: string,
-  navigation: NavigationCategory[]
-): NavigationCategory[] => {
-  if (!navigation) {
-    return [];
-  }
-  return navigation.map((category) => {
-    return {
-      ...category,
-      entries: normalizeDocsUrls(version, category.entries),
-    };
-  });
-};
-
-/*
- * Here we normalize urls in the "redirects" section.
- */
-
 const normalizeRedirects = (
   version: string,
   redirects: Redirect[]
@@ -288,18 +161,12 @@ const normalizeRedirects = (
  */
 
 export const normalize = (config: Config, version: string): Config => {
-  config.navigation = normalizeNavigation(version, config.navigation);
-
   if (config.redirects) {
     config.redirects = normalizeRedirects(version, config.redirects);
   }
 
   if (!config.variables) {
     config.variables = {};
-  }
-
-  if (!config.navigation) {
-    config.navigation = [];
   }
 
   return config;
@@ -314,178 +181,4 @@ export const loadConfig = (version: string, clonePath: string, fs = nodefs) => {
   validateConfig<Config>(validator, config);
 
   return normalize(config, version);
-};
-
-const makeIdFromSlug = (slug: string, version) => {
-  const newSlug = slug
-    .replace(`/ver/${version}/`, "")
-    .replace(/\/$/, "")
-    .replace(/^\//, "");
-
-  // Docusaurus requires explicit index name in configs.
-  return newSlug || "index";
-};
-
-const makeDocusaurusDocFromEntry = (entry: NavigationItem, version: string) => {
-  return {
-    type: "doc",
-    label: entry.title,
-    id: makeIdFromSlug(entry.slug, version),
-  };
-};
-
-const makeDocusaurusCategoryFromEntry = (
-  entry: NavigationItem,
-  version: string
-) => {
-  const category = {
-    type: "category",
-    label: entry.title,
-    collapsible: true,
-    items: entry.entries?.map((subEntry) =>
-      subEntry.entries
-        ? makeDocusaurusCategoryFromEntry(subEntry, version)
-        : makeDocusaurusDocFromEntry(subEntry, version)
-    ),
-  };
-
-  if (entry.slug) {
-    category.link = {
-      type: "doc",
-      id: makeIdFromSlug(entry.slug, version),
-    };
-  }
-
-  return category;
-};
-
-// Docusaurus doesn't export the types it uses internally for sidebar
-// categories, and these are a little involved, so we'll accept any object.
-// See:
-// https://github.com/facebook/docusaurus/blob/main/packages/docusaurus-plugin-content-docs/src/sidebars/types.ts
-export interface DocusaurusCategory {
-  [propName: string]: unknown;
-}
-
-// categoryDirPattern matches a slug that has been normalized to include a
-// version, or the default version. Examples:
-// - /ver/10.x/installation/
-// - /database-access/introduction/
-const categoryDirPattern = `(/ver/[0-9]+\\.x)?/([^/]*)`;
-
-// getIndexPageID infers the Docusaurus page ID of a category index page based
-// on the slugs of pages within the category. The legacy config.json format does
-// not specify the slugs of category index pages within each top-level category
-// so we need to generate this to add links to these pages in the Docusaurus
-// sidebar.
-export const getIndexPageID = (category: NavigationCategory): string => {
-  if (category.entries.length == 0 && !category.generateFrom) {
-    throw new Error(
-      `a navigation category with no generateFrom property must have entries`
-    );
-  }
-
-  // Base the ID on the directory we generated the sidebar from in the legacy
-  // docs site.
-  if (category.generateFrom) {
-    return category.generateFrom + "/" + category.generateFrom;
-  }
-
-  const slugSegments = category.entries.map((e) => {
-    const parts = e.slug.match(categoryDirPattern);
-    if (!parts) {
-      throw new Error(
-        `malformed slug in docs sidebar configuration: "${e.slug}"`
-      );
-    }
-    return parts[2];
-  });
-
-  // Check if the entries contain the root index page. If they do, use that ID
-  if (slugSegments.some((e) => e == "")) {
-    return "index";
-  }
-
-  // The sidebar is manually defined, so base the category index page ID on
-  // the first-level directory that contains all entries in the category.
-  let categoryIndexDir: string;
-  for (let i = 0; i < slugSegments.length; i++) {
-    if (!categoryIndexDir) {
-      categoryIndexDir = slugSegments[i];
-      continue;
-    }
-    if (slugSegments[i] != categoryIndexDir) {
-      throw new Error(
-        `cannot determine a category index page ID for top-level category ${category.title} because not all of its entries are in the same first-level directory`
-      );
-    }
-  }
-  return categoryIndexDir + "/" + categoryIndexDir;
-};
-
-// makeDocusaurusNavigationCategory converts one top-level navigation category
-// as specified in the legacy configuration format (config.json) to the
-// Docusaurus configuration format.
-export const makeDocusaurusNavigationCategory = (
-  category: NavigationCategory,
-  version: string
-) => {
-  if (category.generateFrom) {
-    return {
-      type: "category",
-      label: category.title,
-      link: { type: "doc", id: getIndexPageID(category) },
-      items: [
-        {
-          type: "autogenerated",
-          dirName: category.generateFrom,
-        },
-      ],
-    };
-  }
-  return {
-    type: "category",
-    label: category.title,
-    collapsible: true,
-    link: { type: "doc", id: getIndexPageID(category) },
-    items: category.entries.map((entry) =>
-      entry.entries
-        ? makeDocusaurusCategoryFromEntry(entry, version)
-        : makeDocusaurusDocFromEntry(entry, version)
-    ),
-  };
-};
-
-// docusaurusifyNavigation converts the legacy config.json format of the sidebar
-// navigation config to use the Docusaurus sidebar configuration schema. 
-//
-// docusaurusifyNavigation first attempts to load a Docusaurus sidebar
-// configuration file called docs/sidebar.json within the content directory at
-// version within the gravitational/docs clone at clonePath. If no such file
-// exists, it converts the legacy configuration file at docs/config.json.
-// 
-// fs can be reassigned from the "fs" standard library package for testing.
-export const docusaurusifyNavigation = (
-  version: string,
-  clonePath: string,
-  fs = nodefs
-) => {
-  const sidebarJSONPath = join(
-    clonePath,
-    "content",
-    version,
-    "docs",
-    "sidebar.json"
-  );
-  if (fs.existsSync(sidebarJSONPath)) {
-    const content = fs.readFileSync(sidebarJSONPath, "utf-8");
-    return JSON.parse(content);
-  }
-  const config = loadConfig(version, clonePath, fs);
-
-  return {
-    docs: config.navigation.map((category) => {
-      return makeDocusaurusNavigationCategory(category, version);
-    }),
-  };
 };

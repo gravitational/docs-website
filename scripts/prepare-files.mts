@@ -1,7 +1,6 @@
 import { copyFileSync, rmSync, existsSync, mkdirSync } from "fs";
-import { resolve, dirname } from "path";
+import { join, resolve, dirname } from "path";
 import { glob } from "glob";
-import { docusaurusifyNavigation } from "../server/config-docs";
 import {
   getCurrentVersion,
   getLatestVersion,
@@ -22,14 +21,12 @@ const defaultVersion = getLatestVersion();
 const versions = getVersionNames();
 
 const writeSidebar = (version: string) => {
-  const docs = docusaurusifyNavigation(version, ".");
+  copyFileSync(
+    join("content", version, "docs", "sidebar.json"),
 
-  writeFileSync(
     version === currentVersion
       ? SIDEBAR_FILENAME
-      : GET_VERSION_SIDEBAR_FILENAME(version),
-    JSON.stringify(docs),
-    "utf8"
+      : GET_VERSION_SIDEBAR_FILENAME(version)
   );
 };
 
@@ -70,12 +67,19 @@ versions.forEach((version) => {
 writeVersions();
 
 // Make sure the upcoming releases page is the same on all 3 branches.
-const versionsToOverride = getVersionNames().filter(v => v !== defaultVersion);
-const defaultUpcomingReleases = resolve("content", defaultVersion, "docs/pages/upcoming-releases.mdx");
+const versionsToOverride = getVersionNames().filter(
+  (v) => v !== defaultVersion
+);
+const defaultUpcomingReleases = resolve(
+  "content",
+  defaultVersion,
+  "docs/pages/upcoming-releases.mdx"
+);
 versionsToOverride.forEach((version) => {
-  const destination = version === currentVersion
-    ? resolve("docs", "upcoming-releases.mdx")
-    : resolve(DOCS_PAGES_ROOT, `version-${version}`, "upcoming-releases.mdx");
+  const destination =
+    version === currentVersion
+      ? resolve("docs", "upcoming-releases.mdx")
+      : resolve(DOCS_PAGES_ROOT, `version-${version}`, "upcoming-releases.mdx");
 
   copyFileSync(defaultUpcomingReleases, destination);
-})
+});
