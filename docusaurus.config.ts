@@ -53,6 +53,11 @@ const config: Config = {
     "./src/styles/global.css",
   ],
   themeConfig: {
+    docs: {
+      sidebar: {
+        autoCollapseCategories: true,
+      },
+    },
     image: "/og-image.png",
     colorMode: {
       defaultMode: "light",
