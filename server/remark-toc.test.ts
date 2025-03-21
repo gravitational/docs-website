@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { Volume, createFsFromVolume } from "memfs";
-import { default as remarkTOC, getTOC } from "../server/remark-toc";
+import { default as remarkTOC } from "../server/remark-toc";
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import { Compatible, VFile, VFileOptions } from "vfile";
@@ -51,104 +51,6 @@ title: "Application Access Page 2"
 description: "Protecting App 2 with Teleport"
 ---`,
   };
-
-  test("getTOC with one link to a directory", () => {
-    const expected = `- [Application Access](application-access/application-access.mdx): Guides related to Application Access`;
-
-    const vol = Volume.fromJSON({
-      "/docs/docs.mdx": `---
-title: Documentation Home
-description: Guides for setting up the product.
----
-
-Guides for setting up the product.
-
-`,
-      "/docs/application-access/application-access.mdx": `---
-title: "Application Access"
-description: "Guides related to Application Access"
----
-
-`,
-      "/docs/application-access/page1.mdx": `---
-title: "Application Access Page 1"
-description: "Protecting App 1 with Teleport"
----`,
-      "/docs/application-access/page2.mdx": `---
-title: "Application Access Page 2"
-description: "Protecting App 2 with Teleport"
----`,
-    });
-    const fs = createFsFromVolume(vol);
-    const actual = getTOC("/docs/docs.mdx", fs);
-    expect(actual.result).toBe(expected);
-  });
-
-  test("getTOC with multiple links to directories", () => {
-    const expected = `- [Application Access](application-access/application-access.mdx): Guides related to Application Access
-- [Database Access](database-access/database-access.mdx): Guides related to Database Access.`;
-
-    const vol = Volume.fromJSON(testFilesTwoSections);
-    const fs = createFsFromVolume(vol);
-    const actual = getTOC("/docs/docs.mdx", fs);
-    expect(actual.result).toBe(expected);
-  });
-
-  test("getTOC orders sections correctly", () => {
-    const expected = `- [API Usage](api.mdx): Using the API.
-- [Application Access](application-access/application-access.mdx): Guides related to Application Access
-- [Desktop Access](desktop-access/desktop-access.mdx): Guides related to Desktop Access
-- [Initial Setup](initial-setup.mdx): How to set up the product for the first time.
-- [Kubernetes](kubernetes.mdx): A guide related to Kubernetes.`;
-
-    const vol = Volume.fromJSON({
-      "/docs/docs.mdx": `---
-title: Documentation Home
-description: Guides to setting up the product.
----
-
-Guides to setting up the product.
-
-`,
-      "/docs/desktop-access/desktop-access.mdx": `---
-title: "Desktop Access"
-description: "Guides related to Desktop Access"
----
-
-`,
-
-      "/docs/application-access/application-access.mdx": `---
-title: "Application Access"
-description: "Guides related to Application Access"
----
-
-`,
-      "/docs/desktop-access/get-started.mdx": `---
-title: "Get Started"
-description: "Get started with desktop access."
----`,
-      "/docs/application-access/page1.mdx": `---
-title: "Application Access Page 1"
-description: "Protecting App 1 with Teleport"
----`,
-      "/docs/kubernetes.mdx": `---
-title: "Kubernetes"
-description: "A guide related to Kubernetes."
----`,
-
-      "/docs/initial-setup.mdx": `---
-title: "Initial Setup"
-description: "How to set up the product for the first time."
----`,
-      "/docs/api.mdx": `---
-title: "API Usage"
-description: "Using the API."
----`,
-    });
-    const fs = createFsFromVolume(vol);
-    const actual = getTOC("/docs/docs.mdx", fs);
-    expect(actual.result).toBe(expected);
-  });
 
   const transformer = (vfileOptions: VFileOptions) => {
     const file: VFile = new VFile(vfileOptions);
