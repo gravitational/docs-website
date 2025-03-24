@@ -13,7 +13,6 @@ import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkIncludes from "./server/remark-includes";
 import remarkVariables from "./server/remark-variables";
 import remarkUpdateTags from "./server/remark-update-tags";
-import remarkTOC from "./server/remark-toc";
 import remarkCodeSnippet from "./server/remark-code-snippet";
 import { fetchVideoMeta } from "./server/youtube-meta";
 import { getRedirects } from "./server/redirects";
@@ -244,9 +243,6 @@ const config: Config = {
               updater: updateAssetPath,
             },
           ],
-          // remarkTOC must occur after remarkUpdateAssetPaths, otherwise some
-          // table of contents links will be malformed.
-          remarkTOC,
           remarkUpdateTags,
         ],
         beforeDefaultRehypePlugins: [

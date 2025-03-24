@@ -1,7 +1,6 @@
 import { resolve } from "path";
 import remarkVariables from "./.remark-build/server/remark-variables.mjs";
 import remarkIncludes from "./.remark-build/server/remark-includes.mjs";
-import remarkTOC from "./.remark-build/server/remark-toc.mjs";
 import { remarkLintTeleportDocsLinks } from "./.remark-build/server/lint-teleport-docs-links.mjs";
 import {
   getVersion,
