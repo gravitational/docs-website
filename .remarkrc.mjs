@@ -11,7 +11,6 @@ import {
   updatePathsInIncludes,
 } from "./.remark-build//server/asset-path-helpers.mjs";
 
-
 const configFix = {
   settings: {
     bullet: "-",
@@ -50,7 +49,6 @@ const configLint = {
     ["lint-maximum-heading-length", false],
     ["lint-no-shortcut-reference-link", false],
     ["lint-no-file-name-irregular-characters", false],
-    [remarkTOC],
     [
       remarkIncludes, // Lints (!include.ext!) syntax
       {
