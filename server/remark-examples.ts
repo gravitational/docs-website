@@ -4,7 +4,6 @@ import type { Transformer } from "unified";
 import type { Node } from "unist";
 import { visit, CONTINUE, SKIP } from "unist-util-visit";
 
-const versionedDocsPrefix = "versioned_docs";
 const versionedDocsPattern = `versioned_docs/version-([0-9]+\\.x)/`;
 
 export default function remarkExamples(latestVersion: string): Transformer {
@@ -28,13 +27,15 @@ export default function remarkExamples(latestVersion: string): Transformer {
         return CONTINUE;
       }
 
-      const examplesPath = new RegExp(`import \\w+ from ["']@examples\\/.*["']`);
+      const examplesPath = new RegExp(
+        `import \\w+ from ["']@examples\\/.*["']`
+      );
       if (!examplesPath.test(txt.value)) {
         return CONTINUE;
       }
 
       let version: string = latestVersion;
-      const versionedPathParts = vfile.path.match(versionedDocsPrefix);
+      const versionedPathParts = vfile.path.match(versionedDocsPattern);
       if (versionedPathParts) {
         version = versionedPathParts[1];
       }

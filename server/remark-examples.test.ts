@@ -15,7 +15,7 @@ const transformer = (vfileOptions: VFileOptions) => {
     .processSync(file as any);
 };
 
-describe.only("server/remark-examples", () => {
+describe("server/remark-examples", () => {
   interface testCase {
     description: string;
     input: string;
@@ -42,7 +42,27 @@ import CodeExample from "!!raw-loader!@site/content/15.x/examples/access-plugin-
 
 This is a paragraph.
 `,
-	path: "docs/mypage.mdx",
+      path: "docs/mypage.mdx",
+    },
+    {
+      description: "import statement in non-latest docs path",
+      input: `---
+title: My page
+description: My page
+---
+      import CodeExample from "@examples/access-plugin-minimal/config.go"
+
+This is a paragraph.`,
+      expected: `---
+title: My page
+description: My page
+---
+
+import CodeExample from "!!raw-loader!@site/content/16.x/examples/access-plugin-minimal/config.go"
+
+This is a paragraph.
+`,
+      path: "versioned_docs/version-16.x/mypage.mdx",
     },
   ];
 
