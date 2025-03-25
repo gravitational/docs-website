@@ -20,11 +20,12 @@ describe("server/remark-examples", () => {
     description: string;
     input: string;
     expected: string;
+    path: string;
   }
 
   const testCases: Array<testCase> = [
     {
-      description: "import statement at the beginning of the file",
+      description: "import statement in latest-version docs path",
       input: `---
 title: My page
 description: My page
@@ -39,14 +40,16 @@ description: My page
 
 import CodeExample from "!!raw-loader!@site/content/15.x/examples/access-plugin-minimal/config.go/access-plugin-minimal/config.go
 
-This is a paragraph.`,
+This is a paragraph.
+`,
+	path: "docs/mypage.mdx",
     },
   ];
 
   test.each(testCases)("$description", (tc) => {
     const result = transformer({
       value: tc.input,
-      path: "/content/4.0/docs/pages/filename.mdx",
+      path: tc.path,
     }).toString();
 
     expect(result).toEqual(tc.expected);
