@@ -3,21 +3,12 @@
  */
 
 import type { Transformer } from "unified";
-import type { Node, Parent } from "unist";
-import type { Root, Text as MdastText, Code as MdastCode } from "mdast";
-import type { MdxJsxElement } from "./types-unist";
+import type { Parent } from "unist";
+import type { Root } from "mdast";
 
 import { nanoid } from "nanoid";
 import { visit } from "unist-util-visit";
-import { isMdxNode, getAttribute, getAttributeValue } from "./mdx-helpers";
-
-// const componentNames = new Map([
-//   ["tip", "Tip"],
-//   ["warning", "Warning"],
-//   ["note", "Note"],
-// ]);
-
-const isCodeNode = (node: Node): node is MdastCode => node.type === "code";
+import { isMdxNode } from "./mdx-helpers";
 
 export default function remarkMigrationUpdateTags(): Transformer {
   return (root: Root) => {
@@ -30,14 +21,6 @@ export default function remarkMigrationUpdateTags(): Transformer {
           name: "value",
           type: "mdxJsxAttribute",
         });
-      }
-
-      // Remove string styles from nodes
-      if (isMdxNode(node)) {
-        node.attributes = node.attributes.filter(
-          (attrs) =>
-            !(attrs.name === "style" && typeof attrs.value === "string")
-        );
       }
     });
   };
