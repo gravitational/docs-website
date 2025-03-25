@@ -3,12 +3,14 @@ import { VFile, VFileOptions } from "vfile";
 import { remark } from "remark";
 import mdx from "remark-mdx";
 import remarkExamples from "./remark-examples";
+import remarkFrontmatter from "remark-frontmatter";
 
 const transformer = (vfileOptions: VFileOptions) => {
   const file: VFile = new VFile(vfileOptions);
 
   return remark()
     .use(mdx as any)
+    .use(remarkFrontmatter) // Test cases use frontmatter
     .use(remarkExamples as any, "15.x")
     .processSync(file as any);
 };
