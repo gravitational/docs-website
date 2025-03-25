@@ -15,7 +15,7 @@ const transformer = (vfileOptions: VFileOptions) => {
     .processSync(file as any);
 };
 
-describe("server/remark-examples", () => {
+describe.only("server/remark-examples", () => {
   interface testCase {
     description: string;
     input: string;
@@ -30,7 +30,7 @@ describe("server/remark-examples", () => {
 title: My page
 description: My page
 ---
-      import CodeExample from "@examples/access-plugin-minimal/config.go
+      import CodeExample from "@examples/access-plugin-minimal/config.go"
 
 This is a paragraph.`,
       expected: `---
@@ -38,7 +38,7 @@ title: My page
 description: My page
 ---
 
-import CodeExample from "!!raw-loader!@site/content/15.x/examples/access-plugin-minimal/config.go/access-plugin-minimal/config.go
+import CodeExample from "!!raw-loader!@site/content/15.x/examples/access-plugin-minimal/config.go"
 
 This is a paragraph.
 `,
