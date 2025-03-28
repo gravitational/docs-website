@@ -9,6 +9,10 @@ const versionedDocsPattern = `versioned_docs/version-([0-9]+\\.x)/`;
 export default function remarkExamples(latestVersion: string): Transformer {
   return (root: Root, vfile: VFile) => {
     visit(root, (node: Node) => {
+      if (vfile.path.includes("access-plugin.mdx")) {
+        console.log("calling visitor for:", JSON.stringify(node, null, 2));
+      }
+
       if (node.type != "paragraph") {
         return CONTINUE;
       }
