@@ -34,7 +34,8 @@ export default function remarkExamples(latestVersion: string): Transformer {
         version = versionedPathParts[1];
       }
 
-      // The result of fromMarkdown is a root Node with a single child
+      // The result of fromMarkdown is a root Node with a single child, an
+      // mdxjsEsm node.
       const newESM = fromMarkdown(
         esm.value.replace(
           "@examples",
