@@ -1,0 +1,49 @@
+# Basic `dependabot.yml` file with
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    labels:
+      - "dependencies"
+      - "gha"
+    schedule:
+      # Check for updates to GitHub Actions every week
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - emargetis
+      - taraspos
+      - ptgott
+
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    labels:
+      - "dependencies"
+      - "nodejs"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      npm-web-dependencies:
+        update-types:
+          - "minor"
+          - "patch"
+    reviewers:
+      - emargetis
+      - ptgott
+
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    # Look for a `Dockerfile` in the `root` directory
+    directory: "/"
+    # Check for updates once a week
+    labels:
+      - "dependencies"
+      - "docker" 
+    schedule:
+      interval: "weekly"
+    reviewers:
+      - emargetis
+      - taraspos
