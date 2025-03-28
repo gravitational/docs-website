@@ -1,4 +1,4 @@
-import type { Root, Paragraph, Literal } from "mdast";
+import type { MdxjsEsm, Root, Paragraph, Literal } from "mdast";
 import type { VFile } from "vfile";
 import type { Transformer } from "unified";
 import type { Node } from "unist";
@@ -9,32 +9,17 @@ const versionedDocsPattern = `versioned_docs/version-([0-9]+\\.x)/`;
 export default function remarkExamples(latestVersion: string): Transformer {
   return (root: Root, vfile: VFile) => {
     visit(root, (node: Node) => {
-      if (vfile.path.includes("access-plugin.mdx")) {
-        console.log("calling visitor for:", JSON.stringify(node, null, 2));
-      }
-
-      if (node.type != "paragraph") {
+      if (node.type != "mdxjsEsm") {
         return CONTINUE;
       }
 
-      const paragraph = node as Paragraph;
-      if (paragraph.children.length !== 1) {
-        return CONTINUE;
-      }
+      console.log(JSON.stringify(node, null, 2));
 
-      const txt = paragraph.children[0] as Literal;
-      if (!txt.value) {
-        return CONTINUE;
-      }
-
-      if (!txt.value.startsWith("import")) {
-        return CONTINUE;
-      }
-
+      const esm = node as MdxjsEsm;
       const examplesPath = new RegExp(
         `import \\w+ from ["']@examples\\/.*["']`
       );
-      if (!examplesPath.test(txt.value)) {
+      if (!examplesPath.test(esm.value)) {
         return CONTINUE;
       }
 
@@ -44,15 +29,17 @@ export default function remarkExamples(latestVersion: string): Transformer {
         version = versionedPathParts[1];
       }
 
-      paragraph.children = [
-        {
-          type: "text",
-          value: txt.value.replace(
-            "@examples",
-            `!!raw-loader!@site/content/${version}/examples`
-          ),
-        },
-      ];
+      // TODO: parse the new import statement and replace the mdxJsEsm node's
+      // children with it.
+      //      paragraph.children = [
+      //        {
+      //          type: "text",
+      //          value: txt.value.replace(
+      //            "@examples",
+      //            `!!raw-loader!@site/content/${version}/examples`
+      //          ),
+      //        },
+      //      ];
 
       return SKIP;
     });
