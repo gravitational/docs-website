@@ -26,6 +26,9 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 5
     groups:
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
       npm-web-dependencies:
         update-types:
           - "minor"
