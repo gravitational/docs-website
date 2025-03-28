@@ -30,7 +30,8 @@ describe("server/remark-examples", () => {
 title: My page
 description: My page
 ---
-      import CodeExample from "@examples/access-plugin-minimal/config.go"
+
+import CodeExample from "@examples/access-plugin-minimal/config.go"
 
 This is a paragraph.`,
       expected: `---
@@ -50,7 +51,8 @@ This is a paragraph.
 title: My page
 description: My page
 ---
-      import CodeExample from "@examples/access-plugin-minimal/config.go"
+
+import CodeExample from "@examples/access-plugin-minimal/config.go"
 
 This is a paragraph.`,
       expected: `---
