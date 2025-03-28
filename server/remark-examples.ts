@@ -20,8 +20,6 @@ export default function remarkExamples(latestVersion: string): Transformer {
         return CONTINUE;
       }
 
-      console.log(JSON.stringify(node, null, 2));
-
       const esm = node as unknown as MdxjsEsm;
       const examplesPath = new RegExp(
         `import \\w+ from ["']@examples\\/.*["']`
@@ -36,7 +34,8 @@ export default function remarkExamples(latestVersion: string): Transformer {
         version = versionedPathParts[1];
       }
 
-      const program = fromMarkdown(
+      // The result of fromMarkdown is a root Node with a single child
+      const newESM = fromMarkdown(
         esm.value.replace(
           "@examples",
           `!!raw-loader!@site/content/${version}/examples`
@@ -45,21 +44,10 @@ export default function remarkExamples(latestVersion: string): Transformer {
           extensions: [mdxjsEsm({ acorn, addResult: true })],
           mdastExtensions: [mdxjsEsmFromMarkdown()],
         }
-      );
+      ).children[0];
 
-      console.log("program:", JSON.stringify(program, null, 2));
-
-      // TODO: parse the new import statement and replace the mdxJsEsm node's
-      // children with it.
-      //      paragraph.children = [
-      //        {
-      //          type: "text",
-      //          value: txt.value.replace(
-      //            "@examples",
-      //            `!!raw-loader!@site/content/${version}/examples`
-      //          ),
-      //        },
-      //      ];
+      // Copy the properties from the new mdxjsEsm node to the existing one
+      Object.assign(node, newESM);
 
       return SKIP;
     });
