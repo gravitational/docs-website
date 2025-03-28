@@ -33,17 +33,3 @@ updates:
     reviewers:
       - emargetis
       - ptgott
-
-  # Enable version updates for Docker
-  - package-ecosystem: "docker"
-    # Look for a `Dockerfile` in the `root` directory
-    directory: "/"
-    # Check for updates once a week
-    labels:
-      - "dependencies"
-      - "docker" 
-    schedule:
-      interval: "weekly"
-    reviewers:
-      - emargetis
-      - taraspos
