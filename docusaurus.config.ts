@@ -12,6 +12,7 @@ import {
 import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkIncludes from "./server/remark-includes";
 import remarkVariables from "./server/remark-variables";
+import remarkUpdateTags from "./server/remark-update-tags";
 import remarkCodeSnippet from "./server/remark-code-snippet";
 import { fetchVideoMeta } from "./server/youtube-meta";
 import { getRedirects } from "./server/redirects";
@@ -240,6 +241,7 @@ const config: Config = {
               updater: updateAssetPath,
             },
           ],
+          remarkUpdateTags,
         ],
         beforeDefaultRehypePlugins: [
           [
