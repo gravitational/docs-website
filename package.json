@@ -60,6 +60,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dotenv": "^16.5.0",
+    "hast-util-to-text": "^4.0.2",
     "highlightjs-terraform": "https://github.com/highlightjs/highlightjs-terraform#eb1b9661e143a43dff6b58b391128ce5cdad31d4",
     "lowlight": "^3.1.0",
     "mdast-util-from-markdown": "^2.0.1",
