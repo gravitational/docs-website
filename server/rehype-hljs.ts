@@ -3,7 +3,6 @@ import type { VFile } from "vfile";
 import rehypeHighlight, {
   Options as RehypeHighlightOptions,
 } from "rehype-highlight";
-import { common } from "lowlight";
 import type { Node as UnistNode, Parent as UnistParent } from "unist";
 import { visit, CONTINUE, SKIP } from "unist-util-visit";
 import { v4 as uuid } from "uuid";
@@ -11,6 +10,7 @@ import remarkParse from "remark-parse";
 import type { Text, Element, Node, Parent } from "hast";
 import type { MdxJsxFlowElement } from "mdast-util-mdx-jsx";
 import remarkMDX from "remark-mdx";
+import { common, createLowlight } from "lowlight";
 
 const makePlaceholder = (): string => {
   // UUID for uniqueness, but remove hyphens since these are often parsed
@@ -49,7 +49,136 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     options.detect = true;
     options.subset = ["text"];
 
-    const highlighter = rehypeHighlight(options);
+    const highlighter = ((options) => {
+      const settings = options || emptyOptions;
+      const aliases = settings.aliases;
+      const detect = settings.detect || false;
+      const languages = settings.languages || common;
+      const plainText = settings.plainText;
+      const prefix = settings.prefix;
+      const subset = settings.subset;
+      let name = "hljs";
+
+      const lowlight = createLowlight(languages);
+
+      if (aliases) {
+        lowlight.registerAlias(aliases);
+      }
+
+      if (prefix) {
+        const pos = prefix.indexOf("-");
+        name = pos === -1 ? prefix : prefix.slice(0, pos);
+      }
+
+      /**
+       * Transform.
+       *
+       * @param {Root} tree
+       *   Tree.
+       * @param {VFile} file
+       *   File.
+       * @returns {undefined}
+       *   Nothing.
+       */
+      return function (tree, file) {
+        visit(tree, "element", function (node, _, parent) {
+          if (
+            node.tagName !== "code" ||
+            !parent ||
+            parent.type !== "element" ||
+            parent.tagName !== "pre"
+          ) {
+            return;
+          }
+
+          const lang = ((node) => {
+            const list = node.properties.className;
+            let index = -1;
+
+            if (!Array.isArray(list)) {
+              return;
+            }
+
+            /** @type {string | undefined} */
+            let name;
+
+            while (++index < list.length) {
+              const value = String(list[index]);
+
+              if (value === "no-highlight" || value === "nohighlight") {
+                return false;
+              }
+
+              if (!name && value.slice(0, 5) === "lang-") {
+                name = value.slice(5);
+              }
+
+              if (!name && value.slice(0, 9) === "language-") {
+                name = value.slice(9);
+              }
+            }
+
+            return name;
+          })(node);
+
+          if (
+            lang === false ||
+            (!lang && !detect) ||
+            (lang && plainText && plainText.includes(lang))
+          ) {
+            return;
+          }
+
+          if (!Array.isArray(node.properties.className)) {
+            node.properties.className = [];
+          }
+
+          if (!node.properties.className.includes(name)) {
+            node.properties.className.unshift(name);
+          }
+
+          const text = toText(node, { whitespace: "pre" });
+          /** @type {Root} */
+          let result;
+
+          try {
+            result = lang
+              ? lowlight.highlight(lang, text, { prefix })
+              : lowlight.highlightAuto(text, { prefix, subset });
+          } catch (error) {
+            const cause = /** @type {Error} */ error;
+
+            if (lang && /Unknown language/.test(cause.message)) {
+              file.message(
+                "Cannot highlight as `" + lang + "`, it’s not registered",
+                {
+                  ancestors: [parent, node],
+                  cause,
+                  place: node.position,
+                  ruleId: "missing-language",
+                  source: "rehype-highlight",
+                },
+              );
+
+              /* c8 ignore next 5 -- throw arbitrary hljs errors */
+              return;
+            }
+
+            throw cause;
+          }
+
+          if (!lang && result.data && result.data.language) {
+            node.properties.className.push("language-" + result.data.language);
+          }
+
+          if (result.children.length > 0) {
+            node.children =
+              /** @type {Array<ElementContent>} */ result.children;
+          }
+        });
+      };
+    })(options);
+
     let placeholdersToVars: Record<string, Node> = {};
 
     // In a code snippet, Var elements are parsed as text. Replace these with
@@ -87,7 +216,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
         });
 
         txt.value = newVal;
-      }
+      },
     );
 
     // rehype-hljs only highlights element nodes of type code with parent pre,
@@ -166,7 +295,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
         }
 
         const placeholders = Array.from(
-          hljsSpanValue.matchAll(new RegExp(placeholderPattern, "g"))
+          hljsSpanValue.matchAll(new RegExp(placeholderPattern, "g")),
         );
 
         // No placeholders to recover, so there's nothing more to do.
@@ -230,10 +359,10 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
         (parent.children as Array<Text | Element>).splice(
           index,
           1,
-          ...newChildren
+          ...newChildren,
         );
         return [SKIP, index + newChildren.length];
-      }
+      },
     );
   };
 };
