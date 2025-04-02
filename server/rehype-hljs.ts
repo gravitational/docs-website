@@ -103,9 +103,9 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
       },
     );
 
-    console.log("ABOUT TO HIGHLIGHT:", JSON.stringify(file, null, 2));
     // Apply syntax highlighting
-    visit(root, "element", function (node: Element, _, parent: Element) {
+    visit(root, function (node: Node, _, parent: Parent) {
+      console.log("HIGHLIGHTING:", JSON.stringify(node, null, 2));
       if (
         node.tagName !== "code" ||
         !parent ||
