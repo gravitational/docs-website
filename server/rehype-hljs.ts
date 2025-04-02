@@ -220,55 +220,9 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
       },
     );
 
-    // rehype-hljs only highlights element nodes of type code with parent pre,
-    // so change the type of pre elements parsed as MDX in order to apply
-    // highlighting. Also assign the name property to tagName.
-    visit(root, (node: Node) => {
-      if (
-        node.type === "mdxJsxFlowElement" &&
-        (node as MdxJsxFlowElement).name === "pre"
-      ) {
-        node.type = "element";
-        (node as Element).tagName = "pre";
-        return [CONTINUE];
-      }
-
-      if (
-        node.type === "mdxJsxFlowElement" &&
-        (node as MdxJsxFlowElement).name === "code"
-      ) {
-        node.type = "element";
-        (node as Element).tagName = "code";
-        console.log("reassigned node's type!");
-        return [SKIP];
-      }
-    });
-
     console.log("ABOUT TO HIGHLIGHT:", JSON.stringify(file, null, 2));
     // Apply syntax highlighting
     (highlighter as Function)(root, file);
-
-    // Restore any code and pre elements that we changed from mdxJsxFlowElements in
-    // case downstream plugins expect an MDX AST.
-    visit(root, (node: Node) => {
-      if (
-        node.type === "element" &&
-        (node as MdxJsxFlowElement).name === "pre"
-      ) {
-        node.type = "mdxJsxFlowElement";
-        delete (node as Element).tagName;
-        return [CONTINUE];
-      }
-
-      if (
-        node.type === "element" &&
-        (node as MdxJsxFlowElement).name === "code"
-      ) {
-        node.type = "mdxJsxFlowElement";
-        delete (node as Element).tagName;
-        return [SKIP];
-      }
-    });
 
     // After syntax highlighting, the content of the code snippet will be a
     // series of span elements with different "hljs-*" classes. Find the
