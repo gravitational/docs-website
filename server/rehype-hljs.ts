@@ -50,12 +50,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     // possible language.
     settings.detect = true;
     settings.subset = ["text"];
-
-    const aliases = settings.aliases;
-
-    const detect = settings.detect || false;
-    const plainText = settings.plainText;
-    const prefix = settings.prefix;
+    const { aliases, subset, detect, plainText, prefix } = settings;
     let name = "hljs";
     const lowlight = createLowlight(settings.languages);
 
@@ -110,7 +105,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
 
     console.log("ABOUT TO HIGHLIGHT:", JSON.stringify(file, null, 2));
     // Apply syntax highlighting
-    visit(root, "element", function (node, _, parent) {
+    visit(root, "element", function (node: Element, _, parent: Element) {
       if (
         node.tagName !== "code" ||
         !parent ||
