@@ -11,6 +11,7 @@ import type { Text, Element, Node, Parent } from "hast";
 import type { MdxJsxFlowElement } from "mdast-util-mdx-jsx";
 import remarkMDX from "remark-mdx";
 import { common, createLowlight } from "lowlight";
+import {toText} from 'hast-util-to-text'
 
 const makePlaceholder = (): string => {
   // UUID for uniqueness, but remove hyphens since these are often parsed
@@ -50,7 +51,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     options.subset = ["text"];
 
     const highlighter = ((options) => {
-      const settings = options || emptyOptions;
+      const settings = options || {};
       const aliases = settings.aliases;
       const detect = settings.detect || false;
       const languages = settings.languages || common;
