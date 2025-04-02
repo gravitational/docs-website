@@ -71,16 +71,6 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
         name = pos === -1 ? prefix : prefix.slice(0, pos);
       }
 
-      /**
-       * Transform.
-       *
-       * @param {Root} tree
-       *   Tree.
-       * @param {VFile} file
-       *   File.
-       * @returns {undefined}
-       *   Nothing.
-       */
       return function (tree, file) {
         visit(tree, "element", function (node, _, parent) {
           if (
