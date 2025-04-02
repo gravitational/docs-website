@@ -11,7 +11,7 @@ import type { Text, Element, Node, Parent } from "hast";
 import type { MdxJsxFlowElement } from "mdast-util-mdx-jsx";
 import remarkMDX from "remark-mdx";
 import { common, createLowlight } from "lowlight";
-import {toText} from 'hast-util-to-text'
+import { toText } from "hast-util-to-text";
 
 const makePlaceholder = (): string => {
   // UUID for uniqueness, but remove hyphens since these are often parsed
@@ -22,153 +22,51 @@ const makePlaceholder = (): string => {
 
 const placeholderPattern = "var[a-z0-9]{32}";
 
+// We only visit text nodes inside code snippets that include either the
+// <Var tag or (if we have already swapped out Vars with placeholders) a
+// placeholder.
+const isPossibleVarContainer = (node: UnistParent) => {
+  let textValue;
+  if (
+    node.type === "text" ||
+    (node.type === "element" &&
+      node.children.length === 1 &&
+      node.children[0].type === "text")
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
   return (root: UnistNode, file: VFile) => {
-    // We only visit text nodes inside code snippets that include either the
-    // <Var tag or (if we have already swapped out Vars with placeholders) a
-    // placeholder.
-    const isPossibleVarContainer = (node: UnistParent) => {
-      let textValue;
-      if (
-        node.type === "text" ||
-        (node.type === "element" &&
-          node.children.length === 1 &&
-          node.children[0].type === "text")
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    };
-
+    const settings = options || {};
     // Highlight common languages in addition to any additional configured ones.
-    options.languages = { ...options.languages, ...common };
+    settings.languages = { ...settings.languages, ...common };
 
     // Configure the highlighter to treat unlabeled code snippets as having the
     // "text" language by enabling detection and making "text" the only
     // possible language.
-    options.detect = true;
-    options.subset = ["text"];
+    settings.detect = true;
+    settings.subset = ["text"];
 
-    const highlighter = ((options) => {
-      const settings = options || {};
-      const aliases = settings.aliases;
-      const detect = settings.detect || false;
-      const languages = settings.languages || common;
-      const plainText = settings.plainText;
-      const prefix = settings.prefix;
-      const subset = settings.subset;
-      let name = "hljs";
+    const aliases = settings.aliases;
 
-      const lowlight = createLowlight(languages);
+    const detect = settings.detect || false;
+    const plainText = settings.plainText;
+    const prefix = settings.prefix;
+    let name = "hljs";
+    const lowlight = createLowlight(settings.languages);
 
-      if (aliases) {
-        lowlight.registerAlias(aliases);
-      }
+    if (aliases) {
+      lowlight.registerAlias(aliases);
+    }
 
-      if (prefix) {
-        const pos = prefix.indexOf("-");
-        name = pos === -1 ? prefix : prefix.slice(0, pos);
-      }
-
-      return function (tree, file) {
-        visit(tree, "element", function (node, _, parent) {
-          if (
-            node.tagName !== "code" ||
-            !parent ||
-            parent.type !== "element" ||
-            parent.tagName !== "pre"
-          ) {
-            return;
-          }
-
-          const lang = ((node) => {
-            const list = node.properties.className;
-            let index = -1;
-
-            if (!Array.isArray(list)) {
-              return;
-            }
-
-            /** @type {string | undefined} */
-            let name;
-
-            while (++index < list.length) {
-              const value = String(list[index]);
-
-              if (value === "no-highlight" || value === "nohighlight") {
-                return false;
-              }
-
-              if (!name && value.slice(0, 5) === "lang-") {
-                name = value.slice(5);
-              }
-
-              if (!name && value.slice(0, 9) === "language-") {
-                name = value.slice(9);
-              }
-            }
-
-            return name;
-          })(node);
-
-          if (
-            lang === false ||
-            (!lang && !detect) ||
-            (lang && plainText && plainText.includes(lang))
-          ) {
-            return;
-          }
-
-          if (!Array.isArray(node.properties.className)) {
-            node.properties.className = [];
-          }
-
-          if (!node.properties.className.includes(name)) {
-            node.properties.className.unshift(name);
-          }
-
-          const text = toText(node, { whitespace: "pre" });
-          /** @type {Root} */
-          let result;
-
-          try {
-            result = lang
-              ? lowlight.highlight(lang, text, { prefix })
-              : lowlight.highlightAuto(text, { prefix, subset });
-          } catch (error) {
-            const cause = /** @type {Error} */ error;
-
-            if (lang && /Unknown language/.test(cause.message)) {
-              file.message(
-                "Cannot highlight as `" + lang + "`, it’s not registered",
-                {
-                  ancestors: [parent, node],
-                  cause,
-                  place: node.position,
-                  ruleId: "missing-language",
-                  source: "rehype-highlight",
-                },
-              );
-
-              /* c8 ignore next 5 -- throw arbitrary hljs errors */
-              return;
-            }
-
-            throw cause;
-          }
-
-          if (!lang && result.data && result.data.language) {
-            node.properties.className.push("language-" + result.data.language);
-          }
-
-          if (result.children.length > 0) {
-            node.children =
-              /** @type {Array<ElementContent>} */ result.children;
-          }
-        });
-      };
-    })(options);
+    if (prefix) {
+      const pos = prefix.indexOf("-");
+      name = pos === -1 ? prefix : prefix.slice(0, pos);
+    }
 
     let placeholdersToVars: Record<string, Node> = {};
 
@@ -212,7 +110,100 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
 
     console.log("ABOUT TO HIGHLIGHT:", JSON.stringify(file, null, 2));
     // Apply syntax highlighting
-    (highlighter as Function)(root, file);
+    visit(root, "element", function (node, _, parent) {
+      if (
+        node.tagName !== "code" ||
+        !parent ||
+        parent.type !== "element" ||
+        parent.tagName !== "pre"
+      ) {
+        return;
+      }
+
+      const lang = ((node) => {
+        const list = node.properties.className;
+        let index = -1;
+
+        if (!Array.isArray(list)) {
+          return;
+        }
+
+        /** @type {string | undefined} */
+        let name;
+
+        while (++index < list.length) {
+          const value = String(list[index]);
+
+          if (value === "no-highlight" || value === "nohighlight") {
+            return false;
+          }
+
+          if (!name && value.slice(0, 5) === "lang-") {
+            name = value.slice(5);
+          }
+
+          if (!name && value.slice(0, 9) === "language-") {
+            name = value.slice(9);
+          }
+        }
+
+        return name;
+      })(node);
+
+      if (
+        lang === false ||
+        (!lang && !detect) ||
+        (lang && plainText && plainText.includes(lang))
+      ) {
+        return;
+      }
+
+      if (!Array.isArray(node.properties.className)) {
+        node.properties.className = [];
+      }
+
+      if (!node.properties.className.includes(name)) {
+        node.properties.className.unshift(name);
+      }
+
+      const text = toText(node, { whitespace: "pre" });
+      /** @type {Root} */
+      let result;
+
+      try {
+        result = lang
+          ? lowlight.highlight(lang, text, { prefix })
+          : lowlight.highlightAuto(text, { prefix, subset });
+      } catch (error) {
+        const cause = /** @type {Error} */ error;
+
+        if (lang && /Unknown language/.test(cause.message)) {
+          file.message(
+            "Cannot highlight as `" + lang + "`, it’s not registered",
+            {
+              ancestors: [parent, node],
+              cause,
+              place: node.position,
+              ruleId: "missing-language",
+              source: "rehype-highlight",
+            },
+          );
+
+          /* c8 ignore next 5 -- throw arbitrary hljs errors */
+          return;
+        }
+
+        throw cause;
+      }
+
+      if (!lang && result.data && result.data.language) {
+        node.properties.className.push("language-" + result.data.language);
+      }
+
+      if (result.children.length > 0) {
+        node.children = /** @type {Array<ElementContent>} */ result.children;
+      }
+    });
 
     // After syntax highlighting, the content of the code snippet will be a
     // series of span elements with different "hljs-*" classes. Find the
