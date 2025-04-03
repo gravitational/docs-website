@@ -29,9 +29,10 @@ type MdxNode =
   | MdxFlowExpression // https://github.com/syntax-tree/mdast-util-mdx-expression/blob/main/complex-types.d.ts
   | MdxTextExpression; // https://github.com/syntax-tree/mdast-util-mdx-expression/blob/main/complex-types.d.ts
 
-export default function rehypeMdxToHast(): Transformer {
-  return (root: Parent) => {
-    visit(root, (node: any, index: number, parent: Parent) => {
+// transformToHast transforms the MDX AST node, including its parent, into an
+// HTML AST. This is a separate function to enable calling in multiple
+// transformers.
+export const transformToHast = (node: any, index: number, parent: Parent) => {
       // TextElement in an inline tag and FlowElement is a block tag. e want ot convert them.
       if (
         node.type === "mdxJsxTextElement" ||
@@ -96,6 +97,10 @@ export default function rehypeMdxToHast(): Transformer {
       ) {
         parent.children.splice(index, 1);
       }
-    });
+    }
+
+export default function rehypeMdxToHast(): Transformer {
+  return (root: Parent) => {
+    visit(root, transformToHast);
   };
 }
