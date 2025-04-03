@@ -106,16 +106,18 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     // Apply syntax highlighting
     visit(root, function (node: Node, _, parent: Parent) {
       console.log("HIGHLIGHTING:", JSON.stringify(node, null, 2));
+      const el = node as Element;
+      const elParent = parent as Element;
       if (
-        node.tagName !== "code" ||
-        !parent ||
-        parent.type !== "element" ||
-        parent.tagName !== "pre"
+        el.tagName !== "code" ||
+        !elParent ||
+        elParent.type !== "element" ||
+        elParent.tagName !== "pre"
       ) {
         return;
       }
 
-      const lang = ((node) => {
+      const lang = ((node: Element) => {
         const list = node.properties.className;
         let index = -1;
 
@@ -143,7 +145,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
         }
 
         return name;
-      })(node);
+      })(el);
 
       if (
         lang === false ||
@@ -153,15 +155,15 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
         return;
       }
 
-      if (!Array.isArray(node.properties.className)) {
-        node.properties.className = [];
+      if (!Array.isArray(el.properties.className)) {
+        el.properties.className = [];
       }
 
-      if (!node.properties.className.includes(name)) {
-        node.properties.className.unshift(name);
+      if (!el.properties.className.includes(name)) {
+        el.properties.className.unshift(name);
       }
 
-      const text = toText(node, { whitespace: "pre" });
+      const text = toText(el, { whitespace: "pre" });
       /** @type {Root} */
       let result;
 
@@ -178,7 +180,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
             {
               ancestors: [parent, node],
               cause,
-              place: node.position,
+              place: el.position,
               ruleId: "missing-language",
               source: "rehype-highlight",
             },
@@ -192,11 +194,11 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
       }
 
       if (!lang && result.data && result.data.language) {
-        node.properties.className.push("language-" + result.data.language);
+        el.properties.className.push("language-" + result.data.language);
       }
 
       if (result.children.length > 0) {
-        node.children = /** @type {Array<ElementContent>} */ result.children;
+        el.children = /** @type {Array<ElementContent>} */ result.children;
       }
     });
 
