@@ -12,6 +12,7 @@ import type { MdxJsxFlowElement } from "mdast-util-mdx-jsx";
 import remarkMDX from "remark-mdx";
 import { common, createLowlight } from "lowlight";
 import { toText } from "hast-util-to-text";
+import { transformToHast } from "./rehype-mdx-to-hast";
 
 const makePlaceholder = (): string => {
   // UUID for uniqueness, but remove hyphens since these are often parsed
@@ -104,8 +105,16 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     );
 
     // Apply syntax highlighting
-    visit(root, function (node: Node, _, parent: Parent) {
+    visit(root, function (node: Node, index: number, parent: Parent) {
       console.log("HIGHLIGHTING:", JSON.stringify(node, null, 2));
+      if (
+        node.type == "mdxJsxFlowElement" &&
+        (node as MdxJsxFlowElement).name == "code" &&
+        parent.type == "mdxJsxFlowElement" &&
+        (parent as MdxJsxFlowElement).name == "pre"
+      ) {
+        transformToHast(node, index, parent);
+      }
       const el = node as Element;
       const elParent = parent as Element;
       if (
