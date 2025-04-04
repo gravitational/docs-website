@@ -106,7 +106,6 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
 
     // Apply syntax highlighting
     visit(root, function (node: Node, index: number, parent: UnistParent) {
-      console.log("HIGHLIGHTING:", JSON.stringify(node, null, 2));
       if (
         node.type == "mdxJsxFlowElement" &&
         (node as unknown as MdxJsxFlowElement).name == "code" &&
