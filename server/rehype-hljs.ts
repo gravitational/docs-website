@@ -105,18 +105,18 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     );
 
     // Apply syntax highlighting
-    visit(root, function (node: Node, index: number, parent: Parent) {
+    visit(root, function (node: Node, index: number, parent: UnistParent) {
       console.log("HIGHLIGHTING:", JSON.stringify(node, null, 2));
       if (
         node.type == "mdxJsxFlowElement" &&
-        (node as MdxJsxFlowElement).name == "code" &&
+        (node as unknown as MdxJsxFlowElement).name == "code" &&
         parent.type == "mdxJsxFlowElement" &&
-        (parent as MdxJsxFlowElement).name == "pre"
+        (parent as unknown as MdxJsxFlowElement).name == "pre"
       ) {
         transformToHast(node, index, parent);
       }
-      const el = node as Element;
-      const elParent = parent as Element;
+      const el = node as unknown as Element;
+      const elParent = parent as unknown as Element;
       if (
         el.tagName !== "code" ||
         !elParent ||
