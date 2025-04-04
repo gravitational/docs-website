@@ -23,4 +23,4 @@ jobs:
         # Changes to server code can break the formatting linter by mistake, so run it to
         # make sure this hasn't happened.
       - name: Run the docs formatting linter
-        run: yarn markdown-lint
+        run: scripts/lint-test.sh
