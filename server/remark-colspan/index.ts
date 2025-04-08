@@ -1,12 +1,12 @@
 import type { Processor } from 'unified';
-import { extendedTable } from 'micromark-extension-extended-table';
+import { extendedTable } from './micromark-extension-extended-table';
 import {
   extendedTableFromMarkdown,
   extendedTableFromMarkdownOptions,
   extendedTableToMarkdown,
   extendedTableToMarkdownOptions,
-} from 'mdast-util-extended-table';
-export { extendedTableHandler, extendedTableHandlers } from 'mdast-util-extended-table';
+} from './mdast-util-extended-table';
+export { extendedTableHandler, extendedTableHandlers } from './mdast-util-extended-table';
 
 export type Options = extendedTableToMarkdownOptions & extendedTableFromMarkdownOptions;
 
