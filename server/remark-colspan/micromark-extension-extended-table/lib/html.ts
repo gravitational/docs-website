@@ -6,8 +6,5 @@ export const extendedTableHtml = {
     [tokenTypes.extendedTableCellColspanMarker](this: CompileContext): undefined {
       this.raw('>');
     },
-    [tokenTypes.extendedTableCellRowspanMarker](this: CompileContext): undefined {
-      this.raw(this.encode('^'));
-    },
   },
 };
