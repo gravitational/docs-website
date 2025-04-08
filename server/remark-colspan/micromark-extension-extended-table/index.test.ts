@@ -29,112 +29,30 @@ const parseWithDevHtml = (md: string) => {
   });
 };
 
-test('rowspan marker', () => {
-  const result = parse(`
-| a | b |
-|---|---|
-| ^ | 1 |
-`);
-  const expected = `
-<table>
-<thead>
-<tr>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>^</td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
-`;
-  expect(result).toEqual(expected.trimLeft());
-});
-
-test('colspan marker', () => {
-  const result = parse(`
-| a | b |
-|---|---|
-| > | 1 |
-`);
-  const expected = `
-<table>
-<thead>
-<tr>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>></td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
-`;
-  expect(result).toEqual(expected.trimLeft());
-});
-
-test('rowspan marker with text', () => {
-  const result = parseWithDevHtml(`
-| a | b |
-|---|---|
-| > | ^ |
-| ^aaa | bbb^ |
-| ^*aaa* | *bbb*^ |
-`);
-  const expected = `
-<table>
-<thead>
-<tr>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>*COLSPAN*</td>
-<td>*ROWSPAN*</td>
-</tr>
-<tr>
-<td>^aaa</td>
-<td>bbb^</td>
-</tr>
-<tr>
-<td>^<em>aaa</em></td>
-<td><em>bbb</em>^</td>
-</tr>
-</tbody>
-</table>
-`;
-  expect(result).toEqual(expected.trimLeft());
-});
-
-test('rowspan marker and escaped rowspan marker', () => {
-  const result = parseWithDevHtml(`
-| a | b |
-|---|---|
-| ^ | \\^ |
-`);
-  const expected = `
-<table>
-<thead>
-<tr>
-<th>a</th>
-<th>b</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>*ROWSPAN*</td>
-<td>^</td>
-</tr>
-</tbody>
-</table>
-`;
-  expect(result).toEqual(expected.trimLeft());
-});
+// Removing rowspan logic since we don't need it, but keeping this code
+// commented out as an example test in case we want to add test cases here.
+//
+//test('rowspan marker and escaped rowspan marker', () => {
+//  const result = parseWithDevHtml(`
+//| a | b |
+//|---|---|
+//| ^ | \\^ |
+//`);
+//  const expected = `
+//<table>
+//<thead>
+//<tr>
+//<th>a</th>
+//<th>b</th>
+//</tr>
+//</thead>
+//<tbody>
+//<tr>
+//<td>*ROWSPAN*</td>
+//<td>^</td>
+//</tr>
+//</tbody>
+//</table>
+//`;
+//  expect(result).toEqual(expected.trimLeft());
+//});

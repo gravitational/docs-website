@@ -5,15 +5,10 @@ import type { Table, TableCell } from './types.js';
 import { types } from 'micromark-extension-extended-table';
 import { visit } from 'unist-util-visit';
 
-export interface extendedTableFromMarkdownOptions {
-  colspanWithEmpty?: boolean;
-}
-
-export const extendedTableFromMarkdown = (options?: extendedTableFromMarkdownOptions) => {
+export const extendedTableFromMarkdown = () => {
   return {
     enter: {
       [types.extendedTableCellColspanMarker]: enterColspanMarker,
-      [types.extendedTableCellRowspanMarker]: enterRowspanMarker,
       tableHeader: enterCell,
       tableData: enterCell,
     },
@@ -34,21 +29,11 @@ export const extendedTableFromMarkdown = (options?: extendedTableFromMarkdownOpt
   function enterColspanMarker(this: CompileContext, token: Token): void {
     if (this.data.inTableCell) {
       this.enter({ type: mdastTypes.tableCellColspanWithRight }, token);
-    } else {
-      this.enter({ type: 'text', value: '>' }, token);
-    }
-  }
-
-  function enterRowspanMarker(this: CompileContext, token: Token): void {
-    if (this.data.inTableCell) {
-      this.enter({ type: mdastTypes.tableCellRowspan }, token);
-    } else {
-      this.enter({ type: 'text', value: '^' }, token);
     }
   }
 
   function exitCell(this: CompileContext, token: Token): void {
-    if (options?.colspanWithEmpty && ['|', '||'].includes(this.sliceSerialize(token))) {
+    if (['|', '||'].includes(this.sliceSerialize(token))) {
       this.enter({ type: mdastTypes.tableCellColspanWithLeft }, token);
       this.exit(token);
     }
