@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import { test, expect } from '@jest/globals';
 
 import { extendedTableToMarkdown } from './to-markdown.js';
 import { gfmTableToMarkdown } from 'mdast-util-gfm-table';

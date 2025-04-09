@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import { test, expect } from '@jest/globals';
 
 import { extendedTable, extendedTableHtml } from './index.js';
 import { micromark } from 'micromark';

@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import { test, expect } from '@jest/globals';
 
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { extendedTableFromMarkdown, extendedTableFromMarkdownOptions } from './from-markdown.js';

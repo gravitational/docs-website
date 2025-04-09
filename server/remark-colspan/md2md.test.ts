@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import { expect, test } from "@jest/globals";
 import { remarkExtendedTable } from './index.js';
 
 import { unified } from 'unified';
