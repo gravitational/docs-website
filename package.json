@@ -63,6 +63,7 @@
     "highlightjs-terraform": "https://github.com/highlightjs/highlightjs-terraform#eb1b9661e143a43dff6b58b391128ce5cdad31d4",
     "lowlight": "^3.1.0",
     "mdast-util-from-markdown": "^2.0.1",
+    "micromark-util-symbol": "^2.0.1",
     "nanoid": "^5.1.0",
     "postcss-preset-env": "^10.1.6",
     "prism-react-renderer": "^2.3.0",

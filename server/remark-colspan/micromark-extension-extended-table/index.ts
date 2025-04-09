@@ -1,3 +1,3 @@
-export { extendedTable } from './lib/syntax.js';
-export { extendedTableHtml } from './lib/html.js';
-export { tokenTypes as types } from './lib/types.js';
+export { extendedTable } from './lib/syntax';
+export { extendedTableHtml } from './lib/html';
+export { tokenTypes as types } from './lib/types';
