@@ -9,10 +9,10 @@ import { gfmTableFromMarkdown } from 'mdast-util-gfm-table';
 import { toHast } from 'mdast-util-to-hast';
 import { extendedTableHandlers } from './mdast-to-hast';
 
-const compile = (md: string, options?: extendedTableFromMarkdownOptions) =>
+const compile = (md: string) =>
   fromMarkdown(md, {
     extensions: [gfmTable(), extendedTable],
-    mdastExtensions: [gfmTableFromMarkdown(), extendedTableFromMarkdown(options)],
+    mdastExtensions: [gfmTableFromMarkdown(), extendedTableFromMarkdown()],
   });
 
 const mdast2hast = (mdast: any) => {
@@ -21,8 +21,8 @@ const mdast2hast = (mdast: any) => {
   });
 };
 
-const md2hast = (md: string, options?: extendedTableFromMarkdownOptions) => {
-  return mdast2hast(compile(md, options));
+const md2hast = (md: string) => {
+  return mdast2hast(compile(md));
 };
 
 test('mdast to hast', () => {

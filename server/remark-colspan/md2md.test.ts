@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { remarkExtendedTable } from './index.js';
+import { remarkExtendedTable } from './index';
 
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';

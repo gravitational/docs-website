@@ -1,6 +1,6 @@
 import { test, expect } from '@jest/globals';
 
-import { remarkExtendedTable, extendedTableHandlers, Options } from './index.js';
+import { remarkExtendedTable, extendedTableHandlers, Options } from './index';
 
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
@@ -41,7 +41,7 @@ test('span with empty cell', async () => {
 </tr>
 </tbody>
 </table>`;
-  expect((await process(md, { colspanWithEmpty: true })).value).toBe(html);
+  expect((await process(md)).value).toBe(html);
 });
 
 test('no span with empty cell', async () => {
