@@ -10,10 +10,10 @@ import remarkGfm, { Options as gfmOptions } from 'remark-gfm';
 
 const process = (md: string, options?: Options, gfmOptions?: gfmOptions) =>
   unified()
-    .use(remarkParse)
+    .use(remarkParse as any)
     .use(remarkGfm, gfmOptions)
     .use(remarkExtendedTable, { ...options, ...gfmOptions })
-    .use(remarkRehype, { handlers: extendedTableHandlers })
+    .use(remarkRehype as any, { handlers: extendedTableHandlers })
     .use(rehypeStringify)
     .process(md);
 
