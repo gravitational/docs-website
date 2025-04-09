@@ -1,9 +1,9 @@
 import { test, expect } from '@jest/globals';
 
-import { extendedTable, extendedTableHtml } from './index.js';
+import { extendedTable, extendedTableHtml } from './index';
 import { micromark } from 'micromark';
 import { gfmTable, gfmTableHtml } from 'micromark-extension-gfm-table';
-import { tokenTypes } from './lib/types.js';
+import { tokenTypes } from './lib/types';
 import { CompileContext } from 'micromark-util-types';
 
 const parse = (md: string) =>

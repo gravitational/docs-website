@@ -1,15 +1,15 @@
 import { test, expect } from '@jest/globals';
 
 import { fromMarkdown } from 'mdast-util-from-markdown';
-import { extendedTableFromMarkdown, extendedTableFromMarkdownOptions } from './from-markdown.js';
+import { extendedTableFromMarkdown } from './from-markdown.js';
 import { extendedTable } from 'micromark-extension-extended-table';
 import { gfmTable } from 'micromark-extension-gfm-table';
 import { gfmTableFromMarkdown } from 'mdast-util-gfm-table';
 
-const compile = (md: string, options?: extendedTableFromMarkdownOptions) =>
+const compile = (md: string) =>
   fromMarkdown(md, {
     extensions: [gfmTable(), extendedTable],
-    mdastExtensions: [gfmTableFromMarkdown(), extendedTableFromMarkdown(options)],
+    mdastExtensions: [gfmTableFromMarkdown(), extendedTableFromMarkdown()],
   });
 
 test('simple colspan', () => {
@@ -385,7 +385,7 @@ test('empty cell colspan', () => {
       end: { column: 1, line: 7, offset: 51 },
     },
   };
-  const result = compile(md, { colspanWithEmpty: true });
+  const result = compile(md);
   expect(result).toEqual(mdast);
 });
 
@@ -535,7 +535,7 @@ test('not empty cell colspan', () => {
       end: { column: 1, line: 6, offset: 30 },
     },
   };
-  const result = compile(md, { colspanWithEmpty: true });
+  const result = compile(md);
   expect(result).toEqual(mdast);
 });
 

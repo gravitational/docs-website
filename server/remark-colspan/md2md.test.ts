@@ -17,7 +17,7 @@ test('toMarkdown', async () => {
 | > | 2   |
 `;
   const result = await unified()
-    .use(remarkParse)
+    .use(remarkParse as any)
     .use(remarkGfm)
     .use(remarkExtendedTable)
     .use(remarkStringify)
@@ -36,7 +36,7 @@ test('passing gfmOptions', async () => {
 | > | 2 |
 `;
   const result = await unified()
-    .use(remarkParse)
+    .use(remarkParse as any)
     .use(remarkGfm, { tablePipeAlign: false })
     .use(remarkExtendedTable, { tablePipeAlign: false })
     .use(remarkStringify)
