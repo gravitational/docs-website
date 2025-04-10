@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import styles from "./ThumbsFeedback.module.css";
 
 const ThumbsFeedback = () => {
-  console.log("👍 ThumbsFeedback component rendered"); // <-- Add this line
-
   const [submitted, setSubmitted] = useState(false);
 
   const handleFeedback = (type: 'up' | 'down') => {
