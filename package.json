@@ -115,7 +115,6 @@
     "ts-jest": "^29.3.1",
     "ts-loader": "^9.5.2",
     "tsc-esm-fix": "^3.1.0",
-    "tsm": "^2.3.0",
     "typescript": "~5.8.3",
     "unified": "^11.0.5",
     "unified-lint-rule": "^3.0.0",
