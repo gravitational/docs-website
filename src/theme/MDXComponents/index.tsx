@@ -47,6 +47,7 @@ const MDXComponents: MDXComponentsObject = {
   snippet: Snippet,
   ul: MDXUl,
   Var: (props) => <Var {...props} />, // needed to circumvent props mismatch in types
+ThumbsFeedback,
 };
 
 export default MDXComponents;
