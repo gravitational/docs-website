@@ -143,21 +143,4 @@ describe("server/remark-hljs-var", () => {
       ).trim()
     );
   });
-
-test("Highlight snippets declared with tags", () => {
-    const result = transformer({
-      value: readFileSync(
-        resolve("server/fixtures/yaml-snippet-tags.mdx"),
-        "utf-8"
-      ),
-      path: "/docs/index.mdx",
-    });
-
-    expect((result.value as string).trim()).toBe(
-      readFileSync(
-        resolve("server/fixtures/result/yaml-snippet-tags.html"),
-        "utf-8"
-      ).trim()
-    );
-  });
 });

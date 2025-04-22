@@ -12,7 +12,6 @@ import {
 import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkIncludes from "./server/remark-includes";
 import remarkVariables from "./server/remark-variables";
-import remarkExamples from "./server/remark-examples";
 import remarkCodeSnippet from "./server/remark-code-snippet";
 import { fetchVideoMeta } from "./server/youtube-meta";
 import { getRedirects } from "./server/redirects";
@@ -215,7 +214,6 @@ const config: Config = {
         versions: getDocusaurusConfigVersionOptions(),
         // Our custom plugins need to be before default plugins
         beforeDefaultRemarkPlugins: [
-          [remarkExamples, latestVersion],
           [
             remarkIncludes,
             {

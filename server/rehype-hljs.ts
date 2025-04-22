@@ -9,7 +9,6 @@ import { visit, CONTINUE, SKIP } from "unist-util-visit";
 import { v4 as uuid } from "uuid";
 import remarkParse from "remark-parse";
 import type { Text, Element, Node, Parent } from "hast";
-import type { MdxJsxFlowElement } from "mdast-util-mdx-jsx";
 import remarkMDX from "remark-mdx";
 
 const makePlaceholder = (): string => {
@@ -75,9 +74,9 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
           // its properties. The result should be a small HTML AST with a root
           // node and one child, the Var node.
           const varElement = unified()
-            // Converting to "any" since, for some reason, the type of
-            // remarkParse doesn't match the signature of "use" despite this
-            // being a common use case in the unified documentation.
+	    // Converting to "any" since, for some reason, the type of
+	    // remarkParse doesn't match the signature of "use" despite this
+	    // being a common use case in the unified documentation.
             .use(remarkParse as any)
             .use(remarkMDX)
             .parse(match);
@@ -90,55 +89,8 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
       }
     );
 
-    // rehype-hljs only highlights element nodes of type code with parent pre,
-    // so change the type of pre elements parsed as MDX in order to apply
-    // highlighting. Also assign the name property to tagName.
-    visit(root, (node: Node) => {
-      if (
-        node.type === "mdxJsxFlowElement" &&
-        (node as MdxJsxFlowElement).name === "pre"
-      ) {
-        node.type = "element";
-        (node as Element).tagName = "pre";
-        return [CONTINUE];
-      }
-
-      if (
-        node.type === "mdxJsxFlowElement" &&
-        (node as MdxJsxFlowElement).name === "code"
-      ) {
-        node.type = "element";
-        (node as Element).tagName = "code";
-        console.log("reassigned node's type!");
-        return [SKIP];
-      }
-    });
-
-    console.log("ABOUT TO HIGHLIGHT:", JSON.stringify(file, null, 2));
     // Apply syntax highlighting
     (highlighter as Function)(root, file);
-
-    // Restore any code and pre elements that we changed from mdxJsxFlowElements in
-    // case downstream plugins expect an MDX AST.
-    visit(root, (node: Node) => {
-      if (
-        node.type === "element" &&
-        (node as MdxJsxFlowElement).name === "pre"
-      ) {
-        node.type = "mdxJsxFlowElement";
-        delete (node as Element).tagName;
-        return [CONTINUE];
-      }
-
-      if (
-        node.type === "element" &&
-        (node as MdxJsxFlowElement).name === "code"
-      ) {
-        node.type = "mdxJsxFlowElement";
-        delete (node as Element).tagName;
-        return [SKIP];
-      }
-    });
 
     // After syntax highlighting, the content of the code snippet will be a
     // series of span elements with different "hljs-*" classes. Find the
@@ -149,7 +101,6 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
       isPossibleVarContainer,
       (node: Node, index: number, parent: Parent) => {
         const el = node as Element | Text;
-
         let hljsSpanValue = "";
         if (el.type === "text") {
           hljsSpanValue = el.value;
