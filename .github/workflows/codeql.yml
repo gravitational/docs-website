@@ -9,10 +9,12 @@ on:
     branches:
       - main
       - dev
+  merge_group:
 
 jobs:
   analyze:
-    name: Analyze
+    if: ${{ github.event_name != 'merge_group' }}
+    name: CodeQL
     runs-on: ubuntu-latest
     permissions:
       actions: read
