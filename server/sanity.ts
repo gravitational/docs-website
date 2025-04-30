@@ -65,6 +65,7 @@ const navQuery = `
         sectionItems[]{
           itemType,
           "icon": icon.asset->url,
+          highlightBadge,
           title,
           description,
           link,
@@ -90,6 +91,7 @@ const navQuery = `
         sectionItems[]{
           itemType,
           "icon": icon.asset->url,
+          highlightBadge,
           title,
           description,
           link,

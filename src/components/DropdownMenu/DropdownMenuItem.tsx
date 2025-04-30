@@ -1,12 +1,14 @@
 import { clsx } from "clsx";
 
 import Link from "../Link";
+import New from "./assets/new-badge.svg";
 
 import styles from "./DropdownMenuItem.module.css";
 import cn from "classnames";
 export interface MenuItemProps {
   itemType: string | "normal" | "image";
   icon?: string | null;
+  highlightBadge?: boolean | null;
   title?: string | null;
   description?: string | null;
   link: string | null;
@@ -28,6 +30,7 @@ const DropdownMenuItem = ({
   title,
   link = "",
   icon,
+  highlightBadge = false,
   description,
   imageItem,
   itemAmount,
@@ -39,7 +42,10 @@ const DropdownMenuItem = ({
       className={clsx(styles.styledLink, !description && styles.center)}
       href={link}
     >
-      <img src={icon || ""} width={35} height={35} alt="" />
+      <div className={styles.iconWrapper}>
+        <img src={icon || ""} width={35} height={35} alt="" />
+        {highlightBadge && <New />}
+      </div>
       <div className={styles.item}>
         <p className={styles.itemTitle}>{title}</p>
         {description && <p className={styles.description}>{description}</p>}

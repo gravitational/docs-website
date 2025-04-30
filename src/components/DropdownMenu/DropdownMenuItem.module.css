@@ -104,6 +104,14 @@
     display: initial;
   }
 }
+
+.iconWrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  min-width: 35px;
+}
+
 .dateText {
   font-size: 14px;
   line-height: 18px;
