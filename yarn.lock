@@ -1937,19 +1937,19 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@inkeep/cxkit-color-mode@0.5.71":
-  version "0.5.71"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-color-mode/-/cxkit-color-mode-0.5.71.tgz#f2a7545154b06fa0daf6181c7c6287d1aea39d3a"
-  integrity sha512-yP4kwzwonDMIhHiY4aNjzrn+4UZuE2hnov/z0/5XtjMNVnROPy1Q/YS0JUia2QFRZXZeM6DRDhErJu24o/6ypQ==
+"@inkeep/cxkit-color-mode@0.5.76":
+  version "0.5.76"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-color-mode/-/cxkit-color-mode-0.5.76.tgz#7f1d0e7699963ec461cbcdb92839cafdd47a00e3"
+  integrity sha512-l28xwAumz/U4BmrGbLBN5dCi8BBDGOHHMfCvVQ3FZ1yZPcGIaEKlLjbYtv1Hxbdc6uDLKVGapCw+VYglBAM4rQ==
 
-"@inkeep/cxkit-primitives@0.5.71":
-  version "0.5.71"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-primitives/-/cxkit-primitives-0.5.71.tgz#99d7b7d3953821d1b19b0395f2cb0a7e6c2ae3cd"
-  integrity sha512-P0pGt1rkuVMDoO9cpTILo1yyjY25yClQk7F7X42bMXcNbTcFjAXEvtaFB2ILDr1JDp5zXwIMrorPHe4MXhVQbg==
+"@inkeep/cxkit-primitives@0.5.76":
+  version "0.5.76"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-primitives/-/cxkit-primitives-0.5.76.tgz#15140444d0e79b2903b49c9c9eddc56c86930d12"
+  integrity sha512-B1Viq3GrBcmlLx5NCmP8vwN8cxVmIhHOoFmczyaDi74FiHS4C2RUXRG7ceVMvAC6Zdzt3+zZqee+4cOBjayLlw==
   dependencies:
-    "@inkeep/cxkit-color-mode" "0.5.71"
-    "@inkeep/cxkit-theme" "0.5.71"
-    "@inkeep/cxkit-types" "0.5.71"
+    "@inkeep/cxkit-color-mode" "0.5.76"
+    "@inkeep/cxkit-theme" "0.5.76"
+    "@inkeep/cxkit-types" "0.5.76"
     "@radix-ui/primitive" "^1.1.1"
     "@radix-ui/react-avatar" "1.1.2"
     "@radix-ui/react-checkbox" "1.1.3"
@@ -1976,12 +1976,12 @@
     aria-hidden "^1.2.4"
     dequal "^2.0.3"
     humps "2.0.1"
+    lucide-react "^0.503.0"
     marked "^15.0.9"
     merge-anything "5.1.7"
     openai "4.78.1"
     prism-react-renderer "2.4.1"
     react-hook-form "7.54.2"
-    react-icons "5.4.0"
     react-markdown "9.0.3"
     react-remove-scroll "^2.6.3"
     react-svg "16.3.0"
@@ -1991,36 +1991,37 @@
     unist-util-visit "^5.0.0"
     use-sync-external-store "^1.4.0"
 
-"@inkeep/cxkit-react@^0.5.71":
-  version "0.5.71"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-react/-/cxkit-react-0.5.71.tgz#ef63707c651453e9a9c19df266d8c8bd74cce720"
-  integrity sha512-oF73PNUxyXYyqbJYKoNC82ZqZ20gH9qP5n/lPGO6JTj12SNNLIY7aqbAse5y11Qet3DNYZoO3OwEif1mS08hUQ==
+"@inkeep/cxkit-react@^0.5.76":
+  version "0.5.76"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-react/-/cxkit-react-0.5.76.tgz#13944b5adbf48fb537775151042d5f34c70aea9f"
+  integrity sha512-ImVdcFa6y0g8wTOEO1fdjDMhZRkk4UVfPyzYIdaifxynNEnnP8Y2LW+cQ7NUcst3JJqrtP6oZCuuyUPD4OKP0g==
   dependencies:
-    "@inkeep/cxkit-styled" "0.5.71"
+    "@inkeep/cxkit-styled" "0.5.76"
     "@radix-ui/react-use-controllable-state" "^1.1.0"
+    lucide-react "^0.503.0"
 
-"@inkeep/cxkit-styled@0.5.71":
-  version "0.5.71"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-styled/-/cxkit-styled-0.5.71.tgz#8be6ab677cabf555275b606e5966c32d38a27116"
-  integrity sha512-0mAn+qlN+EVnbYhg3G7jQVvFKi1Qae31oB8qEb8gywvO4Dq1YdZ4THIjtZf2in0u3L0c2cR2f8jh4Y4xR1hdqA==
+"@inkeep/cxkit-styled@0.5.76":
+  version "0.5.76"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-styled/-/cxkit-styled-0.5.76.tgz#b784f1393bd051f2ef636a0c8f09916ca7b2586c"
+  integrity sha512-ryBjOlJ37mtUaDiqfyWpOviIyMg383TMNasI5S10RO04J7W3q90t5A+qHSKmfFVAb8gbCd+yIKIEI2yeUM2lgw==
   dependencies:
-    "@inkeep/cxkit-primitives" "0.5.71"
+    "@inkeep/cxkit-primitives" "0.5.76"
     class-variance-authority "0.7.1"
     clsx "2.1.1"
     merge-anything "5.1.7"
     tailwind-merge "2.6.0"
 
-"@inkeep/cxkit-theme@0.5.71":
-  version "0.5.71"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-theme/-/cxkit-theme-0.5.71.tgz#e47238f6db95b59f75bff65440b0a881d0f0d031"
-  integrity sha512-xl8VyBb+16989dsXL/Lzh5FNcjuGfwc0utxOypae5MrTojIZ0yRq0uV0wVK17thP4vzrhAqF4CplzZ8/luoSaA==
+"@inkeep/cxkit-theme@0.5.76":
+  version "0.5.76"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-theme/-/cxkit-theme-0.5.76.tgz#d28d4846f3bc5c997c2cd42664c3dd70bfd5bcf9"
+  integrity sha512-Lu707ar++oNT4RF7js6lVJ/6ch3QCVziFSCz1WX0oqZtF8b5sPOWZFm63N+wM3hhcyVrZ0kluT10/eXVUHsrQg==
   dependencies:
     colorjs.io "0.5.2"
 
-"@inkeep/cxkit-types@0.5.71":
-  version "0.5.71"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-types/-/cxkit-types-0.5.71.tgz#b93fc7077b490702a2095c1f6de8544a79857fb1"
-  integrity sha512-R2HqtZG9wlt93VZykT56xksdNngnB4QztW0uJZ+uIKUf1iDrtDhhDQBxQ8inZn7mTbHANH5Lb87HpIUMpXWZuA==
+"@inkeep/cxkit-types@0.5.76":
+  version "0.5.76"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-types/-/cxkit-types-0.5.76.tgz#7266ebdb4a083d66ee8650124cf459d39a210ea2"
+  integrity sha512-uwOhzqOizJw99RdgV9xWBXdfnNnYSC5IBVCnb1GKVzf8LZgcGCMT+Msf1IkczlhqldGJxi0g6LH8WmkGREOv1g==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -6545,10 +6546,10 @@ es-errors@^1.3.0:
   resolved "https://registry.yarnpkg.com/es-errors/-/es-errors-1.3.0.tgz#05f75a25dab98e4fb1dcd5e1472c0546d5057c8f"
   integrity sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==
 
-es-module-lexer@^1.2.1, es-module-lexer@^1.5.0, es-module-lexer@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-1.6.0.tgz#da49f587fd9e68ee2404fe4e256c0c7d3a81be21"
-  integrity sha512-qqnD1yMU6tk/jnaMosogGySTZP8YtUgAffA9nMN+E/rjxcfRQ6IEk7IiozUjgxKoFHBGjTLnrHB/YC45r/59EQ==
+es-module-lexer@^1.2.1, es-module-lexer@^1.5.0, es-module-lexer@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-1.7.0.tgz#9159601561880a85f2734560a9099b2c31e5372a"
+  integrity sha512-jEQoCwk8hyb2AZziIOLhDqpm5+2ww5uIE6lkO/6jcOCusfk6LhMHpXXfBLXTZ7Ydyt0j4VoUQv6uGNYbdW+kBA==
 
 es-object-atoms@^1.0.0, es-object-atoms@^1.1.1:
   version "1.1.1"
@@ -9313,6 +9314,11 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
+
+lucide-react@^0.503.0:
+  version "0.503.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.503.0.tgz#4ac55b262fa613f9497531c9df50ea0e883d2de2"
+  integrity sha512-HGGkdlPWQ0vTF8jJ5TdIqhQXZi6uh3LnNgfZ8MHiuxFfX3RZeA79r2MW2tHAZKlAVfoNE8esm3p+O6VkIvpj6w==
 
 lz-string@^1.5.0:
   version "1.5.0"
@@ -12120,11 +12126,6 @@ react-hook-form@7.54.2:
   version "7.54.2"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.54.2.tgz#8c26ed54c71628dff57ccd3c074b1dd377cfb211"
   integrity sha512-eHpAUgUjWbZocoQYUHposymRb4ZP6d0uwUnooL2uOybA9/3tPUvoAKqEWK1WaSiTxxOfTpffNZP7QwlnM3/gEg==
-
-react-icons@5.4.0:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.4.0.tgz#443000f6e5123ee1b21ea8c0a716f6e7797f7416"
-  integrity sha512-7eltJxgVt7X64oHh6wSWNwwbKTCtMfK35hcjvJS0yxEAhPM8oUKdS3+kqaW1vicIltw+kR2unHaa12S9pPALoQ==
 
 react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0:
   version "16.13.1"
@@ -15033,14 +15034,14 @@ vfile@^6.0.0, vfile@^6.0.1:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
-vite-node@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/vite-node/-/vite-node-3.1.2.tgz#b17869a12307f5260b20ba4b58cf493afee70aa7"
-  integrity sha512-/8iMryv46J3aK13iUXsei5G/A3CUlW4665THCPS+K8xAaqrVWiGB4RfXMQXCLjpK9P2eK//BczrVkn5JLAk6DA==
+vite-node@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/vite-node/-/vite-node-3.1.3.tgz#d021ced40b5a057305eaea9ce62c610c33b60a48"
+  integrity sha512-uHV4plJ2IxCl4u1up1FQRrqclylKAogbtBfOTwcuJ28xFi+89PZ57BRh+naIRvH70HPwxy5QHYzg1OrEaC7AbA==
   dependencies:
     cac "^6.7.14"
     debug "^4.4.0"
-    es-module-lexer "^1.6.0"
+    es-module-lexer "^1.7.0"
     pathe "^2.0.3"
     vite "^5.0.0 || ^6.0.0"
 

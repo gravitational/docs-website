@@ -54,7 +54,7 @@
     "@docusaurus/plugin-svgr": "^3.7.0",
     "@docusaurus/theme-classic": "^3.7.0",
     "@docusaurus/tsconfig": "^3.7.0",
-    "@inkeep/cxkit-react": "^0.5.71",
+    "@inkeep/cxkit-react": "^0.5.76",
     "@mdx-js/react": "^3.0.0",
     "classnames": "^2.3.1",
     "clsx": "^2.1.1",
@@ -73,7 +73,7 @@
     "rehype-highlight": "^7.0.2",
     "remark-mdx": "^2.1.1",
     "remark-parse": "^10.0.1",
-    "vite-node": "^3.1.2"
+    "vite-node": "^3.1.3"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.7.0",
