@@ -33,13 +33,9 @@ export const getReportIssueURL = function (pagePath: string): string {
 };
 export const GitHubIssueLink = function ({ pathname }: GitHubIssueLinkProps) {
   return (
-    <p>
-      <a
-        className={styles.githubLink}
-        href={getReportIssueURL(pathname)}
-        target={"_blank"}
-      >
-        {"Report an issue with this page."}
+    <p className={styles.githubLink}>
+      <a href={getReportIssueURL(pathname)} target={"_blank"}>
+        {"Report an issue with this page"}
       </a>
     </p>
   );
