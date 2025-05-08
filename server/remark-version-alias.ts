@@ -1,4 +1,3 @@
-import type { ImportDeclaration } from "estree";
 import type { MdxjsEsm } from "mdast-util-mdxjs-esm";
 import type { Root, Paragraph, Literal } from "mdast";
 import type { VFile } from "vfile";
@@ -35,7 +34,7 @@ export default function remarkVersionAlias(latestVersion: string): Transformer {
         version = versionedPathParts[1];
       }
 
-      const decl = esm.data.estree.body[0] as ImportDeclaration;
+      const decl = esm.data.estree.body[0];
 
       const newPath = (decl.source.value as string).replace(
         "@version",
