@@ -496,6 +496,9 @@ describe("orderSidebarItems", () => {
         },
       ],
     },
+      // TODO: sidebar_position for first level
+      // TODO: sidebar position for beyond the first level
+      // TODO: sidebar position and an "Introduction" page
   ];
 
   test.each(testCases)("$description", (c) => {
