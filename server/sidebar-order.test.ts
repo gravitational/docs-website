@@ -4,13 +4,27 @@ import { orderSidebarItems, removeRedundantItems } from "./sidebar-order";
 import type { docPage } from "./sidebar-order";
 import type { NormalizedSidebarItem } from "@docusaurus/plugin-content-docs/src/sidebars/types.ts";
 
-// makeDocPageMap takes a page ID and creates the docs page metadata that would
-// have generated a sidebar item, letting us simplify tests. The page title comes
-// from the ID of the page, with hyphens replaced by spaces and the first word
-// capitalized. Other attributes are taken from page IDs as well.
+// getDocPageForId takes a page ID and creates the docs page metadata that would
+// have generated a sidebar item. This way, we don't need to provide test inputs
+// beyond the ID of each page.
+//
+// The page title comes from the ID of the page, with hyphens replaced by spaces
+// and the first word capitalized. Other attributes are taken from page IDs as
+// well.
+//
+// If there is an integer at the end of an ID, getDocPageForId uses it for the
+// value of sideBarPosition in the docPage and removes it from the title.
 function getDocPageForId(id: string): docPage {
   let title = basename(id).replaceAll("-", " ");
   title = title[0].toUpperCase() + title.slice(1);
+  const pos = id.match(/[0-9]+$/);
+  console.log("pos:", pos);
+  let sideBarPosition;
+  if (pos != null) {
+    sideBarPosition = parseInt(pos[0]);
+    // Remove the position from the title
+    title = title.slice(0, title.length - pos[0].length);
+  }
 
   return {
     title: title,
@@ -21,6 +35,7 @@ function getDocPageForId(id: string): docPage {
     },
     source: "@site/docs/" + id + ".mdx",
     sourceDirName: dirname(id),
+    sideBarPosition: sideBarPosition,
   };
 }
 
@@ -496,9 +511,9 @@ describe("orderSidebarItems", () => {
         },
       ],
     },
-      // TODO: sidebar_position for first level
-      // TODO: sidebar position for beyond the first level
-      // TODO: sidebar position and an "Introduction" page
+    // TODO: sidebar_position for first level
+    // TODO: sidebar position for beyond the first level
+    // TODO: sidebar position and an "Introduction" page
   ];
 
   test.each(testCases)("$description", (c) => {
