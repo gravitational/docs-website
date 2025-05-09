@@ -24,7 +24,7 @@ function getDocPageForId(id: string): docPage {
   };
 }
 
-describe("orderSidebarItems", () => {
+describe("orderSidebarItems/no position", () => {
   interface testCase {
     description: string;
     input: Array<NormalizedSidebarItem>;
@@ -496,13 +496,72 @@ describe("orderSidebarItems", () => {
         },
       ],
     },
-      // TODO: sidebar_position for first level
-      // TODO: sidebar position for beyond the first level
-      // TODO: sidebar position and an "Introduction" page
   ];
 
   test.each(testCases)("$description", (c) => {
     const actual = orderSidebarItems(c.input, getDocPageForId);
+    expect(actual).toEqual(c.expected);
+  });
+});
+
+describe("orderSidebarItems/predefined position", () => {
+  const idToDocPage = {
+    "page-a": {
+      title: "Page A",
+      id: "page-a",
+      frontmatter: {
+        title: "Page A",
+        description: "Page A",
+      },
+      source: "@site/docs/page-a.mdx",
+      sourceDirName: "",
+    },
+    "page-b": {
+      title: "Page B",
+      id: "page-b",
+      frontmatter: {
+        title: "Page B",
+        description: "Page B",
+      },
+      source: "@site/docs/page-b.mdx",
+      sourceDirName: "",
+    },
+    "page-c": {
+      title: "Page C",
+      id: "page-c",
+      frontmatter: {
+        title: "Page C",
+        description: "Page C",
+      },
+      source: "@site/docs/page-c.mdx",
+      sourceDirName: "",
+    },
+    "page-d": {
+      title: "Introduction",
+      id: "page-d",
+      frontmatter: {
+        title: "Page D",
+        description: "Page D",
+      },
+      source: "@site/docs/page-c.mdx",
+      sourceDirName: "",
+    },
+  };
+
+  interface testCase {
+    description: string;
+    input: Array<NormalizedSidebarItem>;
+    expected: Array<NormalizedSidebarItem>;
+  }
+  const testCases: Array<testCase> = [];
+  // TODO: sidebar_position with no special title features
+  // TODO: sidebar position and an "Introduction" page
+  // TODO: sidebar position and an "Introduction" page and "Getting Started" page
+
+  test.each(testCases)("$description", (c) => {
+    const actual = orderSidebarItems(c.input, (id: string): docPage => {
+      return idToDocPage[id];
+    });
     expect(actual).toEqual(c.expected);
   });
 });
