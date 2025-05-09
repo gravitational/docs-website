@@ -15,22 +15,25 @@ export interface docPage {
   sideBarPosition?: number;
 }
 
-interface titleFeatures {
+interface orderAttributes {
   title: string;
   isIntroduction: boolean;
   isGettingStarted: boolean;
+  sideBarPosition?: number;
 }
 
-// getTitleFeatures extracts attributes of a NormalizedSidebarItem's title (or
+// getOrderAttributes extracts attributes of a NormalizedSidebarItem's title (or
 // label, in the case of category pages) for sorting. Titles are lowercased.
-const getTitleFeatures = (
+// Also extracts the sidebar position.
+const getOrderAttributes = (
   item: NormalizedSidebarItem,
-  getter: (id: string) => docPage
-): titleFeatures => {
+  getter: (id: string) => docPage,
+): orderAttributes => {
   let title: string;
+  const page = getter((item as SidebarItemDoc).id);
   switch (item.type) {
     case "doc":
-      title = getter((item as SidebarItemDoc).id).title;
+      title = page.title;
       break;
     case "category":
       if (!(item as NormalizedSidebarItemCategory).label) {
@@ -46,12 +49,13 @@ const getTitleFeatures = (
     title: title.toLowerCase(),
     isIntroduction: title.toLowerCase().includes("introduction"),
     isGettingStarted: title.toLowerCase().match(/get(ting)? started/) !== null,
+    sideBarPosition: page.sideBarPosition,
   };
 };
 
 export const orderSidebarItems = (
   items: Array<NormalizedSidebarItem>,
-  getter: (id: string) => docPage
+  getter: (id: string) => docPage,
 ): Array<NormalizedSidebarItem> => {
   const newItems = [];
 
@@ -68,34 +72,34 @@ export const orderSidebarItems = (
   });
 
   return newItems.sort((a, b) => {
-    const aTitle = getTitleFeatures(a, getter);
-    const bTitle = getTitleFeatures(b, getter);
+    const attrsA = getOrderAttributes(a, getter);
+    const attrsB = getOrderAttributes(b, getter);
 
     // We can't sort by title, so don't compare.
-    if (aTitle == undefined || bTitle == undefined) {
+    if (attrsA == undefined || attrsB == undefined) {
       return 0;
     }
 
     // Sort pages first if they include "introduction" (case-insensitive) in
     // the title.
-    if (aTitle.isIntroduction && !bTitle.isIntroduction) {
+    if (attrsA.isIntroduction && !attrsB.isIntroduction) {
       return -1;
     }
-    if (bTitle.isIntroduction && !aTitle.isIntroduction) {
+    if (attrsB.isIntroduction && !attrsA.isIntroduction) {
       return 1;
     }
 
     // Sort pages earlier if they are getting started guides.
-    if (aTitle.isGettingStarted && !bTitle.isGettingStarted) {
+    if (attrsA.isGettingStarted && !attrsB.isGettingStarted) {
       return -1;
     }
-    if (bTitle.isGettingStarted && !aTitle.isGettingStarted) {
+    if (attrsB.isGettingStarted && !attrsA.isGettingStarted) {
       return 1;
     }
 
     // If there's nothing special about one title relative to the other,
     // sort them alphabetically.
-    if (aTitle.title >= bTitle.title) {
+    if (attrsA.title >= attrsB.title) {
       return 1;
     } else {
       return -1;
@@ -107,7 +111,7 @@ export const orderSidebarItems = (
 // since we expect these to be defined as links within each top-level category.
 export const removeRedundantItems = (
   items: Array<NormalizedSidebarItem>,
-  dirname: string
+  dirname: string,
 ): Array<NormalizedSidebarItem> => {
   // Return all items except for the one with the ID of the index page to
   // remove from the body of the sidebar section. We expect the top-level category index

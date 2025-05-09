@@ -619,6 +619,7 @@ describe("orderSidebarItems/predefined position", () => {
   ];
   // TODO: sidebar position and an "Introduction" page
   // TODO: sidebar position and an "Introduction" page and "Getting Started" page
+  // TODO: the final element has a sidebar position for the final position
 
   test.each(testCases)("$description", (c) => {
     const actual = orderSidebarItems(c.input, (id: string): docPage => {
