@@ -546,6 +546,16 @@ describe("orderSidebarItems/predefined position", () => {
       source: "@site/docs/page-c.mdx",
       sourceDirName: "",
     },
+    "page-e": {
+      title: "Page E",
+      id: "page-e",
+      frontmatter: {
+        title: "Page E",
+        description: "Page E",
+        sidebar_position: 2,
+      },
+      sideBarPosition: 2,
+    },
   };
 
   interface testCase {
@@ -553,8 +563,60 @@ describe("orderSidebarItems/predefined position", () => {
     input: Array<NormalizedSidebarItem>;
     expected: Array<NormalizedSidebarItem>;
   }
-  const testCases: Array<testCase> = [];
-  // TODO: sidebar_position with no special title features
+  const testCases: Array<testCase> = [
+    {
+      description: "all pages ordered with fixed sidebar position",
+      input: [
+        {
+          type: "category",
+          label: "My Docs Category",
+          items: [
+            {
+              type: "doc",
+              id: "page-c",
+            },
+            {
+              type: "doc",
+              id: "page-a",
+            },
+            {
+              type: "doc",
+              id: "page-b",
+            },
+            {
+              type: "doc",
+              id: "page-e",
+            },
+          ],
+        },
+      ],
+      // Page E has a sidebar position of 2, so it must occupy that position.
+      expected: [
+        {
+          type: "category",
+          label: "My Docs Category",
+          items: [
+            {
+              type: "doc",
+              id: "page-a",
+            },
+            {
+              type: "doc",
+              id: "page-e",
+            },
+            {
+              type: "doc",
+              id: "page-b",
+            },
+            {
+              type: "doc",
+              id: "page-c",
+            },
+          ],
+        },
+      ],
+    },
+  ];
   // TODO: sidebar position and an "Introduction" page
   // TODO: sidebar position and an "Introduction" page and "Getting Started" page
 
