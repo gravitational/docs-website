@@ -30,10 +30,12 @@ const getOrderAttributes = (
   getter: (id: string) => docPage,
 ): orderAttributes => {
   let title: string;
-  const page = getter((item as SidebarItemDoc).id);
+  let sideBarPosition: number;
   switch (item.type) {
     case "doc":
+      const page = getter((item as SidebarItemDoc).id);
       title = page.title;
+      sideBarPosition = page.sideBarPosition;
       break;
     case "category":
       if (!(item as NormalizedSidebarItemCategory).label) {
@@ -49,7 +51,7 @@ const getOrderAttributes = (
     title: title.toLowerCase(),
     isIntroduction: title.toLowerCase().includes("introduction"),
     isGettingStarted: title.toLowerCase().match(/get(ting)? started/) !== null,
-    sideBarPosition: page.sideBarPosition,
+    sideBarPosition: sideBarPosition,
   };
 };
 
@@ -71,9 +73,9 @@ export const orderSidebarItems = (
     // If the item has a sidebar position, add it to the final array. We'll sort
     // the remaining items automatically before adding them to the empty slots
     // in the final array.
-    const page = getter((newItem as SidebarItemDoc).id);
-    if (page.sideBarPosition) {
-      newItems[page.sideBarPosition] = newItem;
+    const { sideBarPosition } = getOrderAttributes(newItem, getter);
+    if (sideBarPosition > 0) {
+      newItems[sideBarPosition - 1] = newItem;
       return;
     }
     unsortedItems.push(newItem);
@@ -116,11 +118,11 @@ export const orderSidebarItems = (
 
   // Add the sorted items to slots in the array not already occupied by items
   // with a sidebar_position.
-  newItems.forEach((el, idx) => {
-    if (!el) {
-      newItems[idx] = unsortedItems.shift();
+  for (let i = 0; i < newItems.length; i++) {
+    if (!newItems[i]) {
+      newItems[i] = unsortedItems.shift();
     }
-  });
+  }
 
   return newItems;
 };
