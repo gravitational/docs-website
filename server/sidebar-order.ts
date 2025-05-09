@@ -57,21 +57,29 @@ export const orderSidebarItems = (
   items: Array<NormalizedSidebarItem>,
   getter: (id: string) => docPage,
 ): Array<NormalizedSidebarItem> => {
-  const newItems = [];
+  const newItems = new Array(items.length);
+  const unsortedItems = [];
 
-  // Start by recursively descending into items and sorting their children.
   items.forEach((item) => {
+    // Start by recursively descending into items and sorting their children.
     let newItem = Object.assign({}, item);
     const cat = newItem as NormalizedSidebarItemCategory;
     if (cat.items) {
       cat.items = orderSidebarItems(cat.items, getter);
-      newItems.push(cat);
+    }
+
+    // If the item has a sidebar position, add it to the final array. We'll sort
+    // the remaining items automatically before adding them to the empty slots
+    // in the final array.
+    const page = getter((newItem as SidebarItemDoc).id);
+    if (page.sideBarPosition) {
+      newItems[page.sideBarPosition] = newItem;
       return;
     }
-    newItems.push(item);
+    unsortedItems.push(newItem);
   });
 
-  return newItems.sort((a, b) => {
+  unsortedItems.sort((a, b) => {
     const attrsA = getOrderAttributes(a, getter);
     const attrsB = getOrderAttributes(b, getter);
 
@@ -105,6 +113,16 @@ export const orderSidebarItems = (
       return -1;
     }
   });
+
+  // Add the sorted items to slots in the array not already occupied by items
+  // with a sidebar_position.
+  newItems.forEach((el, idx) => {
+    if (!el) {
+      newItems[idx] = unsortedItems.shift();
+    }
+  });
+
+  return newItems;
 };
 
 // removeRedundantItems removes top-level category index pages from the sidebar,
