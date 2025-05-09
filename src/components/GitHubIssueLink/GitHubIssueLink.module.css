@@ -4,7 +4,7 @@
   min-width: 0;
   transition: color var(--t-interaction);
   color: var(--ifm-font-color-base);
-  text-align: right;
+  margin-top: -25px;
 
   &:hover,
   &:active,
