@@ -39,7 +39,32 @@ title: My page
 description: My page
 ---
 
-import CodeExample from '@site/content/15.x/examples/access-plugin-minimal/config.go'
+import CodeExample from '@site/content/15.x/examples/access-plugin-minimal/config.go';
+
+This is a paragraph.
+`,
+      path: "docs/mypage.mdx",
+    },
+{
+      description: "three import statements in latest-version docs path",
+      input: `---
+title: My page
+description: My page
+---
+
+import CodeExample from "@version/examples/access-plugin-minimal/config.go";
+import MyImage from "@version/myimg.png";
+import Triangle from "@version/triangle.png";
+
+This is a paragraph.`,
+      expected: `---
+title: My page
+description: My page
+---
+
+import CodeExample from '@site/content/15.x/examples/access-plugin-minimal/config.go';
+import MyImage from '@site/content/15.x/myimg.png';
+import Triangle from '@site/content/15.x/triangle.png';
 
 This is a paragraph.
 `,
@@ -60,7 +85,7 @@ title: My page
 description: My page
 ---
 
-import CodeExample from '@site/content/16.x/examples/access-plugin-minimal/config.go'
+import CodeExample from '@site/content/16.x/examples/access-plugin-minimal/config.go';
 
 This is a paragraph.
 `,
@@ -81,7 +106,7 @@ title: My page
 description: My page
 ---
 
-import CodeExample from '!!raw-loader!@site/content/16.x/examples/access-plugin-minimal/config.go'
+import CodeExample from '!!raw-loader!@site/content/16.x/examples/access-plugin-minimal/config.go';
 
 This is a paragraph.
 `,

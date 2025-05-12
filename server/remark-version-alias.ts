@@ -17,36 +17,41 @@ export default function remarkVersionAlias(latestVersion: string): Transformer {
       // Only process import statements that import an identifier from a default
       // export.
       const esm = node as unknown as MdxjsEsm;
-      if (
-        !esm.data ||
-        !esm.data.estree ||
-        esm.data.estree.body.length !== 1 ||
-        esm.data.estree.body[0]["type"] != "ImportDeclaration" ||
-        esm.data.estree.body[0].specifiers.length !== 1 ||
-        esm.data.estree.body[0].specifiers[0].type != "ImportDefaultSpecifier"
-      ) {
+      if (!esm.data || !esm.data.estree) {
         return CONTINUE;
       }
 
       let version: string = latestVersion;
+      let newVal: Array<string> = [];
       const versionedPathParts = vfile.path.match(versionedDocsPattern);
       if (versionedPathParts) {
         version = versionedPathParts[1];
       }
 
-      const decl = esm.data.estree.body[0];
+      esm.data.estree.body.forEach((decl) => {
+        if (
+          decl["type"] != "ImportDeclaration" ||
+          decl.specifiers.length !== 1 ||
+          decl.specifiers[0].type != "ImportDefaultSpecifier"
+        ) {
+          return;
+        }
+        const newPath = (decl.source.value as string).replace(
+          "@version",
+          `@site/content/${version}`,
+        );
+        decl.source = {
+          type: "Literal",
+          value: newPath,
+          raw: `"${newPath}"`,
+        };
 
-      const newPath = (decl.source.value as string).replace(
-        "@version",
-        `@site/content/${version}`,
-      );
+        newVal.push(
+          `import ${decl.specifiers[0].local.name} from '${newPath}';`,
+        );
+      });
 
-      esm.value = `import ${esm.data.estree.body[0].specifiers[0].local.name} from '${newPath}'`;
-      decl.source = {
-        type: "Literal",
-        value: newPath,
-        raw: `"${newPath}"`,
-      };
+      esm.value = newVal.join("\n");
 
       return SKIP;
     });
