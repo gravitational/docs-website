@@ -45,7 +45,6 @@
   "dependencies": {
     "@csstools/postcss-global-data": "^2.1.1",
     "@docusaurus/core": "^3.7.0",
-    "@storybook/react": "^8.6.12",
     "@docusaurus/faster": "^3.7.0",
     "@docusaurus/plugin-client-redirects": "^3.7.0",
     "@docusaurus/plugin-content-docs": "^3.7.0",
