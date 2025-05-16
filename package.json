@@ -45,6 +45,7 @@
   "dependencies": {
     "@csstools/postcss-global-data": "^2.1.1",
     "@docusaurus/core": "^3.7.0",
+    "@storybook/react": "^8.6.12",
     "@docusaurus/faster": "^3.7.0",
     "@docusaurus/plugin-client-redirects": "^3.7.0",
     "@docusaurus/plugin-content-docs": "^3.7.0",
@@ -59,6 +60,7 @@
     "classnames": "^2.3.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "docusaurus-pushfeedback": "^1.0.3",
     "dotenv": "^16.5.0",
     "highlightjs-terraform": "https://github.com/highlightjs/highlightjs-terraform#eb1b9661e143a43dff6b58b391128ce5cdad31d4",
     "lowlight": "^3.1.0",
@@ -111,7 +113,6 @@
     "remark-preset-lint-markdown-style-guide": "^5.1.2",
     "remark-rehype": "^10.1.0",
     "remark-validate-links": "^11.0.2",
-    "storybook": "^8.6.12",
     "to-vfile": "^8.0.0",
     "ts-jest": "^29.3.2",
     "ts-loader": "^9.5.2",

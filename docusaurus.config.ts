@@ -258,6 +258,11 @@ const config: Config = {
       },
     ],
     extendedPostcssConfigPlugin,
+        [
+        'docusaurus-pushfeedback',{
+            project: '467su2n7t9'
+        }
+    ],
     process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
   ].filter(Boolean),
 };
