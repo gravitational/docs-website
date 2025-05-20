@@ -7,7 +7,7 @@ import type {
 export interface docPage {
   title: string;
   id: string;
-  frontmatter: {
+  frontMatter: {
     [index: string]: any;
   };
   source: string;
@@ -40,6 +40,9 @@ const getOrderAttributes = (
       title = page.title;
       sidebarPosition = page.sidebarPosition;
       id = page.id;
+      if (page.frontMatter && page.frontMatter.sidebar_label) {
+        title = page.frontMatter.sidebar_label;
+      }
       break;
     case "category":
       const cat = item as NormalizedSidebarItemCategory;

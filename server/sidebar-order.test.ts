@@ -15,7 +15,7 @@ function getDocPageForId(id: string): docPage {
   return {
     title: title,
     id: id,
-    frontmatter: {
+    frontMatter: {
       title: title,
       description: "Provides information on Teleport functionality",
     },
@@ -510,7 +510,7 @@ describe("orderSidebarItems", () => {
       "page-a": {
         title: "Page A",
         id: "page-a",
-        frontmatter: {
+        frontMatter: {
           title: "Page A",
           description: "Page A",
         },
@@ -520,7 +520,7 @@ describe("orderSidebarItems", () => {
       "page-b": {
         title: "Page B",
         id: "page-b",
-        frontmatter: {
+        frontMatter: {
           title: "Page B",
           description: "Page B",
         },
@@ -530,7 +530,7 @@ describe("orderSidebarItems", () => {
       "page-c": {
         title: "Page C",
         id: "page-c",
-        frontmatter: {
+        frontMatter: {
           title: "Page C",
           description: "Page C",
         },
@@ -540,7 +540,7 @@ describe("orderSidebarItems", () => {
       "page-d": {
         title: "Introduction",
         id: "page-d",
-        frontmatter: {
+        frontMatter: {
           title: "Introduction",
           description: "Introduction",
         },
@@ -550,7 +550,7 @@ describe("orderSidebarItems", () => {
       "page-e": {
         title: "Page E",
         id: "page-e",
-        frontmatter: {
+        frontMatter: {
           title: "Page E",
           description: "Page E",
           sidebar_position: 2,
@@ -562,7 +562,7 @@ describe("orderSidebarItems", () => {
       "page-f": {
         title: "Getting Started",
         id: "page-f",
-        frontmatter: {
+        frontMatter: {
           title: "Getting Started",
           description: "Getting Started",
         },
@@ -572,7 +572,7 @@ describe("orderSidebarItems", () => {
       "page-g": {
         title: "Introduction",
         id: "page-g",
-        frontmatter: {
+        frontMatter: {
           title: "Introduction",
           description: "Introduction",
         },
@@ -760,12 +760,162 @@ describe("orderSidebarItems", () => {
     });
   });
 
+  describe("sidebar label", () => {
+    const idToDocPage = {
+      "page-a": {
+        title: "Page A",
+        id: "page-a",
+        frontMatter: {
+          title: "Page A",
+          sidebar_label: "Page Z",
+          description: "Page A",
+        },
+        source: "@site/docs/page-a.mdx",
+        sourceDirName: "",
+      },
+      "page-b": {
+        title: "Page B",
+        id: "page-b",
+        frontMatter: {
+          title: "Page B",
+          sidebar_label: "Page W",
+          description: "Page B",
+        },
+        source: "@site/docs/page-b.mdx",
+        sourceDirName: "",
+      },
+      "page-c": {
+        title: "Page C",
+        id: "page-c",
+        frontMatter: {
+          title: "Page C",
+          sidebar_label: "Page X",
+          description: "Page C",
+        },
+        source: "@site/docs/page-c.mdx",
+        sourceDirName: "",
+      },
+      "page-d": {
+        title: "Page D",
+        id: "page-d",
+        frontMatter: {
+          title: "Page D",
+          description: "Page D",
+        },
+        source: "@site/docs/page-d.mdx",
+        sourceDirName: "",
+      },
+    };
+
+    interface testCase {
+      description: string;
+      input: Array<NormalizedSidebarItem>;
+      expected: Array<NormalizedSidebarItem>;
+    }
+
+    const testCases: Array<testCase> = [
+      {
+        description: "all pages use sidebar_label",
+        input: [
+          {
+            type: "category",
+            label: "My Docs Category",
+            items: [
+              {
+                type: "doc",
+                id: "page-a",
+              },
+              {
+                type: "doc",
+                id: "page-b",
+              },
+              {
+                type: "doc",
+                id: "page-c",
+              },
+            ],
+          },
+        ],
+        expected: [
+          {
+            type: "category",
+            label: "My Docs Category",
+            items: [
+              {
+                type: "doc",
+                id: "page-b",
+              },
+              {
+                type: "doc",
+                id: "page-c",
+              },
+              {
+                type: "doc",
+                id: "page-a",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        description: "one page uses title",
+        input: [
+          {
+            type: "category",
+            label: "My Docs Category",
+            items: [
+              {
+                type: "doc",
+                id: "page-d",
+              },
+              {
+                type: "doc",
+                id: "page-b",
+              },
+              {
+                type: "doc",
+                id: "page-c",
+              },
+            ],
+          },
+        ],
+        expected: [
+          {
+            type: "category",
+            label: "My Docs Category",
+            items: [
+              {
+                type: "doc",
+                id: "page-d",
+              },
+              {
+                type: "doc",
+                id: "page-b",
+              },
+              {
+                type: "doc",
+                id: "page-c",
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    test.each(testCases)("$description", (c) => {
+      const actual = orderSidebarItems(c.input, (id: string): docPage => {
+        return idToDocPage[id];
+      });
+      expect(actual).toEqual(c.expected);
+    });
+  });
+
   describe("ordering category index pages", () => {
     const idToDocPage = {
       "section-a/section-a": {
         title: "Section A",
         id: "section-a/section-a",
-        frontmatter: {
+        frontMatter: {
           title: "Section A",
           description: "Section A",
         },
@@ -775,7 +925,7 @@ describe("orderSidebarItems", () => {
       "section-a/page-a": {
         title: "Section A Page A",
         id: "section-a/page-a",
-        frontmatter: {
+        frontMatter: {
           title: "Section A Page A",
           description: "Page A",
         },
@@ -785,7 +935,7 @@ describe("orderSidebarItems", () => {
       "section-a/page-b": {
         title: "Section A Page B",
         id: "section-a/page-b",
-        frontmatter: {
+        frontMatter: {
           title: "Section A Page B",
           description: "Page B",
         },
@@ -795,7 +945,7 @@ describe("orderSidebarItems", () => {
       "section-b/section-b": {
         title: "Section B",
         id: "section-b/section-b",
-        frontmatter: {
+        frontMatter: {
           title: "Section B",
           description: "Section B",
         },
@@ -806,7 +956,7 @@ describe("orderSidebarItems", () => {
       "section-b/page-a": {
         title: "Section B Page A",
         id: "section-b/page-a",
-        frontmatter: {
+        frontMatter: {
           title: "Section B Page A",
           description: "Page A",
         },
@@ -817,7 +967,7 @@ describe("orderSidebarItems", () => {
       "section-b/page-b": {
         title: "Section B Page B",
         id: "section-b/page-b",
-        frontmatter: {
+        frontMatter: {
           title: "Section B Page B",
           description: "Page B",
         },
@@ -827,7 +977,7 @@ describe("orderSidebarItems", () => {
       intro: {
         title: "Introduction",
         id: "intro",
-        frontmatter: {
+        frontMatter: {
           title: "Introduction",
           description: "Introduction",
         },
@@ -936,7 +1086,7 @@ describe("orderSidebarItems", () => {
       "page-a": {
         title: "Page A",
         id: "page-a",
-        frontmatter: {
+        frontMatter: {
           title: "Page A",
           description: "Page A",
         },
@@ -947,7 +1097,7 @@ describe("orderSidebarItems", () => {
       "page-b": {
         title: "Page B",
         id: "page-b",
-        frontmatter: {
+        frontMatter: {
           title: "Page B",
           description: "Page B",
         },
@@ -988,7 +1138,7 @@ describe("orderSidebarItems", () => {
       "page-a": {
         title: "Page A",
         id: "page-a",
-        frontmatter: {
+        frontMatter: {
           title: "Page A",
           description: "Page A",
         },
@@ -999,7 +1149,7 @@ describe("orderSidebarItems", () => {
       "page-b": {
         title: "Page B",
         id: "page-b",
-        frontmatter: {
+        frontMatter: {
           title: "Page B",
           description: "Page B",
         },
