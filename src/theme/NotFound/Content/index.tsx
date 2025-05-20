@@ -12,6 +12,7 @@ import {
   nearestAvailableCategoryIndex,
 } from "/src/utils/suggestions";
 import Search from "/src/components/Search";
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
 export default function NotFoundContent({ className }: Props): ReactNode {
   const { pathname } = useLocation();
@@ -80,7 +81,7 @@ export default function NotFoundContent({ className }: Props): ReactNode {
             {"."}
           </p>
           <p>
-            <a href="/">Go back to the docs home page.</a>
+            <a href={useBaseUrl("/")}>Go back to the docs home page.</a>
           </p>
         </div>
       </div>
