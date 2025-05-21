@@ -37,7 +37,7 @@ export function InkeepSearch() {
     organizationDisplayName: "Teleport",
     primaryBrandColor: "#512FC9",
     aiApiBaseUrl: "https://goteleport.com/inkeep-proxy",
-    analyticsApiBaseUrl: "https://goteleport.com/inkeep-proxy",
+    analyticsApiBaseUrl: 'https://goteleport.com/inkeep-proxy/analytics',
     privacyPreferences: {
       optOutAllAnalytics: false,
     },
