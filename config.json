@@ -67,7 +67,8 @@
     },
     {
       "name": "15.x",
-      "branch": "branch/v15"
+      "branch": "branch/v15",
+      "deprecated": true
     },
     {
       "name": "16.x",
@@ -80,6 +81,10 @@
     },
     {
       "name": "18.x",
+      "branch": "branch/v18"
+    },
+    {
+      "name": "19.x",
       "branch": "master"
     }
   ]
