@@ -114,7 +114,6 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
         });
 
         transformToHast(node);
-        console.log("new node:", JSON.stringify(node, null, 2));
       }
       const el = node as unknown as Element;
       const elParent = parent as unknown as Element;
@@ -127,10 +126,17 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
         return;
       }
 
-      console.log("passed all the AST checks");
-
       const lang = ((node: Element) => {
-        const list = node.properties.className;
+        let list = node.properties.className;
+
+        // The code node was converted from mdast, so there is a single
+        // class value;
+        if (!list && node.properties.class !== "") {
+          list = [node.properties.class as string];
+          node.properties.className = [node.properties.class as string];
+          delete node.properties.class;
+        }
+
         let index = -1;
 
         if (!Array.isArray(list)) {
