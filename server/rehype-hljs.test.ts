@@ -12,7 +12,7 @@ import remarkParse from "remark-parse";
 import rehypeStringify from "rehype-stringify";
 import { definer as hcl } from "highlightjs-terraform";
 
-describe("server/remark-hljs-var", () => {
+describe("server/rehype-hljs-var", () => {
   // transformer executes remark and rehype plugins to transform a VFile using
   // rehypeHLJS. It uses legacy logic from gravitational/docs.
   // TODO: Use an approach that more closely reflects the remark/rehype execution

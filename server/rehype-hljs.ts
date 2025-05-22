@@ -51,17 +51,12 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     // possible language.
     settings.detect = true;
     settings.subset = ["text"];
-    const { aliases, subset, detect, plainText, prefix } = settings;
+    const { aliases, subset, detect, plainText } = settings;
     let name = "hljs";
     const lowlight = createLowlight(settings.languages);
 
     if (aliases) {
       lowlight.registerAlias(aliases);
-    }
-
-    if (prefix) {
-      const pos = prefix.indexOf("-");
-      name = pos === -1 ? prefix : prefix.slice(0, pos);
     }
 
     let placeholdersToVars: Record<string, Node> = {};
@@ -177,8 +172,8 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
 
       try {
         result = lang
-          ? lowlight.highlight(lang, text, { prefix })
-          : lowlight.highlightAuto(text, { prefix, subset });
+          ? lowlight.highlight(lang, text )
+          : lowlight.highlightAuto(text, { subset });
       } catch (error) {
         const cause = /** @type {Error} */ error;
 
