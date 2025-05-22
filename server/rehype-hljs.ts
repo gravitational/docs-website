@@ -103,11 +103,18 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
     visit(root, function (node: Node, index: number, parent: UnistParent) {
       if (
         node.type == "mdxJsxFlowElement" &&
-        (node as unknown as MdxJsxFlowElement).name == "code" &&
-        parent.type == "mdxJsxFlowElement" &&
-        (parent as unknown as MdxJsxFlowElement).name == "pre"
+        (node as unknown as MdxJsxFlowElement).name == "pre" &&
+        (node as UnistParent).children &&
+        (node as UnistParent).children.some((c) => {
+          return (c as unknown as MdxJsxFlowElement).name == "code";
+        })
       ) {
-        transformToHast(node, index, parent);
+        (node as UnistParent).children.forEach((c) => {
+          transformToHast(c);
+        });
+
+        transformToHast(node);
+        console.log("new node:", JSON.stringify(node, null, 2));
       }
       const el = node as unknown as Element;
       const elParent = parent as unknown as Element;
@@ -119,6 +126,8 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
       ) {
         return;
       }
+
+      console.log("passed all the AST checks");
 
       const lang = ((node: Element) => {
         const list = node.properties.className;
@@ -172,7 +181,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
 
       try {
         result = lang
-          ? lowlight.highlight(lang, text )
+          ? lowlight.highlight(lang, text)
           : lowlight.highlightAuto(text, { subset });
       } catch (error) {
         const cause = /** @type {Error} */ error;
