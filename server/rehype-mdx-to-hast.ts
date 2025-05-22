@@ -38,6 +38,15 @@ export const transformToHast = (node: any) => {
       tagName: node.name.toLowerCase(),
       properties: (node.attributes as MdxJsxAttribute[]).reduce(
         (result, prop) => {
+          let key = prop.name;
+          let val: string | Array<string> = (
+            prop.value as MdxJsxAttributeValueExpression
+          ).value;
+          if (key == "class") {
+            key = "className";
+            // Use an array for the class name list
+            val = [val];
+          }
           // If the prop in markdown was a js-expression like disabled={true}
           // it will be parsed as an object with original value as a string
           // and as a estree. For now we just use the string value.
@@ -46,7 +55,7 @@ export const transformToHast = (node: any) => {
             // will get value "{something}"" as is with curly braces.
             return {
               ...result,
-              [prop.name]: (prop.value as MdxJsxAttributeValueExpression).value,
+              [key]: val,
             };
           }
 
@@ -64,7 +73,7 @@ export const transformToHast = (node: any) => {
     Object.assign(node, newNode);
     // This is a pure JS nodes, like {1 + 1} or imports/exports.
     // Just removing them for now for simplicity.
-  } 
+  }
 };
 
 export default function rehypeMdxToHast(): Transformer {
