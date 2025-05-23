@@ -12,7 +12,7 @@ import remarkParse from "remark-parse";
 import rehypeStringify from "rehype-stringify";
 import { definer as hcl } from "highlightjs-terraform";
 
-describe("server/remark-hljs-var", () => {
+describe("server/rehype-hljs-var", () => {
   // transformer executes remark and rehype plugins to transform a VFile using
   // rehypeHLJS. It uses legacy logic from gravitational/docs.
   // TODO: Use an approach that more closely reflects the remark/rehype execution
@@ -139,8 +139,42 @@ describe("server/remark-hljs-var", () => {
     expect((result.value as string).trim()).toBe(
       readFileSync(
         resolve("server/fixtures/result/hcl-addr-var.html"),
-        "utf-8"
-      ).trim()
+        "utf-8",
+      ).trim(),
+    );
+  });
+
+  test("Vars and text snippet label", () => {
+    const result = transformer({
+      value: readFileSync(
+        resolve("server/fixtures/text-snippet-label-var.mdx"),
+        "utf-8",
+      ),
+      path: "/docs/index.mdx",
+    });
+
+    expect((result.value as string).trim()).toBe(
+      readFileSync(
+        resolve("server/fixtures/result/text-snippet-label-var.html"),
+        "utf-8",
+      ).trim(),
+    );
+  });
+
+  test("Vars and no snippet label", () => {
+    const result = transformer({
+      value: readFileSync(
+        resolve("server/fixtures/no-snippet-label-var.mdx"),
+        "utf-8",
+      ),
+      path: "/docs/index.mdx",
+    });
+
+    expect((result.value as string).trim()).toBe(
+      readFileSync(
+        resolve("server/fixtures/result/no-snippet-label-var.html"),
+        "utf-8",
+      ).trim(),
     );
   });
 });
