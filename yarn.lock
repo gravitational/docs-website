@@ -1934,19 +1934,19 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@inkeep/cxkit-color-mode@0.5.79":
-  version "0.5.79"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-color-mode/-/cxkit-color-mode-0.5.79.tgz#246819167850cb7ec9ab9f4a312110542c4fcad0"
-  integrity sha512-answw9olwBQWjp7Wl/AFwz2kBtaPwGaseb88d8Kk/NhO9ypLE6/YTgjgLZLhZTZa3COMUAvaJ8gtDQ5TqVOG+w==
+"@inkeep/cxkit-color-mode@0.5.80":
+  version "0.5.80"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-color-mode/-/cxkit-color-mode-0.5.80.tgz#c328b67aec80db08ce353a160ccd2bb4d3df321c"
+  integrity sha512-sT1F0/wWL4I3SqpAMoYVe/9TiMKejPbmBuzXOkMDOsfYuFfaTRlMT3BZu646sguVmwAS5OC7S1FddanwLD60jg==
 
-"@inkeep/cxkit-primitives@0.5.79":
-  version "0.5.79"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-primitives/-/cxkit-primitives-0.5.79.tgz#e47b5590663f8b261118bd378044bf55da6efbd0"
-  integrity sha512-OkRsGANPYOBG7hEpOaVxrts22cqLfMCQb9h53AMSkyjbySHBDkVOqUm3BeLJEbAEAo4P39/u8+qIC5M2Tny8fQ==
+"@inkeep/cxkit-primitives@0.5.80":
+  version "0.5.80"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-primitives/-/cxkit-primitives-0.5.80.tgz#4e32ab500fcbe1497cc5408fa0756d5f262af34f"
+  integrity sha512-ivzGbXUrycTwbQzcYlFUdFACexbt4HgkPPEQl8KJHpWCUQ5xZIhnyGDDSZmdFIlmKMlLFLEP00q7zUbQseqUqw==
   dependencies:
-    "@inkeep/cxkit-color-mode" "0.5.79"
-    "@inkeep/cxkit-theme" "0.5.79"
-    "@inkeep/cxkit-types" "0.5.79"
+    "@inkeep/cxkit-color-mode" "0.5.80"
+    "@inkeep/cxkit-theme" "0.5.80"
+    "@inkeep/cxkit-types" "0.5.80"
     "@radix-ui/primitive" "^1.1.1"
     "@radix-ui/react-avatar" "1.1.2"
     "@radix-ui/react-checkbox" "1.1.3"
@@ -1981,7 +1981,7 @@
     react-error-boundary "^6.0.0"
     react-hook-form "7.54.2"
     react-markdown "9.0.3"
-    react-remove-scroll "^2.6.3"
+    react-remove-scroll "2.6.3"
     react-svg "16.3.0"
     react-textarea-autosize "8.5.7"
     rehype-raw "7.0.0"
@@ -1989,37 +1989,37 @@
     unist-util-visit "^5.0.0"
     use-sync-external-store "^1.4.0"
 
-"@inkeep/cxkit-react@^0.5.79":
-  version "0.5.79"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-react/-/cxkit-react-0.5.79.tgz#89093870ff28e97f55dae295d387da1415654511"
-  integrity sha512-oCHtfeKF/5n2FtUN5p/TD5KnjCH3TCPWae+aB6+sLhbsM64sGFdeJCJE7X5Ta6UcXavAvncQDRwyhD5mWrC5FQ==
+"@inkeep/cxkit-react@^0.5.80":
+  version "0.5.80"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-react/-/cxkit-react-0.5.80.tgz#22d293f4a5de93fd3c35cd995dcb0b94ba67ac0b"
+  integrity sha512-fVYBv0OjUg94/70+HTZSyWotUnM/WDJt32fbZ5/7BxB6ZN0O2JlN3D9TKo1S8CFOMHg5flp0+W4VeeWXDk9d4w==
   dependencies:
-    "@inkeep/cxkit-styled" "0.5.79"
+    "@inkeep/cxkit-styled" "0.5.80"
     "@radix-ui/react-use-controllable-state" "^1.1.0"
     lucide-react "^0.503.0"
 
-"@inkeep/cxkit-styled@0.5.79":
-  version "0.5.79"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-styled/-/cxkit-styled-0.5.79.tgz#c0de9cc907e85739a21e6d2f9fa87a9b7e1cc9ea"
-  integrity sha512-U+jEjshVRCPtaFtKM6BXlRZby00PJ4CLT69y2snMKxm42pLG1AwltwpPx2uWv7WP0xOBCPD16XbxvNyComHGyA==
+"@inkeep/cxkit-styled@0.5.80":
+  version "0.5.80"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-styled/-/cxkit-styled-0.5.80.tgz#24fa33d56174f559c3b857bea88ef5c5c8d3710f"
+  integrity sha512-ZlJwEegL8MCIx3pVapj32AOV2AWROWC+uBKjM/vvnGWhg5fNnQx40p90RnDCWF5H5fgmlP7PS8r1CmN0lVtwug==
   dependencies:
-    "@inkeep/cxkit-primitives" "0.5.79"
+    "@inkeep/cxkit-primitives" "0.5.80"
     class-variance-authority "0.7.1"
     clsx "2.1.1"
     merge-anything "5.1.7"
     tailwind-merge "2.6.0"
 
-"@inkeep/cxkit-theme@0.5.79":
-  version "0.5.79"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-theme/-/cxkit-theme-0.5.79.tgz#07fda6b02d9ac0763da584d3ba22452974dd2bb5"
-  integrity sha512-SS65mXtrFU/C08GKq9LpynC5NbeRzfZKf6ygRGjRMl/rbAnVxrGbH2Gb13p6NfzB9ANGqPyLlHTmj/hw2zEVhQ==
+"@inkeep/cxkit-theme@0.5.80":
+  version "0.5.80"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-theme/-/cxkit-theme-0.5.80.tgz#4f878e9c593bc7dcef3d5f93de3742f189b2f95e"
+  integrity sha512-7wwjczUz7deEP8V3uY1+YnUaVIhwBs8om9/N10jP2Vh9kkpEIZELSCwPS7QeKeY0FpIB0WgUNwDUcN4yrZ3EnA==
   dependencies:
     colorjs.io "0.5.2"
 
-"@inkeep/cxkit-types@0.5.79":
-  version "0.5.79"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-types/-/cxkit-types-0.5.79.tgz#f1f008552b05ee2d9ecbafd5c6ba12f15887c35d"
-  integrity sha512-2zzX1DW2mKl+ugu+2snuai4I79MMxVRVWT6KWYNqlik0NoOBbcOU10hQnJx4rg51nTfnurF0Q5qn3GMivg0/2A==
+"@inkeep/cxkit-types@0.5.80":
+  version "0.5.80"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-types/-/cxkit-types-0.5.80.tgz#c0921d2c2006ec32ce4621c97ff62770b4294861"
+  integrity sha512-Vpr/yTritQ0Fyy7GvxWTYpAHMn3Iee7xyZykR0Bv0aMNaB4XKq8eVXsueVxz4pgJao+inOU6GzrSflK8QBGJYw==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -12203,7 +12203,7 @@ react-remove-scroll-bar@^2.3.7:
     react-style-singleton "^2.2.2"
     tslib "^2.0.0"
 
-react-remove-scroll@^2.6.3:
+react-remove-scroll@2.6.3, react-remove-scroll@^2.6.3:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/react-remove-scroll/-/react-remove-scroll-2.6.3.tgz#df02cde56d5f2731e058531f8ffd7f9adec91ac2"
   integrity sha512-pnAi91oOk8g8ABQKGF5/M9qxmmOPxaAnopyTHYfqYEwJhyFrbbBtHuSgtKEoH0jpcxx5o3hXqH1mNd9/Oi+8iQ==
