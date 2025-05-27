@@ -34,6 +34,10 @@ const latestVersion = getLatestVersion();
 
 const config: Config = {
   future: {
+    v4: {
+      // https://docusaurus.io/blog/releases/3.8#worker-threads
+      removeLegacyPostBuildHeadAttribute: true, // required
+    },
     // This speeds up build by a lot and should resolve memory issues during build
     // https://docusaurus.io/blog/releases/3.6
     experimental_faster: true,
