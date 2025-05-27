@@ -1,0 +1,35 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Setup Swapfile to work around lack of RAM on build node
+        # https://github.com/aws-amplify/amplify-hosting/issues/654
+        - echo "Setting up swap space..."
+        - sudo fallocate -l 40G ../swapfile
+        - sudo chmod 600 ../swapfile
+        - sudo mkswap ../swapfile
+        - sudo swapon ../swapfile
+        - sudo swapon -s
+        - echo "✅  Done setting up swap space!"
+        # install yarn dependencies
+        - yarn
+        - echo "Setting up content cache"
+        - |
+          if [ -d ./cached_content ]; then
+            rm -rf content/
+          else
+            mv content/ cached_content/
+          fi
+        - ln -s cached_content/ content/
+    build:
+      commands:
+        - yarn build --out-dir build/${local.teleport_docs_subpath}
+  artifacts:
+    baseDirectory: build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - cached_content/**/*
