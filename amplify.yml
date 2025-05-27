@@ -24,7 +24,7 @@ frontend:
         - ln -s cached_content/ content/
     build:
       commands:
-        - yarn build --out-dir build/${local.teleport_docs_subpath}
+        - yarn build --out-dir build/docs/
   artifacts:
     baseDirectory: build
     files:
