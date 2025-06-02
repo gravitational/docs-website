@@ -54,7 +54,7 @@
     "@docusaurus/plugin-svgr": "^3.8.0",
     "@docusaurus/theme-classic": "^3.8.0",
     "@docusaurus/tsconfig": "^3.8.0",
-    "@inkeep/cxkit-react": "^0.5.80",
+    "@inkeep/cxkit-react": "^0.5.82",
     "@mdx-js/react": "^3.0.0",
     "classnames": "^2.3.1",
     "clsx": "^2.1.1",
@@ -64,7 +64,7 @@
     "lowlight": "^3.1.0",
     "mdast-util-from-markdown": "^2.0.1",
     "nanoid": "^5.1.0",
-    "postcss-preset-env": "^10.1.6",
+    "postcss-preset-env": "^10.2.0",
     "prism-react-renderer": "^2.3.0",
     "raw-loader": "^4.0.2",
     "react": "^18.3.1",
@@ -74,7 +74,7 @@
     "rehype-highlight": "^7.0.2",
     "remark-mdx": "^2.1.1",
     "remark-parse": "^10.0.1",
-    "vite-node": "^3.1.4"
+    "vite-node": "^3.2.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.7.0",
@@ -101,7 +101,7 @@
     "micromark-extension-frontmatter": "^2.0.0",
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-mdxjs": "^3.0.0",
-    "postcss": "^8.4.38",
+    "postcss": "^8.5.4",
     "postcss-loader": "^8.1.1",
     "rehype-stringify": "^10.0.1",
     "remark-cli": "10.0.1",
