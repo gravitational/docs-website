@@ -2,7 +2,7 @@ import React, { type ReactNode } from "react";
 import Tabs from "@theme-original/Tabs";
 import type TabsType from "@theme/Tabs";
 import type { WrapperProps } from "@docusaurus/types";
-import { nanoid } from "nanoid";
+import { useId } from "react";
 
 type Props = WrapperProps<typeof TabsType>;
 
@@ -28,7 +28,7 @@ export default function TabsWrapper(props: Props): ReactNode {
         ...child,
         props: {
           ...child.props,
-          value: nanoid(),
+          value: useId(),
         },
       };
     }),
