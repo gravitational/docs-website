@@ -39,9 +39,6 @@
   "simple-git-hooks": {
     "pre-commit": "yarn lint-staged"
   },
-  "resolutions": {
-    "@rspack/core": "1.2.5"
-  },
   "dependencies": {
     "@csstools/postcss-global-data": "^2.1.1",
     "@docusaurus/core": "^3.8.0",
