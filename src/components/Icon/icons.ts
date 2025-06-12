@@ -1,3 +1,4 @@
+export { default as apple } from "./svg/apple.svg";
 export { default as arrow } from "./svg/arrow.svg";
 export { default as arrowRight } from "./svg/arrow-right.svg";
 export { default as bolt } from "./svg/bolt.svg";
@@ -21,8 +22,10 @@ export { default as copy } from "./svg/copy.svg";
 export { default as connect } from "./svg/connect.svg";
 export { default as database } from "./svg/database.svg";
 export { default as desktop } from "./svg/desktop.svg";
+export { default as docker } from "./svg/docker.svg";
 export { default as download } from "./svg/download.svg";
 export { default as earth } from "./svg/earth.svg";
+export { default as ec2 } from "./svg/ec2.svg";
 export { default as edit } from "./svg/edit.svg";
 export { default as ellipsis } from "./svg/ellipsis.svg";
 export { default as error } from "./svg/error.svg";
@@ -34,7 +37,10 @@ export { default as help } from "./svg/help.svg";
 export { default as home } from "./svg/home.svg";
 export { default as integrations } from "./svg/integrations.svg";
 export { default as kubernetes } from "./svg/kubernetes.svg";
+export { default as kubernetes2 } from "./svg/kubernetes2.svg";
+export { default as laptop } from "./svg/laptop.svg";
 export { default as layers } from "./svg/layers.svg";
+export { default as linux } from "./svg/linux.svg";
 export { default as list } from "./svg/list.svg";
 export { default as lock } from "./svg/lock.svg";
 export { default as magnify } from "./svg/magnify.svg";
@@ -56,4 +62,10 @@ export { default as wand } from "./svg/magic-wand.svg";
 export { default as users } from "./svg/users.svg";
 export { default as warning } from "./svg/warning.svg";
 export { default as window } from "./svg/window.svg";
+export { default as windows } from "./svg/windows.svg";
 export { default as wrench } from "./svg/wrench.svg";
+
+// Teleport svgs
+export { default as cluster } from "./teleport-svg/cluster.svg";
+export { default as cli } from "./teleport-svg/cli.svg";
+export { default as agent } from "./teleport-svg/agent.svg";
