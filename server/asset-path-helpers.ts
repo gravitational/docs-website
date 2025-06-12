@@ -142,12 +142,12 @@ export const updatePathsInIncludes = ({
       const absTargetPath = resolve(
         versionRootDir,
         dirname(includePath),
-        href
+        href,
       ).replace(getPagesDir(vfile), getCurrentDir(vfile));
 
       (node as Link | Image | Definition).url = relative(
         absMdxPath,
-        absTargetPath
+        absTargetPath,
       );
     } else {
       const absMdxPath = resolve(getOriginalPath(vfile));
@@ -156,14 +156,94 @@ export const updatePathsInIncludes = ({
 
       (node as Link | Image | Definition).url = relative(
         dirname(absMdxPath),
-        absTargetPath
+        absTargetPath,
       );
     }
   }
 
   if ("children" in node) {
     (node as Parent).children?.forEach?.((child) =>
-      updatePathsInIncludes({ node: child, versionRootDir, includePath, vfile })
+      updatePathsInIncludes({
+        node: child,
+        versionRootDir,
+        includePath,
+        vfile,
+      }),
+    );
+  }
+};
+
+// updatePathsInIncludesTests edits URLs in image and link references within a
+// partials so that, when a page includes the partial, the references are still
+// correct.
+// The logic is:
+// - Find the absolute path of the asset in the link reference (i.e., an image or
+//   another page)
+// - Find the absolute path of the including page within the content directory
+//   (not the Docusaurus build directory).
+// - Replace the original ink reference with a relative path between the
+//   absolute path of the including page and teh absolute path of the asset.
+export const updatePathsInIncludesTests = ({
+  node,
+  versionRootDir,
+  includePath,
+  vfile,
+}: {
+  node: Node;
+  versionRootDir: string;
+  includePath: string;
+  vfile: VFile;
+}) => {
+  const projectPath = vfile.path.replace(process.cwd(), "");
+
+  if (
+    node.type === "image" ||
+    node.type === "link" ||
+    node.type === "definition"
+  ) {
+    const href = (node as Link | Image | Definition).url;
+
+    // Ignore non-strings, absolute paths, web URLs, and links consisting only
+    // of anchors (these will end up pointing to the containing page).
+    if (
+      typeof href !== "string" ||
+      href[0] === "/" ||
+      /^http/.test(href) ||
+      href[0] === "#"
+    ) {
+      return href;
+    }
+    if (node.type === "link") {
+      // We find the relative link from the directory containing the partial to
+      // the path of the link target.
+      const absMdxPath = dirname(vfile.path);
+
+      const absTargetPath = resolve(versionRootDir, dirname(includePath), href);
+
+      (node as Link | Image | Definition).url = relative(
+        absMdxPath,
+        absTargetPath,
+      );
+    } else {
+      const absMdxPath = resolve(vfile.path);
+
+      const absTargetPath = resolve(versionRootDir, dirname(includePath), href);
+
+      (node as Link | Image | Definition).url = relative(
+        dirname(absMdxPath),
+        absTargetPath,
+      );
+    }
+  }
+
+  if ("children" in node) {
+    (node as Parent).children?.forEach?.((child) =>
+      updatePathsInIncludesTests({
+        node: child,
+        versionRootDir,
+        includePath,
+        vfile,
+      }),
     );
   }
 };
