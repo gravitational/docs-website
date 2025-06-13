@@ -143,7 +143,10 @@ export const updatePathsInIncludes = ({
         versionRootDir,
         dirname(includePath),
         href,
-      ).replace(resolve(getRootDir(vfile), "docs/pages"), getCurrentDir(vfile));
+      ).replace(
+        resolve(resolve("content", getVersionFromVFile(vfile)), "docs/pages"),
+        getCurrentDir(vfile),
+      );
 
       (node as Link | Image | Definition).url = relative(
         absMdxPath,
