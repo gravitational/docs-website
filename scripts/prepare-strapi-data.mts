@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import { resolve, join } from "path";
-import { generateEvent, generateNavigation } from "../server/sanity-settings";
+import { generateEvent, generateNavigation } from "../server/strapi-settings";
 
 const DATA_FOLDER = resolve(__dirname, "../data");
 

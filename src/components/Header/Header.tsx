@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 import { useState, useCallback, useEffect } from "react";
 import { useWindowSize } from "@docusaurus/theme-common";
 
-import { EventBanner, getComingEvent } from "../EventBanner";
+import { BannerData, EventBanner } from "../EventBanner";
 
 import type { HeaderNavigation } from "../../../server/strapi-types";
 import blockBodyScroll from "../../utils/block-body-scroll";
@@ -30,7 +30,7 @@ const Header = () => {
   const { menuItems, rightSide } = data as unknown as HeaderNavigation;
   const mobileBtn = rightSide?.mobileButton;
   const logo = data.logo;
-  const event = eventData ? getComingEvent(eventData) : null;
+  const event = eventData ? eventData as unknown as BannerData : null;
 
   useEffect(() => {
     if (event) {
@@ -54,7 +54,12 @@ const Header = () => {
       {event && <EventBanner initialEvent={event} />}
       <header className={`${styles.wrapper} ${event ? styles.margin : " "}`}>
         <a href="/" className={styles["logo-link"]}>
-          <img src={logo.url || ""} alt="Teleport logo" width={121} height={24} />
+          <img
+            src={logo.url || ""}
+            alt="Teleport logo"
+            width={121}
+            height={24}
+          />
         </a>
         {mobileBtn && (
           <Button
@@ -85,11 +90,7 @@ const Header = () => {
           style={{ top: event ? "96px" : "48px" }}
         >
           <Menu navbarData={menuItems} />
-          {rightSide && (
-            <HeaderCTA
-              rightSide={rightSide}
-            />
-          )}
+          {rightSide && <HeaderCTA rightSide={rightSide} />}
         </div>
       </header>
     </div>
