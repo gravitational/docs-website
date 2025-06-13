@@ -92,21 +92,16 @@ export const updateAssetPath = (href: string, { vfile }: { vfile: VFile }) => {
   return href;
 };
 
-/**
- * correct relative paths resolving in partial docs
- * i.e. start realtive paths from the partial file directory, not from place where it is being inserted
- * example:
- * main file: docs/page/1.mdx
- * partial:   docs/partials/headers/1.mdx
- *
- * With this utility path like that
- * ../image.jpg
- * in partial will be pointing to
- * docs/partials/image.jpg
- * and without:
- * docs/image.jpg
- */
-
+// updatePathsInIncludes edits URLs in image and link references within a
+// partials so that, when a page includes the partial, the references are still
+// correct.
+// The logic is:
+// - Find the absolute path of the asset in the link reference (i.e., an image or
+//   another page)
+// - Find the absolute path of the including page within the content directory
+//   (not the Docusaurus build directory).
+// - Replace the original ink reference with a relative path between the
+//   absolute path of the including page and teh absolute path of the asset.
 export const updatePathsInIncludes = ({
   node,
   versionRootDir,
