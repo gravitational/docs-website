@@ -1,41 +1,28 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import BrowserOnly from "@docusaurus/BrowserOnly";
-import { useDocsVersion } from "@docusaurus/plugin-content-docs/client";
-import {
-  type InkeepAIChatSettings,
-  type InkeepSearchSettings,
-  type InkeepCustomTriggerProps,
-  type InkeepWidgetBaseSettings,
-  type AIChatFunctions,
-  type SearchFunctions,
-} from "@inkeep/widgets";
+import type {
+  InkeepAIChatSettings,
+  InkeepSearchSettings,
+  InkeepModalSearchAndChatProps,
+  InkeepBaseSettings,
+  AIChatFunctions,
+  SearchFunctions,
+} from "@inkeep/cxkit-react";
 
 import styles from "./InkeepSearch.module.css";
 import InkeepSearchIconSvg from "./inkeepIcon.svg";
 
-const cssOverrides = `
-  .ikp-modal-widget-content {
-    border: 2px solid #512FC9;
-    border-radius: 12px;
-    top: 88px;
-    left: 12px;
-  }
-`;
-
-const stylesheets = [<style key="inkeep-overrides">{cssOverrides}</style>];
 
 export function InkeepSearch() {
-  const versionMetadata = useDocsVersion();
-  const { version } = versionMetadata;
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [CustomTrigger, setCustomTrigger] = useState(null);
 
   useEffect(() => {
     (async () => {
-      const { InkeepCustomTrigger } = await import("@inkeep/widgets");
-      setCustomTrigger(() => InkeepCustomTrigger);
+      const { InkeepModalSearchAndChat } = await import("@inkeep/cxkit-react");
+      setCustomTrigger(() => InkeepModalSearchAndChat);
     })();
   }, []);
 
@@ -43,42 +30,41 @@ export function InkeepSearch() {
 
   const inkeepConfig = siteConfig.customFields.inkeepConfig as {
     apiKey: string;
-    integrationId: string;
-    organizationId: string;
   };
 
-  const inkeepBaseSettings: InkeepWidgetBaseSettings = {
-    apiKey: inkeepConfig.apiKey,
-    integrationId: inkeepConfig.integrationId,
-    organizationId: inkeepConfig.organizationId,
+  const inkeepBaseSettings: InkeepBaseSettings = {
+    apiKey: inkeepConfig.apiKey || '',
     organizationDisplayName: "Teleport",
     primaryBrandColor: "#512FC9",
-    chatApiProxyDomain: "goteleport.com/inkeep-proxy",
-    remoteErrorLogsLevel: 1,
-    optOutAllAnalytics: false,
-    consoleDebugLevel: 0,
-    customCardSettings: [
-      {
-        filters: {
-          ContentType: "docs",
-        },
-        searchTabLabel: "Docs",
-        icon: { builtIn: "IoDocumentTextOutline" },
-      },
-    ],
+    aiApiBaseUrl: "https://goteleport.com/inkeep-proxy",
+    analyticsApiBaseUrl: 'https://goteleport.com/inkeep-proxy/analytics',
+    privacyPreferences: {
+      optOutAllAnalytics: false,
+    },
+    transformSource: (source) => {
+      const isDocs =
+      source.contentType === 'docs' ||
+      source.type === 'documentation'
+      if (!isDocs) {
+        return source
+      }
+    return {
+      ...source,
+      tabs: ['Docs', ...(source.tabs ?? [])],
+      icon: { builtIn: 'IoDocumentTextOutline' },
+    }
+    },
+    colorMode: {
+      forcedColorMode: "light",
+    },
     theme: {
-      colorMode: {
-        forcedColorMode: "light",
-      },
-      tokens: {
-        zIndex: {
-          overlay: "2100",
-          modal: "2200",
-          popover: "2300",
-          skipLink: "2400",
-          toast: "2500",
-          tooltip: "2600",
-        },
+      zIndex: {
+        overlay: "2100",
+        modal: "2200",
+        popover: "2300",
+        skipLink: "2400",
+        toast: "2500",
+        tooltip: "2600",
       },
     },
   };
@@ -89,39 +75,33 @@ export function InkeepSearch() {
   const handleChange = useCallback(
     (str: string) => {
       chatCallableFunctionsRef.current?.updateInputMessage(str);
-      searchCallableFunctionsRef.current?.updateSearchQuery(str);
+      searchCallableFunctionsRef.current?.updateQuery(str);
       setMessage(str);
-      setIsOpen(true);
+      if (str) {
+        setIsOpen(true);
+      }
     },
-    [setMessage, chatCallableFunctionsRef, searchCallableFunctionsRef]
+    []
   );
 
-  const handleClose = useCallback(() => {
-    setIsOpen(false);
-  }, []);
 
-  const inkeepCustomTriggerProps: InkeepCustomTriggerProps = {
-    isOpen,
-    onClose: handleClose,
-    stylesheets,
+  const inkeepCustomTriggerProps: InkeepModalSearchAndChatProps = {
     baseSettings: {
       ...inkeepBaseSettings,
     },
     aiChatSettings: {
       ...inkeepAIChatSettings,
       chatFunctionsRef: chatCallableFunctionsRef,
-      handleMessageChange: handleChange,
-      messageAttributes: {
-        productVersion: version,
-      },
+      onInputMessageChange: handleChange,
     },
     searchSettings: {
       ...inkeepSearchSettings,
       searchFunctionsRef: searchCallableFunctionsRef,
-      handleSearchQueryChange: handleChange,
+      onQueryChange: handleChange,
     },
     modalSettings: {
-      closeOnBlur: true,
+      onOpenChange: setIsOpen,
+      isOpen: isOpen,
     },
   };
 
@@ -150,21 +130,16 @@ export function InkeepSearch() {
 }
 
 const inkeepAIChatSettings: InkeepAIChatSettings = {
-  botName: "Teleport",
-  botAvatarSrcUrl: "https://goteleport.com/static/pam-standing.svg",
-  isControlledMessage: true,
-  defaultChatMode: "AUTO",
+  aiAssistantName: 'Teleport',
+  aiAssistantAvatar: 'https://goteleport.com/static/pam-standing.svg',
 };
 
 const inkeepSearchSettings: InkeepSearchSettings = {
-  placeholder: "Search Docs",
-  tabSettings: {
-    isAllTabEnabled: false,
-    rootBreadcrumbsToUseAsTabs: ["Docs", "GitHub"],
-    tabOrderByLabel: ["Docs", "GitHub"],
-    alwaysDisplayedTabs: ["Docs", "GitHub"],
-    disabledDefaultTabs: undefined,
-  },
-  isControlledSearchQuery: true,
+  placeholder: 'Search Docs',
+  tabs: [
+    ['Docs', { isAlwaysVisible: true }],
+    ['GitHub', { isAlwaysVisible: true }],
+  ],
   shouldOpenLinksInNewTab: true,
+  view: 'dual-pane',
 };

@@ -1,6 +1,7 @@
 import OriginalMDXComponents from "@theme-original/MDXComponents";
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
+import DocCardList from "@theme/DocCardList";
 import Admonition from "@theme/Admonition";
 import React, { type ComponentProps } from "react";
 import Head from "@docusaurus/Head";
@@ -21,6 +22,7 @@ import type { MDXComponentsObject } from "@theme/MDXComponents";
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
   Details: MDXDetails,
+  DocCardList: DocCardList,
   Head,
   TabItem,
   Tabs,

@@ -6,8 +6,9 @@
 
 import Ajv from "ajv";
 import { validateConfig } from "./config-common";
-import { resolve } from "path";
+import { join, sep } from "path";
 import { existsSync, readFileSync } from "fs";
+import * as nodefs from "fs";
 import { isExternalLink, isHash, splitPath } from "../src/utils/url";
 import { getLatestVersion } from "./config-site";
 
@@ -40,54 +41,25 @@ type Redirect = {
       permanent?: never;
     }
 );
-export const scopeValues = ["oss", "enterprise", "cloud", "team"] as const;
-
-export type ScopeType = (typeof scopeValues)[number];
-export type ScopesType = ScopeType | ScopeType[];
-
-export type ScopesInMeta = [""] | ["noScope"] | ScopeType[];
-
-interface BaseNavigationItem {
-  title: string;
-  slug: string;
-  entries?: NavigationItem[];
-  generateFrom: string;
-}
-export interface RawNavigationItem extends BaseNavigationItem {
-  forScopes?: ScopeType[];
-}
-
-export interface NavigationItem extends BaseNavigationItem {
-  forScopes: ScopesInMeta;
-}
-
-export interface NavigationCategory {
-  icon: string;
-  title: string;
-  entries: NavigationItem[];
-  generateFrom?: string;
-}
 
 const latest = getLatestVersion();
 
 export interface Config {
-  navigation: NavigationCategory[];
   variables?: Record<string, unknown>;
   redirects?: Redirect[];
 }
 
 const getConfigPath = (version: string) =>
-  resolve("content", version, "docs/config.json");
+  join("content", version, "docs/config.json");
 
-/*
- * Try to load config file and throw error if it does not exist.
- */
+// load loads the docs configuration for the given version at the
+// gravitational/docs clone in clonePath. fs can be reassigned from the "fs"
+// standard library package for testing.
+export const load = (version: string, clonePath: string, fs = nodefs) => {
+  const path = join(clonePath, "content", version, "docs", "config.json");
 
-export const load = (version: string) => {
-  const path = getConfigPath(version);
-
-  if (existsSync(path)) {
-    const content = readFileSync(path, "utf-8");
+  if (fs.existsSync(path)) {
+    const content = fs.readFileSync(path, "utf-8");
 
     return JSON.parse(content) as Config;
   } else {
@@ -108,53 +80,6 @@ const validator = ajv.compile({
   properties: {
     variables: {
       type: "object",
-    },
-    navigation: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          icon: { type: "string" },
-          title: { type: "string" },
-          entries: {
-            type: "array",
-            items: {
-              type: "object",
-              $id: "navigation-item",
-              properties: {
-                title: { type: "string" },
-                slug: { type: "string" },
-                forScopes: {
-                  anyOf: [
-                    {
-                      type: "string",
-                    },
-                    {
-                      type: "array",
-                      items: {
-                        type: "string",
-                      },
-                    },
-                  ],
-                },
-                entries: {
-                  type: "array",
-                  items: { $ref: "navigation-item" },
-                },
-              },
-              required: ["title", "slug"],
-              additionalProperties: false,
-            },
-          },
-          generateFrom: {
-            type: "string",
-          },
-        },
-        required: ["title", "icon", "entries"],
-        additionalProperties: false,
-      },
-      minItems: 1,
-      uniqueItems: true,
     },
     redirects: {
       type: "array",
@@ -183,7 +108,7 @@ const validator = ajv.compile({
       },
     },
   },
-  required: ["navigation"],
+  required: [],
   additionalProperties: false,
 });
 
@@ -217,54 +142,6 @@ export const normalizeDocsUrl = (version: string, url: string) => {
   return prefix + url;
 };
 
-const getPathsForNavigationEntries = (entries: NavigationItem[]): string[] => {
-  return entries.reduce((allSlugs, currentEntry) => {
-    let slugs = [currentEntry.slug];
-    if (currentEntry.entries) {
-      const moreSlugs = getPathsForNavigationEntries(currentEntry.entries);
-      slugs.push(...moreSlugs);
-    }
-    allSlugs.push(...slugs);
-    return allSlugs;
-  }, [] as string[]);
-};
-
-const normalizeDocsUrls = (
-  version: string,
-  entries: NavigationItem[]
-): NavigationItem[] => {
-  return entries.map((entry) => {
-    const newEntry = Object.assign(entry);
-
-    newEntry.slug = normalizeDocsUrl(version, entry.slug);
-
-    if (entry.entries) {
-      newEntry.entries = normalizeDocsUrls(version, entry.entries);
-    }
-
-    return newEntry;
-  });
-};
-
-/*
- * Here we normalize urls in the "navigation" section.
- */
-
-const normalizeNavigation = (
-  version: string,
-  navigation: NavigationCategory[]
-): NavigationCategory[] =>
-  navigation.map((category) => {
-    return {
-      ...category,
-      entries: normalizeDocsUrls(version, category.entries),
-    };
-  });
-
-/*
- * Here we normalize urls in the "redirects" section.
- */
-
 const normalizeRedirects = (
   version: string,
   redirects: Redirect[]
@@ -284,8 +161,6 @@ const normalizeRedirects = (
  */
 
 export const normalize = (config: Config, version: string): Config => {
-  config.navigation = normalizeNavigation(version, config.navigation);
-
   if (config.redirects) {
     config.redirects = normalizeRedirects(version, config.redirects);
   }
@@ -297,86 +172,13 @@ export const normalize = (config: Config, version: string): Config => {
   return config;
 };
 
-/* Load, validate and normalize config. */
-
-export const loadConfig = (version: string) => {
-  const config = load(version);
+// loadConfig loads, validates, and normalizes the docs configuration for the
+// given version at the gravitational/docs clone in clonePath. fs can be
+// reassigned from the "fs" standard library package for testing.
+export const loadConfig = (version: string, clonePath: string, fs = nodefs) => {
+  const config = load(version, clonePath, fs);
 
   validateConfig<Config>(validator, config);
 
   return normalize(config, version);
-};
-
-const makeIdFromSlug = (slug: string, version) => {
-  const newSlug = slug
-    .replace(`/ver/${version}/`, "")
-    .replace(/\/$/, "")
-    .replace(/^\//, "");
-
-  // Docusaurus requires explicit index name in configs.
-  return newSlug || "index";
-};
-
-const makeDocusaurusDocFromEntry = (entry: NavigationItem, version: string) => {
-  return {
-    type: "doc",
-    label: entry.title,
-    id: makeIdFromSlug(entry.slug, version),
-  };
-};
-
-const makeDocusaurusCategoryFromEntry = (
-  entry: NavigationItem,
-  version: string
-) => {
-  const category = {
-    type: "category",
-    label: entry.title,
-    collapsible: true,
-    items: entry.entries?.map((subEntry) =>
-      subEntry.entries
-        ? makeDocusaurusCategoryFromEntry(subEntry, version)
-        : makeDocusaurusDocFromEntry(subEntry, version)
-    ),
-  };
-
-  if (entry.slug) {
-    category.link = {
-      type: "doc",
-      id: makeIdFromSlug(entry.slug, version),
-    };
-  }
-
-  return category;
-};
-
-export const docusaurusifyNavigation = (version: string) => {
-  const config = loadConfig(version);
-
-  return {
-    docs: config.navigation.map((category) => {
-      if (category.generateFrom) {
-        return {
-          type: "category",
-          label: category.title,
-          items: [
-            {
-              type: "autogenerated",
-              dirName: category.generateFrom,
-            },
-          ],
-        };
-      }
-      return {
-        type: "category",
-        label: category.title,
-        collapsible: true,
-        items: category.entries.map((entry) =>
-          entry.entries
-            ? makeDocusaurusCategoryFromEntry(entry, version)
-            : makeDocusaurusDocFromEntry(entry, version)
-        ),
-      };
-    }),
-  };
 };

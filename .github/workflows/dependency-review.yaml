@@ -2,6 +2,7 @@ name: Dependency Review
 
 on:
   pull_request:
+  merge_group:
 
 jobs:
   dependency-review:
@@ -9,4 +10,18 @@ jobs:
     permissions:
       contents: read
     with:
-      allow-dependencies-licenses: 'pkg:npm/%40inkeep/widgets, pkg:npm/domain-browser'
+      allow-additional-licenses: >
+        LicenseRef-scancode-public-domain AND Unlicense
+      # @swc/core@1.11.24 uses Apache-2.0, but
+      # LicenseRef-scancode-unknown-license-reference is also detected.
+      # https://www.npmjs.com/package/@swc/core/v/1.11.24?activeTab=code
+      # https://scancode-licensedb.aboutcode.org/unknown-license-reference.html
+      allow-dependencies-licenses: >
+        pkg:npm/swc/core,
+        pkg:npm/%40inkeep/cxkit-color-mode,
+        pkg:npm/%40inkeep/cxkit-primitives,
+        pkg:npm/%40inkeep/cxkit-react,
+        pkg:npm/%40inkeep/cxkit-styled,
+        pkg:npm/%40inkeep/cxkit-theme,
+        pkg:npm/%40inkeep/cxkit-types,
+        pkg:npm/domain-browser

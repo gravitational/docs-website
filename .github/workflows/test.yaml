@@ -1,0 +1,28 @@
+name: Test
+on:
+  pull_request:
+  merge_group:
+
+jobs:
+  run-tests:
+    name: Run tests
+    if: ${{ github.event_name != 'merge_group' }}
+    runs-on: ubuntu-22.04-2core-arm64
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 23
+          cache: 'yarn'
+      - name: Install deps
+        run: yarn && yarn playwright install --with-deps
+      - name: Run unit tests
+        run: yarn test
+      - name: Build Storybook
+        run: yarn storybook:build
+      - name: Run Storybook tests
+        run: yarn storybook:test-ci
+        # Changes to server code can break the formatting linter by mistake, so run it to
+        # make sure this hasn't happened.
+      - name: Run the docs formatting linter
+        run: scripts/lint-test.sh

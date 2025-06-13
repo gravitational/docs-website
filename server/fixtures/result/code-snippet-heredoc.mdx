@@ -1,0 +1,91 @@
+## Header
+
+<snippet>
+  <commandcomment data-type="descr">
+    Copy and Paste the below and run on the Teleport Auth server.
+  </commandcomment>
+
+  <command>
+    <commandline data-content="$ ">
+      cat > api-role.yaml <<ENDOFMESSAGE
+    </commandline>
+
+    <commandline>
+      kind: role
+    </commandline>
+
+    <commandline>
+      metadata:
+    </commandline>
+
+    <commandline>
+        name: api-role
+    </commandline>
+
+    <commandline>
+      spec:
+    </commandline>
+
+    <commandline>
+        allow:
+    </commandline>
+
+    <commandline>
+          rules:
+    </commandline>
+
+    <commandline>
+            \- resources: ['role']
+    </commandline>
+
+    <commandline>
+              verbs: ['read']
+    </commandline>
+
+    <commandline>
+        deny:
+    </commandline>
+
+    <commandline>
+          node_labels:
+    </commandline>
+
+    <commandline>
+            '*': '*'
+    </commandline>
+
+    <commandline>
+      version: v3
+    </commandline>
+
+    <commandline>
+      ENDOFMESSAGE
+    </commandline>
+  </command>
+
+  <codeline>
+
+  </codeline>
+
+  <br />
+
+  <commandcomment data-type="descr">
+    Create role
+  </commandcomment>
+
+  <command>
+    <commandline data-content="$ ">
+      tctl create -f api-role.yaml
+    </commandline>
+  </command>
+
+  <commandcomment data-type="descr">
+    Add user and login via web proxy
+  </commandcomment>
+
+  <command>
+    <commandline data-content="$ ">
+      tctl users add api-user --roles=api-role
+    </commandline>
+  </command>
+</snippet>

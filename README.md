@@ -1,4 +1,4 @@
-# Website
+# Website <br> ![goteleportcomdocs hosted by AWS Amplify](https://cronitor.io/badges/hnmp7r/production/TFpnWbbLZZMb7vaCrRjbyHjS2Bo.svg)
 
 This a port of the Teleport docs from the original custom engine to [Docusaurus](https://docusaurus.io/).
 
@@ -35,7 +35,7 @@ Settings for AWS Amplify are following:
 1. `nodejs` 20 and `yarn` v1.22.22.
 2. Build command `yarn build`
 4. Build results folder `build`
-5. Following env variables should be set: `INKEEP_API_KEY`, `INKEEP_INTEGRATION_ID`, `INKEEP_ORGANIZATION_ID`, `YOUTUBE_API_KEY`, `STRAPI_URL`, `STRAPI_AUTH_TOKEN`.
+5. Following env variables should be set: `INKEEP_API_KEY`, `YOUTUBE_API_KEY`, `STRAPI_URL`, `STRAPI_AUTH_TOKEN`.
 6. This variable should be set increase nodejs memory `NODE_OPTIONS=--max-old-space-size=8192`
 7. Add the following redirect to make 404 work:
     - Source address: `/<*>` 

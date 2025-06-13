@@ -2,6 +2,7 @@ import "dotenv/config";
 import type { Config } from "@docusaurus/types";
 import type { VFile } from "vfile";
 
+import { useDocById } from "@docusaurus/plugin-content-docs/client";
 import { getFromSecretOrEnv } from "./utils/general";
 import { loadConfig } from "./server/config-docs";
 import {
@@ -11,8 +12,7 @@ import {
 import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkIncludes from "./server/remark-includes";
 import remarkVariables from "./server/remark-variables";
-import remarkUpdateTags from "./server/remark-update-tags";
-import remarkTOC from "./server/remark-toc";
+import remarkVersionAlias from "./server/remark-version-alias";
 import remarkCodeSnippet from "./server/remark-code-snippet";
 import { fetchVideoMeta } from "./server/youtube-meta";
 import { getRedirects } from "./server/redirects";
@@ -22,6 +22,10 @@ import {
   getRootDir,
   updatePathsInIncludes,
 } from "./server/asset-path-helpers";
+import {
+  orderSidebarItems,
+  removeRedundantItems,
+} from "./server/sidebar-order";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
@@ -30,6 +34,10 @@ const latestVersion = getLatestVersion();
 
 const config: Config = {
   future: {
+    v4: {
+      // https://docusaurus.io/blog/releases/3.8#worker-threads
+      removeLegacyPostBuildHeadAttribute: true, // required
+    },
     // This speeds up build by a lot and should resolve memory issues during build
     // https://docusaurus.io/blog/releases/3.6
     experimental_faster: true,
@@ -37,8 +45,6 @@ const config: Config = {
   customFields: {
     inkeepConfig: {
       apiKey: getFromSecretOrEnv("INKEEP_API_KEY"),
-      integrationId: getFromSecretOrEnv("INKEEP_INTEGRATION_ID"),
-      organizationId: getFromSecretOrEnv("INKEEP_ORGANIZATION_ID"),
     },
   },
   clientModules: [
@@ -48,6 +54,11 @@ const config: Config = {
     "./src/styles/global.css",
   ],
   themeConfig: {
+    docs: {
+      sidebar: {
+        autoCollapseCategories: true,
+      },
+    },
     image: "/og-image.png",
     colorMode: {
       defaultMode: "light",
@@ -154,17 +165,51 @@ const config: Config = {
       },
     ],
     [
-      '@docusaurus/plugin-google-gtag',
+      "@docusaurus/plugin-google-gtag",
       {
-        trackingID: 'G-Z1BMQRVFH3',
+        trackingID: "G-Z1BMQRVFH3",
         anonymizeIP: true,
       },
     ],
     "@docusaurus/theme-classic",
     "@docusaurus/plugin-sitemap",
+    "@docusaurus/plugin-svgr",
     [
       "@docusaurus/plugin-content-docs",
       {
+        async sidebarItemsGenerator({
+          defaultSidebarItemsGenerator,
+          numberPrefixParser,
+          item,
+          version,
+          docs,
+          categoriesMetadata,
+          isCategoryIndex,
+        }) {
+          const items = await defaultSidebarItemsGenerator({
+            defaultSidebarItemsGenerator,
+            numberPrefixParser,
+            item,
+            version,
+            docs,
+            categoriesMetadata,
+            isCategoryIndex,
+          });
+
+          const idToDocPage = new Map();
+          docs.forEach((d) => {
+            idToDocPage.set(d.id, d);
+          });
+
+          const getDocPageByID = (id: string) => {
+            return idToDocPage.get(id);
+          };
+
+          return orderSidebarItems(
+            removeRedundantItems(items, item.dirName),
+            getDocPageByID
+          );
+        },
         // Host docs on the root page, later it will be exposed on goteleport.com/docs
         // next to the website and blog
         // https://docusaurus.io/docs/docs-introduction#docs-only-mode
@@ -174,6 +219,7 @@ const config: Config = {
         versions: getDocusaurusConfigVersionOptions(),
         // Our custom plugins need to be before default plugins
         beforeDefaultRemarkPlugins: [
+          [remarkVersionAlias, latestVersion],
           [
             remarkIncludes,
             {
@@ -185,7 +231,7 @@ const config: Config = {
             remarkVariables,
             {
               variables: (vfile: VFile) =>
-                loadConfig(getVersionFromVFile(vfile)).variables,
+                loadConfig(getVersionFromVFile(vfile), ".").variables,
             },
           ],
           [
@@ -200,10 +246,6 @@ const config: Config = {
               updater: updateAssetPath,
             },
           ],
-          // remarkTOC must occur after remarkUpdateAssetPaths, otherwise some
-          // table of contents links will be malformed.
-          remarkTOC,
-          remarkUpdateTags,
         ],
         beforeDefaultRehypePlugins: [
           [
@@ -220,7 +262,7 @@ const config: Config = {
       },
     ],
     extendedPostcssConfigPlugin,
-    process.env.NODE_ENV === "production" && "@docusaurus/plugin-debug",
+    process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
   ].filter(Boolean),
 };
 

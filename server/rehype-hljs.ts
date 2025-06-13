@@ -10,6 +10,7 @@ import { v4 as uuid } from "uuid";
 import remarkParse from "remark-parse";
 import type { Text, Element, Node, Parent } from "hast";
 import remarkMDX from "remark-mdx";
+import type { MdxJsxFlowElement } from "mdast-util-mdx-jsx";
 
 const makePlaceholder = (): string => {
   // UUID for uniqueness, but remove hyphens since these are often parsed
@@ -20,25 +21,20 @@ const makePlaceholder = (): string => {
 
 const placeholderPattern = "var[a-z0-9]{32}";
 
+// We only visit text nodes inside code snippets that include either the
+// <Var tag or (if we have already swapped out Vars with placeholders) a
+// placeholder.
+const isPossibleVarContainer = (node: UnistParent) => {
+  return (
+    node.type === "text" ||
+    (node.type === "element" &&
+      node.children.length === 1 &&
+      node.children[0].type === "text")
+  );
+};
+
 export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
   return (root: UnistNode, file: VFile) => {
-    // We only visit text nodes inside code snippets that include either the
-    // <Var tag or (if we have already swapped out Vars with placeholders) a
-    // placeholder.
-    const isPossibleVarContainer = (node: UnistParent) => {
-      let textValue;
-      if (
-        node.type === "text" ||
-        (node.type === "element" &&
-          node.children.length === 1 &&
-          node.children[0].type === "text")
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    };
-
     // Highlight common languages in addition to any additional configured ones.
     options.languages = { ...options.languages, ...common };
 
@@ -73,20 +69,25 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
           // Since the Var element was originally text, parse it so we can recover
           // its properties. The result should be a small HTML AST with a root
           // node and one child, the Var node.
-          const varElement = unified()
-	    // Converting to "any" since, for some reason, the type of
-	    // remarkParse doesn't match the signature of "use" despite this
-	    // being a common use case in the unified documentation.
+          const varParent = unified()
+            // Converting to "any" since, for some reason, the type of
+            // remarkParse doesn't match the signature of "use" despite this
+            // being a common use case in the unified documentation.
             .use(remarkParse as any)
             .use(remarkMDX)
+            // The parsed element begins with a root element, so get its first
+            // child, which is our Var.
             .parse(match);
 
-          placeholdersToVars[placeholder] = (varElement as Parent).children[0];
+          const varElement = (varParent as Parent)
+            .children[0] as MdxJsxFlowElement;
+
+          placeholdersToVars[placeholder] = varElement;
           return placeholder;
         });
 
         txt.value = newVal;
-      }
+      },
     );
 
     // Apply syntax highlighting
@@ -157,16 +158,23 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
             textVal += hljsSpanValue[valueIdx];
             valueIdx++;
           }
+
           if (el.type === "text") {
             newChildren.push({
               type: "text",
               value: textVal,
             });
           } else {
+            // Add properties from any containing spans to preserve syntax
+            // highlighting.
+            let props: Record<string, any>;
+            if (el.tagName == "span") {
+              props = el.properties;
+            }
             newChildren.push({
               tagName: "span",
               type: "element",
-              properties: el.properties,
+              properties: props,
               children: [
                 {
                   type: "text",
@@ -177,14 +185,26 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
           }
         }
 
-        // Delete the current span and replace it with the new children.
-        (parent.children as Array<Text | Element>).splice(
-          index,
-          1,
-          ...newChildren
-        );
+        // Alter the final AST. This depends on the effects of syntax
+        // highlighting.
+        // The element is a text element or an hljs span containing a single
+        // text element, which results from highlighting a
+        // string. Replace the text element or hljs span.
+        if (
+          el.type === "text" ||
+          ((el as Element).tagName == "span" && el.children.length == 1)
+        ) {
+          (parent.children as Array<Text | Element>).splice(
+            index,
+            1,
+            ...newChildren,
+          );
+        } else {
+          // Replace the children of the node.
+          (el.children as Array<Text | Element>) = newChildren;
+        }
         return [SKIP, index + newChildren.length];
-      }
+      },
     );
   };
 };

@@ -2,11 +2,11 @@ import React from "react";
 import clsx from "clsx";
 import { useNavbarSecondaryMenu } from "@docusaurus/theme-common/internal";
 import type { Props } from "@theme/Navbar/MobileSidebar/Layout";
-import SearchBar from "@theme/SearchBar";
 import { useNavbarMobileSidebar } from "@docusaurus/theme-common/internal";
 import { translate } from "@docusaurus/Translate";
 import IconClose from "@theme/Icon/Close";
 import Version from "@theme-original/NavbarItem/DocsVersionDropdownNavbarItem";
+import Search from "../../../../components/Search";
 
 export default function NavbarMobileSidebarLayout({
   primaryMenu,
@@ -34,7 +34,7 @@ export default function NavbarMobileSidebarLayout({
         </button>
       </div>
       <div className="navbar-sidebar__search">
-        <SearchBar />
+        <Search />
       </div>
       <div
         className={clsx("navbar-sidebar__items", {

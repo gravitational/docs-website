@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 
 import Link from "../Link";
+import New from "./assets/new-badge.svg";
 
 import styles from "./DropdownMenuItem.module.css";
 import cn from "classnames";
@@ -22,7 +23,11 @@ const DropdownMenuItem = ({
       className={clsx(styles.styledLink, !description && styles.center)}
       href={link}
     >
+      
+      <div className={styles.iconWrapper}>
       <img src={customImage.image.url || ""} width={35} height={35} alt="" />
+        {highlightBadge && <New />}
+      </div>
       <div className={styles.item}>
         <p className={styles.itemTitle}>{title}</p>
         {description && <p className={styles.description}>{description}</p>}
