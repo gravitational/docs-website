@@ -70,11 +70,11 @@ const getCurrentDir = (vfile: VFile) => {
     : resolve(`versioned_docs/version-${getVersionFromVFile(vfile)}`);
 };
 
-const getPagesDir = (vfile: VFile): string =>
-  resolve(getRootDir(vfile), "docs/pages");
-
 const getOriginalPath = (vfile: VFile) =>
-  vfile.path.replace(getCurrentDir(vfile), getPagesDir(vfile));
+  vfile.path.replace(
+    getCurrentDir(vfile),
+    resolve(getRootDir(vfile), "docs/pages"),
+  );
 
 const extBlackList = ["md", "mdx"];
 
@@ -142,12 +142,12 @@ export const updatePathsInIncludes = ({
       const absTargetPath = resolve(
         versionRootDir,
         dirname(includePath),
-        href
-      ).replace(getPagesDir(vfile), getCurrentDir(vfile));
+        href,
+      ).replace(resolve(getRootDir(vfile), "docs/pages"), getCurrentDir(vfile));
 
       (node as Link | Image | Definition).url = relative(
         absMdxPath,
-        absTargetPath
+        absTargetPath,
       );
     } else {
       const absMdxPath = resolve(getOriginalPath(vfile));
@@ -156,14 +156,19 @@ export const updatePathsInIncludes = ({
 
       (node as Link | Image | Definition).url = relative(
         dirname(absMdxPath),
-        absTargetPath
+        absTargetPath,
       );
     }
   }
 
   if ("children" in node) {
     (node as Parent).children?.forEach?.((child) =>
-      updatePathsInIncludes({ node: child, versionRootDir, includePath, vfile })
+      updatePathsInIncludes({
+        node: child,
+        versionRootDir,
+        includePath,
+        vfile,
+      }),
     );
   }
 };
