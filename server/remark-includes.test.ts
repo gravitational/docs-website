@@ -24,13 +24,13 @@ const transformer = (
   const file = new VFile(vfileOptions);
 
   return remark()
-    .use(remarkMdx)
+    .use(remarkMdx as any)
     .use(remarkGFM)
     .use(remarkIncludes, {
       rootDir: "server/fixtures/includes/",
       ...pluginOptions,
     })
-    .processSync(file);
+    .processSync(file as any);
 };
 
 describe("server/remark-includes", () => {
@@ -196,7 +196,7 @@ describe("server/remark-includes", () => {
           `${c.description}: should not have thrown, but got error: ${err}`,
         );
       }
-      expect(val).equal(c.expected);
+      expect(val).toEqual(c.expected);
     });
   });
 
