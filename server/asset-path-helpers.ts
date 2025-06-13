@@ -152,7 +152,12 @@ export const updatePathsInIncludes = ({
         absTargetPath,
       );
     } else {
-      const absMdxPath = resolve(getOriginalPath(vfile));
+      const absMdxPath = resolve(
+        vfile.path.replace(
+          getCurrentDir(vfile),
+          resolve(getRootDir(vfile), "docs/pages"),
+        ),
+      );
 
       const absTargetPath = resolve(versionRootDir, dirname(includePath), href);
 
