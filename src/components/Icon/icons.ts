@@ -25,7 +25,7 @@ export { default as desktop } from "./svg/desktop.svg";
 export { default as docker } from "./svg/docker.svg";
 export { default as download } from "./svg/download.svg";
 export { default as earth } from "./svg/earth.svg";
-export { default as ec2 } from "./svg/ec2.svg";
+export { default as ec2 } from "./svg/aws-ec2.svg";
 export { default as edit } from "./svg/edit.svg";
 export { default as ellipsis } from "./svg/ellipsis.svg";
 export { default as error } from "./svg/error.svg";
