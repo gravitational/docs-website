@@ -120,6 +120,24 @@ export const updatePathsInIncludes = ({
   ) {
     const href = (node as Link | Image | Definition).url;
 
+    let version;
+    if (isCurrent(vfile)) {
+      version = current;
+    }
+    const projectPath = getProjectPath(vfile);
+
+    const postPrepVersion = REGEXP_POST_PREPARE_VERSION.exec(projectPath);
+    if (!!postPrepVersion) {
+      version = postPrepVersion[1];
+    }
+
+    const prePrepVersion = REGEXP_PRE_PREPARE_VERSION.exec(projectPath);
+    if (!!prePrepVersion) {
+      version = prePrepVersion[1];
+    }
+
+    throw new Error(`unable to extract a version from filepath ${projectPath}`);
+
     // Ignore non-strings, absolute paths, web URLs, and links consisting only
     // of anchors (these will end up pointing to the containing page).
     if (
@@ -135,11 +153,11 @@ export const updatePathsInIncludes = ({
     let currentDir: string;
     // The page is in the pre-migration directory, i.e., we're linting it
     if (vfile.path.startsWith("content")) {
-      currentDir = resolve(`content/${getVersionFromVFile(vfile)}/docs/pages`);
+      currentDir = resolve(`content/${version}/docs/pages`);
     }
     currentDir = isCurrent(vfile)
       ? resolve("docs")
-      : resolve(`versioned_docs/version-${getVersionFromVFile(vfile)}`);
+      : resolve(`versioned_docs/version-${version}`);
 
     if (node.type === "link") {
       // We find the relative link from the directory containing the partial to
@@ -152,10 +170,7 @@ export const updatePathsInIncludes = ({
         versionRootDir,
         dirname(includePath),
         href,
-      ).replace(
-        resolve(resolve("content", getVersionFromVFile(vfile)), "docs/pages"),
-        currentDir,
-      );
+      ).replace(resolve(resolve("content", version), "docs/pages"), currentDir);
 
       (node as Link | Image | Definition).url = relative(
         absMdxPath,
