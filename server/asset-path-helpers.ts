@@ -113,40 +113,41 @@ export const updatePathsInIncludes = ({
   includePath: string;
   vfile: VFile;
 }) => {
+  const projectPath = vfile.path.replace(process.cwd(), "");
+  const isCurrent = projectPath.startsWith("/docs/");
+
+  let version;
+  if (isCurrent) {
+    version = current;
+  }
+
+  const postPrepVersion = REGEXP_POST_PREPARE_VERSION.exec(projectPath);
+  if (!!postPrepVersion) {
+    version = postPrepVersion[1];
+  }
+
+  const prePrepVersion = REGEXP_PRE_PREPARE_VERSION.exec(projectPath);
+  if (!!prePrepVersion) {
+    version = prePrepVersion[1];
+  }
+
+  // TODO: not sure what this refers to. It's from inlining getCurrentDir
+  let currentDir: string;
+  // The page is in the pre-migration directory, i.e., we're linting it
+  if (vfile.path.startsWith("content")) {
+    currentDir = resolve(`content/${version}/docs/pages`);
+  } else {
+    currentDir = isCurrent
+      ? resolve("docs")
+      : resolve(`versioned_docs/version-${version}`);
+  }
+
   if (
     node.type === "image" ||
     node.type === "link" ||
     node.type === "definition"
   ) {
     const href = (node as Link | Image | Definition).url;
-
-    const projectPath = vfile.path.replace(process.cwd(), "");
-    const isCurrent = projectPath.startsWith("/docs/");
-
-    let version;
-    if (isCurrent) {
-      version = current;
-    }
-
-    const postPrepVersion = REGEXP_POST_PREPARE_VERSION.exec(projectPath);
-    if (!!postPrepVersion) {
-      version = postPrepVersion[1];
-    }
-
-    const prePrepVersion = REGEXP_PRE_PREPARE_VERSION.exec(projectPath);
-    if (!!prePrepVersion) {
-      version = prePrepVersion[1];
-    }
-
-    // TODO: not sure what this refers to. It's from inlining getCurrentDir
-    let currentDir: string;
-    // The page is in the pre-migration directory, i.e., we're linting it
-    if (vfile.path.startsWith("content")) {
-      currentDir = resolve(`content/${version}/docs/pages`);
-    }
-    currentDir = isCurrent
-      ? resolve("docs")
-      : resolve(`versioned_docs/version-${version}`);
 
     // Ignore non-strings, absolute paths, web URLs, and links consisting only
     // of anchors (these will end up pointing to the containing page).
