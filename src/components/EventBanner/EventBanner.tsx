@@ -8,127 +8,126 @@ import MapPin from "./assets/map-pin.svg";
 import VirtualIcon from "./assets/video-meeting.svg";
 import styles from "./EventBanner.module.css";
 
-export interface EventProps {
-  end?: string | null;
-  link?: string;
-  location?: string | null;
-  start?: string | null;
-  title?: string | null;
-  cta?: string;
-  isVirtual?: boolean;
-  bannerType?: "custom" | "event" | string;
-  defaultContent?: {
+export type BannerData = {
+  bannerText?: string;
+  bannerType?: "event" | "custom";
+  featuredEvent?: {
     title: string;
+    description: string;
+    end?: string;
+    isVirtual?: boolean;
+    start: string;
     link: string;
-    cta: string;
+    location?: string;
+    cardBackground?: { url: string };
   };
-  sideButtons?: {
-    first?: {
-      title: string;
-      url: string;
-    };
-    second?: {
-      title: string;
-      url: string;
-    };
-  };
-}
+  ctaText?: string;
+  link?: string;
+  firstButton?: { title: string; link?: string };
+  secondButton?: { title: string; link?: string };
+  expiredText?: string;
+  expiredLink?: string;
+  expiredCTAText?: string;
+};
 
-export interface Events {
-  events: EventProps[];
-}
-
-export interface Event {
-  selectedEvent: EventProps;
-}
-
-export const getComingEvent = (event?: EventProps) => {
-  if (!event || !event?.title)
-    return { ...event?.defaultContent, sideButtons: { ...event?.sideButtons } };
+// Check whether to use default view or not (Default = Expired fields)
+const showDefault = (event?: BannerData) => {
+  if (!event || (!event.featuredEvent?.title && !event?.bannerText))
+    return true;
   const currentDate = new Date();
-  const endDate = event.end ? new Date(event.end) : null;
+  const endDate = event.featuredEvent?.end
+    ? new Date(event.featuredEvent.end)
+    : null;
 
   if (endDate && currentDate > endDate) {
     //Event end date has gone
-    return { ...event?.defaultContent, sideButtons: { ...event?.sideButtons } };
+    return true;
   }
-  return event; //No end date set or end date is in the future
+  return false; //No end date set or end date is in the future
 };
 
 export const EventBanner: React.FC<{
-  initialEvent: EventProps;
+  initialEvent: BannerData;
 }> = ({ initialEvent }) => {
-  const [event, setEvent] = useState<EventProps>(initialEvent);
-  /* There was an excessive amount of api requests coming in to fetch the event data
-so this fetch is disable until we find and fix the issue or decide to completely drop this version of the revalidation
-useEffect(() => {
-    const fetchEvent = async () => {
-      const tempEvent = await fetch("/api/getfeaturedevent/").then(
-        (res) => res.status === 200 && res.json()
-      );
-      tempEvent && setEvent(tempEvent.data as EventProps);
-    };
-    fetchEvent();
-  }, []);*/
-  const { sideButtons } = event;
+  const [event, setEvent] = useState<BannerData>(initialEvent);
+  const defaultView = showDefault(initialEvent);
+
+  const { firstButton, secondButton } = event;
   return (
     <div className={styles.banner}>
-      <a className={styles.linkWrapper} href={event.link}>
-        <div className={styles.mainText}>{event.title}</div>
-        {(event.start || event.location) && (
+      <a
+        className={styles.linkWrapper}
+        href={
+          defaultView
+            ? event.expiredLink
+            : event.featuredEvent?.link || event.link
+        }
+      >
+        <div className={styles.mainText}>
+          {" "}
+          {defaultView
+            ? event?.expiredText
+            : event?.featuredEvent?.title || event?.bannerText}
+        </div>
+        {(event?.featuredEvent?.start || event?.featuredEvent?.location) && (
           <div className={styles.container}>
-            {event.start && (
+            {event?.featuredEvent?.start && (
               <div className={styles.styledBox}>
                 <div className={styles.icon}>
                   <CalendarTrans />
                 </div>
                 <div className={styles.styledText}>
-                  {getParsedDate(new Date(event.start), "MMM d")}
-                  {event.end != null &&
-                    "-" + getParsedDate(new Date(event.end), "d")}
+                  {getParsedDate(new Date(event?.featuredEvent.start), "MMM d")}
+                  {event.featuredEvent?.end != null &&
+                    "-" + getParsedDate(new Date(event.featuredEvent.end), "d")}
                 </div>
               </div>
             )}
             {event.bannerType !== "custom" &&
-              (event?.location || event?.isVirtual) && (
+              (event?.featuredEvent?.location ||
+                event?.featuredEvent?.isVirtual) && (
                 <div className={styles.styledBox}>
                   <div className={styles.icon}>
-                    {event?.location === "Virtual" || event.isVirtual ? (
+                    {event?.featuredEvent?.location === "Virtual" ||
+                    event.featuredEvent?.isVirtual ? (
                       <VirtualIcon viewBox="0 0 16 16" />
                     ) : (
                       <MapPin />
                     )}
                   </div>
                   <div className={styles.styledtext}>
-                    {event?.location || (event?.isVirtual && "Virtual")}
+                    {event?.featuredEvent?.location ||
+                      (event?.featuredEvent?.isVirtual && "Virtual")}
                   </div>
                 </div>
               )}
           </div>
         )}
         <div className={styles.ctaWrapper}>
-          <div className={styles.linkButton}>{event?.cta}</div>
+          <div className={styles.linkButton}>
+            {defaultView ? event.expiredCTAText : event?.ctaText}
+          </div>
           <div className={styles.icon}>
             <ArrowRight />
           </div>
         </div>
       </a>
-      {sideButtons && (
+      {(firstButton || secondButton) && (
         <div className={styles.sideButtonBox}>
-          {sideButtons?.first && (
+          {firstButton && firstButton.link&& (
             <div className={styles.linkButton}>
-              <a href={sideButtons.first?.url || ""}>
-                {sideButtons.first?.title}
+              <a href={firstButton.link || ""}>
+                {firstButton.title}
               </a>
               <div className={styles.icon}>
                 <ArrowRight />
               </div>
             </div>
           )}
-          {sideButtons?.second && (
+          {secondButton && secondButton.link && (
             <div className={styles.linkButton}>
-              <a href={sideButtons.second?.url || ""}>
-                {sideButtons.second?.title}
+              <a href={secondButton.link|| ""}>
+                {secondButton.title}
               </a>
               <div className={styles.icon}>
                 <ArrowRight />
