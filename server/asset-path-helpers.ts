@@ -137,8 +137,12 @@ export const updatePathsInIncludes = ({
     }
 
     if (node.type === "link") {
+      // We find the relative link from the directory containing the partial to
+      // the path of the link target.
       const absMdxPath = dirname(vfile.path);
 
+      // Find the absolute path of the target asset in the pre-migration docs content
+      // directory.
       const absTargetPath = resolve(
         versionRootDir,
         dirname(includePath),
