@@ -131,6 +131,16 @@ export const updatePathsInIncludes = ({
       return href;
     }
 
+    // TODO: not sure what this refers to. It's from inlining getCurrentDir
+    let currentDir: string;
+    // The page is in the pre-migration directory, i.e., we're linting it
+    if (vfile.path.startsWith("content")) {
+      currentDir = resolve(`content/${getVersionFromVFile(vfile)}/docs/pages`);
+    }
+    currentDir = isCurrent(vfile)
+      ? resolve("docs")
+      : resolve(`versioned_docs/version-${getVersionFromVFile(vfile)}`);
+
     if (node.type === "link") {
       // We find the relative link from the directory containing the partial to
       // the path of the link target.
@@ -144,7 +154,7 @@ export const updatePathsInIncludes = ({
         href,
       ).replace(
         resolve(resolve("content", getVersionFromVFile(vfile)), "docs/pages"),
-        getCurrentDir(vfile),
+        currentDir,
       );
 
       (node as Link | Image | Definition).url = relative(
@@ -154,7 +164,7 @@ export const updatePathsInIncludes = ({
     } else {
       const absMdxPath = resolve(
         vfile.path.replace(
-          getCurrentDir(vfile),
+          currentDir,
           resolve(getRootDir(vfile), "docs/pages"),
         ),
       );
