@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { NavigationItem } from "../../../server/sanity-types";
+import type { NavigationItem } from "../../../server/strapi-types";
 import Icon from "../Icon";
 import Link from "../Link";
 
@@ -10,7 +10,7 @@ import DropdownSection from "./DropdownSection";
 import styles from "./DropdownSubMenu.module.css";
 
 export interface DropdownMenuProps {
-  items: NavigationItem["submenus"];
+  items: NavigationItem["navSections"];
 }
 
 const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
@@ -18,11 +18,11 @@ const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
   return (
     <div className={styles.subMenuWrapper}>
       <div className={styles.subMenus}>
-        {items.map(({ submenuTitle, titleLink }, index) => {
-          if (titleLink && titleLink.length > 0) {
+        {items.map(({ submenuTitle, submenuTitleLink}, index) => {
+          if (submenuTitle && submenuTitleLink?.length > 0) {
             return (
               <Link
-                href={titleLink}
+                href={submenuTitle}
                 className={styles.submenuLink}
                 key={`submenu-${submenuTitle}-${index}`}
               >
@@ -55,7 +55,7 @@ const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
         })}
       </div>
       {items
-        ?.filter(({ titleLink }) => !titleLink)
+        ?.filter(({ submenuTitleLink }) => !submenuTitleLink)
         .map(({ submenuSections, submenuTitle }, i) => (
           <div
             key={`wrapper${submenuTitle}-${i}`}

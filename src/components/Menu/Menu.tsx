@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { NavigationItem } from "../../../server/sanity-types";
+import type { NavigationItem } from "../../../server/strapi-types";
 
 import MenuCategory from "./Category";
 import styles from "./Menu.module.css";

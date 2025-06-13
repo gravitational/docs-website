@@ -21,8 +21,7 @@
     transition-duration: 0s;
     opacity: 0.56;
   }
-
-  ,
+  
   &&:disabled {
     background-color: var(--color-lightest-gray);
     border-color: var(--lightest-gray);

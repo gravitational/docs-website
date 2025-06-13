@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useClickAway } from "react-use";
 
-import { HeaderNavigation } from "../../../server/sanity-types";
+import { HeaderNavigation } from "../../../server/strapi-types";
 import Button from "../Button";
 import Link from "../Link";
 import Icon from "../Icon";
@@ -9,14 +9,11 @@ import Icon from "../Icon";
 import styles from "./HeaderCTA.module.css";
 
 const HeaderCTA = ({
-  ctas,
-  actionButtons,
+ rightSide
 }: {
-  ctas: HeaderNavigation["navbarData"]["rightSide"];
-  actionButtons: HeaderNavigation["bannerButtons"];
+  rightSide: HeaderNavigation["rightSide"];
 }) => {
-  const { CTAs } = ctas || {};
-  const { first, second } = actionButtons || {};
+  const { searchButton, ctas, bannerButtons } = rightSide || {}
   const ref = useRef(null);
 
   const [isSignInVisible, setIsSignInVisible] = useState<boolean>(false);
@@ -29,16 +26,16 @@ const HeaderCTA = ({
 
   return (
     <div className={styles.wrapper}>
-      {CTAs && (
+      {ctas && (
         <div className={styles.ctaWrapper}>
-          {CTAs.map((cta, i) => (
+          {ctas.map((cta, i) => (
             <Button
               as="link"
               className={styles.cta}
               href={cta.href}
               key={`navCTA-${cta.href}-${i}`}
               variant={i !== 0 ? "secondary" : "primary"}
-              id={cta?.id || ""}
+              id={cta?.elementId || ""}
               shape="md"
             >
               {cta.title}
@@ -46,24 +43,17 @@ const HeaderCTA = ({
           ))}
         </div>
       )}
-      {(first || second) && (
+      {bannerButtons && (
         <div className={styles.actionButtonFlex}>
-          {first && (
-            <Link className={styles.styledLink} href={first?.url || ""}>
+          {bannerButtons.map((button) =>(
+            <Link className={styles.styledLink} href={button?.link || ""}>
               <div className={styles.flex}>
-                {first?.title}
+                {button?.title}
                 <Icon name="arrowRight" />
               </div>
             </Link>
-          )}
-          {second && (
-            <Link className={styles.styledLink} href={second?.url || ""}>
-              <div className={styles.flex}>
-                {second?.title}
-                <Icon name="arrowRight" />
-              </div>
-            </Link>
-          )}
+          ))}
+       
         </div>
       )}
     </div>

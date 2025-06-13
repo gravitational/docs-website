@@ -4,7 +4,7 @@ import { useWindowSize } from "@docusaurus/theme-common";
 
 import { EventBanner, getComingEvent } from "../EventBanner";
 
-import type { HeaderNavigation } from "../../../server/sanity-types";
+import type { HeaderNavigation } from "../../../server/strapi-types";
 import blockBodyScroll from "../../utils/block-body-scroll";
 import Icon from "../Icon";
 import Menu from "../Menu";
@@ -27,9 +27,9 @@ const Header = () => {
 
   const windowSize = useWindowSize();
 
-  const { navbarData, bannerButtons } = data as unknown as HeaderNavigation;
-  const mobileBtn = navbarData.rightSide?.mobileBtn;
-  const logo = navbarData.logo;
+  const { menuItems, rightSide } = data as unknown as HeaderNavigation;
+  const mobileBtn = rightSide?.mobileButton;
+  const logo = data.logo;
   const event = eventData ? getComingEvent(eventData) : null;
 
   useEffect(() => {
@@ -54,13 +54,13 @@ const Header = () => {
       {event && <EventBanner initialEvent={event} />}
       <header className={`${styles.wrapper} ${event ? styles.margin : " "}`}>
         <a href="/" className={styles["logo-link"]}>
-          <img src={logo || ""} alt="Teleport logo" width={121} height={24} />
+          <img src={logo.url || ""} alt="Teleport logo" width={121} height={24} />
         </a>
         {mobileBtn && (
           <Button
             as="link"
             href={mobileBtn?.href || ""}
-            id={mobileBtn?.id || ""}
+            id={mobileBtn?.elementId || ""}
             variant="secondary"
             className={styles.mobileCTA}
           >
@@ -84,11 +84,10 @@ const Header = () => {
           })}
           style={{ top: event ? "96px" : "48px" }}
         >
-          <Menu navbarData={navbarData.menu} />
-          {navbarData?.rightSide && (
+          <Menu navbarData={menuItems} />
+          {rightSide && (
             <HeaderCTA
-              ctas={navbarData.rightSide}
-              actionButtons={bannerButtons}
+              rightSide={rightSide}
             />
           )}
         </div>
