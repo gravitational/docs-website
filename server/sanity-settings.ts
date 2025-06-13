@@ -26,20 +26,5 @@ export const generateEvent = async ({ file }: GenerateEventProps) => {
   }
 };
 export const generateNavigation = async ({ file }: { file: string }) => {
-  let navData = undefined;
-  try {
-    navData = await getNavData();
-    if (!navData) return;
-  } catch (error) {
-    console.error("No header navigation data returned");
-    return;
-  }
-  if (navData) {
-    try {
-      writeFileSync(file, JSON.stringify(navData));
-      console.log("Writing header navigation data to file: ", file);
-    } catch (error) {
-      console.error("Error writing header navigation data to file:", error);
-    }
-  }
+
 };
