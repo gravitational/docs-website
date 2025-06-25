@@ -2,14 +2,13 @@ import { resolve } from "path";
 import remarkVariables from "./.remark-build/server/remark-variables.mjs";
 import remarkIncludes from "./.remark-build/server/remark-includes.mjs";
 import { remarkLintTeleportDocsLinks } from "./.remark-build/server/lint-teleport-docs-links.mjs";
+import { remarkLintFrontmatter } from "./.remark-build/server/lint-frontmatter.mjs";
 import {
   getVersion,
   getVersionRootPath,
 } from "./.remark-build/server/docs-helpers.mjs";
 import { loadConfig } from "./.remark-build/server/config-docs.mjs";
-import {
-  updatePathsInIncludes,
-} from "./.remark-build//server/asset-path-helpers.mjs";
+import { updatePathsInIncludes } from "./.remark-build//server/asset-path-helpers.mjs";
 
 const configFix = {
   settings: {
@@ -49,6 +48,7 @@ const configLint = {
     ["lint-maximum-heading-length", false],
     ["lint-no-shortcut-reference-link", false],
     ["lint-no-file-name-irregular-characters", false],
+    [remarkLintFrontmatter],
     [
       remarkIncludes, // Lints (!include.ext!) syntax
       {
