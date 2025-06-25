@@ -1,30 +1,29 @@
 import { writeFileSync } from "fs";
-import { fetchEventsFromSanity, getNavData } from "./sanity";
+import { getNavData, getBannerData } from "./strapi";
 
 export type GenerateEventProps = {
   file: string; // path to file
 };
 
 export const generateEvent = async ({ file }: GenerateEventProps) => {
-  let eventData = undefined;
-  try {
-    eventData = await fetchEventsFromSanity();
-    if (!eventData) return;
-  } catch (error) {
-    console.error("No banner data returned");
-    return;
-  }
-  if (eventData) {
+  const writeEventData = (data: object) => {
     try {
-      writeFileSync(file, JSON.stringify(eventData));
-      console.log("");
+      writeFileSync(file, JSON.stringify(data));
       console.log("Writing event data to file...", "\n");
       console.log("FILE:", file, "\n");
     } catch (error) {
       console.error("Error writing event data to file:", error);
     }
+  };
+  let eventData = undefined;
+  eventData = await getBannerData();
+  if (eventData) {
+    writeEventData(eventData);
+  } else {
+    writeEventData({});
   }
 };
+
 export const generateNavigation = async ({ file }: { file: string }) => {
   let navData = undefined;
   try {
@@ -43,3 +42,4 @@ export const generateNavigation = async ({ file }: { file: string }) => {
     }
   }
 };
+
