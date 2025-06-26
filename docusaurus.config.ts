@@ -12,7 +12,7 @@ import {
 import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkIncludes from "./server/remark-includes";
 import remarkVariables from "./server/remark-variables";
-import remarkUpdateTags from "./server/remark-update-tags";
+import remarkVersionAlias from "./server/remark-version-alias";
 import remarkCodeSnippet from "./server/remark-code-snippet";
 import { fetchVideoMeta } from "./server/youtube-meta";
 import { getRedirects } from "./server/redirects";
@@ -34,6 +34,10 @@ const latestVersion = getLatestVersion();
 
 const config: Config = {
   future: {
+    v4: {
+      // https://docusaurus.io/blog/releases/3.8#worker-threads
+      removeLegacyPostBuildHeadAttribute: true, // required
+    },
     // This speeds up build by a lot and should resolve memory issues during build
     // https://docusaurus.io/blog/releases/3.6
     experimental_faster: true,
@@ -163,13 +167,24 @@ const config: Config = {
     [
       "@docusaurus/plugin-google-gtag",
       {
-        trackingID: "G-Z1BMQRVFH3",
+        trackingID: "G-036NBYBND3",
         anonymizeIP: true,
       },
     ],
     "@docusaurus/theme-classic",
     "@docusaurus/plugin-sitemap",
-    "@docusaurus/plugin-svgr",
+    [
+      "@docusaurus/plugin-svgr",
+      {
+        svgrConfig: {
+          svgoConfig: {
+            plugins: [
+              "prefixIds"
+            ],
+          },
+        },
+      }
+    ],
     [
       "@docusaurus/plugin-content-docs",
       {
@@ -215,6 +230,7 @@ const config: Config = {
         versions: getDocusaurusConfigVersionOptions(),
         // Our custom plugins need to be before default plugins
         beforeDefaultRemarkPlugins: [
+          [remarkVersionAlias, latestVersion],
           [
             remarkIncludes,
             {
@@ -241,7 +257,6 @@ const config: Config = {
               updater: updateAssetPath,
             },
           ],
-          remarkUpdateTags,
         ],
         beforeDefaultRehypePlugins: [
           [
