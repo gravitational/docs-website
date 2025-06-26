@@ -15,6 +15,7 @@ import MDXLi from "@theme/MDXComponents/Li";
 import MDXImg from "@theme/MDXComponents/Img";
 import Mermaid from "@theme/Mermaid";
 import Command, { CommandLine, CommandComment } from "/src/components/Command";
+import ThumbsFeedback from "/src/components/ThumbsFeedback";
 import Snippet from "/src/components/Snippet";
 import { Var } from "/src/components/Variables";
 import type { MDXComponentsObject } from "@theme/MDXComponents";
@@ -53,6 +54,7 @@ const MDXComponents: MDXComponentsObject = {
   snippet: Snippet,
   ul: MDXUl,
   Var: (props) => <Var {...props} />, // needed to circumvent props mismatch in types
+ThumbsFeedback,
 };
 
 export default MDXComponents;
