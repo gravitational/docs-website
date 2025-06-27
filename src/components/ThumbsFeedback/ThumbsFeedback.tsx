@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import styles from './ThumbsFeedback.module.css';
-import { DocsEvent } from "@site/utils/tracking";
-
 
 const ThumbsFeedback = () => {
   const [submitted, setSubmitted] = useState(false);
 
   const handleFeedback = (type: 'up' | 'down') => {
     console.debug(`[ThumbsFeedback] Feedback button clicked:`, type);
-    DocsEvent("feedback", {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'feedback', {
         event_category: 'Thumbs',
         event_label: type,
         value: 1,
       });
-
+    } else {
+      console.log('gtag not available', type);
+    }
     setSubmitted(true);
   };
 
