@@ -1,25 +1,24 @@
 import { lintRule } from "unified-lint-rule";
-import { visit } from "unist-util-visit";
+import { visit, SKIP } from "unist-util-visit";
 import type { Node } from "unist";
 import { parse } from "yaml";
 import type { Literal } from "mdast";
 
-const possibleProducts = [
+const possibleProducts = new Set([
   "identity-governance",
   "identity-security",
   "mwi",
   "zero-trust",
   "platform-wide",
-];
+]);
 
-const possibleTypes = [
+const possibleTypes = new Set([
   "how-to",
   "conceptual",
   "get-started",
   "reference",
   "faq",
-  "other",
-];
+]);
 
 export const remarkLintFrontmatter = lintRule(
   "remark-lint:frontmatter",
@@ -30,24 +29,33 @@ export const remarkLintFrontmatter = lintRule(
       hasFrontmatter = true;
 
       const frontmatter = parse((node as Literal).value);
-      if (!frontmatter.hasOwnProperty("type")) {
-        vfile.message(`missing frontmatter field "type"`, node.position);
-      } else if (!possibleTypes.includes(frontmatter.type)) {
+      if (!frontmatter.hasOwnProperty("labels")) {
         vfile.message(
-          `the "type" frontmatter field must be one of: ${possibleTypes.join(", ")}`,
+          `every docs page must include a frontmatter field called "labels"`,
           node.position,
         );
+        return SKIP;
       }
 
-      if (!frontmatter.hasOwnProperty("product")) {
-        vfile.message(`missing frontmatter field "product"`, node.position);
-      } else if (!possibleProducts.includes(frontmatter.product)) {
+      if (!Array.isArray(frontmatter.labels)) {
         vfile.message(
-          `the "product" frontmatter field must be one of: ${possibleProducts.join(", ")}`,
+          `the "labels" frontmatter field must be a list with at least one value`,
+          node.position,
+        );
+        return SKIP;
+      }
+
+      const labels = new Set(frontmatter.labels);
+      const allLabels = possibleProducts.union(possibleTypes);
+      const unrecognizedLabels = labels.difference(allLabels);
+      if (unrecognizedLabels.size > 0) {
+        vfile.message(
+          `unrecognized label values: ${[...unrecognizedLabels.values()].join(", ")} - valid labels are: ${[...allLabels.values()].join(", ")}`,
           node.position,
         );
       }
     });
+
     if (!hasFrontmatter) {
       vfile.message(
         `the page must begin with a YAML frontmatter document surrounded by "---" separators`,
