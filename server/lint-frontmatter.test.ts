@@ -30,57 +30,25 @@ describe("server/lint-frontmatter", () => {
       input: `---
 title: "My page"
 description: "Provides documentation."
-type: how-to
+labels:
+  - how-to
 ---
 `,
-      expected: ['missing frontmatter field "product"'],
+      expected: [
+        'missing item under the "labels" frontmatter field for product - must include one of: identity-governance, identity-security, mwi, zero-trust, platform-wide',
+      ],
     },
     {
       description: "no type",
       input: `---
 title: "My page"
 description: "Provides documentation."
-product: identity-governance
----
-`,
-      expected: ['missing frontmatter field "type"'],
-    },
-    {
-      description: "no product or type",
-      input: `---
-title: "My page"
-description: "Provides documentation."
+labels: 
+ - identity-governance
 ---
 `,
       expected: [
-        'missing frontmatter field "type"',
-        'missing frontmatter field "product"',
-      ],
-    },
-    {
-      description: "invalid product",
-      input: `---
-title: "My page"
-description: "Provides documentation."
-product: "id-gov"
-type: "how-to"
----
-`,
-      expected: [
-        'the "product" frontmatter field must be one of: identity-governance, identity-security, mwi, zero-trust, platform-wide',
-      ],
-    },
-    {
-      description: "invalid type",
-      input: `---
-title: "My page"
-description: "Provides documentation."
-product: "mwi"
-type: "architecture"
----
-`,
-      expected: [
-        'the "type" frontmatter field must be one of: how-to, conceptual, get-started, reference, faq, other',
+        'missing item under the "labels" frontmatter field for guide type - must include one of: how-to, conceptual, get-started, reference, faq, other',
       ],
     },
     {
@@ -88,11 +56,43 @@ type: "architecture"
       input: `---
 title: "My page"
 description: "Provides documentation."
-product: "mwi"
-type: "how-to"
+labels:
+  - mwi
+  - how-to
+  - arbitrary
 ---
 `,
       expected: [],
+    },
+    {
+      description: "multiple products",
+      input: `---
+title: "My page"
+description: "Provides documentation."
+labels:
+  - how-to
+  - identity-security
+  - identity-governance
+---
+`,
+      expected: [
+        'too many "labels" frontmatter values for product - must include one of: identity-governance, identity-security, mwi, zero-trust, platform-wide',
+      ],
+    },
+    {
+      description: "multiple guide types",
+      input: `---
+title: "My page"
+description: "Provides documentation."
+labels:
+  - how-to
+  - reference
+  - identity-security
+---
+`,
+      expected: [
+        'too many "labels" frontmatter values for guide type - must include one of: how-to, conceptual, get-started, reference, faq, other',
+      ],
     },
     {
       description: "no frontmatter detected",
@@ -107,6 +107,29 @@ type: "how-to"
 `,
       expected: [
         `the page must begin with a YAML frontmatter document surrounded by "---" separators`,
+      ],
+    },
+    {
+      description: "no labels field",
+      input: `---
+title: "My page"
+description: "Provides documentation."
+---
+`,
+      expected: [
+        'every docs page must include a frontmatter field called "labels"',
+      ],
+    },
+    {
+      description: "labels field is not a list",
+      input: `---
+title: "My page"
+description: "Provides documentation."
+labels: label
+---
+`,
+      expected: [
+        'the "labels" frontmatter field must be a list with at least one value',
       ],
     },
   ];
