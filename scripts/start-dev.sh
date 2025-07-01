@@ -67,7 +67,7 @@ reload() {
 
 cleanup() {
     echo -e "\n🧹 Cleaning up..."
-    jobs -p | xargs kill
+    jobs -p | xargs -r kill 2>/dev/null || true
 }
 
 trap cleanup SIGINT SIGTERM
