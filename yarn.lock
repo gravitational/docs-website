@@ -1046,10 +1046,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/media-query-list-parser/-/media-query-list-parser-4.0.3.tgz#7aec77bcb89c2da80ef207e73f474ef9e1b3cdf1"
   integrity sha512-HAYH7d3TLRHDOUQK4mZKf9k9Ph/m8Akstg66ywKR4SFAigjs3yBiUeZtFxywiTm5moZMAp/5W/ZuFnNXXYLuuQ==
 
-"@csstools/postcss-cascade-layers@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@csstools/postcss-cascade-layers/-/postcss-cascade-layers-5.0.1.tgz#9640313e64b5e39133de7e38a5aa7f40dc259597"
-  integrity sha512-XOfhI7GShVcKiKwmPAnWSqd2tBR0uxt+runAxttbSp/LY2U16yAVPmAf7e9q4JJ0d+xMNmpwNDLBXnmRCl3HMQ==
+"@csstools/postcss-cascade-layers@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@csstools/postcss-cascade-layers/-/postcss-cascade-layers-5.0.2.tgz#dd2c70db3867b88975f2922da3bfbae7d7a2cae7"
+  integrity sha512-nWBE08nhO8uWl6kSAeCx4im7QfVko3zLrtgWZY4/bP87zrSPpSyN/3W3TDqz1jJuH+kbKOHXg5rJnK+ZVYcFFg==
   dependencies:
     "@csstools/selector-specificity" "^5.0.0"
     postcss-selector-parser "^7.0.0"
@@ -1946,19 +1946,19 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@inkeep/cxkit-color-mode@0.5.89":
-  version "0.5.89"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-color-mode/-/cxkit-color-mode-0.5.89.tgz#4a5471b3dc453262ef0277908c30e108b1095331"
-  integrity sha512-h89/i67uEiJh0Bqf/dt9nJWv3IjCnmu96nkomocZ3evPKrLeBq13IygFIxtvmvXfx1QBBdmAD+x933rc5RcgFA==
+"@inkeep/cxkit-color-mode@0.5.91":
+  version "0.5.91"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-color-mode/-/cxkit-color-mode-0.5.91.tgz#a90d5f6b774a99db15012276eb2070a95bcd2c44"
+  integrity sha512-YtRvt99QUN8GMXXdZhgzuiliEyz0xm+0VHdzMg+Iv8YxxgmFbJAuYt6hWgDk1QwzZtcQkDabWZbmN49YNKs8aA==
 
-"@inkeep/cxkit-primitives@0.5.89":
-  version "0.5.89"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-primitives/-/cxkit-primitives-0.5.89.tgz#1f8252f18754aab2c28dd0e1436381b4323d2c0b"
-  integrity sha512-ugC80ivuimKmzcm8RktAL9C7YHss7CneerbHnNy+uipCx9ZcIY5dRfgMqIdoLG6fL7fhSm6E0QElGL8YjjfN6g==
+"@inkeep/cxkit-primitives@0.5.91":
+  version "0.5.91"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-primitives/-/cxkit-primitives-0.5.91.tgz#5e6a322a5134820a0ed9427674485fa1c78ed422"
+  integrity sha512-97SdJjifsI8xHZ4qlXHkljrqihxZddSG9hz1RRccKYmbW3HiNtfthvtW88bjrgg9dM11I4acW0/E349twnj4sQ==
   dependencies:
-    "@inkeep/cxkit-color-mode" "0.5.89"
-    "@inkeep/cxkit-theme" "0.5.89"
-    "@inkeep/cxkit-types" "0.5.89"
+    "@inkeep/cxkit-color-mode" "0.5.91"
+    "@inkeep/cxkit-theme" "0.5.91"
+    "@inkeep/cxkit-types" "0.5.91"
     "@radix-ui/primitive" "^1.1.1"
     "@radix-ui/react-avatar" "1.1.2"
     "@radix-ui/react-checkbox" "1.1.3"
@@ -2003,37 +2003,37 @@
     unist-util-visit "^5.0.0"
     use-sync-external-store "^1.4.0"
 
-"@inkeep/cxkit-react@^0.5.89":
-  version "0.5.89"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-react/-/cxkit-react-0.5.89.tgz#4bc37852bc6161ed4dc5b44b3ceb8beddf49f6f8"
-  integrity sha512-v86J6xe86kgKfDzlNGZSGHQ3PB8KJ46ra8xnVV4RrRjp7kPGiR7MvGfalFcSiaSEQzWiAcKAl4gya/AF/J/OZw==
+"@inkeep/cxkit-react@^0.5.91":
+  version "0.5.91"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-react/-/cxkit-react-0.5.91.tgz#a5c5f774440693863f38959c5ebcff17549ed90b"
+  integrity sha512-jhAQj90jqk4WMI24Z9zFs+dxIt6lwcPuRKVQR2gaGHvUGrbVhyQ4C5HdSU5pW+Ksrw+hq7gFndZeQsft50LNMA==
   dependencies:
-    "@inkeep/cxkit-styled" "0.5.89"
+    "@inkeep/cxkit-styled" "0.5.91"
     "@radix-ui/react-use-controllable-state" "^1.1.0"
     lucide-react "^0.503.0"
 
-"@inkeep/cxkit-styled@0.5.89":
-  version "0.5.89"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-styled/-/cxkit-styled-0.5.89.tgz#e113ee393f5055457281a52cfb8221dd14f70661"
-  integrity sha512-w9V3vYuq4ytluow16RO/0/V1s9PSBqOjZdvATdn+jy06gUn5ClNAiJ79m34fB3Ep0Y6o2m+obujX4njw4A+LPw==
+"@inkeep/cxkit-styled@0.5.91":
+  version "0.5.91"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-styled/-/cxkit-styled-0.5.91.tgz#e0727e70a6f0531553260a4579d8bf8b29cb2250"
+  integrity sha512-m5HpsMp9np2p7Wbb91TCLrnoLf1+TZwRpULLrqaB3K7GXH+v76bPMGfSLZv/ITLZVOE0SPMuu+PdiurO5eHqkQ==
   dependencies:
-    "@inkeep/cxkit-primitives" "0.5.89"
+    "@inkeep/cxkit-primitives" "0.5.91"
     class-variance-authority "0.7.1"
     clsx "2.1.1"
     merge-anything "5.1.7"
     tailwind-merge "2.6.0"
 
-"@inkeep/cxkit-theme@0.5.89":
-  version "0.5.89"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-theme/-/cxkit-theme-0.5.89.tgz#b1f9f7be2a87f25b8c6b2c4eb654b998b6bd7cc8"
-  integrity sha512-Yji2OCDi2buYZQXY4tw93U6W3ZFDaNw7wgGLP+vTyRZaFBMGwW52zNOjewz2UL1jNGl6ublHXmWM+kjIC4b5SQ==
+"@inkeep/cxkit-theme@0.5.91":
+  version "0.5.91"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-theme/-/cxkit-theme-0.5.91.tgz#c2b7d7d24bfc3ba4fb32f23f4d6b382a898d0abf"
+  integrity sha512-TxpQICBm+CuHrZtNGibS5ArWXl3RdrTKitYCgdGETm6UZa4X6r5j4UajGAeYnpY9SV2hmUo/YUydkyhviZWqrw==
   dependencies:
     colorjs.io "0.5.2"
 
-"@inkeep/cxkit-types@0.5.89":
-  version "0.5.89"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-types/-/cxkit-types-0.5.89.tgz#f8db85cca7c8dbb72c6a035882435b5e0e86ca76"
-  integrity sha512-zz6945Ex9kSpIUeZaVAX4h6HeCaOt28BzZyuprQWXIpzvAlFKuKDNV1Zm5umEglaiGSx+T9J6WViy3PoRXwTtA==
+"@inkeep/cxkit-types@0.5.91":
+  version "0.5.91"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-types/-/cxkit-types-0.5.91.tgz#2fdff6bb346667f8980ec5e7a3f3f28ec67ae630"
+  integrity sha512-cPNarnGk3gHpO+AOFgJnZEjkTClztAcYuQcGqCKuOaDSa8HG0LWmzA3L3RmqN1ZWatvusNoi3U6VJgcVt/pe3Q==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -11607,12 +11607,12 @@ postcss-place@^10.0.0:
   dependencies:
     postcss-value-parser "^4.2.0"
 
-postcss-preset-env@^10.2.1, postcss-preset-env@^10.2.3:
-  version "10.2.3"
-  resolved "https://registry.yarnpkg.com/postcss-preset-env/-/postcss-preset-env-10.2.3.tgz#3a84bde7205b48f1304a656b25841bd3f40fb3cb"
-  integrity sha512-zlQN1yYmA7lFeM1wzQI14z97mKoM8qGng+198w1+h6sCud/XxOjcKtApY9jWr7pXNS3yHDEafPlClSsWnkY8ow==
+postcss-preset-env@^10.2.1, postcss-preset-env@^10.2.4:
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/postcss-preset-env/-/postcss-preset-env-10.2.4.tgz#17d386b5a86b136dfbca89b52ef03a95ad9e32fa"
+  integrity sha512-q+lXgqmTMdB0Ty+EQ31SuodhdfZetUlwCA/F0zRcd/XdxjzI+Rl2JhZNz5US2n/7t9ePsvuhCnEN4Bmu86zXlA==
   dependencies:
-    "@csstools/postcss-cascade-layers" "^5.0.1"
+    "@csstools/postcss-cascade-layers" "^5.0.2"
     "@csstools/postcss-color-function" "^4.0.10"
     "@csstools/postcss-color-mix-function" "^3.0.10"
     "@csstools/postcss-color-mix-variadic-function-arguments" "^1.0.0"
