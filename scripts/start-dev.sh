@@ -68,7 +68,6 @@ reload() {
 cleanup() {
     echo -e "\n🧹 Cleaning up..."
     jobs -p | xargs kill
-    exit 0
 }
 
 trap cleanup SIGINT SIGTERM
@@ -76,7 +75,7 @@ trap cleanup SIGINT SIGTERM
 main() {
     install_dependencies
     
-    watchexec -w content/ 'bash scripts/start-dev.sh --sync-only' &
+    watchexec --watch content 'bash scripts/start-dev.sh --sync-only' &
     sleep 3
     
     yarn prepare-files
@@ -84,15 +83,22 @@ main() {
     
     sync_content
     
-    yarn clear && yarn docusaurus start
+    watchexec --restart \
+        --watch content \
+        --filter '**/includes/**' \
+        'bash scripts/start-dev.sh --reload'
 }
 
-if [[ "$1" == "--sync-only" ]]; then
-    sync_content
-    exit 0
-elif [[ "$1" == "--reload" ]]; then
-    reload
-    exit 0
-fi
+case "${1:-}" in
+    --sync-only)
+        sync_content
+        ;;
+    --reload)
+        reload
+        ;;
+    *)
+        main
+        ;;
+esac
 
-main
+exit 0
