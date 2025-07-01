@@ -13,7 +13,7 @@ Create `.env` file with variables: `SANITY_PROJECT_ID` and `SANITY_DATASET` tom 
 ## Local Development
 
 ```
-$ yarn start
+$ yarn dev
 ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.

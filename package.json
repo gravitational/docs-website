@@ -9,6 +9,7 @@
     "prepare-files": "npx vite-node ./scripts/prepare-files.mts",
     "prepare-sanity-data": "npx vite-node ./scripts/prepare-sanity-data.mts",
     "docusaurus": "docusaurus",
+    "dev": "bash scripts/start-dev.sh",
     "start": "yarn prepare-files && yarn prepare-sanity-data && docusaurus start",
     "build": "yarn git-update && yarn prepare-files && yarn prepare-sanity-data && docusaurus build \"$@\"",
     "swizzle": "docusaurus swizzle",
