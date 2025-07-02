@@ -28,7 +28,7 @@
     "storybook:build": "storybook build",
     "storybook:test-ci": "npx concurrently --kill-others --success first --names \"STORYBOOK,TESTS\" -c \"magenta,blue\" \"npx http-server -a 127.0.0.1 --silent storybook-static --port 6006\" \"npx wait-on tcp:127.0.0.1:6006 && yarn storybook:test --url http://127.0.0.1:6006/storybook-static \"",
     "storybook:test": "test-storybook",
-    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --trace-warnings --experimental-vm-modules\" jest --config ./jest.config.mjs --roots=src --roots=server"
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --trace-warnings --experimental-vm-modules\" jest --config ./jest.config.mjs --roots=src --roots=server --roots=utils"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -83,6 +83,7 @@
     "@storybook/test": "^8.6.14",
     "@storybook/test-runner": "^0.23.0",
     "@svgr/webpack": "^8.1.0",
+    "@testing-library/react": "^16.3.0",
     "@types/react": "^18.3.3",
     "ajv": "^8.16.0",
     "concurrently": "9.2.0",
