@@ -15,7 +15,8 @@
   },
   "include": [
     ".storybook/@types/**/*.d.ts",
-    "./src/components/**/*.stories.tsx"
+    "./src/components/**/*.stories.tsx",
+    "./utils/*.tsx"
   ],
   "exclude": ["node_modules", "content/**"]
 }

@@ -11,6 +11,13 @@ const jestConfig = {
         tsconfig: "tsconfig.node.json",
       },
     ],
+    "^.+\\.[tj]sx$": [
+      "ts-jest",
+      {
+        useESM: true,
+        tsconfig: "tsconfig.storybook.json",
+      },
+    ],
   },
   transformIgnorePatterns: ["<rootDir>/node_modules/*"],
 };
