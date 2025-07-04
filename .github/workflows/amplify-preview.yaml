@@ -29,7 +29,10 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         wait: "true"
 
-    - run: echo ${{ steps.amplify_preview.outputs }}
+    - run: |
+        echo ${{ steps.amplify_preview.outputs.amplify_branch_name }}
+        echo ${{ steps.amplify_preview.outputs.amplify_app_id }}
+        echo ${{ steps.amplify_preview.outputs.amplify_job_id }}
 
   # If the event is merge_group, we want to make sure the build passes with the
   # most recent version of the docs content to prevent unexpected inputs from
