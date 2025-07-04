@@ -22,11 +22,14 @@ jobs:
 
     - name: Get Amplify Preview URL
       uses: gravitational/shared-workflows/tools/amplify-preview@taras/amplify-github-outputs
+      id: amplify_preview
       with:
         app_ids: ${{ vars.AMPLIFY_APP_IDS }}
         create_branches: "false"
         github_token: ${{ secrets.GITHUB_TOKEN }}
         wait: "true"
+
+    - run: echo ${{ steps.amplify_preview.outputs }}
 
   # If the event is merge_group, we want to make sure the build passes with the
   # most recent version of the docs content to prevent unexpected inputs from
