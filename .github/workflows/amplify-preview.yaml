@@ -21,12 +21,20 @@ jobs:
         role-to-assume: ${{ vars.IAM_ROLE }}
 
     - name: Get Amplify Preview URL
-      uses: gravitational/shared-workflows/tools/amplify-preview@tools/amplify-preview/v0.0.1
+      uses: gravitational/shared-workflows/tools/amplify-preview@taras/amplify-github-outputs
+      id: amplify_preview
       with:
         app_ids: ${{ vars.AMPLIFY_APP_IDS }}
         create_branches: "false"
         github_token: ${{ secrets.GITHUB_TOKEN }}
         wait: "true"
+        wait_interval: 1s
+
+    - if: failure()
+      run: |
+        echo ${{ steps.amplify_preview.outputs.amplify_branch_name }}
+        echo ${{ steps.amplify_preview.outputs.amplify_app_id }}
+        echo ${{ steps.amplify_preview.outputs.amplify_job_id }}
 
   # If the event is merge_group, we want to make sure the build passes with the
   # most recent version of the docs content to prevent unexpected inputs from
