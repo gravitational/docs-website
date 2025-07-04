@@ -30,7 +30,7 @@ jobs:
         wait: "true"
         wait_interval: 1s
 
-    - if: always()
+    - if: failure()
       run: |
         echo ${{ steps.amplify_preview.outputs.amplify_branch_name }}
         echo ${{ steps.amplify_preview.outputs.amplify_app_id }}
