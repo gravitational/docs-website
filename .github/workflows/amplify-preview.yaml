@@ -28,7 +28,7 @@ jobs:
         create_branches: "false"
         github_token: ${{ secrets.GITHUB_TOKEN }}
         wait: "true"
-        wait_interval: 1s
+        wait_interval: 60s
 
 
     - name: Print failure message
