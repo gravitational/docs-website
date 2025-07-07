@@ -7,9 +7,10 @@ import { default as Snippet } from "./Snippet";
 import Command, { CommandLine, CommandComment } from "../Command/Command";
 import { CodeLine } from "/src/theme/MDXComponents/Code";
 import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
+import { collectGtagCalls } from "/src/utils/gtag";
 
 export const SimpleCommand = () => (
-  <Snippet>
+  <Snippet gtag={collectGtagCalls()}>
     <Command>
       <CommandLine data-content="$ ">echo Hello world!</CommandLine>
     </Command>
@@ -26,8 +27,8 @@ type Story = StoryObj<typeof Snippet>;
 export const CopyCommandVar: Story = {
   render: () => {
     return (
-      <Snippet>
-        <Command>
+      <Snippet gtag={collectGtagCalls()}>
+        <Command gtag={collectGtagCalls()}>
           <CommandLine data-content="$ ">
             curl https://
             <Var name="example.com" isGlobal={false} description="" />
@@ -59,7 +60,7 @@ export const CopyCommandVar: Story = {
 export const CopyCommandVarWithOutput: Story = {
   render: () => {
     return (
-      <Snippet>
+      <Snippet gtag={collectGtagCalls()}>
         <Command>
           <CommandLine data-content="$ ">
             curl https://
@@ -90,7 +91,7 @@ export const CopyCommandVarWithOutput: Story = {
 export const CopyCodeLineVar: Story = {
   render: () => {
     return (
-      <Snippet>
+      <Snippet gtag={collectGtagCalls()}>
         <CodeLine>
           curl https://
           <Var name="example.com" isGlobal={false} description="" />
