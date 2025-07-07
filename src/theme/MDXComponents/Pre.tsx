@@ -6,20 +6,48 @@ import { toCopyContent } from "/utils/general";
 import styles from "./Pre.module.css";
 import commandStyles from "/src/components/Command/Command.module.css";
 import codeBlockStyles from "./CodeBlock.module.css";
+import { makeCodeSnippetGtagEvent, logGtag } from "/src/utils/gtag";
+import { Children } from "react";
 
 const TIMEOUT = 1000;
 
 interface CodeProps {
   children: ReactNode;
   className?: string;
+  gtag?: (command: string, name: string, params: any) => {};
 }
 
-const Pre = ({ children, className }: CodeProps) => {
+const Pre = ({ children, className, gtag }: CodeProps) => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const codeRef = useRef<HTMLDivElement>();
   const buttonRef = useRef<HTMLButtonElement>();
 
+  // Get the code snippet label for the inner code element.
+  let langLabel = "";
+  Children.forEach(children, (child, index) => {
+    if (!child.type || child.type != "code") {
+      return;
+    }
+
+    if (
+      !child.props ||
+      !child.props.className ||
+      !child.props.className.includes("hljs")
+    ) {
+      return;
+    }
+
+    langLabel = child.props.className
+      .split(" ")
+      .find((c) => c.startsWith("language-"))
+      .slice("language-".length);
+  });
+
   const handleCopy = useCallback(() => {
+    const { name, params } = makeCodeSnippetGtagEvent("snippet", langLabel);
+    const gtagFn = gtag || window.gtag || logGtag;
+    gtagFn("event", name, params);
+
     if (!navigator.clipboard) {
       return;
     }
@@ -77,7 +105,9 @@ const Pre = ({ children, className }: CodeProps) => {
         {isCopied && <div className={styles.copied}>Copied!</div>}
       </HeadlessButton>
       <div ref={codeRef}>
-        <pre className={cn(codeBlockStyles.wrapper, styles.code)}>{children}</pre>
+        <pre className={cn(codeBlockStyles.wrapper, styles.code)}>
+          {children}
+        </pre>
       </div>
     </div>
   );
