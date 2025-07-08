@@ -52,7 +52,7 @@
     "@docusaurus/plugin-svgr": "^3.8.1",
     "@docusaurus/theme-classic": "^3.8.1",
     "@docusaurus/tsconfig": "^3.8.1",
-    "@inkeep/cxkit-react": "^0.5.92",
+    "@inkeep/cxkit-react": "^0.5.91",
     "@mdx-js/react": "^3.0.0",
     "classnames": "^2.3.1",
     "clsx": "^2.1.1",
