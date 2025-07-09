@@ -167,7 +167,7 @@ const config: Config = {
     [
       "@docusaurus/plugin-google-gtag",
       {
-        trackingID: "G-Z1BMQRVFH3",
+        trackingID: "G-PPQXNPQ8WR",
         anonymizeIP: true,
       },
     ],
