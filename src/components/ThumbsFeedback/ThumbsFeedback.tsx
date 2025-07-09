@@ -66,11 +66,7 @@ const ThumbsFeedback = (): JSX.Element => {
     trackEvent({
       event_name: 'feedback_thumb_click',
       event_category: 'feedback',
-      event_label: `thumbs_${feedbackValue}`,
-      custom_parameters: {
-        feedback_type: feedbackValue,
-        page_url: location.pathname
-      }
+      event_label: `thumbs_${feedbackValue}`
     });
   };
 
@@ -86,13 +82,7 @@ const ThumbsFeedback = (): JSX.Element => {
     // trackEvent({
     //   event_name: 'feedback_comment_submit',
     //   event_category: 'feedback',
-    //   event_label: `comment_thumbs_${feedback}`,
-    //   custom_parameters: {
-    //     feedback_type: feedback,
-    //     has_comment: trimmedComment.length > 0,
-    //     comment_length: trimmedComment.length,
-    //     page_url: location.pathname
-    //   }
+    //   event_label: `comment_thumbs_${feedback}`
     // });
 
     console.log('Comment submitted:', {

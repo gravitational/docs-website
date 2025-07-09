@@ -1,4 +1,3 @@
-// TypeScript interfaces for analytics events
 interface AnalyticsEvent {
   event_name: string;
   event_category: string;
@@ -7,7 +6,6 @@ interface AnalyticsEvent {
   custom_parameters?: Record<string, any>;
 }
 
-// Generic gtag wrapper with safety checks
 export const trackEvent = (eventData: AnalyticsEvent): void => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', eventData.event_name, {
@@ -19,5 +17,4 @@ export const trackEvent = (eventData: AnalyticsEvent): void => {
   }
 };
 
-// Export interface for use in other components
 export type { AnalyticsEvent };
