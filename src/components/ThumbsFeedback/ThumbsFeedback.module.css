@@ -5,6 +5,17 @@ rect.btn {
   stroke-opacity:0;
 }
 
+.thumbsFeedback {
+  /* Hide on mobile and tablet, only show on desktop */
+  display: none;
+}
+
+@media (min-width: 997px) {
+  .thumbsFeedback {
+    display: block;
+  }
+}
+
 .feedbackTitle {
   font-size: var(--fs-text-sm);
   line-height: var(--lh-md);
