@@ -1,9 +1,10 @@
 import styles from './ThumbsFeedback.module.css';
-import React, { FormEvent, useState, useEffect, useRef } from "react";
+import React, { FormEvent, useState, useEffect } from "react";
 import { useLocation } from '@docusaurus/router';
 import Icon from "../Icon/Icon";
 import Button from "../Button/Button";
 import {GitHubIssueLink} from "@site/src/components/GitHubIssueLink";
+import { trackEvent } from '@site/src/utils/analytics';
 
 const MAX_COMMENT_LENGTH: number = 500;
 
@@ -23,13 +24,9 @@ const ThumbsFeedback = (): JSX.Element => {
   const [comment, setComment] = useState<string>("");
   const [showButtons, setShowButtons] = useState<boolean>(true);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [isSidebarScrollable, setIsSidebarScrollable] = useState<boolean>(false);
-  
-  const feedbackRef = useRef<HTMLDivElement>(null);  
+  const [isSidebarScrollable, setIsSidebarScrollable] = useState<boolean>(false);  
   const location = useLocation();
 
-  // Early return for submitted state
   if (isSubmitted) {
     return <p>Thank you for your feedback.</p>;
   }
@@ -66,30 +63,6 @@ const ThumbsFeedback = (): JSX.Element => {
     setComment("");
   }, [location.pathname]);
 
-  // Intersection Observer to detect if component is in viewport
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1 // Show when 10% of component is visible
-      }
-    );
-
-    if (feedbackRef.current) {
-      observer.observe(feedbackRef.current);
-    }
-
-    return () => {
-      if (feedbackRef.current) {
-        observer.unobserve(feedbackRef.current);
-      }
-    };
-  }, []);
-
   // Check if sidebar is scrollable
   useEffect(() => {
     const checkSidebarScrollable = (): void => {
@@ -118,9 +91,23 @@ const ThumbsFeedback = (): JSX.Element => {
       return;
     }
 
+    const trimmedComment = comment.trim();
+
+    // Send comment submission to Google Analytics
+    trackEvent({
+      event_name: 'feedback_comment_submit',
+      event_category: 'engagement',
+      event_label: `comment_${feedback}`,
+      custom_parameters: {
+        feedback_type: feedback,
+        has_comment: trimmedComment.length > 0,
+        comment_length: trimmedComment.length
+      }
+    });
+
     const data: FeedbackData = {
       feedback,
-      comment: comment.trim(),
+      comment: trimmedComment,
       url: window.location.pathname,
     };
     console.log(data)
@@ -132,6 +119,16 @@ const ThumbsFeedback = (): JSX.Element => {
     setFeedback(feedbackValue);
     setShowButtons(false);
     
+    // Send thumb click to Google Analytics
+    trackEvent({
+      event_name: 'feedback_thumb_click',
+      event_category: 'engagement',
+      event_label: `thumb_${feedbackValue}`,
+      custom_parameters: {
+        feedback_type: feedbackValue
+      }
+    });
+    
     const data: FeedbackData = {
       feedback: feedbackValue,
       comment: "",
@@ -141,10 +138,10 @@ const ThumbsFeedback = (): JSX.Element => {
     // await forwardData(data);
   };
 
-  const shouldShowFeedback: boolean = isVisible && !isSidebarScrollable;
+  const shouldShowFeedback: boolean = !isSidebarScrollable;
 
   return (
-    <div ref={feedbackRef} className={styles.thumbsFeedback}>
+    <div className={styles.thumbsFeedback}>
       <form onSubmit={handleSubmit}>
         <div id="feedbackContainer" className={styles.feedbackForm}>
           {shouldShowFeedback && (
