@@ -65,7 +65,18 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
           <DocItemPaginator />
         </div>
       </div>
-      {docTOC.desktop && <div className="col col--3">{docTOC.desktop}</div>}<ThumbsFeedback />
+      <div className="col col--3">
+        <div className={styles.stickySidebar}>
+          <div className={styles.tocWithFeedback}>
+            <div className={styles.tocWrapper}>
+              {docTOC.desktop}
+            </div>
+            <div className={styles.feedbackWrapper}>
+              <ThumbsFeedback />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

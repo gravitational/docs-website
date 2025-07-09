@@ -1,37 +1,107 @@
+rect.btn {
+  stroke:#fff;
+  fill:#fff;
+  fill-opacity:0;
+  stroke-opacity:0;
+}
+
+.feedbackTitle {
+  font-size: var(--fs-text-sm);
+  line-height: var(--lh-md);
+  max-height: 100%;
+  overflow-y: auto;
+  margin: 0 var(--m-0-5) var(--m-0-5);
+  padding: var(--m-0-5) 0;
+  font-weight: var(--fw-bold);
+  color: var(--color-darkest);
+}
+
+.svgContainer {
+  display: flex;
+  padding-left: 18px;
+  justify-content: left;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
 .feedbackForm {
-    z-index: 10;
-    position: relative;
-    padding: 1rem 0;
+  z-index: 10;
+  position: relative;
+}
+
+.buttonSeparator {
+  font-size: var(--fs-text-sm);
+  line-height: var(--lh-md);
+  max-height: 100%;
+  overflow-y: auto;
+  margin: 0 var(--m-0-5) var(--m-0-5);
+  padding: var(--m-0-5) 0;
+  font-weight: var(--fw-bold);
+  color: var(--color-darkest);
+  text-align: center;
+}
+
+.buttonContainer {
+  display: block;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+}
+
+.submitButton {
+  text-align: center;
+}
+
+.commentTextarea {
+  width: 100%;
+  height: 150px;
+  font-family: inherit;
+  resize: none;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--r-md);
+  padding: 12px;
+  font-size: var(--fs-text-md);
+  line-height: 1.5;
+  background-color: #fff;
+  transition: border-color 0.2s ease;
+  margin-bottom: 3px;
+}
+
+.commentTextarea.error {
+  border-color: #e53e3e;
+}
+
+.commentTextarea:focus {
+  outline: none;
+  border-color: #4b31c1;
+  box-shadow: 0 0 0 3px rgba(75, 49, 193, 0.1);
+}
+
+.commentTextarea::placeholder {
+  color: #64748b;
+}
+
+.characterCount {
+  font-size: var(--fs-text-sm);
+  color: #64748b;
+  margin-bottom: 9px;
+  text-align: center;
+}
+
+.characterCount.error {
+  color: #e53e3e;
+  font-weight: var(--fw-bold);
+}
+
+.githubLinkWrapper {
+  font-style: italic;
+  margin-top: 19px;
+  line-height: var(--lh-md);
+
+  &:hover,
+  &:active,
+  &:focus {
+    text-decoration: underline;
   }
-  
-  .svgContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .feedbackTitle {
-    font-size: 1.25rem; /* Slightly larger font size */
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    color: var(--color-darkest);
-  }
-  
-  .buttonContainer {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-  }
-  
-  .feedbackButton {
-    font-size: 1.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .feedbackMessage {
-    margin-top: 1rem;
-    color: green;
-  }
+}
