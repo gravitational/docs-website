@@ -1,12 +1,4 @@
-rect.btn {
-  stroke:#fff;
-  fill:#fff;
-  fill-opacity:0;
-  stroke-opacity:0;
-}
-
 .thumbsFeedback {
-  /* Hide on mobile and tablet, only show on desktop */
   display: none;
 }
 
@@ -24,7 +16,6 @@ rect.btn {
   margin: 0 var(--m-0-5) var(--m-0-5);
   padding: var(--m-0-5) 0;
   font-weight: var(--fw-bold);
-  color: var(--color-darkest);
 }
 
 .svgContainer {
@@ -32,7 +23,6 @@ rect.btn {
   padding-left: 18px;
   justify-content: left;
   align-items: center;
-  text-align: center;
   gap: 16px;
 }
 
@@ -53,56 +43,52 @@ rect.btn {
   text-align: center;
 }
 
-.buttonContainer {
-  display: block;
-  justify-content: center;
-  height: 100%;
-  align-items: center;
-}
-
 .submitButton {
   text-align: center;
 }
 
 .commentTextarea {
   width: 100%;
-  height: 150px;
+  height: 100px;
   font-family: inherit;
   resize: none;
   border: 2px solid #e2e8f0;
   border-radius: var(--r-md);
-  padding: 12px;
-  font-size: var(--fs-text-md);
+  padding: 8px;
   line-height: 1.5;
-  background-color: #fff;
   transition: border-color 0.2s ease;
   margin-bottom: 3px;
+
+  &:focus {
+    outline: none;
+    border-color: #4b31c1;
+    box-shadow: 0 0 0 3px rgba(75, 49, 193, 0.1);
+  }
+
+  &::placeholder {
+    color: var(--color-dark-gray);
+  }
 }
 
 .commentTextarea.error {
   border-color: #e53e3e;
-}
-
-.commentTextarea:focus {
-  outline: none;
-  border-color: #4b31c1;
-  box-shadow: 0 0 0 3px rgba(75, 49, 193, 0.1);
-}
-
-.commentTextarea::placeholder {
-  color: #64748b;
+  
+  &:focus {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+  }
 }
 
 .characterCount {
   font-size: var(--fs-text-sm);
-  color: #64748b;
-  margin-bottom: 9px;
+  color: var(--color-dark-gray);
+  margin-bottom: 11px;
   text-align: center;
-}
 
-.characterCount.error {
-  color: #e53e3e;
-  font-weight: var(--fw-bold);
+  &.error {
+    color: #e53e3e;
+    font-weight: var(--fw-bold);
+  }
 }
 
 .githubLinkWrapper {

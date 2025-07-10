@@ -6,11 +6,17 @@ import Button from "../Button/Button";
 import { GitHubIssueLink } from "@site/src/components/GitHubIssueLink";
 import { trackEvent } from '@site/src/utils/analytics';
 
-const MAX_COMMENT_LENGTH: number = 500;
+const MAX_COMMENT_LENGTH: number = 100;
 
 const isValidComment = (input: string): boolean => {
   const trimmed = input.trim();
   return trimmed.length > 0 && trimmed.length <= MAX_COMMENT_LENGTH;
+};
+
+const containsPII = (text: string): boolean => {
+  const emailRegex = /\S+@\S+\.\S+/;
+  const phoneRegex = /\d{3}[-.]?\d{3}[-.]?\d{4}/;
+  return emailRegex.test(text) || phoneRegex.test(text);
 };
 
 const ThumbsFeedback = (): JSX.Element => {
@@ -20,10 +26,6 @@ const ThumbsFeedback = (): JSX.Element => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isSidebarScrollable, setIsSidebarScrollable] = useState<boolean>(true);
   const location = useLocation();
-
-  if (isSubmitted) {
-    return <p>Thank you for your feedback.</p>;
-  }
 
   useEffect(() => {
     setShowButtons(true);
@@ -42,7 +44,7 @@ const ThumbsFeedback = (): JSX.Element => {
         const viewportHeight: number = window.innerHeight;
         const tocRect = tocDesktop.getBoundingClientRect();
         const spaceBelow: number = viewportHeight - tocRect.bottom;
-        const wouldOverflowWithTextArea: boolean = spaceBelow < 350;
+        const wouldOverflowWithTextArea: boolean = spaceBelow < 300;
 
         setIsSidebarScrollable(isScrollable || wouldOverflowWithTextArea);
 
@@ -66,7 +68,10 @@ const ThumbsFeedback = (): JSX.Element => {
     trackEvent({
       event_name: 'feedback_thumb_click',
       event_category: 'feedback',
-      event_label: `thumbs_${feedbackValue}`
+      event_label: `thumbs_${feedbackValue}`,
+      custom_parameters: {
+        thumb_direction: feedbackValue
+      }
     });
   };
 
@@ -79,21 +84,24 @@ const ThumbsFeedback = (): JSX.Element => {
 
     const trimmedComment = comment.trim();
 
-    // trackEvent({
-    //   event_name: 'feedback_comment_submit',
-    //   event_category: 'feedback',
-    //   event_label: `comment_thumbs_${feedback}`
-    // });
-
-    console.log('Comment submitted:', {
-      feedback_type: feedback,
-      comment_text: trimmedComment,
-      page_url: location.pathname,
-      timestamp: new Date().toISOString()
-    });
+    if (!containsPII(trimmedComment)) {
+      trackEvent({
+        event_name: 'feedback_comment_submit',
+        event_category: 'feedback',
+        event_label: `comment_thumbs_${feedback}`,
+        custom_parameters: {
+          comment_text: trimmedComment,
+          thumb_direction: feedback
+        }
+      });
+    }
 
     setIsSubmitted(true);
   };
+
+  if (isSubmitted) {
+    return <p>Thank you for your feedback.</p>;
+  }
 
   const shouldShowFeedback: boolean = !isSidebarScrollable;
 
@@ -104,65 +112,61 @@ const ThumbsFeedback = (): JSX.Element => {
   return (
     <div className={styles.thumbsFeedback}>
       <form onSubmit={handleSubmit}>
-        <div id="feedbackContainer" className={styles.feedbackForm}>
-          <p id="feedback" className={styles.feedbackTitle}>
-            Was this page helpful?
-          </p>
-          {showButtons ? (
-            <div className={styles.svgContainer}>
-              <span
-                className={styles.thumbsUp}
-                style={{ cursor: "pointer" }}
-                onClick={() => handleFeedbackClick("up")}
-                tabIndex={0}
-                role="button"
-                aria-label="Thumbs up"
-              >
-                <Icon name="thumbsUp" size="md" />
-              </span>
-              <span
-                className={styles.thumbsDown}
-                style={{ cursor: "pointer" }}
-                onClick={() => handleFeedbackClick("down")}
-                tabIndex={0}
-                role="button"
-                aria-label="Thumbs down"
-              >
-                <Icon name="thumbsDown" size="md" />
-              </span>
-            </div>
-          ) : (
-            <div>
-              <div className={styles.buttonContainer}>
-                <textarea
-                  id="comment"
-                  name="comment"
-                  value={comment}
-                  placeholder="Any additional comments..."
-                  onChange={(e) => setComment(e.target.value)}
-                  className={`${styles.commentTextarea} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ''}`}
-                />
-                <div className={`${styles.characterCount} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ''}`}>
-                  Max 500 characters ({comment.length}/{MAX_COMMENT_LENGTH})
-                </div>
-                <div className={styles.submitButton}>
-                  <Button
-                    type="submit"
-                    as="button"
-                    variant="primary"
-                    disabled={comment.length > MAX_COMMENT_LENGTH}
-                  >
-                    Submit
-                  </Button>
-                  <p className={styles.feedbackTitle}> or </p>
-                  <div className={styles.githubLinkWrapper}>
-                    <GitHubIssueLink pathname={location.pathname} />
-                  </div>
+        <p id="feedback" className={styles.feedbackTitle}>
+          Was this page helpful?
+        </p>
+        {showButtons ? (
+          <div className={styles.svgContainer}>
+            <span
+              className={styles.thumbsUp}
+              style={{ cursor: "pointer" }}
+              onClick={() => handleFeedbackClick("up")}
+              tabIndex={0}
+              role="button"
+              aria-label="Thumbs up"
+            >
+              <Icon name="thumbsUp" size="md" />
+            </span>
+            <span
+              className={styles.thumbsDown}
+              style={{ cursor: "pointer" }}
+              onClick={() => handleFeedbackClick("down")}
+              tabIndex={0}
+              role="button"
+              aria-label="Thumbs down"
+            >
+              <Icon name="thumbsDown" size="md" />
+            </span>
+          </div>
+        ) : (
+          <div>
+              <textarea
+                id="comment"
+                name="comment"
+                value={comment}
+                placeholder="Any additional comments..."
+                onChange={(e) => setComment(e.target.value)}
+                className={`${styles.commentTextarea} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ''}`}
+              />
+              <div className={`${styles.characterCount} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ''}`}>
+                ({comment.length}/{MAX_COMMENT_LENGTH}) characters allowed
+              </div>
+              <div className={styles.submitButton}>
+                <Button
+                  type="submit"
+                  as="button"
+                  variant="primary"
+                  disabled={comment.length > MAX_COMMENT_LENGTH}
+                >
+                  Submit
+                </Button>
+                <p className={styles.feedbackTitle}> or </p>
+                <div className={styles.githubLinkWrapper}>
+                  <GitHubIssueLink pathname={location.pathname} />
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </form>
     </div>
   );
