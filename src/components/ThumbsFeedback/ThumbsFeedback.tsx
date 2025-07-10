@@ -5,19 +5,9 @@ import Icon from "../Icon/Icon";
 import Button from "../Button/Button";
 import { GitHubIssueLink } from "@site/src/components/GitHubIssueLink";
 import { trackEvent } from '@site/src/utils/analytics';
+import { isValidCommentLength, containsPII } from '@site/src/utils/validations';
 
 const MAX_COMMENT_LENGTH: number = 100;
-
-const isValidComment = (input: string): boolean => {
-  const trimmed = input.trim();
-  return trimmed.length > 0 && trimmed.length <= MAX_COMMENT_LENGTH;
-};
-
-const containsPII = (text: string): boolean => {
-  const emailRegex = /\S+@\S+\.\S+/;
-  const phoneRegex = /\d{3}[-.]?\d{3}[-.]?\d{4}/;
-  return emailRegex.test(text) || phoneRegex.test(text);
-};
 
 const ThumbsFeedback = (): JSX.Element => {
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -78,7 +68,7 @@ const ThumbsFeedback = (): JSX.Element => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 
-    if (!isValidComment(comment)) {
+    if (!isValidCommentLength(comment, MAX_COMMENT_LENGTH)) {
       return;
     }
 
