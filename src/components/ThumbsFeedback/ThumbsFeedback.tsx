@@ -9,14 +9,20 @@ import { isValidCommentLength, containsPII } from '@site/src/utils/validations';
 
 const MAX_COMMENT_LENGTH: number = 100;
 
+enum FeedbackType {
+  UP = "up",
+  DOWN = "down"
+}
+
 const ThumbsFeedback = (): JSX.Element => {
-  const [feedback, setFeedback] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<FeedbackType | null>(null);
   const [comment, setComment] = useState<string>("");
   const [showButtons, setShowButtons] = useState<boolean>(true);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isSidebarScrollable, setIsSidebarScrollable] = useState<boolean>(true);
   const location = useLocation();
 
+  // Reset feedback form state when navigating to a different page
   useEffect(() => {
     setShowButtons(true);
     setIsSubmitted(false);
@@ -51,7 +57,7 @@ const ThumbsFeedback = (): JSX.Element => {
     };
   }, [location.pathname]);
 
-  const handleFeedbackClick = async (feedbackValue: string): Promise<void> => {
+  const handleFeedbackClick = async (feedbackValue: FeedbackType): Promise<void> => {
     setFeedback(feedbackValue);
     setShowButtons(false);
 
@@ -93,9 +99,7 @@ const ThumbsFeedback = (): JSX.Element => {
     return <p>Thank you for your feedback.</p>;
   }
 
-  const shouldShowFeedback: boolean = !isSidebarScrollable;
-
-  if (!shouldShowFeedback) {
+  if (isSidebarScrollable) {
     return null;
   }
 
@@ -110,7 +114,7 @@ const ThumbsFeedback = (): JSX.Element => {
             <span
               className={styles.thumbsUp}
               style={{ cursor: "pointer" }}
-              onClick={() => handleFeedbackClick("up")}
+              onClick={() => handleFeedbackClick(FeedbackType.UP)}
               tabIndex={0}
               role="button"
               aria-label="Thumbs up"
@@ -120,7 +124,7 @@ const ThumbsFeedback = (): JSX.Element => {
             <span
               className={styles.thumbsDown}
               style={{ cursor: "pointer" }}
-              onClick={() => handleFeedbackClick("down")}
+              onClick={() => handleFeedbackClick(FeedbackType.DOWN)}
               tabIndex={0}
               role="button"
               aria-label="Thumbs down"
