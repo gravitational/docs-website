@@ -13,6 +13,7 @@ import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import Unlisted from "@theme/ContentVisibility/Unlisted";
 import NavbarMobileSidebarToggle from "@theme/Navbar/MobileSidebar/Toggle";
 import type { Props } from "@theme/DocItem/Layout";
+import ThumbsFeedback from '@site/src/components/ThumbsFeedback';
 
 import styles from "./styles.module.css";
 
@@ -64,7 +65,18 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
           <DocItemPaginator />
         </div>
       </div>
-      {docTOC.desktop && <div className="col col--3">{docTOC.desktop}</div>}
+      <div className="col col--3">
+        <div className={styles.stickySidebar}>
+          <div className={styles.tocWithFeedback}>
+            <div className={styles.tocWrapper}>
+              {docTOC.desktop}
+            </div>
+            <div className={styles.feedbackWrapper}>
+              <ThumbsFeedback />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

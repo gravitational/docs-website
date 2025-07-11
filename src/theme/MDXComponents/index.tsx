@@ -21,6 +21,8 @@ import type { MDXComponentsObject } from "@theme/MDXComponents";
 import Icon from "/src/components/Icon";
 import Tile from "/src/components/Tile";
 import TileGrid from "/src/components/TileGrid";
+import ThumbsFeedback from "/src/components/ThumbsFeedback";
+
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
@@ -53,6 +55,7 @@ const MDXComponents: MDXComponentsObject = {
   snippet: Snippet,
   ul: MDXUl,
   Var: (props) => <Var {...props} />, // needed to circumvent props mismatch in types
+  ThumbsFeedback
 };
 
 export default MDXComponents;
