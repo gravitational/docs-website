@@ -62,12 +62,7 @@ const ThumbsFeedback = (): JSX.Element => {
     setShowButtons(false);
 
     trackEvent({
-      event_name: 'feedback_thumb_click',
-      event_category: 'feedback',
-      event_label: `thumbs_${feedbackValue}`,
-      custom_parameters: {
-        thumb_direction: feedbackValue
-      }
+      event_name: `docs_feedback_thumbs_${feedbackValue}`
     });
   };
 
@@ -82,12 +77,9 @@ const ThumbsFeedback = (): JSX.Element => {
 
     if (!containsPII(trimmedComment)) {
       trackEvent({
-        event_name: 'feedback_comment_submit',
-        event_category: 'feedback',
-        event_label: `comment_thumbs_${feedback}`,
+        event_name: `docs_feedback_comment_thumbs_${feedback}`,
         custom_parameters: {
-          comment_text: trimmedComment,
-          thumb_direction: feedback
+          comment_text: trimmedComment
         }
       });
     }
