@@ -92,9 +92,13 @@
 }
 
 .githubLinkWrapper {
-  font-style: italic;
   margin-top: 19px;
   line-height: var(--lh-md);
+
+  a {
+    font-style: normal;
+    font-size: var(--fs-text-sm);
+  }
 
   &:hover,
   &:active,
