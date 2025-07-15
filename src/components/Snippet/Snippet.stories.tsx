@@ -7,7 +7,7 @@ import { default as Snippet } from "./Snippet";
 import Command, { CommandLine, CommandComment } from "../Command/Command";
 import { CodeLine } from "/src/theme/MDXComponents/Code";
 import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
-import { collectGtagCalls } from "/src/utils/gtag";
+import { collectGtagCalls } from "/src/utils/analytics";
 
 export const SimpleCommand = () => (
   <Snippet gtag={collectGtagCalls()}>

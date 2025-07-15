@@ -3,7 +3,8 @@ import Icon from "/src/components/Icon";
 import HeadlessButton from "/src/components/HeadlessButton";
 import { toCopyContent } from "/utils/general";
 import styles from "./Command.module.css";
-import { makeCodeSnippetGtagEvent, logGtag } from "/src/utils/gtag";
+import { makeCodeSnippetGtagEvent, logGtag } from "/src/utils/analytics";
+import { trackEvent } from "/src/utils/analytics";
 
 const TIMEOUT = 1000;
 
@@ -34,8 +35,11 @@ export default function Command({ children, gtag, ...props }: CommandProps) {
 
   const handleCopy = useCallback(() => {
     const { name, params } = makeCodeSnippetGtagEvent("line", "code");
-    const gtagFn = gtag || window.gtag || logGtag;
-    gtagFn("event", name, params);
+    trackEvent({
+      event_name: name,
+      custom_parameters: params,
+      gtag: gtag,
+    });
 
     if (!navigator.clipboard) {
       return;

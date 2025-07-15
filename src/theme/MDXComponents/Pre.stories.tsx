@@ -5,7 +5,7 @@ import { default as Pre } from "./Pre";
 import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
 import { Var } from "/src/components/Variables/Var";
 import { VarsProvider } from "/src/components/Variables/context";
-import { collectGtagCalls } from "/src/utils/gtag";
+import { collectGtagCalls } from "/src/utils/analytics";
 
 export const SimplePre = () => (
   <Pre gtag={collectGtagCalls()}>
