@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
 import { userEvent, within } from "@storybook/test";
 import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
-import { collectGtagCalls } from "/src/utils/gtag";
+import { collectGtagCalls } from "/src/utils/analytics";
 import Command, { CommandLine } from "./Command";
 
 const commandText = "yarn install";

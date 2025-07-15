@@ -6,8 +6,9 @@ import { toCopyContent } from "/utils/general";
 import styles from "./Pre.module.css";
 import commandStyles from "/src/components/Command/Command.module.css";
 import codeBlockStyles from "./CodeBlock.module.css";
-import { makeCodeSnippetGtagEvent, logGtag } from "/src/utils/gtag";
+import { makeCodeSnippetGtagEvent, logGtag } from "/src/utils/analytics";
 import { Children } from "react";
+import { trackEvent } from "/src/utils/analytics";
 
 const TIMEOUT = 1000;
 
@@ -45,8 +46,11 @@ const Pre = ({ children, className, gtag }: CodeProps) => {
 
   const handleCopy = useCallback(() => {
     const { name, params } = makeCodeSnippetGtagEvent("snippet", langLabel);
-    const gtagFn = gtag || window.gtag || logGtag;
-    gtagFn("event", name, params);
+    trackEvent({
+      event_name: name,
+      custom_parameters: params,
+      gtag: gtag,
+    });
 
     if (!navigator.clipboard) {
       return;
