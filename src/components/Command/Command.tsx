@@ -1,9 +1,10 @@
-import { useRef, useState, useCallback, ReactNode } from "react";
+import { useRef, useState, useCallback, useContext, ReactNode } from "react";
+import { PositionContext } from "/src/components/PositionProvider";
+import { nanoid } from "nanoid";
 import Icon from "/src/components/Icon";
 import HeadlessButton from "/src/components/HeadlessButton";
 import { toCopyContent } from "/utils/general";
 import styles from "./Command.module.css";
-import { makeCodeSnippetGtagEvent, logGtag } from "/src/utils/analytics";
 import { trackEvent } from "/src/utils/analytics";
 
 const TIMEOUT = 1000;
@@ -29,15 +30,37 @@ export interface CommandProps {
   gtag?: (command: string, name: string, params: any) => {};
 }
 
+const commandKey = "command";
+
 export default function Command({ children, gtag, ...props }: CommandProps) {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const codeRef = useRef<HTMLDivElement>();
+  const posProvider = useContext(PositionContext);
+  const thisID = useRef(nanoid());
+  let pos: undefined | number;
+  if (posProvider) {
+    pos = posProvider.registerPosition(commandKey, thisID.current);
+  }
 
   const handleCopy = useCallback(() => {
-    const { name, params } = makeCodeSnippetGtagEvent("line", "code");
+    let commandCount: undefined | number;
+    let containerPosition: undefined | number;
+    let containerCount: undefined | number;
+    if (posProvider) {
+      commandCount = posProvider.getItemCount(commandKey);
+      containerPosition = posProvider.getContainerPosition();
+      containerCount = posProvider.getContainerCount();
+    }
     trackEvent({
-      event_name: name,
-      custom_parameters: params,
+      event_name: "code_copy_button",
+      custom_parameters: {
+        scope: "line",
+        label: "code",
+        code_snippet_index_on_page: containerPosition,
+        code_snippet_count_on_page: containerCount,
+        line_index_in_snippet: pos,
+        line_count_in_snippet: commandCount,
+      },
       gtag: gtag,
     });
 

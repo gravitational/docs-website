@@ -54,32 +54,3 @@ const logGtag = (command: string, name: string, params: any) => {
   };
   console.log("gtag called with: %o", gtagCall);
 };
-
-export enum copyButtonScope {
-  other = 0,
-  line,
-  snippet,
-}
-
-interface CodeSnippetGtagEvent {
-  name: "code_copy_button";
-  params: CodeSnippetGtagEventParams;
-}
-
-interface CodeSnippetGtagEventParams {
-  label: string;
-  scope: string;
-}
-
-export const makeCodeSnippetGtagEvent = (
-  scope: copyButtonScope,
-  label: string,
-): CodeSnippetGtagEvent => {
-  return {
-    name: "code_copy_button",
-    params: {
-      scope: scope,
-      label: label,
-    },
-  };
-};
