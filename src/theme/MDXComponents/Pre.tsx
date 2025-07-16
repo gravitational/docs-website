@@ -6,10 +6,15 @@ import { toCopyContent } from "/utils/general";
 import styles from "./Pre.module.css";
 import commandStyles from "/src/components/Command/Command.module.css";
 import codeBlockStyles from "./CodeBlock.module.css";
-import { makeCodeSnippetGtagEvent, logGtag } from "/src/utils/analytics";
-import { Children } from "react";
+import { Children, useContext } from "react";
 import { trackEvent } from "/src/utils/analytics";
+import {
+  PositionContext,
+  PositionProvider,
+} from "/src/components/PositionProvider";
+import { nanoid } from "nanoid";
 
+const preKey = "pre";
 const TIMEOUT = 1000;
 
 interface CodeProps {
@@ -22,33 +27,58 @@ const Pre = ({ children, className, gtag }: CodeProps) => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const codeRef = useRef<HTMLDivElement>();
   const buttonRef = useRef<HTMLButtonElement>();
+  const posProvider = useContext(PositionContext);
+  const thisID = useRef(nanoid());
+  let pos: undefined | number;
+  if (posProvider) {
+    pos = posProvider.registerPosition(preKey, thisID.current);
+  }
 
   // Get the code snippet label for the inner code element.
   let langLabel = "";
   Children.forEach(children, (child, index) => {
-    if (!child.type || child.type != "code") {
+    // A Pre with a first-level div child indicates a custom "code"-labeled
+    // Snippet component, which doesn't contain the element structured created
+    // by hljs.
+    if (child.type && child.type === "div") {
+      langLabel = "code";
       return;
     }
 
     if (
-      !child.props ||
-      !child.props.className ||
-      !child.props.className.includes("hljs")
+      child.props &&
+      child.props.className &&
+      child.props.className.includes("hljs")
     ) {
-      return;
-    }
+      const lang = child.props.className
+        .split(" ")
+        .find((c) => c.startsWith("language-"));
 
-    langLabel = child.props.className
-      .split(" ")
-      .find((c) => c.startsWith("language-"))
-      .slice("language-".length);
+      if (!lang) {
+        return;
+      }
+
+      langLabel = lang.slice("language-".length);
+    }
   });
 
+  const countPres = (): number => {
+    if (posProvider) {
+      return posProvider.getItemCount(preKey);
+    } else {
+      return undefined;
+    }
+  };
+
   const handleCopy = useCallback(() => {
-    const { name, params } = makeCodeSnippetGtagEvent("snippet", langLabel);
     trackEvent({
-      event_name: name,
-      custom_parameters: params,
+      event_name: "code_copy_button",
+      custom_parameters: {
+        scope: "snippet",
+        label: langLabel,
+        code_snippet_index_on_page: pos,
+        code_snippet_count_on_page: countPres(),
+      },
       gtag: gtag,
     });
 
@@ -109,9 +139,11 @@ const Pre = ({ children, className, gtag }: CodeProps) => {
         {isCopied && <div className={styles.copied}>Copied!</div>}
       </HeadlessButton>
       <div ref={codeRef}>
-        <pre className={cn(codeBlockStyles.wrapper, styles.code)}>
-          {children}
-        </pre>
+        <PositionProvider containerPosition={pos} getContainerCount={countPres}>
+          <pre className={cn(codeBlockStyles.wrapper, styles.code)}>
+            {children}
+          </pre>
+        </PositionProvider>
       </div>
     </div>
   );

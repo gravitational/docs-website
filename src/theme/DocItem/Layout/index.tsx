@@ -13,7 +13,8 @@ import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import Unlisted from "@theme/ContentVisibility/Unlisted";
 import NavbarMobileSidebarToggle from "@theme/Navbar/MobileSidebar/Toggle";
 import type { Props } from "@theme/DocItem/Layout";
-import ThumbsFeedback from '@site/src/components/ThumbsFeedback';
+import ThumbsFeedback from "@site/src/components/ThumbsFeedback";
+import { PositionProvider } from "/src/components/PositionProvider";
 
 import styles from "./styles.module.css";
 
@@ -65,7 +66,9 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
               <NavbarMobileSidebarToggle />
             </div>
             {docTOC.mobile}
-            <DocItemContent>{children}</DocItemContent>
+            <DocItemContent>
+              <PositionProvider>{children}</PositionProvider>
+            </DocItemContent>
             <DocItemFooter />
           </article>
           <DocItemPaginator />
