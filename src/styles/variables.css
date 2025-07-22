@@ -93,6 +93,10 @@
   --ifm-navbar-padding-vertical: 0;
   --ifm-navbar-padding-horizontal: 0;
   --ifm-navbar-shadow: none;
+
+  /* landing page font sizes */
+  --lp-header-1: 40px;
+  --lp-header-2: 32px;
 }
 
 @media (max-width: 996px) {
@@ -100,3 +104,4 @@
     --ifm-navbar-height: 48px;
   }
 }
+
