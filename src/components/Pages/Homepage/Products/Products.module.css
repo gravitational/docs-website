@@ -1,6 +1,5 @@
 .products {
-  margin-bottom: 84px;
-  padding-top: 24px;
+  margin-bottom: var(--ifm-leading);
   background-color: var(--color-white);
 }
 
@@ -10,10 +9,8 @@
 
 .productsTitle {
   font-size: var(--fs-header-1);
-  font-weight: var(--fw-bold);
-  color: var(--color-text);
-  margin: 0 0 var(--m-4) 0;
-  font-family: var(--font-base);
+  margin-bottom: calc(var(--ifm-heading-vertical-rhythm-bottom) * var(--ifm-leading));
+  margin-top: calc(var(--ifm-h2-vertical-rhythm-top) * var(--ifm-leading));
 
   @media (max-width: 576px) {
     font-size: 1.5rem;
