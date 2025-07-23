@@ -17,6 +17,10 @@ import ThumbsFeedback from '@site/src/components/ThumbsFeedback';
 
 import styles from "./styles.module.css";
 
+interface ExtendedFrontMatter {
+  remove_table_of_contents?: boolean;
+}
+
 /**
  * Decide if the toc should be rendered, on mobile or desktop viewports
  */
@@ -25,7 +29,8 @@ function useDocTOC() {
   const windowSize = useWindowSize();
 
   const hidden = frontMatter.hide_table_of_contents;
-  const canRender = !hidden && toc.length > 0;
+  const removed = (frontMatter as ExtendedFrontMatter).remove_table_of_contents;
+  const canRender = !hidden && !removed && toc.length > 0;
 
   const mobile = canRender ? <DocItemTOCMobile /> : undefined;
 
@@ -36,6 +41,7 @@ function useDocTOC() {
 
   return {
     hidden,
+    removed,
     mobile,
     desktop,
   };
@@ -48,7 +54,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   } = useDoc();
   return (
     <div className="row">
-      <div className={clsx("col", !docTOC.hidden && styles.docItemCol)}>
+      <div className={clsx("col", !docTOC.hidden && !docTOC.removed && styles.docItemCol)}>
         {unlisted && <Unlisted />}
         <DocVersionBanner />
         <div className={styles.docItemContainer}>
@@ -65,18 +71,20 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
           <DocItemPaginator />
         </div>
       </div>
-      <div className="col col--3">
-        <div className={styles.stickySidebar}>
-          <div className={styles.tocWithFeedback}>
-            <div className={styles.tocWrapper}>
-              {docTOC.desktop}
-            </div>
-            <div className={styles.feedbackWrapper}>
-              <ThumbsFeedback />
+      {!docTOC.removed && (
+        <div className="col col--3">
+          <div className={styles.stickySidebar}>
+            <div className={styles.tocWithFeedback}>
+              <div className={styles.tocWrapper}>
+                {docTOC.desktop}
+              </div>
+              <div className={styles.feedbackWrapper}>
+                <ThumbsFeedback />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -1,0 +1,286 @@
+import React from 'react';
+import styles from './Products.module.css';
+import zeroTrustSvg from '../../../Icon/teleport-svg/zero-trust.svg';
+import MWISvg from '../../../Icon/teleport-svg/mwi.svg';
+import IGSvg from '../../../Icon/teleport-svg/identity-governance.svg';
+import ISSvg from '../../../Icon/teleport-svg/identity-security.svg';
+
+interface ProductFeature {
+  title: string;
+  description: string;
+  href?: string;
+}
+
+interface ProductCategory {
+  id: string;
+  title: string;
+  description: string;
+  iconColor?: string;
+  iconComponent: any;
+  features: ProductFeature[];
+}
+
+interface ProductsProps {
+  className?: string;
+}
+
+const productCategories: ProductCategory[] = [
+  {
+    id: 'zero-trust-access',
+    title: 'Zero Trust Access',
+    description: 'Easy access to all your infrastructure on a foundation of cryptographic identity',
+    iconColor: '#EEEAFA',
+    iconComponent: zeroTrustSvg,
+    features: [
+      {
+        title: 'Enroll and Protect Your Infrastructure',
+        description: 'Apps, servers, databases, Kubernetes, desktops, & more',
+        href: '/enroll-resources/'
+      },
+      {
+        title: 'VNet: Build without VPNs',
+        description: 'Secure app & SSH access with no VPNs or proxies',
+        href: '/enroll-resources/application-access/guides/vnet/'
+      },
+      {
+        title: 'Secure MCP (Protect the Vibes)',
+        description: 'Secure MCP integration with granular audit trail',
+        href: 'https://goteleport.com/use-cases/secure-model-context-protocol/'
+      },
+      {
+        title: 'Role-Based Access Control (RBAC)',
+        description: 'Govern infrastructure access with granular permissions',
+        href: '/admin-guides/access-controls/'
+      },
+      {
+        title: 'Passwordless Authentication',
+        description: 'Log in securely using biometrics',
+        href: '/admin-guides/access-controls/guides/passwordless'
+      },
+      {
+        title: 'Integrate with SSO Providers',
+        description: 'Connect Okta, Entra ID, Google, and more',
+        href: '/admin-guides/access-controls/sso/'
+      },
+      {
+        title: 'Structured Audit Export',
+        description: 'Forward audit logs to SIEMs like Splunk and Datadog',
+        href: '/admin-guides/management/export-audit-events/'
+      },
+      {
+        title: 'Identity-Based Audit Events',
+        description: 'Detailed audit logs for every user action',
+        href: '/reference/monitoring/audit/'
+      },
+      {
+        title: 'Session Recording and Playback',
+        description: 'Record a detailed review of what took place',
+        href: 'reference/agent-services/desktop-access-reference/sessions/'
+      },
+      {
+        title: 'Session Sharing and Moderation',
+        description: 'Require a moderator for privileged sessions',
+        href: '/admin-guides/access-controls/guides/joining-sessions/'
+      },
+      {
+        title: 'Dual Authorization Capabilities',
+        description: 'Require approvals to perform critical actions',
+        href: '/admin-guides/access-controls/guides/dual-authz/'
+      },
+      {
+        title: 'Manage Clusters with IaC',
+        description: 'Create, update, and manage Teleport in declarative code.',
+        href: '/admin-guides/infrastructure-as-code/'
+      }
+    ]
+  },
+  {
+    id: 'machine-workload-identity',
+    title: 'Machine and Workload Identity',
+    description: 'Replace long-lived secrets with identity-based authentication and authorization',
+    iconColor: '#EEEAFA',
+    iconComponent: MWISvg,
+    features: [
+      {
+        title: 'Intro to Machine & Workload ID',
+        description: 'Replace long-lived secrets with identity-based auth',
+        href: '/machine-id/introduction/'
+      },
+      {
+        title: 'Deploy CI/CD Pipelines',
+        description: 'Replace long-lived secrets in CI/CD pipelines',
+        href: '/machine-workload-identity/machine-id/deployment/#cicd'
+      },
+      {
+        title: 'Secure Infrastructure as Code',
+        description: 'Manage IaC workflows in Terraform and Pulumi',
+        href: '/admin-guides/infrastructure-as-code/terraform-provider/'
+      },
+      {
+        title: 'Hybrid & Multi-Cloud Authentication',
+        description: 'Universal identities across cloud platforms',
+        href: '/machine-workload-identity/machine-id/deployment/'
+      },
+      {
+        title: 'Workload to Workload Authentication',
+        description: 'Service-to-service auth with mTLS',
+        href: '/machine-workload-identity/workload-identity/spiffe/'
+      },
+      {
+        title: 'Identity Management for AI Agents',
+        description: 'RBAC for autonomous agents and processes',
+        href: 'machine-workload-identity/workload-identity/introduction/'
+      }
+    ]
+  },
+  {
+    id: 'identity-governance',
+    title: 'Identity Governance',
+    description: 'Manage identities by enforcing principles of least privilege and zero trust',
+    iconColor: '#EEEAFA',
+    iconComponent: IGSvg,
+    features: [
+      {
+        title: 'Request Temporary Elevated Access',
+        description: 'Eliminate standing privileges w/ just-in-time access',
+        href: '/docs/identity-governance/access-requests/'
+      },
+      {
+        title: 'Manage Standing Access for Teams',
+        description: 'Sync IdP groups to roles w/ automated reviews',
+        href: '/identity-governance/okta/app-and-group-sync/'
+      },
+      {
+        title: 'Require Managed Devices for Access',
+        description: 'Guarantee access only from trusted devices',
+        href: '/identity-governance/device-trust/'
+      },
+      {
+        title: 'Instantly Lock Identities & Sessions',
+        description: 'Lock compromised users and resources',
+        href: '/identity-governance/locking/'
+      },
+      {
+        title: 'Integrate w/your Identity Provider(s)',
+        description: 'Okta, Entra ID, and Sailpoint w/SCIM group sync',
+        href: '/docs/identity-governance/okta/'
+      },
+      {
+        title: 'Federate Users to External Services',
+        description: 'Use Teleport as SAML IdP to 3rd-party apps',
+        href: '/admin-guides/access-controls/idps/'
+      },
+      {
+        title: 'Monitor for Risky Access',
+        description: 'Identify risky access patterns and behaviors',
+        href: '/identity-governance/access-monitoring/'
+      }
+    ]
+  },
+  {
+    id: 'identity-security',
+    title: 'Identity Security',
+    description: 'Visualize access paths and identify security risks across your infrastructure',
+    iconColor: '#EEEAFA',
+    iconComponent: ISSvg,
+    features: [
+      {
+        title: 'Expose Hidden Access Risks',
+        description: 'Scan for SSH keys, repo access, and more',
+        href: '/identity-security/integrations/ssh-keys-scan'
+      },
+      {
+        title: 'Identify Over-Privileged Users',
+        description: 'Identify users with excessive standing privileges',
+        href: '/identity-security/policy-how-to-use/'
+      },
+      {
+        title: 'Monitor Changes to Critical Resources',
+        description: 'Monitor, alert on, and visualize access changes',
+        href: '/identity-security/crown-jewels'
+      },
+      {
+        title: 'See AI Insights from Session Activity',
+        description: 'AI reports highlight top risks, trends, & policy violations',
+        href: '/identity-governance/access-monitoring'
+      },
+      {
+        title: 'Alert on Anomalous Activity',
+        description: 'AI alerting on risky behaviors in your infrastructure',
+        href: '/identity-governance/access-monitoring'
+      },
+      {
+        title: 'Unify Logs from Key Systems',
+        description: 'Unify logs from Okta, AWS, GitHub, and more',
+        href: '/identity-security/integrations/'
+      },
+      {
+        title: 'Query Roles, Groups, & Permissions',
+        description: 'Create custom tailored queries w/the SQL Editor',
+        href: '/identity-security/policy-how-to-use/#sql-editor'
+      }
+    ]
+  }
+];
+
+const ProductCard: React.FC<ProductFeature> = ({ title, description, href }) => {
+  const cardContent = (
+    <>
+      <h4 className={styles.featureTitle}>{title}</h4>
+      <p className={styles.featureDescription}>{description}</p>
+    </>
+  );
+
+  return href ? (
+    <a href={href} className={styles.featureItem}>
+      {cardContent}
+    </a>
+  ) : (
+    <div className={styles.featureItem}>
+      {cardContent}
+    </div>
+  );
+};
+
+const Products: React.FC<ProductsProps> = ({ className }) => {
+  return (
+    <section className={`${styles.products} ${className || ''}`}>
+      <div className={styles.productsContainer}>
+        <h2 className={styles.productsTitle}>Products</h2>
+        
+        {productCategories.map((category) => (
+          <div key={category.id} className={styles.productCategory}>
+            <div className={styles.categoryHeaderFlex}>
+              <div 
+                className={styles.categoryIcon}
+                style={{ backgroundColor: category.iconColor }}
+              >
+                <category.iconComponent className={styles.iconSvg} />
+              </div>
+              
+              <div className={styles.categoryContent}>
+                <div className={styles.categoryHeader}>
+                  <h3 className={styles.categoryTitle}>{category.title}</h3>
+                  <p className={styles.categoryDescription}>{category.description}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className={styles.featuresGrid}>
+              {category.features.map((feature, index) => (
+                <ProductCard 
+                  key={index}
+                  title={feature.title}
+                  description={feature.description}
+                  href={feature.href}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default Products;
