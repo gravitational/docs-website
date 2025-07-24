@@ -22,9 +22,10 @@ interface ProductCategory {
 
 interface ProductsProps {
   className?: string;
+  productCategories?: ProductCategory[];
 }
 
-const productCategories: ProductCategory[] = [
+const defaultProductCategories: ProductCategory[] = [
   {
     id: 'zero-trust-access',
     title: 'Zero Trust Access',
@@ -163,7 +164,7 @@ const productCategories: ProductCategory[] = [
       {
         title: 'Integrate w/your Identity Provider(s)',
         description: 'Okta, Entra ID, and Sailpoint w/SCIM group sync',
-        href: '/identity-governance/okta/'
+        href: 'identity-governance/okta/'
       },
       {
         title: 'Federate Users to External Services',
@@ -242,7 +243,10 @@ const ProductCard: React.FC<ProductFeature> = ({ title, description, href }) => 
   );
 };
 
-const Products: React.FC<ProductsProps> = ({ className }) => {
+const Products: React.FC<ProductsProps> = ({
+  className = '',
+  productCategories = defaultProductCategories,
+}) => {
   return (
     <section className={`${styles.products} ${className || ''}`}>
       <div className={styles.productsContainer}>
