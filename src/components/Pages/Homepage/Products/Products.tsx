@@ -143,7 +143,7 @@ const productCategories: ProductCategory[] = [
       {
         title: 'Request Temporary Elevated Access',
         description: 'Eliminate standing privileges w/ just-in-time access',
-        href: '/docs/identity-governance/access-requests/'
+        href: '/identity-governance/access-requests/'
       },
       {
         title: 'Manage Standing Access for Teams',
@@ -163,7 +163,7 @@ const productCategories: ProductCategory[] = [
       {
         title: 'Integrate w/your Identity Provider(s)',
         description: 'Okta, Entra ID, and Sailpoint w/SCIM group sync',
-        href: '/docs/identity-governance/okta/'
+        href: '/identity-governance/okta/'
       },
       {
         title: 'Federate Users to External Services',
