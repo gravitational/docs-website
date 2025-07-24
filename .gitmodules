@@ -5,7 +5,7 @@
 [submodule "content/17.x"]
 	path = content/17.x
 	url = https://github.com/gravitational/teleport/
-	branch = travis.rodgers/add-products-section
+	branch = branch/v17
 [submodule "content/18.x"]
 	path = content/18.x
 	url = https://github.com/gravitational/teleport
