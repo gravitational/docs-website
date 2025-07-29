@@ -1,5 +1,4 @@
 import React from 'react';
-import { VersionPicker } from './VersionPicker';
 import { InlineSearch } from './InlineSearch';
 import styles from './DocsHeader.module.css';
 
@@ -40,9 +39,6 @@ function DocsHeader({
           
           <div className={styles.searchSection}>
             <div className={styles.searchBar}>
-              <div className={styles.versionPicker}>
-                <VersionPicker />
-              </div>
               <div className={styles.searchContainer}>
                 <InlineSearch />
               </div>
