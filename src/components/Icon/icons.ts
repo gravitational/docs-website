@@ -64,6 +64,11 @@ export { default as warning } from "./svg/warning.svg";
 export { default as window } from "./svg/window.svg";
 export { default as windows } from "./svg/windows.svg";
 export { default as wrench } from "./svg/wrench.svg";
+export { default as azureDevops } from "./svg/azure-devops.svg";
+export { default as gitlab } from "./svg/gitlab.svg";
+export { default as circleci } from "./svg/circleci.svg";
+export { default as bitbucket } from "./svg/bitbucket.svg";
+export { default as jenkins } from "./svg/jenkins.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
