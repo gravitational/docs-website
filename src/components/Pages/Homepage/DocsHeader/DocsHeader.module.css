@@ -81,93 +81,12 @@
   display: flex;
   justify-content: center;
 
-<<<<<<< HEAD
   .searchContainer {
-=======
-  .searchBar {
-    display: flex;
-    width: 100%;
-    border-radius: var(--r-lg);
-    background: var(--color-white);
-    box-shadow: rgba(0, 0, 0, 0.20) 0px 2px 8px;
-    position: relative;
-    overflow: visible;
-    z-index: 1000;
-    max-width: 1000px;
-
-    @media (min-width: 769px) {
-      max-height: 54px;
-    }
-
-    @media (min-width: 901px) {
-      max-height: 64px;
-    }
-
-  }
-
-  .versionPicker {
-    width: 167px;
-    border-top-left-radius: var(--r-lg);
-    display: flex;
-    align-items: center;
-    background: white;
-    border-right: 1px solid var(--color-lighter-gray);
-    position: relative;
-    z-index: 1001;
-    &:hover {
-      border: 1px solid var(--color-text);
-    }
-  }
-
-.searchContainer {
->>>>>>> a0fd56b (remove VersionPicker from the DocsHeader component, styling DocsHeader)
     flex: 1;
     overflow: visible;
     background: var(--color-white);
     border-radius: var(--r-lg);
-<<<<<<< HEAD
     border: 1px solid var(--color-tonal-neutral-1);
-=======
-    border: 1px solid rgba(0, 0, 0, 0.13);
-    &:hover {
-      border: 1px solid var(--color-text);
-    }
-  }
-
-
-  @media (max-width: 768px) {
-    .searchBar {
-      flex-direction: column;
-      gap: 0;
-    }
-    
-    .versionPicker {
-      width: 100%;
-      justify-content: center;
-      border-right: none;
-      border-bottom: 1px solid var(--color-lighter-gray);
-      border-top-right-radius: var(--r-lg);
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      padding: 0.5rem 1rem;
-      height: 40px;
-    }
-
-    .searchContainer {
-      width: 100%;
-      flex-direction: row;
-      border-top-right-radius: 0;
-      border-bottom-left-radius: var(--r-lg);
-      border-bottom-right-radius: var(--r-lg);
-
-      .wrapper {
-        .searchIcon, ::placeholder {
-          position: relative;
-          text-align: center;
-        }
-      }
-    }
->>>>>>> a0fd56b (remove VersionPicker from the DocsHeader component, styling DocsHeader)
   }
 }
 
