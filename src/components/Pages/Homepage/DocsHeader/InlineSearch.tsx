@@ -21,15 +21,20 @@ export function InlineSearch({ className = '', version }: InlineSearchProps) {
   } = useInkeepSearch({
     version,
     enableKeyboardShortcut: true,
-    keyboardShortcut: 'f', // ⌘+F for inline search
+    keyboardShortcut: 'k', // ⌘+K for inline search
   });
+
+  function getPlaceholderByPlatform() {
+    const isMac = navigator.userAgent.toUpperCase().includes('MAC');
+    return isMac ? 'Search Docs or Press ⌘ + K' : 'Search Docs or Press Ctrl + K'
+  }
 
   return (
     <div className={clsx(styles.wrapper, className)}>
       <Icon name="magnify" className={styles.searchIcon} inline />
       <input
         type="text"
-        placeholder="Search Docs or Press ⌘ + F"
+        placeholder={getPlaceholderByPlatform()}
         className={styles.searchInput}
         onClick={() => setIsOpen(true)}
         onFocus={() => setIsOpen(true)}
