@@ -30,7 +30,7 @@ function useDocTOC(removeTOCSidebar: boolean) {
   const windowSize = useWindowSize();
 
   const hidden = frontMatter.hide_table_of_contents;
-  const removed = (frontMatter as ExtendedFrontMatter).remove_table_of_contents;
+  const removed = (frontMatter as ExtendedFrontMatter).remove_table_of_contents || removeTOCSidebar;
   const canRender = !hidden && !removed && toc.length > 0;
 
   const mobile = canRender ? <DocItemTOCMobile /> : undefined;

@@ -24,7 +24,7 @@ function DocsHeader({
   quickActions = defaultQuickActions
 }: DocsHeaderProps) {
   return (
-    <div className={styles.docsHeader}>
+    <section className={styles.docsHeader}>
       {/* Background container with overflow control */}
       <div className={styles.backgroundContainer}>
         <div className={styles.background} />
@@ -59,7 +59,7 @@ function DocsHeader({
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -14,6 +14,10 @@
   --color-dark-gray: #455a64;
   --color-darkest: #37474f;
   --color-black: #000;
+  --color-foreground-slightly-muted: #000000b8;
+  --color-tonal-neutral-0: #0000000f;
+  --color-tonal-neutral-1: #00000021;
+
   --color-warning: #ffb400;
   --color-danger: #f80061;
   --color-text: #263238;

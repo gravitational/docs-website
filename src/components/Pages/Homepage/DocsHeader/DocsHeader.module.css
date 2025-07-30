@@ -20,7 +20,7 @@
 .contentContainer {
   position: relative;
   z-index: 1;
-  padding: var(--m-8);
+  padding: var(--m-9);
   min-height: 350px;
   width: 100%;
   height: 100%;
@@ -47,7 +47,7 @@
 }
 
 .content {
-  max-width: 1200px;
+  max-width: 1400px;
   width: 100%;
   height: 100%;
   margin: 0 auto;
@@ -87,7 +87,7 @@
     width: 100%;
     border-radius: var(--r-lg);
     background: var(--color-white);
-    box-shadow: rgba(0, 0, 0, 0.20) 0px 2px 8px;
+    box-shadow: 0 5px 20px 0 rgba(19, 19, 19, 0.10);
     position: relative;
     overflow: visible;
     z-index: 1000;
@@ -126,7 +126,7 @@
     overflow: visible;
     background: var(--color-white);
     border-radius: var(--r-lg);
-    border: 1px solid rgba(0, 0, 0, 0.13);
+    border: 1px solid var(--color-tonal-neutral-1);
     &:hover {
       border: 1px solid var(--color-text);
     }
@@ -176,7 +176,7 @@
 
   .exampleText {
     font-size: 15px;
-    color: var(--color-text);
+    color: var(--color-foreground-slightly-muted);
     opacity: 0.8;
     margin-right: var(--m-1);
 
@@ -190,12 +190,12 @@
     align-items: center;
     padding: var(--m-0-5) var(--m-1-5);
     background-color: #FBFBFC;
-    color: black;
+    color: var(--color-foreground-slightly-muted);
     text-decoration: none;
     border-radius: var(--r-md);
     font-weight: 500;
     transition: all var(--t-fast) ease;
-    border: 1px solid var(--color-lighter-gray);
+    border: 1px solid var(--color-tonal-neutral-0);
     font-size: var(--fs-text-sm);
 
     &:hover {
