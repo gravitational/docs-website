@@ -1,6 +1,8 @@
 .products {
   margin-bottom: var(--ifm-leading);
   background-color: var(--color-white);
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .productsContainer {

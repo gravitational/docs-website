@@ -6,7 +6,7 @@ import Heading from '@theme/Heading';
 import MDXContent from '@theme/MDXContent';
 import type {Props} from '@theme/DocItem/Content';
 import {GitHubIssueLink} from "/src/components/GitHubIssueLink";
-import { useLocation } from "@docusaurus/router";
+import { useDocTemplate } from '@site/src/hooks/useDocTemplate';
 
 /**
  Title can be declared inside md content or declared through
@@ -29,17 +29,18 @@ function useSyntheticTitle(): string | null {
 }
 
 export default function DocItemContent({children}: Props): ReactNode {
-  const location = useLocation();
   const syntheticTitle = useSyntheticTitle();
+  const { hideTitleSection } = useDocTemplate();
+  
   return (
     <div className={clsx(ThemeClassNames.docs.docMarkdown, 'markdown')}>
-      {syntheticTitle && (
-        <header>
-          <Heading as="h1">{syntheticTitle}</Heading>
-          <GitHubIssueLink pathname={location.pathname}/>
-        </header>
-      )}
-      <MDXContent>{children}</MDXContent>
-    </div>
+        {syntheticTitle && (
+          <header className={hideTitleSection ? 'hide-title-section' : undefined}>
+            <Heading as="h1">{syntheticTitle}</Heading>
+            <GitHubIssueLink pathname={location.pathname}/>
+          </header>
+        )}
+        <MDXContent>{children}</MDXContent>
+      </div>
   );
 }
