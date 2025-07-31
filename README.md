@@ -104,7 +104,7 @@ If no versions are marked as `current`/`latest`, last version in alphabetical or
 
 - `yarn git-update` – update git submodules.
 - `yarn prepare-files` – copy files from `content` to folders used by Docusaurus.
-- `yarn prepare-strapi-data` - fetching and saving data from Strapi CMS.
+- `yarn prepare-strapi-data` - fetches data required for the header and event banner
 - `yarn start` – start server in dev mode.
 - `yarn build` - buld static site.
 - `yarn swizzle` - used to eject files from the default Docusaurus theme to the `src/theme` folder. See [swizzling](https://docusaurus.io/docs/swizzling).
