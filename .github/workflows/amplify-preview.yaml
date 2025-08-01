@@ -59,14 +59,13 @@ jobs:
       - name: Install deps
         run: yarn
       - name: Prepare docs site configuration
-        # Replace data fetched from Sanity CMS with hardcoded JSON objects to
-        # remove the need to authenticate with Sanity. Each includes the minimal
-        # set of data required for docs builds to succeed.
+        # Replace data fetched from goteleport.com/api/data/navigation with hard coded JSON objects. 
+        # Each includes the minimal set of data required for docs builds to succeed.
         run: |
           NEW_PACKAGE_JSON=$(jq '.scripts."prepare-sanity-data" = "echo Using pre-populated Sanity data"' package.json);
           echo "$NEW_PACKAGE_JSON" > package.json;
           echo "{}" > data/events.json
-          echo '{"bannerButtons":{"second":{"title":"LOG IN","url":"https://teleport.sh"},"first":{"title":"Support","url":"https://goteleport.com/support/"}},"navbarData":{"rightSide":{},"logo":"/favicon.svg","menu":[]}}' > data/navbar.json
+          echo '{"bannerButtons":{"second":{"title":"LOG IN","url":"https://teleport.sh"},"first":{"title":"Support","url":"https://goteleport.com/support/"}},"navbarData":{"rightSide":{},"logo":{"url":"/favicon.svg","menuItems":[]}}' > data/navbar.json
 
       - name: Build the docs with the latest content
         run: yarn build
