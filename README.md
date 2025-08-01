@@ -8,8 +8,6 @@ This a port of the Teleport docs from the original custom engine to [Docusaurus]
 $ yarn
 ```
 
-Create `.env` file with variables: `STRAPI_URL` and `STRAPI_AUTH_TOKEN` to make menu and events work.
-
 ## Local Development
 
 ```
@@ -35,7 +33,7 @@ Settings for AWS Amplify are following:
 1. `nodejs` 20 and `yarn` v1.22.22.
 2. Build command `yarn build`
 4. Build results folder `build`
-5. Following env variables should be set: `INKEEP_API_KEY`, `YOUTUBE_API_KEY`, `STRAPI_URL`, `STRAPI_AUTH_TOKEN`.
+5. Following env variables should be set: `INKEEP_API_KEY`, `YOUTUBE_API_KEY`
 6. This variable should be set increase nodejs memory `NODE_OPTIONS=--max-old-space-size=8192`
 7. Add the following redirect to make 404 work:
     - Source address: `/<*>` 
@@ -78,7 +76,7 @@ Everything else is more or less straightforward Docusaurus code.
 - `src/utils` – client-side utils.
 - `static` - static files for the site: manifests, favicons, etc.
 - `docs`, `versioned_docs` and `versioned_sidebars` – folders for Docusaurus site content that will be automatically populated by a script (`yarn prepare-files`).
-- `data` is a folder for content pulled from Strapi CMS.
+- `data` is a folder for navigation element data pulled from goteleport.com/api/data/navigation.
 
 ### `config.json` format
 
@@ -104,7 +102,7 @@ If no versions are marked as `current`/`latest`, last version in alphabetical or
 
 - `yarn git-update` – update git submodules.
 - `yarn prepare-files` – copy files from `content` to folders used by Docusaurus.
-- `yarn prepare-strapi-data` - fetches data required for the header and event banner
+- `yarn prepare-navigation-data` - fetches data required for the header and event banner
 - `yarn start` – start server in dev mode.
 - `yarn build` - buld static site.
 - `yarn swizzle` - used to eject files from the default Docusaurus theme to the `src/theme` folder. See [swizzling](https://docusaurus.io/docs/swizzling).

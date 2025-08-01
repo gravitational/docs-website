@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import { resolve, join } from "path";
-import { generateData } from "../server/strapi-settings";
+import { generateData } from "../server/strapi";
 
 const DATA_FOLDER = resolve(__dirname, "../data");
 

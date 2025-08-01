@@ -7,11 +7,11 @@
     "build-remark": "tsc --build tsconfig.node.json && tsc-esm-fix --target='.remark-build' --ext='.mjs'",
     "git-update": "scripts/update_submodules.sh",
     "prepare-files": "npx vite-node ./scripts/prepare-files.mts",
-    "prepare-strapi-data": "npx vite-node ./scripts/prepare-strapi-data.mts",
+    "prepare-navigation-data": "npx vite-node ./scripts/prepare-navigation-data.mts",
     "docusaurus": "docusaurus",
     "dev": "bash scripts/start-dev.sh",
-    "start": "yarn prepare-files && yarn prepare-strapi-data && docusaurus start",
-    "build": "yarn git-update && yarn prepare-files && yarn prepare-strapi-data && docusaurus build \"$@\"",
+    "start": "yarn prepare-files && yarn prepare-navigation-data && docusaurus start",
+    "build": "yarn git-update && yarn prepare-files && yarn prepare-navigation-data && docusaurus build \"$@\"",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -137,5 +137,6 @@
   },
   "engines": {
     "node": ">=18.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
