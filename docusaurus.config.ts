@@ -127,6 +127,7 @@ const config: Config = {
   // contain a trailing slash in the URL, so add trailing slashes to sitemap
   // URLs to prevent clients from receiving non-200 responses.
   trailingSlash: true,
+  noIndex: process.env.AWS_BRANCH_NAME !== "main",
 
   markdown: {
     parseFrontMatter: async (params) => {
