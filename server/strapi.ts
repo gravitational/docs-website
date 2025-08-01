@@ -19,13 +19,13 @@ const fetchData = async () => {
       });
 
     if (!result) {
-      throw new Error("No result returned from query!");
+      throw new Error("No navigation data returned from query!");
     }
     return result;
   } catch (err) {
     if (err instanceof Error) {
       if (err.name === "AbortError") {
-        console.error(`Request was aborted after 10 seconds`);
+        console.error(`Navigation data request was aborted after 10 seconds`);
       } else {
         throw err;
       }
@@ -46,24 +46,24 @@ export const generateData = async ({
   let data = undefined;
   try {
     data = await fetchData();
-    if (!data || !data.navbardata || !data.eventsdata) return;
+    if (!data?.navbardata || !data?.eventsdata) return;
   } catch (error) {
-    console.error("No data returned");
+    console.error("No navigation data returned");
     return;
   }
 
   if (data) {
     try {
       writeFileSync(navPath, JSON.stringify(data.navbardata));
-      console.log("Writing header data to file: ", navPath);
+      console.log("Writing header navigation data to file: ", navPath);
     } catch (error) {
-      console.error("Error writing header data to file:", error);
+      console.error("Error writing header navigation data to file:", error);
     }
     try {
       writeFileSync(eventPath, JSON.stringify(data.eventsdata));
-      console.log("Writing event data to file: ", eventPath);
+      console.log("Writing eventbanner data to file: ", eventPath);
     } catch (error) {
-      console.error("Error writing event data to file:", error);
+      console.error("Error writing eventbanner data to file:", error);
     }
   }
 };
