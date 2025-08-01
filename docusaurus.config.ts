@@ -173,7 +173,18 @@ const config: Config = {
     ],
     "@docusaurus/theme-classic",
     "@docusaurus/plugin-sitemap",
-    "@docusaurus/plugin-svgr",
+    [
+      "@docusaurus/plugin-svgr",
+      {
+        svgrConfig: {
+          svgoConfig: {
+            plugins: [
+              "prefixIds"
+            ],
+          },
+        },
+      }
+    ],
     [
       "@docusaurus/plugin-content-docs",
       {

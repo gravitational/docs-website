@@ -18,14 +18,22 @@ import Command, { CommandLine, CommandComment } from "/src/components/Command";
 import Snippet from "/src/components/Snippet";
 import { Var } from "/src/components/Variables";
 import type { MDXComponentsObject } from "@theme/MDXComponents";
+import Icon from "/src/components/Icon";
+import Tile from "/src/components/Tile";
+import TileGrid from "/src/components/TileGrid";
+import ThumbsFeedback from "/src/components/ThumbsFeedback";
+
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
   Details: MDXDetails,
   DocCardList: DocCardList,
   Head,
+  Icon,
   TabItem,
   Tabs,
+  Tile,
+  TileGrid,
   a: MDXA,
   Admonition,
   code: Code,
@@ -47,6 +55,7 @@ const MDXComponents: MDXComponentsObject = {
   snippet: Snippet,
   ul: MDXUl,
   Var: (props) => <Var {...props} />, // needed to circumvent props mismatch in types
+  ThumbsFeedback
 };
 
 export default MDXComponents;

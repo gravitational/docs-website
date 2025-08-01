@@ -16,6 +16,8 @@ import type { VFile } from "vfile";
 import { join } from "path";
 import { existsSync, readFileSync } from "fs";
 import { visitParents } from "unist-util-visit-parents";
+import { visit, SKIP } from "unist-util-visit";
+import type { Visitor } from "unist-util-visit";
 import { fromMarkdown } from "mdast-util-from-markdown";
 
 import { mdxjs } from "micromark-extension-mdxjs";
@@ -27,6 +29,8 @@ import { gfmFromMarkdown } from "mdast-util-gfm";
 import { frontmatterFromMarkdown } from "mdast-util-frontmatter";
 
 import updateMessages from "./update-vfile-messages";
+
+import type { MdxJsxTextElement, MdxJsxFlowElement } from "mdast-util-mdx-jsx";
 
 const includeRegexpBase = "\\(!(.*)!\\)`?";
 const includeRegexp = new RegExp(includeRegexpBase);
@@ -54,7 +58,7 @@ export interface ParameterAssignments {
 // Values must be wrapped in double quotes. Assignments must be separated by
 // single spaces. An equals sign must separate each parameter and its value.
 export function parseAssignments(
-  assignmentSection: string
+  assignmentSection: string,
 ): ParameterAssignments {
   // no parameter assignments to parse
   if (assignmentSection.length == 0) {
@@ -70,7 +74,7 @@ export function parseAssignments(
   // Since every assignment must end with a double quote and a space, split
   // assignments on spaces that follow a non-escaped double quote.
   const rawAssignments = assignmentSection.split(
-    new RegExp('(?<=[^\\\\]") ', "g")
+    new RegExp('(?<=[^\\\\]") ', "g"),
   );
 
   // Matches an assignment within the assignmentSection string, e.g.:
@@ -84,13 +88,13 @@ export function parseAssignments(
 
   rawAssignments.forEach((rawAssignment) => {
     const assignmentParts = Array.from(
-      rawAssignment.matchAll(assignmentRegExp)
+      rawAssignment.matchAll(assignmentRegExp),
     )[0];
     // I.e., there's not a main match and two group matches
     if (assignmentParts.length !== 3) {
       throw new Error(
         `Could not parse expression ${rawAssignment} as a partial assignment. ` +
-          `Partial assignments must be wrapped in double quotes and separated by spaces.`
+          `Partial assignments must be wrapped in double quotes and separated by spaces.`,
       );
     }
 
@@ -136,7 +140,7 @@ export function parsePartialParams(expr: string): ParameterAssignments {
     throw new Error(
       "When including a partial, any parameter assignments must" +
         " be separated by single spaces with the values wrapped in double quotes" +
-        ' e.g., (!mypartial.mdx var="val" var2="val"!)'
+        ' e.g., (!mypartial.mdx var="val" var2="val"!)',
     );
   }
   return assignments;
@@ -188,12 +192,12 @@ export function resolveParamValue(val: string): string {
   }
   if (val[0] !== `"`) {
     throw new Error(
-      `parameter values in partials must be wrapped in double-quoted strings, but this value is not: ${val}`
+      `parameter values in partials must be wrapped in double-quoted strings, but this value is not: ${val}`,
     );
   }
   if (val[0] !== val[val.length - 1]) {
     throw new Error(
-      `parameter values in partials must be wrapped in matching quotes, but this value is not: ${val}`
+      `parameter values in partials must be wrapped in matching quotes, but this value is not: ${val}`,
     );
   }
   let newVal = val.slice(1, val.length - 1);
@@ -275,6 +279,53 @@ export interface RemarkIncludesOptions {
   updatePaths?: (options: UpdatePathsOptions) => string;
 }
 
+// elevateSummary finds the summary element in a details box, which Markdown
+// parsing embeds within a paragraph element, and assigns it as a first-level
+// child to the details box so Docusaurus can render the summary as expected.
+const elevateSummary = (node: Node) => {
+  const element = node as unknown as MdxJsxFlowElement;
+  if (!element.name || element.name != "details") {
+    return;
+  }
+
+  // Traverse the first-level children of the details box, since parsing a
+  // partial often buries the summary within a paragraph. The summary can
+  // either be the sole child of the paragraph, in which case we replace the
+  // paragraph with its child, or one of several children, in which case we
+  // preserve the other children while moving the summary to the first level.
+  element.children.forEach((child) => {
+    if (child.type !== "paragraph") {
+      return;
+    }
+    const tr = child as Parent;
+    if (!tr.children || tr.children.length == 0) {
+      return;
+    }
+
+    if (
+      tr.children.length == 1 &&
+      (tr.children[0] as unknown as MdxJsxTextElement).name &&
+      (tr.children[0] as unknown as MdxJsxTextElement).name == "summary"
+    ) {
+      Object.assign(child, tr.children[0]);
+      return;
+    }
+
+    // The paragraph has multiple children, so see if one of them is a summary
+    // and, if so, make it the first child element of the details box.
+    tr.children.forEach((c, i) => {
+      const child = c as unknown as MdxJsxTextElement;
+      if (!child.name || child.name != "summary") {
+        return;
+      }
+      element.children.unshift(child as any);
+      tr.children.splice(i, 1);
+    });
+  });
+
+  return SKIP;
+};
+
 export default function remarkIncludes({
   rootDir = "",
   lint,
@@ -326,6 +377,8 @@ export default function remarkIncludes({
 
               const path = txt.value.match(exactIncludeRegexp)[1];
 
+              // Parse the partial as a Markdown AST and insert it into the
+              // parent AST.
               if (resolve) {
                 if (path.split(" ")[0].match(/\.mdx?$/)) {
                   const tree = fromMarkdown(result, {
@@ -337,6 +390,14 @@ export default function remarkIncludes({
                     ],
                   });
 
+                  // Parsing the include results in embedding the <summary> of
+                  // a <details> box in a <p>, which prevents Docusaurus from
+                  // rendering the summary correctly. Make the summary a
+                  // first-level child of the <details>.
+                  visit(tree as unknown as Node, elevateSummary as Visitor);
+
+                  // Replace relative paths in the partial so they match the
+                  // directory structure of the including page.
                   updatePaths({
                     node: tree as Root,
                     versionRootDir: resolvedRootDir,
@@ -350,7 +411,7 @@ export default function remarkIncludes({
                   grandParent.children.splice(
                     parentIndex,
                     1,
-                    ...(tree as Root).children
+                    ...(tree as Root).children,
                   );
                 } else {
                   txt.value = result;
@@ -363,13 +424,13 @@ export default function remarkIncludes({
             } else if (lint) {
               vfile.message(
                 "Includes only works if they are the only content on the line",
-                node
+                node,
               );
             }
           } else if (lint) {
             vfile.message(
               "Includes only works if they are the only content on the line",
-              node
+              node,
             );
           }
         }
