@@ -46,7 +46,7 @@ export const generateData = async ({
   let data = undefined;
   try {
     data = await fetchData();
-    if (!data) return;
+    if (!data || !data.navbardata || !data.eventsdata) return;
   } catch (error) {
     console.error("No data returned");
     return;
@@ -57,13 +57,13 @@ export const generateData = async ({
       writeFileSync(navPath, JSON.stringify(data.navbardata));
       console.log("Writing header data to file: ", navPath);
     } catch (error) {
-      console.error("Error writing footer data to file:", error);
+      console.error("Error writing header data to file:", error);
     }
     try {
       writeFileSync(eventPath, JSON.stringify(data.eventsdata));
       console.log("Writing event data to file: ", eventPath);
     } catch (error) {
-      console.error("Error writing footer data to file:", error);
+      console.error("Error writing event data to file:", error);
     }
   }
 };
