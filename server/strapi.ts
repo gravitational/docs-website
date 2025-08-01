@@ -48,7 +48,7 @@ export const generateData = async ({
     data = await fetchData();
     if (!data?.navbardata || !data?.eventsdata) return;
   } catch (error) {
-    console.error("No navigation data returned");
+    console.error("No navigation data returned from " + fetchUrl);
     return;
   }
 
