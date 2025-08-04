@@ -6,10 +6,9 @@ import {
   getVersion,
   getVersionRootPath,
 } from "./.remark-build/server/docs-helpers.mjs";
+import { remarkLintPageStructure } from "./.remark-build/server/lint-page-structure.mjs";
 import { loadConfig } from "./.remark-build/server/config-docs.mjs";
-import {
-  updatePathsInIncludes,
-} from "./.remark-build//server/asset-path-helpers.mjs";
+import { updatePathsInIncludes } from "./.remark-build//server/asset-path-helpers.mjs";
 
 const configFix = {
   settings: {
@@ -71,6 +70,7 @@ const configLint = {
     // [CM-08 Information System Component Inventory]((=fedramp.control_url=)CM-8)
     ["validate-links", { repository: false }],
     [remarkLintTeleportDocsLinks],
+    [remarkLintPageStructure],
     // Disabling the remarkLintFrontmatter check until we fix
     // gravitational/docs#80
     // [remarkLintFrontmatter, ["error"]],
