@@ -27,8 +27,7 @@ export function InlineSearch({ className = "", version }: InlineSearchProps) {
   function getPlaceholderByPlatform() {
     const isMac =
       /Mac|Macintosh|MacIntel|MacPPC|iPad|iPhone/.test(navigator.platform) ||
-      /Mac|Macintosh|MacIntel|MacPPC/.test(navigator.userAgent) ||
-      navigator.userAgentData.platform === "macOS";
+      /Mac|Macintosh|MacIntel|MacPPC/.test(navigator.userAgent);
     return isMac
       ? "Search Docs or Press ⌘ + K"
       : "Search Docs or Press Ctrl + K";
