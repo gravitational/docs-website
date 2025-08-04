@@ -11,7 +11,7 @@ import { loadJson } from "./json";
 interface Config {
   versions: {
     name: string;
-    branch: string;
+    release?: string;
     isDefault?: boolean;
     deprecated?: boolean;
   }[];
@@ -44,12 +44,12 @@ const validator = ajv.compile({
         type: "object",
         properties: {
           name: { type: "string" },
-          branch: { type: "string" },
           isDefault: { type: "boolean", nullable: true },
           deprecated: { type: "boolean", nullable: true },
+          release: { type: "string", nullable: true },
         },
         additionalProperties: false,
-        required: ["name", "branch"],
+        required: ["name"],
       },
       minItems: 1,
       uniqueItems: true,
@@ -68,12 +68,21 @@ export const loadConfig = () => {
   return config;
 };
 
-// Returns a list of supported versions, excluding deprecated ones.s
-
+// Returns a list of supported versions, excluding deprecated ones, sorted
+// ascending by number.
 const getSupportedVersions = () => {
   const { versions } = loadConfig();
 
-  return versions.filter(({ deprecated }) => !deprecated);
+  const supportedVersions = versions.filter(({ deprecated }) => !deprecated);
+  supportedVersions.sort((a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    } else if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  });
+  return supportedVersions;
 };
 
 // Returns name of the latest version.
@@ -103,7 +112,7 @@ export const getDocusaurusConfigVersionOptions = (): Record<
 > => {
   const versions = getSupportedVersions();
 
-  return versions.reduce((result, { name, isDefault, branch }, idx) => {
+  return versions.reduce((result, { name, release, isDefault }, idx) => {
     // Use "current" as the name for the current version (i.e., the edge
     // version), the highest-numbered version in the configuration. This way
     // Docusaurus will look for it in the `docs` folder instead of
@@ -112,7 +121,7 @@ export const getDocusaurusConfigVersionOptions = (): Record<
     const versionName = isCurrent ? "current" : name;
 
     const versionOptions: VersionOptions = {
-      label: isCurrent ? `${name} (unreleased)` : name,
+      label: isCurrent ? `${name} (unreleased)` : release || name,
       // Configure root path for the version. Latest in the root, others in the `ver/XX.x` folder.
       path: isDefault ? "" : `ver/${name}`,
     };
