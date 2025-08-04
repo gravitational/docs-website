@@ -36,21 +36,24 @@ export function InlineSearch({ className = "", version }: InlineSearchProps) {
   return (
     <div className={clsx(styles.wrapper, className)}>
       <Icon name="magnify" className={styles.searchIcon} inline />
-      <input
-        type="text"
-        placeholder={getPlaceholderByPlatform()}
-        className={styles.searchInput}
-        onClick={() => setIsOpen(true)}
-        onFocus={() => setIsOpen(true)}
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        readOnly
-      />
-
       <BrowserOnly>
         {() => {
           return (
-            ModalSearchAndChat && <ModalSearchAndChat {...inkeepModalProps} />
+            <>
+              <input
+                type="text"
+                placeholder={getPlaceholderByPlatform()}
+                className={styles.searchInput}
+                onClick={() => setIsOpen(true)}
+                onFocus={() => setIsOpen(true)}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                readOnly
+              />
+              {ModalSearchAndChat && (
+                <ModalSearchAndChat {...inkeepModalProps} />
+              )}
+            </>
           );
         }}
       </BrowserOnly>
