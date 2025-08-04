@@ -1,23 +1,26 @@
 #!/bin/bash
 
-# Fetch all submodule refs on a local machine. On the AWS Amplify build runner,
-# only execute a shallow fetch with a single branch.
-function fetch_submodules () {
-  if [[ -n ${AWS_APP_ID} ]]; then
-      git submodule update --init --remote --progress --depth 1 --single-branch
-  else
-      git submodule update --init --remote --progress
-  fi
-}
 
-let "i=0";
-let "s=0";
-while [ ${i} -lt 5 ]; do
-    fetch_submodules && exit 0;
-    let "i++";
-    let "s=s+5";
-    echo "Failed to load submodules. Trying again in ${s}s."
-    sleep ${s};
-done;
+# Load docs content into the content directory. In production or on CI runners,
+# retrieve archives for the latest release for each supported Teleport major
+# version. If running locally, use git submodules.
+#
+# Note that, when checking docs content changes in gravitational/teleport, CI
+# jobs should clone the gravitational/teleport repository into a subdirectory of
+# content, rather than using this approach.
+if [[ -n ${AWS_APP_ID} || -n ${CI} ]]; then
+  DOCS_VERSIONS=$(jq -r '.versions[] | select(.deprecated != true) | .name' config.json);
+  for v in $(echo "$DOCS_VERSIONS"); do
+     # Make sure there is a subdirectory in content for each version named in
+     # config.json
+     if [[ ! -d "content/$v" ]]; then
+         mkdir "content/$v";
+     fi
 
-exit 1;
+     BRANCH=$(jq --arg ver "$v" -r '.versions[] | select(.name==$ver) | .branch' config.json);
+     scripts/download-content-archive.sh "content/$v" "$BRANCH";
+  done
+else
+  git submodule update --init --remote --progress;
+fi
+
