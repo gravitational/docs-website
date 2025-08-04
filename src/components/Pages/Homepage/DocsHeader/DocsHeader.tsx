@@ -13,9 +13,9 @@ interface DocsHeaderProps {
 }
 
 const defaultQuickActions = [
-  { label: "Enroll Kubernetes cluster", href: "/enroll-resources/kubernetes-access/getting-started/" },
-  { label: "set up SSO with GitHub", href: "/admin-guides/access-controls/sso/github-sso/" },
-  { label: "set up Slack Access Request Plugin", href: "/admin-guides/access-controls/access-request-plugins/slack/" }
+  { label: "Enroll Kubernetes cluster", href: "./enroll-resources/kubernetes-access/getting-started/" },
+  { label: "set up SSO with GitHub", href: "./zero-trust-access/sso/github-sso/" },
+  { label: "set up Slack Access Request Plugin", href: "./identity-governance/access-request-plugins/ssh-approval-slack/" }
 ];
 
 function DocsHeader({ 
