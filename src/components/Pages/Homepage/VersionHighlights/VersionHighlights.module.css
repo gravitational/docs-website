@@ -1,0 +1,109 @@
+.versionHighlights {
+  padding-bottom: 5.25rem /* 84px */;
+  background-color: var(--color-white);
+  margin-left: -1rem;
+  margin-right: -1rem;
+}
+
+.title {
+  font-size: var(--fs-header-1);
+  margin-bottom: unset;
+  @media (max-width: 576px) {
+    font-size: 1.5rem;
+  }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  margin-bottom: var(--m-4);
+  flex-direction: column;
+
+  @media screen (min-width: 577px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: var(--m-2);
+
+  .link {
+    border-radius: var(--m-1-5);
+    background-color: rgba(0, 0, 0, 0.06);
+    color: rgba(0, 0, 0, 0.72);
+    font-weight: var(--fw-bold);
+    padding: var(--fs-text-xs) var(--m-4);
+  }
+}
+
+.highlightsList {
+  display: grid;
+  grid-template-columns: 1fr;
+  list-style: none;
+  padding-left: 0;
+  gap: var(--m-2);
+  @media (--md-scr) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.highlightItem {
+  display: grid;
+  gap: var(--m-2);
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 48% 52%;
+  }
+
+  .highlightContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .highlightImage {
+    background-color: rgba(0, 0, 0, 0.06);
+    border-radius: var(--m-2);
+    aspect-ratio: 323 / 182;
+  }
+  .highlightTag {
+    font-size: var(--fs-text-sm);
+    color: rgba(0, 0, 0, 0.72);
+    background-color: #fbfbfc;
+    border-radius: 8px;
+    padding: 6px 12px;
+    width: max-content;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    margin-bottom: 0;
+  }
+
+  .highlightTitle {
+    margin-bottom: 0;
+    line-height: 1.5;
+    font-size: var(--fs-header-4);
+  }
+
+  .highlightDescription {
+    color: rgba(0, 0, 0, 0.52);
+    margin-bottom: 0;
+    line-height: 1.625;
+  }
+
+  .highlightLink {
+    font-size: var(--fs-header-4);
+    color: var(--color-dark-purple);
+    text-decoration: none;
+    font-weight: var(--fw-bold);
+  }
+}

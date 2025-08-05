@@ -1,0 +1,87 @@
+import React from "react";
+import styles from "./VersionHighlights.module.css";
+import cn from "classnames";
+
+interface VersionHighlight {
+  title: string;
+  description: string;
+  href: string;
+  tag: string;
+  image: any;
+}
+
+interface Link {
+  title: string;
+  href: string;
+}
+
+interface VersionHighlightsProps {
+  className?: string;
+  title?: string;
+  highlights: VersionHighlight[];
+  mainLinks: Link[];
+}
+
+const VersionHighlights: React.FC<VersionHighlightsProps> = ({
+  className = "",
+  title = `What's New`,
+  highlights,
+  mainLinks = [
+    {
+      title: "View Changelog",
+      href: "./changelog/",
+    },
+    {
+      title: "Upcoming Releases",
+      href: "./upcoming-releases/",
+    },
+  ],
+}) => {
+  return (
+    <section className={cn(styles.versionHighlights, className)}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>{title}</h2>
+          <div className={styles.links}>
+            {mainLinks.map((link, index) => (
+              <a key={index} href={link.href} className={styles.link}>
+                {link.title}
+              </a>
+            ))}
+          </div>
+        </div>
+        <ul className={styles.highlightsList}>
+          {highlights.map((highlight, index) => (
+            <li key={index} className={styles.highlightItem}>
+              <div className={styles.highlightImage}>
+                {/* 
+                TODO: make image work
+
+                <img
+                  src={highlight.image}
+                  alt={highlight.title}
+                  className={styles.highlightImage}
+                /> */}
+              </div>
+              <div className={styles.highlightContent}>
+                <p className={styles.highlightTag}>{highlight.tag}</p>
+                <h3 className={styles.highlightTitle}>{highlight.title}</h3>
+                <p className={styles.highlightDescription}>
+                  {highlight.description}
+                </p>
+                <a
+                  href={highlight.href}
+                  className={styles.highlightLink}
+                >
+                  Read more
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+};
+
+export default VersionHighlights;
