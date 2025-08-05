@@ -3,8 +3,10 @@
   z-index: 1;
   margin-left: -1rem;
   margin-right: -1rem;
-  min-height: 350px;
-  margin-bottom: 50px;
+  margin-bottom: var(--ifm-paragraph-margin-bottom);
+  @media (--lg-scr) {
+    margin-bottom: 50px;
+  }
 }
 
 .backgroundContainer {
@@ -21,12 +23,11 @@
   position: relative;
   z-index: 1;
   padding: var(--m-9);
-  min-height: 350px;
   width: 100%;
   height: 100%;
 
   @media (max-width: 1060px) {
-    padding: var(--m-4);
+    padding: var(--m-8) var(--m-5);
   }
 }
 
@@ -38,8 +39,8 @@
   width: 100vw;
   height: 100%;
   z-index: -1;
-  background-color: #FBFBFC;
-  background-image: url('./img/docs-header-background.svg');
+  background-color: #fbfbfc;
+  background-image: url("./img/docs-header-background.svg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -56,11 +57,13 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--m-4);
   align-items: center;
   justify-content: center;
+  gap: var(--m-3);
+  @media (--md-scr) {
+    gap: var(--m-4);
+  }
 }
-
 
 .textSection {
   color: var(--color-text);
@@ -87,7 +90,7 @@
     width: 100%;
     border-radius: var(--r-lg);
     background: var(--color-white);
-    box-shadow: 0 5px 20px 0 rgba(19, 19, 19, 0.10);
+    box-shadow: 0 5px 20px 0 rgba(19, 19, 19, 0.1);
     position: relative;
     overflow: visible;
     z-index: 1000;
@@ -100,7 +103,6 @@
     @media (min-width: 901px) {
       max-height: 64px;
     }
-
   }
 
   .versionPicker {
@@ -117,7 +119,7 @@
     }
   }
 
-.searchContainer {
+  .searchContainer {
     flex: 1;
     min-width: 0;
     display: flex;
@@ -132,13 +134,12 @@
     }
   }
 
-
   @media (max-width: 768px) {
     .searchBar {
       flex-direction: column;
       gap: 0;
     }
-    
+
     .versionPicker {
       width: 100%;
       justify-content: center;
@@ -154,12 +155,11 @@
     .searchContainer {
       width: 100%;
       flex-direction: row;
-      border-top-right-radius: 0;
-      border-bottom-left-radius: var(--r-lg);
-      border-bottom-right-radius: var(--r-lg);
+      border-radius: var(--r-lg);
 
       .wrapper {
-        .searchIcon, ::placeholder {
+        .searchIcon,
+        ::placeholder {
           position: relative;
           text-align: center;
         }
@@ -189,7 +189,7 @@
     display: inline-flex;
     align-items: center;
     padding: var(--m-0-5) var(--m-1-5);
-    background-color: #FBFBFC;
+    background-color: #fbfbfc;
     color: var(--color-foreground-slightly-muted);
     text-decoration: none;
     border-radius: var(--r-md);
