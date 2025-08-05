@@ -16,7 +16,7 @@ export type NavSectionItem = {
   customImage: {
     image: { url: string };
     imageCTA: string;
-    imageDate: string;
+    imageDateText: string;
     itemTitle: string;
   };
 };

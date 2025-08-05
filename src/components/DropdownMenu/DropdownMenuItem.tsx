@@ -23,9 +23,8 @@ const DropdownMenuItem = ({
       className={clsx(styles.styledLink, !description && styles.center)}
       href={link}
     >
-      
       <div className={styles.iconWrapper}>
-      <img src={customImage.image.url || ""} width={35} height={35} alt="" />
+        <img src={customImage.image.url || ""} width={35} height={35} alt="" />
         {highlightBadge && <New />}
       </div>
       <div className={styles.item}>
@@ -40,7 +39,7 @@ const DropdownMenuItem = ({
         <div className={styles.imageItem}>
           <div className={styles.imageBox}>
             <img
-              src={customImage?.image.url|| ""}
+              src={customImage?.image.url || ""}
               width={180}
               height={100}
               sizes="180px"
@@ -49,8 +48,8 @@ const DropdownMenuItem = ({
           </div>
           <div className={cn(styles.item, styles.imageItemText)} {...props}>
             <p className={styles.imageItemTitle}>{customImage?.itemTitle}</p>
-            {customImage?.imageDate && (
-              <p className={styles.dateText}>{customImage?.imageDate}</p>
+            {customImage?.imageDateText && (
+              <p className={styles.dateText}>{customImage?.imageDateText}</p>
             )}
             <p className={styles.paragraph}>{customImage?.imageCTA}</p>
           </div>
