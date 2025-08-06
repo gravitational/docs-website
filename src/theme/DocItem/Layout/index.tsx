@@ -57,6 +57,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   } = useDoc();
 
   // Add template-full-width class to aside and main elements when fullWidth template is used
+  // Set the docs navigation element visible when fullWidth is true
   React.useEffect(() => {
     if (!fullWidth) return;
     

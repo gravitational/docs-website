@@ -55,7 +55,7 @@ const Header = () => {
   }, [event, windowSize]);
 
   return (
-    <div className={styles.header} id="site-header" ref={headerRef}>
+    <div className={styles.header} ref={headerRef}>
       {event && <EventBanner initialEvent={event} />}
       <header className={`${styles.wrapper} ${event ? styles.margin : " "}`}>
         <a href="/" className={styles["logo-link"]}>
