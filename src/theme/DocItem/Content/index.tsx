@@ -32,6 +32,7 @@ function useSyntheticTitle(): string | null {
 export default function DocItemContent({ children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
   const { hideTitleSection } = useDocTemplate();
+  const location = useLocation();
 
   return (
     <div className={clsx(ThemeClassNames.docs.docMarkdown, "markdown")}>
