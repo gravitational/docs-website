@@ -12,7 +12,7 @@
     "docusaurus": "docusaurus",
     "dev": "bash scripts/start-dev.sh",
     "start": "yarn prepare-files && yarn prepare-sanity-data && docusaurus start",
-    "build": "yarn git-update && yarn checkout-tags && yarn prepare-files && yarn prepare-sanity-data && docusaurus build \"$@\"",
+    "build": "yarn git-update && yarn prepare-files && yarn prepare-sanity-data && docusaurus build \"$@\"",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

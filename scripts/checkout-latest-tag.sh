@@ -5,6 +5,11 @@ set -o pipefail;
 # content/v17.x. If it cannot check out the latest release for a submodule, it
 # exits with no error, since we can use the latest commit for that submodule
 # instead (e.g., the master branch).
+
+if [[ -n $(find ./ -name "docs") ]]; then
+    echo "This subodule directory already includes a docs directory. Make sure you haven't loaded the submodule";
+fi
+
 SUBMODULE_NAME='content/([0-9]+)\.x'
 # Extract the major version from the submodule name if it follows the expected
 # format.
@@ -14,7 +19,9 @@ if [[ "$?" -ne 0 ]]; then
     exit 0;
 fi
 
-LATEST_RELEASE_FOR_MAJOR=$(gh release list --json 'tagName' --jq '.[].tagName | select(startswith("v\(env.MAJOR)"))' | head -n 1);
+LATEST_RELEASE_FOR_MAJOR=$(curl -qsf 'https://api.github.com/repos/gravitational/teleport/releases' | \
+    jq '.[].tag_name | select(startswith("v\(env.MAJOR)"))' | head -n 1);
+
 if [[ -z "$LATEST_RELEASE_FOR_MAJOR" ]]; then
     echo "Cannot check out the latest release within a submodule: cannot find a release for major version ${MAJOR}. Skipping.";
     exit 0
@@ -36,4 +43,7 @@ jq --arg major "${MAJOR}" \
 
 mv "${toplevel}/confignew.json" "${toplevel}/config.json";
 
-git checkout "${LATEST_RELEASE_FOR_MAJOR}";
+curl -L -o release.tar "https://api.github.com/repos/gravitational/teleport/tarball/v${LATEST_RELEASE_FOR_MAJOR}";
+tar -xv --include "gravitational-teleport-*/docs/*" --include "gravitational-teleport-*/examples/*" -f release.tar
+mv gravitational-teleport-*/docs docs
+mv gravitational-teleport-*/examples examples
