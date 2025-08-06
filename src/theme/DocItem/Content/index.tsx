@@ -7,7 +7,7 @@ import MDXContent from "@theme/MDXContent";
 import type { Props } from "@theme/DocItem/Content";
 import { GitHubIssueLink } from "/src/components/GitHubIssueLink";
 import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
-import BrowserOnly from "@docusaurus/BrowserOnly";
+import { useLocation } from "@docusaurus/router";
 
 /**
  Title can be declared inside md content or declared through
