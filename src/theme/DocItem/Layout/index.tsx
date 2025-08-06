@@ -56,19 +56,37 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
     metadata: { unlisted },
   } = useDoc();
 
-  // Add template-full-width class to main element when fullWidth template is used
+  // Add template-full-width class to aside and main elements when fullWidth template is used
   React.useEffect(() => {
     if (!fullWidth) return;
     
     const mainElement = document.querySelector('main');
+    const asideElement = document.querySelector('aside');
+    const docsNavigationElement = document.getElementById('docs-navigation');
     if (mainElement) {
       mainElement.classList.add('template-full-width');
+    }
+
+    if (asideElement) {
+      asideElement.classList.add('template-full-width');
+    }
+
+    if (docsNavigationElement) {
+      docsNavigationElement.classList.add('template-full-width');
     }
     
     return () => {
       const mainElement = document.querySelector('main');
+      const asideElement = document.querySelector('aside');
+      const docsNavigationElement = document.getElementById('docs-navigation');
       if (mainElement) {
         mainElement.classList.remove('template-full-width');
+      }
+      if (asideElement) {
+        asideElement.classList.remove('template-full-width');
+      }
+      if (docsNavigationElement) {
+        docsNavigationElement.classList.remove('template-full-width');
       }
     };
   }, [fullWidth]);
@@ -87,17 +105,20 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
         <div className={styles.docItemContainer}>
           <article className={alternateHeader ? styles.alternateBreadcrumbs : undefined}>
             {!hideTitleSection && <DocBreadcrumbs />}
-            <div className={styles.sidebar}>
-              <DocVersionBadge />
-              <NavbarMobileSidebarToggle />
-            </div>
+            {
+              !fullWidth && 
+              <div className={styles.sidebar}>
+                <DocVersionBadge />
+                <NavbarMobileSidebarToggle />
+              </div>
+            }
             {docTOC.mobile}
             <DocItemContent>
               <PositionProvider>{children}</PositionProvider>
             </DocItemContent>
             <DocItemFooter />
           </article>
-          <DocItemPaginator />
+          {!fullWidth && <DocItemPaginator />}
         </div>
       </div>
       {!docTOC.removed && (

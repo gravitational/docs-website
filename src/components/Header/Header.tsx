@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useWindowSize } from "@docusaurus/theme-common";
 
 import { BannerData, EventBanner } from "../EventBanner";
@@ -18,6 +18,7 @@ import eventData from "../../../data/events.json";
 import data from "../../../data/navbar.json";
 
 const Header = () => {
+  const headerRef = useRef<HTMLDivElement>(null);
   const [isNavigationVisible, setIsNavigationVisible] =
     useState<boolean>(false);
   const toggleNavigaton = useCallback(() => {
@@ -38,19 +39,23 @@ const Header = () => {
         // Dirty hack to fix the header height for the event banner
         document.documentElement.style.setProperty(
           "--ifm-navbar-height",
-          "117px",
+          headerRef.current
+            ? `${headerRef.current.getBoundingClientRect().height}px`
+            : "117px"
         );
       } else if (windowSize === "mobile") {
         document.documentElement.style.setProperty(
           "--ifm-navbar-height",
-          "96px",
+          headerRef.current
+            ? `${headerRef.current.getBoundingClientRect().height}px`
+            : "96px"
         );
       }
     }
   }, [event, windowSize]);
 
   return (
-    <div className={styles.header}>
+    <div className={styles.header} id="site-header" ref={headerRef}>
       {event && <EventBanner initialEvent={event} />}
       <header className={`${styles.wrapper} ${event ? styles.margin : " "}`}>
         <a href="/" className={styles["logo-link"]}>
