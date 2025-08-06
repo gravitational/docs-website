@@ -39,11 +39,7 @@ export default function DocItemContent({ children }: Props): ReactNode {
       {syntheticTitle && (
         <header className={hideTitleSection ? "hide-title-section" : undefined}>
           <Heading as="h1">{syntheticTitle}</Heading>
-          <BrowserOnly>
-            {() => {
-              return <GitHubIssueLink pathname={location.pathname} />;
-            }}
-          </BrowserOnly>
+          <GitHubIssueLink pathname={location.pathname} />
         </header>
       )}
       <MDXContent>{children}</MDXContent>
