@@ -178,12 +178,10 @@ const config: Config = {
       {
         svgrConfig: {
           svgoConfig: {
-            plugins: [
-              "prefixIds"
-            ],
+            plugins: ["prefixIds"],
           },
         },
-      }
+      },
     ],
     [
       "@docusaurus/plugin-content-docs",
@@ -218,7 +216,7 @@ const config: Config = {
 
           return orderSidebarItems(
             removeRedundantItems(items, item.dirName),
-            getDocPageByID
+            getDocPageByID,
           );
         },
         // Host docs on the root page, later it will be exposed on goteleport.com/docs

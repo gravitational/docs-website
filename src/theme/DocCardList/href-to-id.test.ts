@@ -22,12 +22,14 @@ describe("categoryHrefToDocID", () => {
     {
       description: "docs URL segment in versioned path",
       href: "/docs/ver/15.x/admin-guides/access-controls/guides/joining-sessions",
-      expectedID: "admin-guides/access-controls/guides/joining-sessions/joining-sessions",
+      expectedID:
+        "admin-guides/access-controls/guides/joining-sessions/joining-sessions",
     },
     {
       description: "docs URL segment in unversioned path",
       href: "/docs/admin-guides/access-controls/guides/joining-sessions",
-      expectedID: "admin-guides/access-controls/guides/joining-sessions/joining-sessions",
+      expectedID:
+        "admin-guides/access-controls/guides/joining-sessions/joining-sessions",
     },
   ];
 

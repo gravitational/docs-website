@@ -35,7 +35,7 @@ const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
                 key={`submenu-${submenuTitle}-${index}`}
                 className={cn(
                   styles.subMenu,
-                  index === activeTab ? styles.active : ""
+                  index === activeTab ? styles.active : "",
                 )}
                 onClick={() => setActiveTab(index)}
                 tabIndex={0}
@@ -81,9 +81,9 @@ const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
                   className={cn(
                     styles.dropdownSection,
                     section.sectionItems.find(
-                      ({ itemType }) => itemType === "normal"
+                      ({ itemType }) => itemType === "normal",
                     ) && styles.normal,
-                    index === submenuSections.length - 1 && styles.last
+                    index === submenuSections.length - 1 && styles.last,
                   )}
                 >
                   {items.map((item, j) => (

@@ -42,7 +42,7 @@ const Button = ({
       styles.wrapper,
       styles[`variant-${variant}`],
       styles[`shape-${shape}`],
-      className
+      className,
     ),
   };
 

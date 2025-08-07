@@ -1,17 +1,17 @@
-import styles from './ThumbsFeedback.module.css';
+import styles from "./ThumbsFeedback.module.css";
 import React, { FormEvent, useState, useEffect } from "react";
-import { useLocation } from '@docusaurus/router';
+import { useLocation } from "@docusaurus/router";
 import Icon from "../Icon/Icon";
 import Button from "../Button/Button";
 import { GitHubIssueLink } from "@site/src/components/GitHubIssueLink";
-import { trackEvent } from '@site/src/utils/analytics';
-import { isValidCommentLength, containsPII } from '@site/src/utils/validations';
+import { trackEvent } from "@site/src/utils/analytics";
+import { isValidCommentLength, containsPII } from "@site/src/utils/validations";
 
 const MAX_COMMENT_LENGTH: number = 100;
 
 enum FeedbackType {
   UP = "up",
-  DOWN = "down"
+  DOWN = "down",
 }
 
 const ThumbsFeedback = (): JSX.Element => {
@@ -34,39 +34,45 @@ const ThumbsFeedback = (): JSX.Element => {
   // Can plan to implement this better going forward
   useEffect(() => {
     const checkSidebarScrollable = (): void => {
-      const tocDesktop: Element | null = document.querySelector('.theme-doc-toc-desktop');
+      const tocDesktop: Element | null = document.querySelector(
+        ".theme-doc-toc-desktop",
+      );
       if (tocDesktop) {
-        const isScrollable: boolean = tocDesktop.scrollHeight > tocDesktop.clientHeight;
+        const isScrollable: boolean =
+          tocDesktop.scrollHeight > tocDesktop.clientHeight;
         const viewportHeight: number = window.innerHeight;
         const tocRect = tocDesktop.getBoundingClientRect();
         const spaceBelow: number = viewportHeight - tocRect.bottom;
         const wouldOverflowWithTextArea: boolean = spaceBelow < 300;
 
         setIsSidebarScrollable(isScrollable || wouldOverflowWithTextArea);
-
       }
     };
     checkSidebarScrollable();
 
-    window.addEventListener('resize', checkSidebarScrollable);
+    window.addEventListener("resize", checkSidebarScrollable);
     const timer = setTimeout(checkSidebarScrollable, 100);
 
     return (): void => {
-      window.removeEventListener('resize', checkSidebarScrollable);
+      window.removeEventListener("resize", checkSidebarScrollable);
       clearTimeout(timer);
     };
   }, [location.pathname]);
 
-  const handleFeedbackClick = async (feedbackValue: FeedbackType): Promise<void> => {
+  const handleFeedbackClick = async (
+    feedbackValue: FeedbackType,
+  ): Promise<void> => {
     setFeedback(feedbackValue);
     setShowButtons(false);
 
     trackEvent({
-      event_name: `docs_feedback_thumbs_${feedbackValue}`
+      event_name: `docs_feedback_thumbs_${feedbackValue}`,
     });
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault();
 
     if (!isValidCommentLength(comment, MAX_COMMENT_LENGTH)) {
@@ -79,8 +85,8 @@ const ThumbsFeedback = (): JSX.Element => {
       trackEvent({
         event_name: `docs_feedback_comment_thumbs_${feedback}`,
         custom_parameters: {
-          comment_text: trimmedComment
-        }
+          comment_text: trimmedComment,
+        },
       });
     }
 
@@ -126,31 +132,33 @@ const ThumbsFeedback = (): JSX.Element => {
           </div>
         ) : (
           <div>
-              <textarea
-                id="comment"
-                name="comment"
-                value={comment}
-                placeholder="Any additional comments..."
-                onChange={(e) => setComment(e.target.value)}
-                className={`${styles.commentTextarea} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ''}`}
-              />
-              <div className={`${styles.characterCount} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ''}`}>
-                ({comment.length}/{MAX_COMMENT_LENGTH}) characters allowed
+            <textarea
+              id="comment"
+              name="comment"
+              value={comment}
+              placeholder="Any additional comments..."
+              onChange={(e) => setComment(e.target.value)}
+              className={`${styles.commentTextarea} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ""}`}
+            />
+            <div
+              className={`${styles.characterCount} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ""}`}
+            >
+              ({comment.length}/{MAX_COMMENT_LENGTH}) characters allowed
+            </div>
+            <div className={styles.submitButton}>
+              <Button
+                type="submit"
+                as="button"
+                variant="primary"
+                disabled={comment.length > MAX_COMMENT_LENGTH}
+              >
+                Submit
+              </Button>
+              <p className={styles.feedbackTitle}> or </p>
+              <div className={styles.githubLinkWrapper}>
+                <GitHubIssueLink pathname={location.pathname} />
               </div>
-              <div className={styles.submitButton}>
-                <Button
-                  type="submit"
-                  as="button"
-                  variant="primary"
-                  disabled={comment.length > MAX_COMMENT_LENGTH}
-                >
-                  Submit
-                </Button>
-                <p className={styles.feedbackTitle}> or </p>
-                <div className={styles.githubLinkWrapper}>
-                  <GitHubIssueLink pathname={location.pathname} />
-                </div>
-              </div>
+            </div>
           </div>
         )}
       </form>

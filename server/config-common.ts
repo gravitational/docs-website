@@ -6,7 +6,7 @@ import { ValidateFunction } from "ajv";
 
 export const validateConfig = <T = Record<string, unknown>>(
   validator: ValidateFunction,
-  config: T
+  config: T,
 ) => {
   if (!validator(config)) {
     console.error(validator.errors);

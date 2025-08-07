@@ -14,7 +14,7 @@ export const isMdxNode = (node: Node): node is MdxJsxElement =>
 
 export const getAttribute = (
   node: MdxJsxElement,
-  attributeName: string
+  attributeName: string,
 ): MdxJsxAttribute | undefined => {
   return node.attributes.find(({ name }) => attributeName === name);
 };
@@ -23,7 +23,7 @@ export const getAttribute = (
 
 export const getAttributeValue = (
   node: MdxJsxElement,
-  attributeName: string
+  attributeName: string,
 ): MdxJsxAttributeValue | undefined => {
   return getAttribute(node, attributeName)?.value;
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './Products.module.css';
+import React from "react";
+import styles from "./Products.module.css";
 
 interface ProductFeature {
   title: string;
@@ -21,7 +21,11 @@ interface ProductsProps {
   productCategories: ProductCategory[];
 }
 
-const ProductCard: React.FC<ProductFeature> = ({ title, description, href }) => {
+const ProductCard: React.FC<ProductFeature> = ({
+  title,
+  description,
+  href,
+}) => {
   const cardContent = (
     <>
       <h4 className={styles.featureTitle}>{title}</h4>
@@ -34,42 +38,42 @@ const ProductCard: React.FC<ProductFeature> = ({ title, description, href }) => 
       {cardContent}
     </a>
   ) : (
-    <div className={styles.featureItem}>
-      {cardContent}
-    </div>
+    <div className={styles.featureItem}>{cardContent}</div>
   );
 };
 
 const Products: React.FC<ProductsProps> = ({
-  className = '',
+  className = "",
   productCategories,
 }) => {
   return (
-    <section className={`${styles.products} ${className || ''}`}>
+    <section className={`${styles.products} ${className || ""}`}>
       <div className={styles.productsContainer}>
         <h2 className={styles.productsTitle}>Products</h2>
-        
+
         {productCategories.map((category) => (
           <div key={category.id} className={styles.productCategory}>
             <div className={styles.categoryHeaderFlex}>
-              <div 
+              <div
                 className={styles.categoryIcon}
                 style={{ backgroundColor: category.iconColor }}
               >
                 <category.iconComponent className={styles.iconSvg} />
               </div>
-              
+
               <div className={styles.categoryContent}>
                 <div className={styles.categoryHeader}>
                   <h3 className={styles.categoryTitle}>{category.title}</h3>
-                  <p className={styles.categoryDescription}>{category.description}</p>
+                  <p className={styles.categoryDescription}>
+                    {category.description}
+                  </p>
                 </div>
               </div>
             </div>
-            
+
             <div className={styles.featuresGrid}>
               {category.features.map((feature, index) => (
-                <ProductCard 
+                <ProductCard
                   key={index}
                   title={feature.title}
                   description={feature.description}

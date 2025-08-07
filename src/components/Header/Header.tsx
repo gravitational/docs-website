@@ -38,12 +38,12 @@ const Header = () => {
         // Dirty hack to fix the header height for the event banner
         document.documentElement.style.setProperty(
           "--ifm-navbar-height",
-          "117px"
+          "117px",
         );
       } else if (windowSize === "mobile") {
         document.documentElement.style.setProperty(
           "--ifm-navbar-height",
-          "96px"
+          "96px",
         );
       }
     }

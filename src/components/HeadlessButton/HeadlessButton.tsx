@@ -14,7 +14,7 @@ export const HeadlessButton = forwardRef(
       ButtonHTMLAttributes<HTMLButtonElement>,
       HTMLButtonElement
     >,
-    ref: RefObject<HTMLButtonElement>
+    ref: RefObject<HTMLButtonElement>,
   ) => {
     return (
       <button
@@ -23,7 +23,7 @@ export const HeadlessButton = forwardRef(
         ref={ref}
       />
     );
-  }
+  },
 );
 
 export default HeadlessButton;
