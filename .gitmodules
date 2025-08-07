@@ -4,8 +4,8 @@
 	branch = branch/v16
 [submodule "content/17.x"]
 	path = content/17.x
-	url = https://github.com/gravitational/teleport/
-	branch = branch/v17
+	url = https://github.com/aatuvai/teleport/
+	branch = aatuvai/whats-new
 [submodule "content/18.x"]
 	path = content/18.x
 	url = https://github.com/gravitational/teleport
