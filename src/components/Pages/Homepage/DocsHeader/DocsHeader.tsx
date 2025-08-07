@@ -14,49 +14,36 @@ interface DocsHeaderProps {
 
 const defaultQuickActions = [
   { label: "Enroll Kubernetes cluster", href: "./enroll-resources/kubernetes-access/getting-started/" },
-  { label: "set up SSO with GitHub", href: "./zero-trust-access/sso/github-sso/" },
-  { label: "set up Slack Access Request Plugin", href: "./identity-governance/access-request-plugins/ssh-approval-slack/" }
+  { label: "Set up SSO with GitHub", href: "./zero-trust-access/sso/github-sso/" },
+  { label: "Set up Slack Access Request Plugin", href: "./identity-governance/access-request-plugins/ssh-approval-slack/" }
 ];
 
-function DocsHeader({ 
+function DocsHeader({
   title = "Teleport Documentation",
   hideTitleSection = false,
   quickActions = defaultQuickActions
 }: DocsHeaderProps) {
   return (
     <section className={styles.docsHeader}>
-      {/* Background container with overflow control */}
-      <div className={styles.backgroundContainer}>
-        <div className={styles.background} />
-      </div>
-      
-      {/* Content container without overflow restrictions */}
-      <div className={styles.contentContainer}>
-        <div className={styles.content}>
-          <div className={styles.textSection}>
-            <div className={hideTitleSection ? 'visually-hidden' : styles.title}>{title}</div>
-          </div>
-          
-          <div className={styles.searchSection}>
-            <div className={styles.searchBar}>
-              <div className={styles.searchContainer}>
-                <InlineSearch />
-              </div>
-            </div>
-          </div>
-          
-          <div className={styles.quickActions}>
-            <span className={styles.exampleText}>Example</span>
-            {quickActions.map((action, index) => (
-              <a 
-                key={index}
-                href={action.href}
-                className={styles.actionButton}
-              >
-                {action.label}
-              </a>
-            ))}
-          </div>
+      <div className={styles.background} />
+
+      <div className={styles.content}>
+        <div className={hideTitleSection ? 'visually-hidden' : styles.title}>{title}</div>
+        <div className={styles.searchBar}>
+          <InlineSearch />
+        </div>
+
+        <div className={styles.quickActions}>
+          <span className={styles.exampleText}>Example</span>
+          {quickActions.map((action, index) => (
+            <a
+              key={index}
+              href={action.href}
+              className={styles.actionButton}
+            >
+              {action.label}
+            </a>
+          ))}
         </div>
       </div>
     </section>
