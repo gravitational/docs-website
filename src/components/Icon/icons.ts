@@ -69,8 +69,8 @@ export { default as gitlab } from "./svg/gitlab.svg";
 export { default as circleci } from "./svg/circleci.svg";
 export { default as bitbucket } from "./svg/bitbucket.svg";
 export { default as jenkins } from "./svg/jenkins.svg";
-export { default as githubActions } from "./svg/bitbucket.svg";
-export { default as spacelifts } from "./svg/jenkins.svg";
+export { default as githubActions } from "./svg/githubActions.svg";
+export { default as spacelift } from "./svg/spacelift.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
