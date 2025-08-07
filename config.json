@@ -61,9 +61,6 @@
     {
       "name": "18.x",
       "isDefault": true
-    },
-    {
-      "name": "19.x"
     }
   ]
 }
