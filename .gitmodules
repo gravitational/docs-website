@@ -5,7 +5,7 @@
 [submodule "content/17.x"]
 	path = content/17.x
 	url = https://github.com/aatuvai/teleport/
-	branch = aatuvai/integrations
+	branch = aatuvai/get-started
 [submodule "content/18.x"]
 	path = content/18.x
 	url = https://github.com/gravitational/teleport
