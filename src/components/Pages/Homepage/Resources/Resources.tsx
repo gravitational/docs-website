@@ -9,7 +9,6 @@ interface Resource {
 }
 
 interface ResourcesProps {
-  id: string;
   className?: string;
   title?: string;
   resources: Resource[];
