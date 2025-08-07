@@ -10,7 +10,6 @@ interface Integration {
 }
 
 interface IntegrationsProps {
-  id?: string;
   title: string;
   className?: string;
   integrations: Integration[];
@@ -50,20 +49,14 @@ const IntegrationCard: React.FC<Integration> = ({
 
 const Integrations: React.FC<IntegrationsProps> = ({
   title = "Integrations",
-  id,
   className = "",
   integrations,
 }) => {
   return (
-    <section className={`${styles.integrations} ${className || ""}`}>
-      <div className={styles.integrationsContainer}>
-        <h2
-          className={styles.integrationsTitle}
-          id={id || title.toLowerCase().replaceAll(" ", "-")}
-        >
-          {title}
-        </h2>
-        <div className={styles.integrationGrid}>
+    <section className={cn(styles.integrations, className)}>
+      <div className={styles.container}>
+        <h2 className={styles.title}>{title}</h2>
+        <div className={styles.grid}>
           {integrations.map((integration, i) => (
             <IntegrationCard
               key={i}
