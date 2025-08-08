@@ -52,9 +52,10 @@ const VersionHighlights: React.FC<VersionHighlightsProps> = ({
         </div>
         <ul className={styles.highlightsList}>
           {highlights.map((highlight, index) => (
-            <li key={index} className={styles.highlightItem}>
-              <div className={styles.highlightImage}>
-                {/* 
+            <li key={index}>
+              <a href={highlight.href} className={styles.highlightItem}>
+                <div className={styles.highlightImage}>
+                  {/* 
                 TODO: make image work
 
                 <img
@@ -62,20 +63,16 @@ const VersionHighlights: React.FC<VersionHighlightsProps> = ({
                   alt={highlight.title}
                   className={styles.highlightImage}
                 /> */}
-              </div>
-              <div className={styles.highlightContent}>
-                <p className={styles.highlightTag}>{highlight.tag}</p>
-                <h3 className={styles.highlightTitle}>{highlight.title}</h3>
-                <p className={styles.highlightDescription}>
-                  {highlight.description}
-                </p>
-                <a
-                  href={highlight.href}
-                  className={styles.highlightLink}
-                >
-                  Read more
-                </a>
-              </div>
+                </div>
+                <div className={styles.highlightContent}>
+                  <p className={styles.highlightTag}>{highlight.tag}</p>
+                  <h3 className={styles.highlightTitle}>{highlight.title}</h3>
+                  <p className={styles.highlightDescription}>
+                    {highlight.description}
+                  </p>
+                  <p className={styles.highlightLink}>Read more</p>
+                </div>
+              </a>
             </li>
           ))}
         </ul>
