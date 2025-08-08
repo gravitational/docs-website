@@ -7,9 +7,7 @@ import {
   getVersionRootPath,
 } from "./.remark-build/server/docs-helpers.mjs";
 import { loadConfig } from "./.remark-build/server/config-docs.mjs";
-import {
-  updatePathsInIncludes,
-} from "./.remark-build//server/asset-path-helpers.mjs";
+import { updatePathsInIncludes } from "./.remark-build/server/asset-path-helpers.mjs";
 
 const configFix = {
   settings: {

@@ -49,7 +49,7 @@ const getTextChildren = (contentValue: string): Text => ({
 const getVariableNode = (
   value: string,
   isGlobal: boolean,
-  description: string | boolean
+  description: string | boolean,
 ): MdxJsxFlowElement => {
   const descriptionValue = description ? description : "";
 
@@ -87,7 +87,7 @@ const getChildrenNode = (content: string): Array<Text | MdxJsxFlowElement> => {
       if (contentVars[i].includes("description=")) {
         newContent = newContent.replace(
           contentVars[i].match(/description="(.*?)"/)[1],
-          ""
+          "",
         );
         newContent = newContent.replace('description=""', "");
       }
@@ -149,7 +149,7 @@ const getLineNode = (content: string, attributes = []) => {
 
 const getCommentNode = (
   content: string,
-  attributes: MdxJsxAttribute[] = []
+  attributes: MdxJsxAttribute[] = [],
 ) => ({
   type: "mdxJsxFlowElement",
   name: "commandcomment",
@@ -229,11 +229,11 @@ export default function remarkCodeSnippet({
                   vfile.fail(
                     "No closing line for heredoc format",
                     node,
-                    RULE_ID
+                    RULE_ID,
                   );
                 } else {
                   console.error(
-                    `ERROR: no closing line ${heredocMark} in the file ${vfile.path}`
+                    `ERROR: no closing line ${heredocMark} in the file ${vfile.path}`,
                   );
                 }
               }
@@ -253,7 +253,7 @@ export default function remarkCodeSnippet({
                 vfile.fail(
                   "The last string in the multiline command has to be without symbol \\",
                   node,
-                  RULE_ID
+                  RULE_ID,
                 );
               }
             }
@@ -274,7 +274,7 @@ export default function remarkCodeSnippet({
                     name: "data-type",
                     value: "descr",
                   },
-                ])
+                ]),
               );
             }
           } else {
@@ -299,7 +299,7 @@ export default function remarkCodeSnippet({
           attributes: [],
           children,
         } as MdxJsxFlowElement;
-      }
+      },
     );
   };
 }

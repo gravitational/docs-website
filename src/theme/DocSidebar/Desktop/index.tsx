@@ -24,7 +24,7 @@ function DocSidebarDesktop({ path, sidebar, onCollapse, isHidden }: Props) {
       className={clsx(
         styles.sidebar,
         hideOnScroll && styles.sidebarWithHideableNavbar,
-        isHidden && styles.sidebarHidden
+        isHidden && styles.sidebarHidden,
       )}
     >
       <div className={styles.controlsWrapper}>

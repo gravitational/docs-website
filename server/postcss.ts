@@ -24,7 +24,7 @@ export function extendedPostcssConfigPlugin() {
               "nesting-rules": true,
             },
           },
-        ]
+        ],
       );
 
       return options;

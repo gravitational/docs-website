@@ -18,7 +18,7 @@ const isMdxComponentWithHref = (node: Node): node is MdxAnyElement => {
   return (
     mdxNodeTypes.has(node.type) &&
     (node as MdxAnyElement).attributes.some(
-      ({ name, value }) => name === "href"
+      ({ name, value }) => name === "href",
     )
   );
 };
@@ -43,23 +43,23 @@ export const remarkLintTeleportDocsLinks = lintRule(
           `Link reference ${
             (node as Link).url
           } must be a relative link to an *.mdx page`,
-          node.position
+          node.position,
         );
         return;
       }
 
       if (isMdxComponentWithHref(node)) {
         const hrefAttribute = node.attributes.find(
-          ({ name }) => name === "href"
+          ({ name }) => name === "href",
         );
 
         if (isAnAbsoluteDocsLink(hrefAttribute.value as string)) {
           vfile.message(
             `Component href ${hrefAttribute.value} must be a relative link to an *.mdx page`,
-            node.position
+            node.position,
           );
         }
       }
     });
-  }
+  },
 );

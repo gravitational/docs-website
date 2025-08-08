@@ -32,7 +32,7 @@ const DropdownSection = ({
       className={cn(
         styles.dropdownSection,
         isFirst && styles.first,
-        className && className
+        className && className,
       )}
       {...props}
     >
@@ -46,7 +46,7 @@ const DropdownSection = ({
         className={cn(
           styles.sectionBox,
           textExists && styles.hasText,
-          inTwoColumns && styles.inTwoColumns
+          inTwoColumns && styles.inTwoColumns,
         )}
       >
         {children}

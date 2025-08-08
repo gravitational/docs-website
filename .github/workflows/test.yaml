@@ -26,3 +26,5 @@ jobs:
         # make sure this hasn't happened.
       - name: Run the docs formatting linter
         run: scripts/lint-test.sh
+      - name: Check source formatting
+        run: npx prettier --check

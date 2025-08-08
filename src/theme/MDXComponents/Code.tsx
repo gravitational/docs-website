@@ -15,11 +15,11 @@ const isHLJSNode = (className?: string) =>
   Boolean(className) && className.indexOf("hljs") !== -1;
 
 export default function (
-  props: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>
+  props: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>,
 ) {
   if (isHLJSNode(props.className)) {
     return <code {...props} />;
   }
 
   return <code {...props} className={cn(styles.wrapper, props.className)} />;
-};
+}

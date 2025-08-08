@@ -118,7 +118,7 @@ export const rehypeHLJS = (options?: RehypeHighlightOptions): Transformer => {
         }
 
         const placeholders = Array.from(
-          hljsSpanValue.matchAll(new RegExp(placeholderPattern, "g"))
+          hljsSpanValue.matchAll(new RegExp(placeholderPattern, "g")),
         );
 
         // No placeholders to recover, so there's nothing more to do.

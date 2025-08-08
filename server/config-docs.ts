@@ -144,7 +144,7 @@ export const normalizeDocsUrl = (version: string, url: string) => {
 
 const normalizeRedirects = (
   version: string,
-  redirects: Redirect[]
+  redirects: Redirect[],
 ): Redirect[] => {
   return redirects.map((redirect) => {
     return {

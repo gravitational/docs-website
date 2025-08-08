@@ -45,7 +45,7 @@ This is a paragraph.
 `,
       path: "docs/mypage.mdx",
     },
-{
+    {
       description: "three import statements in latest-version docs path",
       input: `---
 title: My page
@@ -91,7 +91,7 @@ This is a paragraph.
 `,
       path: "versioned_docs/version-16.x/mypage.mdx",
     },
-{
+    {
       description: "raw loader",
       input: `---
 title: My page

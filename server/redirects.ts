@@ -18,7 +18,21 @@ const isIndexPage = (urlpath: string): boolean => {
   );
 };
 
-export const validateRedirect = (redirect: CustomRedirect) => {
+export const validateRedirects = (redirects: Array<CustomRedirect>) => {
+  const sources = new Map();
+  redirects.forEach((r) => {
+    if (!sources.has(r.source)) {
+      sources.set(r.source, true);
+    } else {
+      throw new Error(
+        `there are multiple redirects with the same source: ${r.source}`,
+      );
+    }
+    validateRedirect(r);
+  });
+};
+
+const validateRedirect = (redirect: CustomRedirect) => {
   ["source", "destination"].forEach((p) => {
     if (isIndexPage(redirect[p])) {
       throw new Error(
@@ -42,7 +56,7 @@ export const getRedirects = () => {
     return config.redirects || [];
   });
 
-  result.forEach(validateRedirect);
+  validateRedirects(result as Array<CustomRedirect>);
   return result.map((r) => {
     return {
       from: r.source,

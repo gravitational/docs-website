@@ -82,7 +82,9 @@ function UnmaintainedVersionLabel({
         versionLabel: <b>{versionMetadata.label}</b>,
       }}
     >
-      {"This is documentation for {siteTitle} {versionLabel}, a previous version of Teleport."}
+      {
+        "This is documentation for {siteTitle} {versionLabel}, a previous version of Teleport."
+      }
     </Translate>
   );
 }
@@ -129,7 +131,7 @@ function DocVersionBannerEnabled({
       className={clsx(
         className,
         ThemeClassNames.docs.docVersionBanner,
-        "alert alert--warning margin-bottom--md"
+        "alert alert--warning margin-bottom--md",
       )}
       role="alert"
     >

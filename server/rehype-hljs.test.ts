@@ -44,7 +44,7 @@ describe("server/rehype-hljs-var", () => {
     const result = transformer({
       value: readFileSync(
         resolve("server/fixtures/yaml-snippet-var.mdx"),
-        "utf-8"
+        "utf-8",
       ),
       path: "/docs/index.mdx",
     });
@@ -52,8 +52,8 @@ describe("server/rehype-hljs-var", () => {
     expect((result.value as string).trim()).toBe(
       readFileSync(
         resolve("server/fixtures/result/yaml-snippet-var.html"),
-        "utf-8"
-      ).trim()
+        "utf-8",
+      ).trim(),
     );
   });
 
@@ -61,7 +61,7 @@ describe("server/rehype-hljs-var", () => {
     const result = transformer({
       value: readFileSync(
         resolve("server/fixtures/go-comment-var.mdx"),
-        "utf-8"
+        "utf-8",
       ),
       path: "/docs/index.mdx",
     });
@@ -69,8 +69,8 @@ describe("server/rehype-hljs-var", () => {
     expect((result.value as string).trim()).toBe(
       readFileSync(
         resolve("server/fixtures/result/go-comment-var.html"),
-        "utf-8"
-      ).trim()
+        "utf-8",
+      ).trim(),
     );
   });
 
@@ -78,7 +78,7 @@ describe("server/rehype-hljs-var", () => {
     const result = transformer({
       value: readFileSync(
         resolve("server/fixtures/yaml-comment-vars.mdx"),
-        "utf-8"
+        "utf-8",
       ),
       path: "/docs/index.mdx",
     });
@@ -86,8 +86,8 @@ describe("server/rehype-hljs-var", () => {
     expect((result.value as string).trim()).toBe(
       readFileSync(
         resolve("server/fixtures/result/yaml-comment-vars.html"),
-        "utf-8"
-      ).trim()
+        "utf-8",
+      ).trim(),
     );
   });
 
@@ -100,8 +100,8 @@ describe("server/rehype-hljs-var", () => {
     expect((result.value as string).trim()).toBe(
       readFileSync(
         resolve("server/fixtures/result/hcl-vars.html"),
-        "utf-8"
-      ).trim()
+        "utf-8",
+      ).trim(),
     );
   });
 
@@ -109,7 +109,7 @@ describe("server/rehype-hljs-var", () => {
     const result = transformer({
       value: readFileSync(
         resolve("server/fixtures/powershell-var.mdx"),
-        "utf-8"
+        "utf-8",
       ),
       path: "/docs/index.mdx",
     });
@@ -117,8 +117,8 @@ describe("server/rehype-hljs-var", () => {
     expect((result.value as string).trim()).toBe(
       readFileSync(
         resolve("server/fixtures/result/powershell-var.html"),
-        "utf-8"
-      ).trim()
+        "utf-8",
+      ).trim(),
     );
   });
 

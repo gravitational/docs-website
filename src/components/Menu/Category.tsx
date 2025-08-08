@@ -82,13 +82,13 @@ const MenuCategory = ({
         onClick && onClick();
       }
     },
-    [opened, children, id, onToggleOpened, onClick]
+    [opened, children, id, onToggleOpened, onClick],
   );
   const open = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
       onHover(id);
     },
-    [id, onHover]
+    [id, onHover],
   );
 
   const containsSubCategories = !!columns || !!submenus;
@@ -98,7 +98,7 @@ const MenuCategory = ({
       <div
         className={clsx(
           styles.wrapper,
-          containsSubCategories && styles.withSubMenus
+          containsSubCategories && styles.withSubMenus,
         )}
         ref={ref}
         onMouseLeave={() => toggleOpened(null)}
@@ -146,7 +146,7 @@ const MenuCategory = ({
                   <div
                     className={clsx(
                       styles.columnBox,
-                      index !== columns?.length - 1 && styles.showBorder
+                      index !== columns?.length - 1 && styles.showBorder,
                     )}
                     key={`columnBox${index}`}
                   >
@@ -165,8 +165,8 @@ const MenuCategory = ({
                           styles.dropdownSection,
                           sectionProps?.sectionItems?.find(
                             ({ itemType }) =>
-                              itemType === "normal" && styles.normal
-                          )
+                              itemType === "normal" && styles.normal,
+                          ),
                         )}
                       >
                         {sectionProps?.sectionItems?.map(
@@ -178,7 +178,7 @@ const MenuCategory = ({
                               {...sectionItemProps}
                               itemAmount={columns.length}
                             />
-                          )
+                          ),
                         )}
                       </DropdownSection>
                     ))}

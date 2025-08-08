@@ -11,7 +11,9 @@
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
-  transition: background var(--t-interaction), color var(--t-interaction);
+  transition:
+    background var(--t-interaction),
+    color var(--t-interaction);
 
   &:focus {
     outline: none;

@@ -24,7 +24,7 @@ function DocCardListForCurrentSidebarCategory({ className }: Props) {
       throw new Error(message);
     }
     throw new Error(
-      "The current page does not have a corresponding sidebar entry, so it is not possible to use DocCardList. Make sure that the page is represented on the sidebar."
+      "The current page does not have a corresponding sidebar entry, so it is not possible to use DocCardList. Make sure that the page is represented on the sidebar.",
     );
   }
   return <DocCardList items={category.items} className={className} />;

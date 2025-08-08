@@ -25,13 +25,13 @@ const defaultAttributes = ["poster", "src", "href", "value"];
 const isNodeWithUrl = (node: unknown): node is Image | Link | Definition =>
   node.hasOwnProperty("type") &&
   ["image", "link", "definition"].includes(
-    (node as Image | Link | Definition).type
+    (node as Image | Link | Definition).type,
   );
 
 const isMdxJsxElement = (node: unknown) =>
   node.hasOwnProperty("type") &&
   ["mdxJsxFlowElement", "mdxJsxTextElement"].includes(
-    (node as MdxJsxFlowElement | MdxJsxTextElement).type
+    (node as MdxJsxFlowElement | MdxJsxTextElement).type,
   );
 
 type PluginOptions = {
@@ -59,7 +59,7 @@ export default function remarkUpdateAssetPaths({
             ) {
               attribute.value = updater(attribute.value, { vfile });
             }
-          }
+          },
         );
       }
     });

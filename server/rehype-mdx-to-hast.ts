@@ -81,7 +81,7 @@ export default function rehypeMdxToHast(): Transformer {
                 [prop.name]: prop.value === null ? true : prop.value,
               };
             },
-            {}
+            {},
           ),
           children: node.children,
         };
@@ -91,7 +91,7 @@ export default function rehypeMdxToHast(): Transformer {
         // Just removing them for now for simplicity.
       } else if (
         ["mdxFlowExpression", "mdxTextExpression", "mdxjsEsm"].includes(
-          node.type
+          node.type,
         )
       ) {
         parent.children.splice(index, 1);

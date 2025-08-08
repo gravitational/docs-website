@@ -58,7 +58,7 @@ type ModalImageProps = {
 const ModalImage = ({ setShowExpandedImage, ...props }: ModalImageProps) => {
   const closeHandler = useCallback(
     () => setShowExpandedImage(false),
-    [setShowExpandedImage]
+    [setShowExpandedImage],
   );
   const modalRef = useRef<HTMLDivElement>();
   useClickInside(modalRef, closeHandler);

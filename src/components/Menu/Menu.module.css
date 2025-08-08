@@ -4,12 +4,12 @@
   flex-direction: column;
   margin-right: 0;
   margin-left: 0;
-  width:100%;
+  width: 100%;
   min-width: 0;
   @media (--nav) {
     flex-direction: row;
     margin-right: 91px;
-    width:auto;
+    width: auto;
     flex-shrink: 1;
   }
 }

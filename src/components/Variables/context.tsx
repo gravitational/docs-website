@@ -17,7 +17,7 @@ export interface VarsContextProps {
     name: string,
     value: string,
     isGlobal?: boolean,
-    description?: string
+    description?: string,
   ) => void;
   setInitial: (name: string, initial: string) => void;
 }
