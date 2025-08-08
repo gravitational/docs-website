@@ -20,12 +20,12 @@ interface GetStartedProps {
   links?: GetStartedLink[];
 }
 
-function GetStarted({
+const GetStarted: React.FC<GetStartedProps> = ({
   title = "Get Started",
   youtubeVideoUrl,
   steps = [],
   links = [],
-}: GetStartedProps) {
+}) => {
   const getEmbedYouTubeUrl = (url: string) => {
     const videoId = url.split("v=")[1];
     return `https://www.youtube.com/embed/${videoId}`;
@@ -45,20 +45,20 @@ function GetStarted({
           </div>
           <div className={styles.video}>
             <iframe
-                src={getEmbedYouTubeUrl(youtubeVideoUrl)}
-                title={title}
-                allowFullScreen
-                className={styles.videoIframe}
-                style={{ width: '100%', height: '100%', border: 'none' }}
+              src={getEmbedYouTubeUrl(youtubeVideoUrl)}
+              title={title}
+              allowFullScreen
+              className={styles.videoIframe}
+              style={{ width: "100%", height: "100%", border: "none" }}
             ></iframe>
           </div>
           <div className={styles.links}>
             {links.map((link, i) => (
               <a href={link.href} key={i} className={styles.link}>
                 <div className={styles.linkContent}>
-                <h3 className={styles.linkTitle}>{link.title}</h3>
-                <p className={styles.linkDescription}>{link.description}</p>
-                <link.iconComponent className={styles.linkIcon} />
+                  <h3 className={styles.linkTitle}>{link.title}</h3>
+                  <p className={styles.linkDescription}>{link.description}</p>
+                  <link.iconComponent className={styles.linkIcon} />
                 </div>
               </a>
             ))}
@@ -67,6 +67,6 @@ function GetStarted({
       </div>
     </section>
   );
-}
+};
 
 export default GetStarted;

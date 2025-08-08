@@ -110,6 +110,9 @@
       cursor: pointer;
       background: var(--color-white);
       box-shadow: 0 4px 12px rgba(81, 47, 201, 0.15);
+      .linkTitle {
+        color: var(--color-dark-purple);
+      }
     }
 
     .linkContent {
@@ -126,6 +129,7 @@
       margin-bottom: unset;
       line-height: 1.5;
       max-width: calc(100% - 24px);
+      transition: color 0.2s ease-in-out;
     }
 
     .linkDescription {
