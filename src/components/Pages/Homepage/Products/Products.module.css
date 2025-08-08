@@ -27,6 +27,10 @@
   gap: var(--m-4);
   margin-bottom: var(--m-4);
 
+  &:last-child {
+    margin-bottom: 0;
+  }
+
   @media (max-width: 576px) {
     gap: var(--m-3);
   }
