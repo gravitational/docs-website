@@ -1,5 +1,5 @@
 .products {
-  margin-bottom: var(--ifm-leading);
+  padding-bottom: 5.25rem; /* 84px */
   background-color: var(--color-white);
   max-width: 1400px;
   margin: 0 auto;
@@ -26,6 +26,10 @@
   flex-direction: column;
   gap: var(--m-4);
   margin-bottom: var(--m-4);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   @media (max-width: 576px) {
     gap: var(--m-3);
