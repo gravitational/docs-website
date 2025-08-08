@@ -11,7 +11,9 @@
 
 .productsTitle {
   font-size: var(--fs-header-1);
-  margin-bottom: calc(var(--ifm-heading-vertical-rhythm-bottom) * var(--ifm-leading));
+  margin-bottom: calc(
+    var(--ifm-heading-vertical-rhythm-bottom) * var(--ifm-leading)
+  );
   margin-top: calc(var(--ifm-h2-vertical-rhythm-top) * var(--ifm-leading));
 
   @media (max-width: 576px) {
@@ -50,7 +52,7 @@
 
 .categoryIcon {
   border-radius: var(--r-lg);
-  background-color: #EEEAFA;
+  background-color: #eeeafa;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,7 +76,6 @@
     height: 24px;
   }
 }
-
 
 .categoryTitle {
   font-size: var(--fs-header-3);

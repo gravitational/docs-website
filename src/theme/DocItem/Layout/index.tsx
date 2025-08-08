@@ -75,7 +75,12 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
 
   return (
     <div className="row">
-      <div className={clsx("col", !docTOC.hidden && !docTOC.removed && styles.docItemCol)}>
+      <div
+        className={clsx(
+          "col",
+          !docTOC.hidden && !docTOC.removed && styles.docItemCol,
+        )}
+      >
         {unlisted && <Unlisted />}
         <DocVersionBanner />
         <div className={styles.docItemContainer}>
@@ -98,9 +103,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
         <div className="col col--3">
           <div className={styles.stickySidebar}>
             <div className={styles.tocWithFeedback}>
-              <div className={styles.tocWrapper}>
-                {docTOC.desktop}
-              </div>
+              <div className={styles.tocWrapper}>{docTOC.desktop}</div>
               <div className={styles.feedbackWrapper}>
                 <ThumbsFeedback />
               </div>

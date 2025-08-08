@@ -32,7 +32,7 @@ interface BannerData {
 
 export async function fetchEventsFromSanity() {
   const apiUrl = `https://${PROJECT_ID}.api.sanity.io/v1/data/query/${DATASET}?query=${encodeURIComponent(
-    bannerQuery
+    bannerQuery,
   )}`;
 
   const response = await fetch(apiUrl);
@@ -124,7 +124,7 @@ const navQuery = `
 
 export const getNavData = async () => {
   const apiUrl = `https://${PROJECT_ID}.api.sanity.io/v1/data/query/${DATASET}?query=${encodeURIComponent(
-    navQuery
+    navQuery,
   )}`;
   const response = await fetch(apiUrl);
 

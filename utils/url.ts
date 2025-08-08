@@ -59,7 +59,7 @@ export const normalizePath = (fullPath: string) => {
 
   parts.path = parts.path.replace(
     `/ver/${process.env.DOCS_LATEST_VERSION}`,
-    ""
+    "",
   );
 
   // In SSR mode next ignores trailingSlsh option in asPath
@@ -102,7 +102,7 @@ interface IsLocalAssetFileProps {
 
 export const isLocalAssetFile = (
   href: unknown,
-  options: IsLocalAssetFileProps = {}
+  options: IsLocalAssetFileProps = {},
 ) => {
   if (typeof href !== "string") {
     return false;

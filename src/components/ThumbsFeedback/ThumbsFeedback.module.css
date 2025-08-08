@@ -72,7 +72,7 @@
 
 .commentTextarea.error {
   border-color: #e53e3e;
-  
+
   &:focus {
     border-color: #e53e3e;
     box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);

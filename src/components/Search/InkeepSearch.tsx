@@ -4,7 +4,6 @@ import { useInkeepSearch } from '@site/src/hooks/useInkeepSearch';
 import styles from "./InkeepSearch.module.css";
 import InkeepSearchIconSvg from "./inkeepIcon.svg";
 
-
 export function InkeepSearch() {
   const {
     message,

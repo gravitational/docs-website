@@ -24,7 +24,7 @@ type NameMap = Record<string, string>;
 
 const generateNameMap = (
   variables: Record<string, unknown>,
-  prefix?: string
+  prefix?: string,
 ) => {
   let result: NameMap = {};
 
@@ -49,14 +49,14 @@ const variableRegExp = /\(=\s?(.+?)\s?=\)/g;
 const replaceVars = (value: string, names: NameMap) =>
   value.replace(
     variableRegExp,
-    (base: string, name: string) => names[name] || base
+    (base: string, name: string) => names[name] || base,
   );
 
 const lintVars = (
   vfile: VFile,
   node: MdastLiteral | MdastLink | MdxJsxElement,
   value: string,
-  variables: string[]
+  variables: string[],
 ) => {
   Array.from(value.matchAll(variableRegExp)).forEach((result) => {
     const match = result[0];
@@ -131,7 +131,7 @@ export default function remarkVariables({
                   lintVars(vfile, node, attribute.value, names);
                 }
               }
-            }
+            },
           );
         }
       }
