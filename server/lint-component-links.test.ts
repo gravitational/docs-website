@@ -34,15 +34,6 @@ describe("server/lint-component-links", () => {
       expected: ["Broken link in Products component"],
     },
     {
-      description: "should validate Products component with valid link",
-      input: `<Products productCategories={[{
-        features: [{
-          href: './enroll-resources/'
-        }]
-      }]} />`,
-      expected: [],
-    },
-    {
       description: "should detect broken link in Products component",
       input: `<Products productCategories={[{
         features: [{
@@ -52,7 +43,7 @@ describe("server/lint-component-links", () => {
       expected: ["Broken link in Products component"],
     },
     {
-      description: "should ignore non-configured components",
+      description: "should ignore non-specified components",
       input: `<SomeOtherComponent href="./broken-link/" />`,
       expected: [],
     },
@@ -62,7 +53,7 @@ describe("server/lint-component-links", () => {
         productCategories={[
           {
             features: [
-              { href: './enroll-resources/' },
+              { href: './some-path/' },
               { href: './broken-link/' }
             ]
           }
@@ -71,12 +62,23 @@ describe("server/lint-component-links", () => {
       expected: ["Broken link in Products component"],
     },
     {
-      description: "should validate folder/folder.mdx pattern",
-      input: `<Products productCategories={[{
-        features: [{
-          href: './machine-workload-identity/machine-id/deployment/'
-        }]
-      }]} />`,
+      description: "should accept valid link to directory with index.mdx",
+      input: `<Products productCategories={[{features: [{href: './'}]}]} />`,
+      expected: [],
+    },
+    {
+      description: "should accept valid link to direct .mdx file",
+      input: `<Products productCategories={[{features: [{href: './faq'}]}]} />`,
+      expected: [],
+    },
+    {
+      description: "should accept valid link to folder/folder.mdx pattern",
+      input: `<Products productCategories={[{features: [{href: './enroll-resources/'}]}]} />`,
+      expected: [],
+    },
+    {
+      description: "should accept valid link with trailing slash to .mdx file",
+      input: `<Products productCategories={[{features: [{href: './faq/'}]}]} />`,
       expected: [],
     },
   ];
