@@ -2,6 +2,7 @@ import { resolve } from "path";
 import remarkVariables from "./.remark-build/server/remark-variables.mjs";
 import remarkIncludes from "./.remark-build/server/remark-includes.mjs";
 import { remarkLintTeleportDocsLinks } from "./.remark-build/server/lint-teleport-docs-links.mjs";
+import { remarkLintComponentLinks } from "./.remark-build/server/lint-component-links.mjs";
 import {
   getVersion,
   getVersionRootPath,
@@ -69,6 +70,7 @@ const configLint = {
     // [CM-08 Information System Component Inventory]((=fedramp.control_url=)CM-8)
     ["validate-links", { repository: false }],
     [remarkLintTeleportDocsLinks],
+    [remarkLintComponentLinks],
     // Disabling the remarkLintFrontmatter check until we fix
     // gravitational/docs#80
     // [remarkLintFrontmatter, ["error"]],
