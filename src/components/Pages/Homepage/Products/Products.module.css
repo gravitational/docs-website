@@ -1,5 +1,5 @@
 .products {
-  margin-bottom: var(--ifm-leading);
+  padding-bottom: 5.25rem; /* 84px */
   background-color: var(--color-white);
   max-width: 1400px;
   margin: 0 auto;
