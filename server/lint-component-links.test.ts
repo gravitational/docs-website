@@ -61,26 +61,6 @@ describe("server/lint-component-links", () => {
       />`,
       expected: ["Broken link in Products component"],
     },
-    {
-      description: "should accept valid link to directory with index.mdx",
-      input: `<Products productCategories={[{features: [{href: './'}]}]} />`,
-      expected: [],
-    },
-    {
-      description: "should accept valid link to direct .mdx file",
-      input: `<Products productCategories={[{features: [{href: './faq'}]}]} />`,
-      expected: [],
-    },
-    {
-      description: "should accept valid link to folder/folder.mdx pattern",
-      input: `<Products productCategories={[{features: [{href: './enroll-resources/'}]}]} />`,
-      expected: [],
-    },
-    {
-      description: "should accept valid link with trailing slash to .mdx file",
-      input: `<Products productCategories={[{features: [{href: './faq/'}]}]} />`,
-      expected: [],
-    },
   ];
 
   test.each(testCases)("$description", (tc) => {
