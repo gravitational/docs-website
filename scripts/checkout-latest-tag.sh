@@ -18,17 +18,18 @@ CONTENT_DIR_NAME='content/([0-9]+)\.x'
 
 MAJOR=$(echo "${1}" | grep -oE "$CONTENT_DIR_NAME" | sed -E "s|^${CONTENT_DIR_NAME}|\1|");
 if [[ "$?" -ne 0 ]]; then
-    echo "Cannot check out the latest release within a content version directory: \"${1}\" does not have the expected name format. Skipping.";
+    echo "Cannot check out the latest release within a content version directory: \"${1}\" does not have the expected name format.";
     exit 1;
 fi
 echo "Found major version $MAJOR";
 
-LATEST_RELEASE_FOR_MAJOR=$(curl -qsf 'https://api.github.com/repos/gravitational/teleport/releases' | \
-    jq -r --arg major "$MAJOR" '.[].tag_name | select(startswith("v\($major)"))' | head -n 1);
+RELEASES=$(curl -qsf 'https://api.github.com/repos/gravitational/teleport/releases');
+LATEST_RELEASE_FOR_MAJOR=$(echo "$RELEASES" | jq -r --arg major "$MAJOR" '.[].tag_name | select(startswith("v\($major)"))' | head -n 1);
 
 if [[ -z "$LATEST_RELEASE_FOR_MAJOR" ]]; then
-    echo "Cannot check out the latest release within content directory ${1}: cannot find a release for major version ${MAJOR}. Skipping.";
-    exit 0
+    echo "Cannot check out the latest release within content directory ${1}: cannot find a release for major version ${MAJOR}.";
+    echo "Got the following output when querying GitHub for releases: \n${RELEASES}";
+    exit 1
 fi
 
 echo "Configuring the docs to display release ${LATEST_RELEASE_FOR_MAJOR}.";
