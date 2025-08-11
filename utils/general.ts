@@ -9,10 +9,10 @@
  */
 export const toCopyContent = (
   commandNode: HTMLElement,
-  commandLineClasses: string[]
+  commandLineClasses: string[],
 ): string => {
   const lines = Array.from(
-    commandNode.querySelectorAll(commandLineClasses.join(","))
+    commandNode.querySelectorAll(commandLineClasses.join(",")),
   ).reduce((allLines, commandLine) => {
     allLines.push(commandLine.textContent);
     return allLines;
@@ -54,6 +54,8 @@ export const filterTextForXSS = (text: string): string => {
 
 export const getFromSecretOrEnv = (name: string): string => {
   // https://docs.aws.amazon.com/amplify/latest/userguide/environment-secrets.html#access-environment-secrets
-  const configVars = process.env.secrets ? JSON.parse(process.env.secrets) : process.env;
-  return configVars[name]
+  const configVars = process.env.secrets
+    ? JSON.parse(process.env.secrets)
+    : process.env;
+  return configVars[name];
 };

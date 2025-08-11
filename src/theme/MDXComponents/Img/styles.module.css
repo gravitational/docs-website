@@ -33,7 +33,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
   cursor: zoom-out;
   cursor: -moz-zoom-out;
   cursor: -webkit-zoom-out;

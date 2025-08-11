@@ -1,11 +1,12 @@
-import React, {type ReactNode} from 'react';
-import clsx from 'clsx';
-import {ThemeClassNames} from '@docusaurus/theme-common';
-import {useDoc} from '@docusaurus/plugin-content-docs/client';
-import Heading from '@theme/Heading';
-import MDXContent from '@theme/MDXContent';
-import type {Props} from '@theme/DocItem/Content';
-import {GitHubIssueLink} from "/src/components/GitHubIssueLink";
+import React, { type ReactNode } from "react";
+import clsx from "clsx";
+import { ThemeClassNames } from "@docusaurus/theme-common";
+import { useDoc } from "@docusaurus/plugin-content-docs/client";
+import Heading from "@theme/Heading";
+import MDXContent from "@theme/MDXContent";
+import type { Props } from "@theme/DocItem/Content";
+import { GitHubIssueLink } from "/src/components/GitHubIssueLink";
+import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 import { useLocation } from "@docusaurus/router";
 
 /**
@@ -19,24 +20,26 @@ import { useLocation } from "@docusaurus/router";
  - the markdown content does not already contain a top-level h1 heading
 */
 function useSyntheticTitle(): string | null {
-  const {metadata, frontMatter, contentTitle} = useDoc();
+  const { metadata, frontMatter, contentTitle } = useDoc();
   const shouldRender =
-    !frontMatter.hide_title && typeof contentTitle === 'undefined';
+    !frontMatter.hide_title && typeof contentTitle === "undefined";
   if (!shouldRender) {
     return null;
   }
   return metadata.title;
 }
 
-export default function DocItemContent({children}: Props): ReactNode {
-  const location = useLocation();
+export default function DocItemContent({ children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
+  const { hideTitleSection } = useDocTemplate();
+  const location = useLocation();
+
   return (
-    <div className={clsx(ThemeClassNames.docs.docMarkdown, 'markdown')}>
+    <div className={clsx(ThemeClassNames.docs.docMarkdown, "markdown")}>
       {syntheticTitle && (
-        <header>
+        <header className={hideTitleSection ? "hide-title-section" : undefined}>
           <Heading as="h1">{syntheticTitle}</Heading>
-          <GitHubIssueLink pathname={location.pathname}/>
+          <GitHubIssueLink pathname={location.pathname} />
         </header>
       )}
       <MDXContent>{children}</MDXContent>

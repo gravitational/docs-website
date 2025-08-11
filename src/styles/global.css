@@ -4,7 +4,13 @@ body {
   padding: 0;
 }
 
-h1, h2, h3, h4, h5, h6, body {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+body {
   font-family: var(--font-base);
 }
 
@@ -36,4 +42,17 @@ h1, h2, h3, h4, h5, h6, body {
   .navbar__item {
     display: block;
   }
+}
+
+/* Accessibility-safe class to visually hide content while keeping it available to screen readers and SEO */
+.hide-title-section {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

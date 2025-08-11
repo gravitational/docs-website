@@ -92,9 +92,7 @@ export const getLatestVersion = () => {
 export const getCurrentVersion = () => {
   const versions = getSupportedVersions();
 
-  return (
-    versions[versions.length - 1]
-  ).name;
+  return versions[versions.length - 1].name;
 };
 
 /* Returns version options for docusaurus.config.js */

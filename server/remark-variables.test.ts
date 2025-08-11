@@ -18,7 +18,7 @@ const variables: Record<string, unknown> = {
 
 const transformer = (
   vfileOptions: VFileOptions,
-  pluginOptions: RemarkVariablesOptions = { resolve: true }
+  pluginOptions: RemarkVariablesOptions = { resolve: true },
 ) => {
   const file: VFile = new VFile(vfileOptions);
 
@@ -32,7 +32,7 @@ describe("server/remark-variables", () => {
   test("Fixture match result", () => {
     const value = readFileSync(
       resolve("server/fixtures/variables-source.mdx"),
-      "utf-8"
+      "utf-8",
     );
 
     const result = transformer({
@@ -42,7 +42,7 @@ describe("server/remark-variables", () => {
 
     const expected = readFileSync(
       resolve("server/fixtures/variables-result.mdx"),
-      "utf-8"
+      "utf-8",
     );
 
     expect(result).toEqual(expected);
@@ -51,7 +51,7 @@ describe("server/remark-variables", () => {
   test("Returns correct warnings on lint", () => {
     const value = readFileSync(
       resolve("server/fixtures/variables-source.mdx"),
-      "utf-8"
+      "utf-8",
     );
 
     const result = transformer(
@@ -59,7 +59,7 @@ describe("server/remark-variables", () => {
         value,
         path: "/content/4.0/docs/pages/filename.mdx",
       },
-      { lint: true, resolve: false }
+      { lint: true, resolve: false },
     );
 
     const errors = result.messages.map(({ message }) => message);

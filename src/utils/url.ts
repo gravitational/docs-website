@@ -70,7 +70,7 @@ interface IsLocalAssetFileProps {
 
 export const isLocalAssetFile = (
   href: unknown,
-  options: IsLocalAssetFileProps = {}
+  options: IsLocalAssetFileProps = {},
 ) => {
   if (typeof href !== "string") {
     return false;

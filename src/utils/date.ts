@@ -15,7 +15,7 @@ export const getParsedDate = (date: Date, dateFormat: string) => {
       // getTimeZoneOffset returns the time zone difference, in minutes, from current locale to UTC
       // multiplying by '60' gives us the difference in seconds
       // multiplying by '1000' gives us the difference in milliseconds
-      date.getTimezoneOffset() * 60 * 1000
+      date.getTimezoneOffset() * 60 * 1000,
   );
 
   return format(adjustedDate, dateFormat);
