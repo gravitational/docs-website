@@ -16,7 +16,11 @@ CONTENT_DIR_NAME='content/([0-9]+)\.x'
 # Extract the major version from the submodule name if it follows the expected
 # format.
 
-MAJOR=$(echo "${1}" | grep -oE "$CONTENT_DIR_NAME" | sed -E "s|^${CONTENT_DIR_NAME}|\1|")
+MAJOR=$(echo "${1}" | grep -oE "$CONTENT_DIR_NAME" | sed -E "s|^${CONTENT_DIR_NAME}|\1|");
+if [[ "$?" -ne 0 ]]; then
+    echo "Cannot check out the latest release within a content version directory: \"${1}\" does not have the expected name format. Skipping.";
+    exit 1;
+fi
 echo "Found major version $MAJOR";
 
 LATEST_RELEASE_FOR_MAJOR=$(curl -qsf 'https://api.github.com/repos/gravitational/teleport/releases' | \
