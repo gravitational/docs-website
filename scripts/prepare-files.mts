@@ -3,7 +3,7 @@ import { join, resolve, dirname } from "path";
 import { glob } from "glob";
 import {
   getCurrentVersion,
-  getLatestVersion,
+  getDefaultVersion,
   getVersionNames,
   getDocusaurusVersions,
 } from "../server/config-site";
@@ -17,7 +17,7 @@ const GET_VERSION_SIDEBAR_FILENAME = (version) =>
 
 const docusaurusVersions = getDocusaurusVersions();
 const currentVersion = getCurrentVersion();
-const defaultVersion = getLatestVersion();
+const defaultVersion = getDefaultVersion();
 const versions = getVersionNames();
 
 const writeSidebar = (version: string) => {

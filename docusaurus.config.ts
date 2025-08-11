@@ -8,6 +8,7 @@ import { loadConfig } from "./server/config-docs";
 import {
   getDocusaurusConfigVersionOptions,
   getLatestVersion,
+  getCurrentVersion,
 } from "./server/config-site";
 import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkIncludes from "./server/remark-includes";
@@ -228,7 +229,7 @@ const config: Config = {
         versions: getDocusaurusConfigVersionOptions(),
         // Our custom plugins need to be before default plugins
         beforeDefaultRemarkPlugins: [
-          [remarkVersionAlias, latestVersion],
+          [remarkVersionAlias, getCurrentVersion()],
           [
             remarkIncludes,
             {

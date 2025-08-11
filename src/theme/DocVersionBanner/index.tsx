@@ -21,8 +21,6 @@ type BannerLabelComponentProps = {
   versionMetadata: PropVersionMetadata;
 };
 
-const unreleasedMessage =
-  "This documentation is for an unreleased version of Teleport.";
 const selfHostedMessage =
   "This documentation is for a version of Teleport that is only available for self-hosted clusters.";
 
@@ -51,9 +49,7 @@ function UnreleasedVersionLabel({
     verToOrder.get("current") > thisIdx
   ) {
     message = selfHostedMessage;
-  } else {
-    message = unreleasedMessage;
-  }
+  } 
 
   return (
     <Translate
@@ -76,7 +72,7 @@ function UnmaintainedVersionLabel({
   return (
     <Translate
       id="theme.docs.versions.unmaintainedVersionLabel"
-      description="Indicates that the user is browsing a previous (but still maintained)  docs version"
+      description="Indicates that the user is browsing a previous (but still maintained) docs version"
       values={{
         siteTitle,
         versionLabel: <b>{versionMetadata.label}</b>,
