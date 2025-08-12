@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import clsx from "clsx";
 import { useWindowSize } from "@docusaurus/theme-common";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
@@ -56,39 +56,20 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
     metadata: { unlisted },
   } = useDoc();
 
-  // Add template-full-width class to aside and main elements when fullWidth template is used
-  // Set the docs navigation element visible when fullWidth is true
-  React.useEffect(() => {
+  // Add template-full-width class to the root layout element if fullWidth is true
+  useEffect(() => {
     if (!fullWidth) return;
     
-    const mainElement = document.querySelector('main');
-    const asideElement = document.querySelector('aside');
-    const docsNavigationElement = document.getElementById('docs-navigation');
-    if (mainElement) {
-      mainElement.classList.add('template-full-width');
-    }
-
-    if (asideElement) {
-      asideElement.classList.add('template-full-width');
-    }
-
-    if (docsNavigationElement) {
-      docsNavigationElement.classList.add('template-full-width');
+    const rootLayoutElement = document.querySelector('.theme-layout-main');
+    if (rootLayoutElement) {
+      rootLayoutElement.classList.add('template-full-width');
     }
     
     return () => {
-      const mainElement = document.querySelector('main');
-      const asideElement = document.querySelector('aside');
-      const docsNavigationElement = document.getElementById('docs-navigation');
-      if (mainElement) {
-        mainElement.classList.remove('template-full-width');
-      }
-      if (asideElement) {
-        asideElement.classList.remove('template-full-width');
-      }
-      if (docsNavigationElement) {
-        docsNavigationElement.classList.remove('template-full-width');
-      }
+    const rootLayoutElement = document.querySelector('.theme-layout-main');
+    if (rootLayoutElement) {
+      rootLayoutElement.classList.remove('template-full-width');
+    }
     };
   }, [fullWidth]);
 
