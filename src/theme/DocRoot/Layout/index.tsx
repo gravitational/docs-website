@@ -1,42 +1,15 @@
 import React, { type ReactNode } from "react";
 import Layout from "@theme-original/DocRoot/Layout";
-import type LayoutType from "@theme/DocRoot/Layout";
 import type { WrapperProps } from "@docusaurus/types";
 import DocsNavigation from "@site/src/components/DocsNavigation";
+import "./styles.module.css";
 
 type Props = WrapperProps<any>;
 
 export default function LayoutWrapper(props: Props): ReactNode {
   return (
     <>
-      <DocsNavigation
-        items={[
-          {
-            label: "Docs Home",
-            href: "/",
-          },
-          {
-            label: "Get Started",
-            href: "/get-started",
-          },
-          {
-            label: "Zero Trust Access",
-            href: "/zero-trust-access",
-          },
-          {
-            label: "Machine & Workload Identity",
-            href: "/machine-workload-identity",
-          },
-          {
-            label: "Identity Governance",
-            href: "/identity-governance",
-          },
-          {
-            label: "Identity Security",
-            href: "/identity-security",
-          },
-        ]}
-      />
+      <DocsNavigation />
       <Layout {...props} />
     </>
   );

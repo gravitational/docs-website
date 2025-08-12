@@ -10,10 +10,6 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 
-  &:global(.template-full-width) {
-    display: block;
-  }
-
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, and Opera */
   }
