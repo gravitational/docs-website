@@ -18,6 +18,7 @@ import { useDocTemplate } from '@site/src/hooks/useDocTemplate';
 import { PositionProvider } from "/src/components/PositionProvider";
 
 import styles from "./styles.module.css";
+import { useIsomorphicLayoutEffect } from "react-use";
 
 interface ExtendedFrontMatter {
   remove_table_of_contents?: boolean;
@@ -57,7 +58,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   } = useDoc();
 
   // Add template-full-width class to the root layout element if fullWidth is true
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!fullWidth) return;
     
     const rootLayoutElement = document.querySelector('.theme-layout-main');
