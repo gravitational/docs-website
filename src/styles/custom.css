@@ -1,0 +1,28 @@
+html.fullWidthPage main {
+  width: 100%;
+  max-width: 100%;
+}
+
+html.fullWidthPage main > .container {
+  max-width: 100%;
+  width: 100%;
+  padding-top: 0px !important;
+}
+
+html.fullWidthPage main > .container > .theme-doc-markdown > :not(section) {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* hide the sidebar */
+
+html.fullWidthPage aside {
+  display: none !important;
+}
+
+/* display the top navigation */
+
+html.fullWidthPage #docs-navigation {
+  display: block;
+}
