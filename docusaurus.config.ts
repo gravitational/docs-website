@@ -171,6 +171,12 @@ const config: Config = {
         anonymizeIP: true,
       },
     ],
+    [
+      "@docusaurus/plugin-google-tag-manager",
+      {
+        containerId: "GTM-WMR7H6",
+      },
+    ],
     "@docusaurus/theme-classic",
     "@docusaurus/plugin-sitemap",
     [
