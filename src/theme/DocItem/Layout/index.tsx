@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import clsx from "clsx";
 import { useWindowSize } from "@docusaurus/theme-common";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
@@ -18,7 +17,6 @@ import { useDocTemplate } from '@site/src/hooks/useDocTemplate';
 import { PositionProvider } from "/src/components/PositionProvider";
 
 import styles from "./styles.module.css";
-import { useIsomorphicLayoutEffect } from "react-use";
 
 interface ExtendedFrontMatter {
   remove_table_of_contents?: boolean;
@@ -56,23 +54,6 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   const {
     metadata: { unlisted },
   } = useDoc();
-
-  // Add template-full-width class to the root layout element if fullWidth is true
-  useIsomorphicLayoutEffect(() => {
-    if (!fullWidth) return;
-    
-    const rootLayoutElement = document.querySelector('.theme-layout-main');
-    if (rootLayoutElement) {
-      rootLayoutElement.classList.add('template-full-width');
-    }
-    
-    return () => {
-    const rootLayoutElement = document.querySelector('.theme-layout-main');
-    if (rootLayoutElement) {
-      rootLayoutElement.classList.remove('template-full-width');
-    }
-    };
-  }, [fullWidth]);
 
   return (
     <div className="row">
