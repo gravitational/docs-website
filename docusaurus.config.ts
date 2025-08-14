@@ -191,7 +191,12 @@ const config: Config = {
         containerId: "GTM-WMR7H6",
       },
     ],
-    "@docusaurus/theme-classic",
+    [
+      "@docusaurus/theme-classic",
+      {
+        customCss: "./src/styles/custom.css",
+      },
+    ],
     "@docusaurus/plugin-sitemap",
     [
       "@docusaurus/plugin-svgr",
