@@ -13,20 +13,20 @@ export default function Root({ children }) {
           {
             `
               html.fullWidthPage main {
-              width: 100%;
-              max-width: 100%;
+              width: 100% !important;
+              max-width: 100% !important;
               }
 
               html.fullWidthPage main > .container {
-              max-width: 100%;
-              width: 100%;
+              max-width: 100% !important;
+              width: 100% !important;
               padding-top: 0px !important;
               }
 
               html.fullWidthPage main > .container > .theme-doc-markdown > :not(section) {
-              max-width: 1400px;∏
-              margin-left: auto;
-              margin-right: auto;
+              max-width: 1400px !important;
+              margin-left: auto !important;
+              margin-right: auto !important;
               }
 
               html.fullWidthPage aside {
@@ -34,7 +34,7 @@ export default function Root({ children }) {
               }
               
               html.fullWidthPage #docs-navigation {
-              display: block;
+              display: block !important;
               }
             `
           }
