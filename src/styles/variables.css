@@ -117,7 +117,7 @@
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-font-family-base: var(--font-base);
 
-  --ifm-navbar-height: 80px;
+  --ifm-navbar-height: 117px;
 
   --ifm-navbar-padding-vertical: 0;
   --ifm-navbar-padding-horizontal: 0;
@@ -145,6 +145,6 @@
 
 @media (max-width: 996px) {
   :root {
-    --ifm-navbar-height: 48px;
+    --ifm-navbar-height: 96px;
   }
 }
