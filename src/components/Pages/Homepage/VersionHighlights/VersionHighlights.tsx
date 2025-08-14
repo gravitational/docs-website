@@ -55,14 +55,13 @@ const VersionHighlights: React.FC<VersionHighlightsProps> = ({
             <li key={index}>
               <a href={highlight.href} className={styles.highlightItem}>
                 <div className={styles.highlightImage}>
-                  {/* 
-                TODO: make image work
-
                 <img
                   src={highlight.image}
                   alt={highlight.title}
-                  className={styles.highlightImage}
-                /> */}
+                  className={styles.image}
+                  width={323}
+                  height={182}
+                />
                 </div>
                 <div className={styles.highlightContent}>
                   <p className={styles.highlightTag}>{highlight.tag}</p>

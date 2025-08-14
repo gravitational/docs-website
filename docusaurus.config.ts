@@ -6,6 +6,7 @@ import { useDocById } from "@docusaurus/plugin-content-docs/client";
 import { getFromSecretOrEnv } from "./utils/general";
 import { loadConfig } from "./server/config-docs";
 import {
+  getCurrentVersion,
   getDocusaurusConfigVersionOptions,
   getLatestVersion,
 } from "./server/config-site";
@@ -29,6 +30,8 @@ import {
 import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
+import path from "path";
+import fs from "fs";
 
 const latestVersion = getLatestVersion();
 
@@ -216,7 +219,7 @@ const config: Config = {
 
           return orderSidebarItems(
             removeRedundantItems(items, item.dirName),
-            getDocPageByID,
+            getDocPageByID
           );
         },
         // Host docs on the root page, later it will be exposed on goteleport.com/docs
@@ -270,6 +273,30 @@ const config: Config = {
         ],
       },
     ],
+    // This is for allowing to import images in .mdx files using the @content alias
+    // TODO: create a remark plugin for processing image paths inside the attributes of MdxJsxFlowElement nodes.
+    // See https://github.com/facebook/docusaurus/blob/main/packages/docusaurus-mdx-loader/src/remark/transformImage/index.ts#L267
+    function contentAlias() {
+      return {
+        name: "content-loader",
+        configureWebpack() {
+          const currentVersion = getLatestVersion();
+          const alias: string = path.resolve(
+            __dirname,
+            "./content",
+            currentVersion
+          );
+
+          return {
+            resolve: {
+              alias: {
+                "@content": alias,
+              },
+            },
+          };
+        },
+      };
+    },
     extendedPostcssConfigPlugin,
     process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
   ].filter(Boolean),

@@ -34,12 +34,12 @@
     background-color: rgba(0, 0, 0, 0.06);
     color: rgba(0, 0, 0, 0.72);
     font-weight: var(--fw-regular);
-    font-size: var(--fs-text-md);
-    padding: var(--fs-text-xs) var(--m-4);
+    font-size: var(--fs-text-sm);
+    padding: var(--m-1) var(--m-4);
   }
 }
 
-@media (min-width: 577px) {
+@media (--md-scr) {
   .header {
     flex-direction: row;
     align-items: center;
@@ -47,18 +47,26 @@
   }
   .links {
     margin-top: 0;
+    .link {
+      font-size: var(--fs-text-md);
+      padding: var(--fs-text-xs) var(--m-4);
+    }
   }
 }
 
 .highlightsList {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   list-style: none;
   margin-bottom: 0;
   padding-left: 0;
-  gap: var(--m-2);
+  gap: var(--m-3);
   @media (--md-scr) {
+    gap: var(--m-2);
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  & > li {
+    margin-top: 0 !important;
   }
 }
 
@@ -67,8 +75,8 @@
   gap: var(--m-2);
   grid-template-columns: 1fr;
 
-  @media (min-width: 768px) {
-    grid-template-columns: 48% 52%;
+  @media (--md-scr) {
+    grid-template-columns: minmax(0, 48%) minmax(0, 52%);
   }
 
   &:hover {
@@ -89,22 +97,35 @@
     background-color: rgba(0, 0, 0, 0.06);
     border-radius: var(--m-2);
     aspect-ratio: 323 / 182;
+    overflow: hidden;
+    position: relative;
+
+    .image {
+      top: 0;
+      left: 0;
+      position: absolute;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
   }
+
   .highlightTag {
-    font-size: var(--fs-text-sm);
+    font-size: 11px;
     color: rgba(0, 0, 0, 0.72);
     background-color: #fbfbfc;
     border-radius: 8px;
-    padding: 6px 12px;
+    padding: 8px 12px;
     width: max-content;
     border: 1px solid rgba(0, 0, 0, 0.06);
     margin-bottom: 0;
+    line-height: 1.45;
   }
 
   .highlightTitle {
     margin-bottom: 0;
     line-height: 1.5;
-    font-size: var(--fs-header-4);
+    font-size: 18px;
     color: var(--color-black);
   }
 
@@ -112,13 +133,30 @@
     color: rgba(0, 0, 0, 0.52);
     margin-bottom: 0;
     line-height: 1.625;
+    font-size: var(--fs-text-md);
   }
 
   .highlightLink {
-    font-size: var(--fs-header-4);
+    font-size: 18px;
     color: var(--color-dark-purple);
     text-decoration: none;
     font-weight: var(--fw-bold);
     margin-bottom: 0;
+  }
+
+  @media (--md-scr) {
+    .highlightTag {
+      font-size: var(--fs-text-sm);
+      padding: 7px 12px;
+    }
+
+    .highlightDescription {
+      font-size: var(--fs-text-lg);
+    }
+
+    .highlightTitle,
+    .highlightLink {
+      font-size: var(--fs-header-4);
+    }
   }
 }
