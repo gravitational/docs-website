@@ -1,46 +1,102 @@
 .docsNavigation {
   display: none;
-  position: sticky;
+  position: fixed;
   top: var(--ifm-navbar-height);
-  border-bottom: 1px solid var(--color-tonal-neutral-0);
   background-color: var(--color-white);
   z-index: 2;
   max-width: 100vw;
-  overflow-x: scroll;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-tonal-neutral-0);
+  @media (--md-scr) {
+    position: sticky;
+    overflow-x: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 
-  &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, and Opera */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, and Opera */
+    }
+
+    &.open {
+      height: auto;
+    }
+  }
+  &.open {
+    max-height: 80dvh;
+    overflow-y: scroll;
+    height: max-content;
+    border-bottom: 1px solid var(--color-tonal-neutral-1);
+  }
+
+  .mobileNavToggle {
+    background-color: var(--color-tonal-neutral-0);
+    border: unset;
+    border-radius: 4px;
+    padding: 6px 8px;
+    position: absolute;
+    top: 0.5rem;
+    left: 1rem;
+
+    @media (--md-scr) {
+      display: none;
+    }
+  }
+
+  .mobileActiveLabel {
+    color: var(--color-dark-purple);
+    font-weight: var(--fw-bold);
+    font-size: 13px;
+    padding: 14px 0px 14px 64px;
+    margin-bottom: 0;
+    line-height: 1.539;
+    &.hidden {
+      display: none;
+    }
+    @media (--md-scr) {
+      display: none;
+    }
   }
 
   .navList {
+    margin-bottom: 0;
     list-style: none;
     padding-left: 0;
     display: flex;
-    width: max-content;
-    margin: 0 5px;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--color-white);
+    visibility: hidden;
+    height: 0;
 
-    @media (min-width: 768px) {
+    @media (--md-scr) {
+      width: max-content;
+      flex-direction: row;
       margin: 0 26px;
+      height: auto;
+      visibility: visible;
+    }
+
+    &.open {
+      visibility: visible;
+      height: auto;
+      padding-block: 14px;
     }
 
     .navLink {
       display: flex;
       align-items: center;
       position: relative;
-      padding: var(--m-1-5) 11px;
+      padding: 14px 0;
+      margin-left: 64px;
       color: var(--color-black);
-      font-size: var(--fs-text-md);
+      font-size: 13px;
       text-decoration: none;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
 
-      @media (min-width: 768px) {
-        padding: var(--m-1-5) 16px;
-      }
-
       &::after {
+        display: none;
         content: "";
         position: absolute;
         bottom: 0;
@@ -62,6 +118,15 @@
 
       &:hover {
         color: var(--color-dark-purple);
+      }
+
+      @media (--md-scr) {
+        font-size: var(--fs-text-md);
+        padding: var(--m-1-5) 16px;
+        margin-left: unset;
+        &::after {
+          display: block;
+        }
       }
     }
   }
