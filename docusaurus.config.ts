@@ -171,7 +171,12 @@ const config: Config = {
         anonymizeIP: true,
       },
     ],
-    "@docusaurus/theme-classic",
+    [
+      "@docusaurus/theme-classic",
+      {
+        customCss: "./src/styles/custom.css",
+      },
+    ],
     "@docusaurus/plugin-sitemap",
     [
       "@docusaurus/plugin-svgr",
