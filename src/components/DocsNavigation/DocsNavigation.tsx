@@ -1,6 +1,7 @@
 import { useDocById } from "@docusaurus/plugin-content-docs/lib/client/docsUtils.js";
 import styles from "./DocsNavigation.module.css";
 import DocsNavList from "./DocsNavList";
+import { useLocation } from "@docusaurus/router";
 
 type DocsNavigationProps = {
   items: Array<{
@@ -10,6 +11,7 @@ type DocsNavigationProps = {
 };
 
 const DocsNavigation: React.FC<DocsNavigationProps> = ({ items }) => {
+  const location = useLocation();
   const checkIfDocExists = (docId: string): boolean => {
     try {
       const doc = useDocById(docId);
