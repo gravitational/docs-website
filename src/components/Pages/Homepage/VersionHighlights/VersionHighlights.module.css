@@ -31,8 +31,8 @@
 
   .link {
     border-radius: var(--m-1-5);
-    background-color: rgba(0, 0, 0, 0.06);
-    color: rgba(0, 0, 0, 0.72);
+    background-color: var(--color-tonal-neutral-0);
+    color: var(--color-foreground-slightly-muted);
     font-weight: var(--fw-regular);
     font-size: var(--fs-text-sm);
     padding: var(--m-1) var(--m-4);
@@ -94,7 +94,7 @@
   }
 
   .highlightImage {
-    background-color: rgba(0, 0, 0, 0.06);
+    background-color: var(--color-tonal-neutral-0);
     border-radius: var(--m-2);
     aspect-ratio: 323 / 182;
     overflow: hidden;
@@ -112,12 +112,12 @@
 
   .highlightTag {
     font-size: 11px;
-    color: rgba(0, 0, 0, 0.72);
+    color: var(--color-foreground-slightly-muted);
     background-color: #fbfbfc;
     border-radius: 8px;
     padding: 8px 12px;
     width: max-content;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--color-tonal-neutral-0);
     margin-bottom: 0;
     line-height: 1.45;
   }
@@ -130,7 +130,7 @@
   }
 
   .highlightDescription {
-    color: rgba(0, 0, 0, 0.52);
+    color: var(--color-foreground-muted);
     margin-bottom: 0;
     line-height: 1.625;
     font-size: var(--fs-text-md);

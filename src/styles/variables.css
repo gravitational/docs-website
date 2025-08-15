@@ -14,9 +14,16 @@
   --color-dark-gray: #455a64;
   --color-darkest: #37474f;
   --color-black: #000;
-  --color-foreground-slightly-muted: #000000b8;
-  --color-tonal-neutral-0: #0000000f;
-  --color-tonal-neutral-1: #00000021;
+  --color-foreground-slightly-muted: rgba(0, 0, 0, 0.72);
+  --color-foreground-muted: rgba(0, 0, 0, 0.54);
+  --color-foreground-disabled: rgba(0, 0, 0, 0.36);
+  --color-foreground-tooltip: rgba(0, 0, 0, 0.8);
+  --color-tonal-neutral-0: rgba(0, 0, 0, 0.06);
+  --color-tonal-neutral-1: rgba(0, 0, 0, 0.13);
+  --color-tonal-neutral-2: rgba(0, 0, 0, 0.18);
+  --color-tonal-primary-0: rgba(81, 47, 201, 0.1);
+  --color-tonal-primary-1: rgba(81, 47, 201, 0.18);
+  --color-tonal-primary-2: rgba(81, 47, 201, 0.25);
 
   --color-warning: #ffb400;
   --color-danger: #f80061;
@@ -108,4 +115,3 @@
     --ifm-navbar-height: 48px;
   }
 }
-
