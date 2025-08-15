@@ -1,12 +1,13 @@
 import { useState } from "react";
 import styles from "./DocsNavigation.module.css";
 import ListSvg from "@site/src/components/Icon/svg/list-more-lines.svg";
-import { PropSidebarItem } from "@docusaurus/plugin-content-docs";
 import cn from "classnames";
-import { SidebarItemLink } from "@docusaurus/plugin-content-docs/src/sidebars/types.js";
 
 interface DocsNavListProps {
-  items: Array<PropSidebarItem | SidebarItemLink>;
+  items: Array<{
+    label: string;
+    href: string;
+  }>;
   location: Location;
 }
 
