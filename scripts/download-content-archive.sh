@@ -26,20 +26,30 @@ fi
 echo "Found major version $MAJOR";
 
 BRANCH_TAR_URL="https://api.github.com/repos/gravitational/teleport/tarball/${2}";
-BRANCH_TAR_FILE="${DOWNLOADS_DIR}/v${MAJOR}.tar.gz";
 
-mkdir -p "${DOWNLOADS_DIR}";
+# read the name of the tarball we'll write the gravitational/teleport archive to 
+# from the "content-disposition" header.
+BRANCH_TAR_FILE="${DOWNLOADS_DIR}/$(curl -qIL $BRANCH_TAR_URL | grep 'content-disposition' | sed -n 's/.*filename="*\([^";]*\.tar\.gz\)"*.*/\1/p')";
+
 if [[ -f "${BRANCH_TAR_FILE}" ]]; then
     du -h "${BRANCH_TAR_FILE}";
     echo "Archive ${BRANCH_TAR_FILE} already exists. Skipping download."
 else
     echo "Fetching an archive from ${BRANCH_TAR_URL} and writing it to ${BRANCH_TAR_FILE};"
-    curl -fL -o "${BRANCH_TAR_FILE}" "${BRANCH_TAR_URL}";
+    curl -fLJO --create-dirs --output-dir "${DOWNLOADS_DIR}" "${BRANCH_TAR_URL}";
 fi
 
-tar -xf "${BRANCH_TAR_FILE}" \
-    --strip-components=1 \
-    -C "$1" \
-        '*/docs' '*/examples'
+# Detect tar flavor and add --wildcards only for GNU tar
+TAR_VERSION_STR="$(tar --version 2>&1 | head -n1 || true)"
+TAR_ARGS=(-xf "${BRANCH_TAR_FILE}" --strip-components=1 -C "$1")
+if echo "${TAR_VERSION_STR}" | grep -qi 'gnu tar'; then
+    TAR_ARGS+=(--wildcards)
+fi
+
+# Extract desired paths
+tar "${TAR_ARGS[@]}" '*/docs' '*/examples' '*/CHANGELOG.md'
 
 ls -al "$1"
+
+echo "Cleaning up old tarballs from $DOWNLOADS_DIR"
+find "$DOWNLOADS_DIR" -type f -mtime +3 -not -wholename "$BRANCH_TAR_FILE" -print -delete

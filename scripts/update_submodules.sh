@@ -13,9 +13,7 @@ if [[ -n ${AWS_APP_ID} || -n ${CI} ]]; then
   for v in $(echo "$DOCS_VERSIONS"); do
      # Make sure there is a subdirectory in content for each version named in
      # config.json
-     if [[ ! -d "content/$v" ]]; then
-         mkdir "content/$v";
-     fi
+     mkdir -p "content/$v";
 
      BRANCH=$(jq --arg ver "$v" -r '.versions[] | select(.name==$ver) | .branch' config.json);
      scripts/download-content-archive.sh "content/$v" "$BRANCH";
