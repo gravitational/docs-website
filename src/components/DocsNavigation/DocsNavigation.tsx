@@ -21,11 +21,10 @@ const DocsNavigation: React.FC<DocsNavigationProps> = ({ items }) => {
     }
   };
 
+  // utilize useDocById to make sure that only existing documents are displayed
   const availableItems = items.filter((item) => {
     const docId = item.href === "/" ? "index" : item.href.split("/").slice(1).join("/");
     const docIdLeaf = item.href.split("/").pop();
-
-    console.log(`${docId}/${docIdLeaf}`);
 
     // First check the document without inner paths
     if (checkIfDocExists(docId)) {
