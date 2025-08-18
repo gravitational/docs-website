@@ -21,7 +21,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
   image,
   youtubeVideoUrl,
   icon,
-  links,
+  links = [],
   children,
 }) => {
   const Icon = icon;
@@ -66,7 +66,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
             )}
           </div>
         </div>
-        {links?.length > 0 && (
+        {links.length > 0 && (
           <div className={styles.links}>
             {links.map((link, i) => (
               <a href={link.href} key={i} className={styles.link}>

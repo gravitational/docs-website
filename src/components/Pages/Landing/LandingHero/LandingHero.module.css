@@ -1,9 +1,7 @@
 .landingHero {
-  padding: 2rem 1rem; /* 32px 16px */
-  margin-left: -1rem;
-  margin-right: -1rem;
+  padding: var(--m-4) 0;
   @media (--md-scr) {
-    padding: 2rem 2.5rem; /* 32px 40px */
+    padding: var(--m-4) var(--m-3);
   }
 }
 
@@ -18,17 +16,17 @@
   border-radius: 12px;
   background-color: #512fc90d;
   grid-template-columns: minmax(0, 1fr);
-  padding: 1rem;
+  padding: var(--m-2);
   gap: 0.5rem;
 
   @media (--md-scr) {
-    padding: 2rem;
+    padding: var(--m-4);
     grid-template-columns: minmax(0, 1fr);
-    gap: 2rem;
+    gap: var(--m-4);
   }
 
   @media (--lg-scr) {
-    gap: 2.5rem 2rem;
+    padding: var(--m-5) var(--m-4);
     grid-template-columns: minmax(0, 55.1%) minmax(0, 44.9%);
   }
 }
@@ -64,6 +62,7 @@
   .description {
     line-height: 1.75;
     color: var(--color-foreground-slightly-muted);
+    font-weight: 500;
     ul {
       padding-left: 1.5em;
     }
@@ -100,7 +99,7 @@
 
   .link {
     padding: var(--m-3);
-    border-radius: 16px;
+    border-radius: var(--m-2);
     height: 100%;
     border: 1.5px solid var(--color-tonal-neutral-0);
     text-decoration: none;
