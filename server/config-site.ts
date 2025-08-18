@@ -11,7 +11,7 @@ import { loadJson } from "./json";
 interface Config {
   versions: {
     name: string;
-    branch: string;
+    release?: string;
     isDefault?: boolean;
     deprecated?: boolean;
   }[];
@@ -44,12 +44,12 @@ const validator = ajv.compile({
         type: "object",
         properties: {
           name: { type: "string" },
-          branch: { type: "string" },
           isDefault: { type: "boolean", nullable: true },
           deprecated: { type: "boolean", nullable: true },
+          release: { type: "string", nullable: true },
         },
         additionalProperties: false,
-        required: ["name", "branch"],
+        required: ["name"],
       },
       minItems: 1,
       uniqueItems: true,
@@ -68,27 +68,48 @@ export const loadConfig = () => {
   return config;
 };
 
-// Returns a list of supported versions, excluding deprecated ones.s
-
+// Returns a list of supported versions, excluding deprecated ones, sorted
+// ascending by number.
 const getSupportedVersions = () => {
   const { versions } = loadConfig();
 
-  return versions.filter(({ deprecated }) => !deprecated);
+  const supportedVersions = versions.filter(({ deprecated }) => !deprecated);
+  supportedVersions.sort((a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    } else if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  });
+  return supportedVersions;
 };
 
-// Returns name of the latest version.
-
+// getLatestVersion returns the name of the latest supported version, i.e., the
+// default version of the docs site. This is the versioned marked isDefault in
+// the version configuration. If this is the highest supported version, we use
+// the name "current" to satisfy the expectations of Docusaurus.
 export const getLatestVersion = () => {
   const versions = getSupportedVersions();
-
-  return (
-    versions.find(({ isDefault }) => isDefault === true) ||
-    versions[versions.length - 1]
-  ).name;
+  const idx = versions.findIndex(({ isDefault }) => isDefault === true);
+  if (idx == versions.length - 1) {
+    // By Docusaurus convention, the highest-numbered version is called
+    // "current".
+    return "current";
+  }
+  return versions[idx].name;
 };
 
-// Returns name of the current version.
+// getDefaultVersion returns the name of the latest supported version, i.e., the
+// default version of the docs site.
+export const getDefaultVersion = () => {
+  const versions = getSupportedVersions();
+  return versions.find(({ isDefault }) => isDefault === true).name;
+};
 
+// getCurrentVersion returns the name of the version that the Docusaurus
+// configuration calls "current". This is the name of the highest supported
+// version.
 export const getCurrentVersion = () => {
   const versions = getSupportedVersions();
 
@@ -103,24 +124,22 @@ export const getDocusaurusConfigVersionOptions = (): Record<
 > => {
   const versions = getSupportedVersions();
 
-  return versions.reduce((result, { name, isDefault, branch }, idx) => {
-    // Use "current" as the name for the current version (i.e., the edge
-    // version), the highest-numbered version in the configuration. This way
-    // Docusaurus will look for it in the `docs` folder instead of
-    // `versioned_docs`.
+  // Since we build the Docusaurus site from GitHub releases in production,
+  // there is no "current" version, i.e., a docs version that is under
+  // development. In this way, our use of Docusaurus versions differs from the
+  // convention described in the Docusaurus documentation:
+  // https://docusaurus.io/docs/versioning
+  // At the same time, we still need to name the latest version "current" to
+  // meet the expectations of Docusaurus.
+  return versions.reduce((result, { name, release, isDefault }, idx) => {
     const isCurrent = idx === versions.length - 1;
     const versionName = isCurrent ? "current" : name;
 
     const versionOptions: VersionOptions = {
-      label: isCurrent ? `${name} (unreleased)` : name,
+      label: release || name,
       // Configure root path for the version. Latest in the root, others in the `ver/XX.x` folder.
       path: isDefault ? "" : `ver/${name}`,
     };
-
-    // Banner will show message for the current version that it is still WIP.
-    if (isCurrent) {
-      versionOptions.banner = "unreleased";
-    }
 
     return { ...result, [versionName]: versionOptions };
   }, {});

@@ -10,7 +10,7 @@ import { join, sep } from "path";
 import { existsSync, readFileSync } from "fs";
 import * as nodefs from "fs";
 import { isExternalLink, isHash, splitPath } from "../src/utils/url";
-import { getLatestVersion } from "./config-site";
+import { getDefaultVersion } from "./config-site";
 
 type RouteHas =
   | {
@@ -42,7 +42,7 @@ type Redirect = {
     }
 );
 
-const latest = getLatestVersion();
+const latest = getDefaultVersion();
 
 export interface Config {
   variables?: Record<string, unknown>;
