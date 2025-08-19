@@ -18,7 +18,7 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
   useCases = [],
 }) => {
   return (
-    <section className={cn(styles.versionHighlights, className)}>
+    <section className={cn(styles.useCasesList, className)}>
       <div className={styles.container}>
         <h2 className={styles.title}>{title}</h2>
         <ul className={styles.items}>
