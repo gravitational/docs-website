@@ -224,7 +224,7 @@
   background-color: #fbfbfc;
   border-radius: 12px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
 
   .additionalLinksTitle {
     margin-right: var(--m-3);
@@ -235,13 +235,17 @@
   .additionalLinksList {
     list-style: none;
     display: flex;
-    gap: 54px;
+    flex-direction: column;
     margin-bottom: 0;
     padding-left: 0;
 
     & > li {
       padding: 6px 0;
       margin: 0;
+      &:last-child {
+        padding-bottom: 0;
+      }
+
       & > a {
         display: flex;
         align-items: center;
@@ -250,6 +254,22 @@
 
         svg {
           margin-right: 6px;
+        }
+      }
+    }
+  }
+
+  @media (--md-scr) {
+    flex-direction: row;
+    align-items: center;
+
+    .additionalLinksList {
+      flex-direction: row;
+      gap: 54px;
+
+      & > li {
+        &:last-child {
+          padding-bottom: 6px;
         }
       }
     }
