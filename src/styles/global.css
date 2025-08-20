@@ -80,8 +80,8 @@ html.fullWidthPage aside {
   display: none !important;
 }
 
-/* display the top navigation */
-
-html.fullWidthPage #docs-navigation {
-  display: block !important;
+.theme-doc-sidebar-container {
+  & > div {
+    top: var(--docs-top-nav-height);
+  }
 }

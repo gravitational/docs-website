@@ -8,7 +8,9 @@ interface DocsNavListProps {
     label: string;
     href: string;
   }>;
-  location: Location;
+  location: {
+    pathname: string;
+  };
 }
 
 const DocsNavList: React.FC<DocsNavListProps> = ({ items, location }) => {
