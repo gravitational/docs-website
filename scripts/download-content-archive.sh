@@ -46,10 +46,12 @@ if echo "${TAR_VERSION_STR}" | grep -qi 'gnu tar'; then
     TAR_ARGS+=(--wildcards)
 fi
 
+ls -al "${DOWNLOADS_DIR}"
+
 # Extract desired paths
 tar "${TAR_ARGS[@]}" '*/docs' '*/examples' '*/CHANGELOG.md'
 
 ls -al "$1"
 
 echo "Cleaning up old tarballs from $DOWNLOADS_DIR"
-find "$DOWNLOADS_DIR" -type f -mtime +3 -not -wholename "$BRANCH_TAR_FILE" -print -delete
+find "$DOWNLOADS_DIR" -type f -mtime +1 -not -wholename "$BRANCH_TAR_FILE" -print -delete
