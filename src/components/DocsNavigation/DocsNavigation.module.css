@@ -5,12 +5,11 @@
   z-index: 2;
   max-width: 100vw;
   width: 100%;
-  overflow: hidden;
   border-bottom: 1px solid var(--color-tonal-neutral-0);
   @media (--md-scr) {
     max-height: var(--docs-top-nav-height);
+    display: flex;
     position: sticky;
-    overflow-x: scroll;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 
@@ -22,11 +21,14 @@
       height: auto;
     }
   }
-  &.open {
-    max-height: 80dvh;
-    overflow-y: scroll;
-    height: max-content;
-    border-bottom: 1px solid var(--color-tonal-neutral-1);
+
+  @media (--sm-scr) {
+    &.open {
+      max-height: 80dvh;
+      overflow-y: scroll;
+      height: max-content;
+      border-bottom: 1px solid var(--color-tonal-neutral-1);
+    }
   }
 
   .mobileNavToggle {
@@ -78,10 +80,107 @@
       visibility: visible;
     }
 
+    &.navListRight {
+      @media (--md-scr) {
+        margin-left: auto;
+      }
+    }
+
     &.open {
       visibility: visible;
       height: auto;
-      padding-block: 14px;
+      padding-top: 14px;
+      &:last-of-type {
+        padding-top: 0;
+        padding-bottom: 14px;
+      }
+    }
+
+    .navItem {
+      display: flex;
+      align-items: center;
+
+      &.navItemDropdown {
+        position: relative;
+        cursor: pointer;
+        flex-direction: column;
+        align-items: flex-start;
+
+        @media (--md-scr) {
+          flex-direction: row;
+          align-items: center;
+        }
+
+        .subNavList {
+          margin: 0;
+          list-style: none;
+          padding-left: unset;
+          @media (--md-scr) {
+            position: absolute;
+            top: 100%;
+            left: -50%;
+            z-index: 1;
+            width: 150%;
+            display: none;
+            background-color: var(--color-white);
+            box-shadow: var(--box-shadow);
+            padding: 8px 0;
+            box-shadow: 0 5px 20px 0 rgba(19, 19, 19, 0.1);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+          }
+        }
+
+        .subNavLink {
+          display: block;
+          color: var(--color-black);
+          font-size: 13px;
+          text-decoration: none;
+          line-height: 1.5;
+          -webkit-font-smoothing: antialiased;
+          margin-left: 64px;
+          padding: 14px 0;
+
+          &:hover {
+            color: var(--color-dark-purple);
+          }
+
+          @media (--md-scr) {
+            margin-left: unset;
+            padding: 7px 16px;
+          }
+        }
+
+        &:hover {
+          .icon {
+            transform: rotate(270deg);
+          }
+          .subNavList {
+            display: block;
+          }
+          .navLink {
+            color: var(--color-dark-purple);
+          }
+        }
+
+        .navLink {
+          padding-right: var(--m-1);
+        }
+      }
+
+      .iconWrapper {
+        display: flex;
+        align-items: center;
+      }
+
+      .icon {
+        transform: rotate(90deg);
+        display: none;
+
+        @media (--md-scr) {
+          display: inline-block;
+        }
+      }
     }
 
     .navLink {

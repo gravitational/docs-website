@@ -68,10 +68,10 @@ export const getFromSecretOrEnv = (name: string): string => {
  * @param version - The version metadata.
  * @returns The versioned URL.
  */
-export const getVersionedUrl = (href: string, version: PropVersionMetadata): string => {
+export const getVersionedUrl = (version: PropVersionMetadata, href?: string): string => {
   const {isLast, label} = version;
 
-  if (isLast) {
+  if (isLast || !href) {
     return href;
   }
 
