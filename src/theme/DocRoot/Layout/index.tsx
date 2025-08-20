@@ -34,6 +34,28 @@ export default function LayoutWrapper(props: Props): ReactNode {
             label: "Identity Security",
             href: "/identity-security",
           },
+          "split",
+          {
+            label: "References",
+            href: "/reference",
+          },
+          {
+            label: "Help & Support",
+            items: [
+              {
+                label: "FAQ",
+                href: "/faq",
+              },
+              {
+                label: "Changelog",
+                href: "/changelog",
+              },
+              {
+                label: "Upcoming Releases",
+                href: "/upcoming-releases",
+              },
+            ],
+          },
         ]}
       />
       <Layout {...props} />
