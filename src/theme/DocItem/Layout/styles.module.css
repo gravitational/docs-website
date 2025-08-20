@@ -3,6 +3,12 @@
   margin-top: 0;
 }
 
+@media (--sm-scr) {
+  .docItemContainer article > *:first-child {
+    margin-top: var(--docs-top-nav-height);
+  }
+}
+
 .sidebar {
   display: flex;
   justify-content: space-between;

@@ -1,5 +1,4 @@
 .docsNavigation {
-  display: none;
   position: fixed;
   top: var(--ifm-navbar-height);
   background-color: var(--color-white);
@@ -9,6 +8,7 @@
   overflow: hidden;
   border-bottom: 1px solid var(--color-tonal-neutral-0);
   @media (--md-scr) {
+    max-height: var(--docs-top-nav-height);
     position: sticky;
     overflow-x: scroll;
     -ms-overflow-style: none; /* IE and Edge */
@@ -33,7 +33,7 @@
     background-color: var(--color-tonal-neutral-0);
     border: unset;
     border-radius: 4px;
-    padding: 6px 8px;
+    padding: 5px 8px;
     position: absolute;
     top: 0.5rem;
     left: 1rem;
@@ -45,6 +45,7 @@
 
   .mobileActiveLabel {
     color: var(--color-dark-purple);
+    max-height: var(--docs-top-nav-height);
     font-weight: var(--fw-bold);
     font-size: 13px;
     padding: 14px 0px 14px 64px;
