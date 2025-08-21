@@ -42,11 +42,9 @@ curl -sS -L --fail \
     -o "$BRANCH_TAR_FILE" \
     "$BRANCH_TAR_URL"
 
-# If ETAG_FILE is empty but TMP_ETAG is not, replace ETAG_FILE with TMP_ETAG
+# If TMP_ETAG exist and it's not empty, replace ETAG_FILE with TMP_ETAG
 # This is needed because of bug in older curl versions: https://github.com/curl/curl/issues/15728
-if [[ -f "$TMP_ETAG" && (! -f "$ETAG_FILE" || ! -s "$ETAG_FILE") && -s "$TMP_ETAG" ]]; then
-    mv -f "$TMP_ETAG" "$ETAG_FILE"
-fi
+[ -s "$TMP_ETAG" ] && mv -fv "$TMP_ETAG" "$ETAG_FILE"
 
 # Detect tar flavor and add --wildcards only for GNU tar
 TAR_VERSION_STR="$(tar --version 2>&1 | head -n1 || true)"
