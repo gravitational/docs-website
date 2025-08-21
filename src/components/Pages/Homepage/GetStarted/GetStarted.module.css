@@ -1,5 +1,5 @@
 .getStarted {
-  padding-bottom: 5.25rem /* 84px */;
+  padding-bottom: var(--lp-section-padding-lg);
   background-color: var(--color-white);
   margin-left: -1rem;
   margin-right: -1rem;
@@ -16,7 +16,7 @@
 }
 
 .container {
-  max-width: 1400px;
+  max-width: var(--lp-section-max-width);
   margin: 0 auto;
   padding: 0 1rem;
 }

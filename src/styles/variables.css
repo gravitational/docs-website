@@ -101,6 +101,14 @@
   /* landing page font sizes */
   --lp-header-1: 40px;
   --lp-header-2: 32px;
+
+  /* max width for landing page sections */
+  --lp-section-max-width: 1400px;
+
+  /* consistent spacings between landing page sections */
+  --lp-section-padding-lg: 84px;
+  --lp-section-padding-md: 80px;
+  --lp-section-padding-sm: 32px;
 }
 
 @media (max-width: 996px) {
