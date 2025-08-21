@@ -17,6 +17,7 @@
   margin: 0 auto;
 }
 
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -48,7 +49,7 @@
 }
 
 .mainLink {
-  border-radius: var(--m-1-5);
+  border-radius: var(--m-0-5);
   background-color: var(--color-tonal-neutral-0);
   color: var(--color-foreground-slightly-muted);
   font-weight: var(--fw-regular);
@@ -77,15 +78,11 @@
   grid-template-columns: 1fr;
   gap: var(--m-2);
 
-  @media (min-width: 577px) {
+  @media (--md-scr) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (--lg-scr) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (min-width: 1400px) {
+  @media (--xl-scr) {
     grid-template-columns: repeat(var(--desktop-column-count), 1fr);
   }
 }
@@ -112,6 +109,7 @@
   }
 
   &.rowLayout {
+    padding-right: 20px;
     padding-bottom: var(--m-1);
   }
 
@@ -129,9 +127,14 @@
 
       &.rowLayout {
         gap: 0;
+        padding: 0 0 var(--m-1-5) 20px;
+        .integrationTitle {
+          margin-top: var(--m-1-5);
+        }
 
         .integrationDescription {
           font-size: var(--fs-text-lg);
+          color: var(--color-foreground-muted);
 
           @media (--md-scr) {
             font-size: var(--fs-text-xl);
@@ -173,6 +176,10 @@
     min-height: unset;
     max-height: unset;
     padding: 20px;
+    .iconSvg {
+      width: 40px;
+      height: 40px;
+    }
   }
 }
 

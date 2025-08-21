@@ -1,4 +1,5 @@
 @custom-media --sm-scr (max-width: 900px);
 @custom-media --md-scr (min-width: 901px);
 @custom-media --lg-scr (min-width: 1201px);
+@custom-media --xl-scr (min-width: 1401px);
 @custom-media --nav (min-width: 1125px);
