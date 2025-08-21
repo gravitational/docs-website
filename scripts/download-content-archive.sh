@@ -25,18 +25,27 @@ if [[ "$?" -ne 0 ]]; then
 fi
 echo "Found major version $MAJOR";
 
-BRANCH_TAR_URL="https://api.github.com/repos/gravitational/teleport/tarball/${2}";
+BRANCH_TAR_URL="https://api.github.com/repos/gravitational/teleport/tarball/${2}"
 
-# read the name of the tarball we'll write the gravitational/teleport archive to 
-# from the "content-disposition" header.
-BRANCH_TAR_FILE="${DOWNLOADS_DIR}/$(curl -qIL $BRANCH_TAR_URL | grep 'content-disposition' | sed -n 's/.*filename="*\([^";]*\.tar\.gz\)"*.*/\1/p')";
+# Use curl's ETag support to compare the tarball we want to download with the one in the cache. 
+# Save the tarball as .downloads/$1.tar.gz
+BRANCH_TAR_FILE="$(echo ${DOWNLOADS_DIR}/${MAJOR}.tar.gz | tr -s /)"
+ETAG_FILE="${BRANCH_TAR_FILE}.etag"
+TMP_ETAG="${ETAG_FILE}.tmp"
+mkdir -p "${DOWNLOADS_DIR}"
 
-if [[ -f "${BRANCH_TAR_FILE}" ]]; then
-    du -h "${BRANCH_TAR_FILE}";
-    echo "Archive ${BRANCH_TAR_FILE} already exists. Skipping download."
-else
-    echo "Fetching an archive from ${BRANCH_TAR_URL} and writing it to ${BRANCH_TAR_FILE};"
-    curl -fLJO --create-dirs --output-dir "${DOWNLOADS_DIR}" "${BRANCH_TAR_URL}";
+curl -sS -L --fail \
+    --retry 5 \
+    --etag-compare "$ETAG_FILE" \
+    --etag-save "$TMP_ETAG" \
+    -w '%{http_code}: Downloaded file (%header{content-disposition} with size of %{size_download}) as %{filename_effective} from %{url}\n' \
+    -o "$BRANCH_TAR_FILE" \
+    "$BRANCH_TAR_URL"
+
+# If ETAG_FILE is empty but TMP_ETAG is not, replace ETAG_FILE with TMP_ETAG
+# This is needed because of bug in older curl versions: https://github.com/curl/curl/issues/15728
+if [[ -f "$TMP_ETAG" && (! -f "$ETAG_FILE" || ! -s "$ETAG_FILE") && -s "$TMP_ETAG" ]]; then
+    mv -f "$TMP_ETAG" "$ETAG_FILE"
 fi
 
 # Detect tar flavor and add --wildcards only for GNU tar
@@ -46,12 +55,10 @@ if echo "${TAR_VERSION_STR}" | grep -qi 'gnu tar'; then
     TAR_ARGS+=(--wildcards)
 fi
 
-ls -al "${DOWNLOADS_DIR}"
+tree -D -h "${DOWNLOADS_DIR}"
 
 # Extract desired paths
+echo "Extracting selected content from ${BRANCH_TAR_FILE} to $1"
 tar "${TAR_ARGS[@]}" '*/docs' '*/examples' '*/CHANGELOG.md'
 
-ls -al "$1"
-
-echo "Cleaning up old tarballs from $DOWNLOADS_DIR"
-find "$DOWNLOADS_DIR" -type f -mtime +1 -not -wholename "$BRANCH_TAR_FILE" -print -delete
+tree -L 1 "$1"
