@@ -1,5 +1,5 @@
 .integrations {
-  padding-block: 4rem; /* 64px */
+  padding: 4rem 1rem; /* 64px */
   background-color: #fbfbfc;
   margin-left: -1rem;
   margin-right: -1rem;
@@ -7,16 +7,21 @@
   &.noBackgroundColor {
     background-color: transparent;
     padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+    margin: auto;
+
+    .container {
+      padding: unset;
+    }
   }
 }
 
 .container {
   width: 100%;
   max-width: 1400px;
-  padding: 0 1rem;
   margin: 0 auto;
 }
-
 
 .header {
   display: flex;
@@ -146,6 +151,7 @@
 
   &:hover {
     background: var(--color-white);
+    border-color: rgba(0, 0, 0, 0);
     box-shadow: 0 4px 12px rgba(81, 47, 201, 0.15);
   }
 }
