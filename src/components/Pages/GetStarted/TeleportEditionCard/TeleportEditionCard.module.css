@@ -1,0 +1,61 @@
+.card {
+  background-color: var(--color-background-depth-2);
+  border: 1px solid var(--color-tonal-neutral-0);
+  border-radius: 12px;
+  padding: var(--m-4);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+}
+
+.card:hover {
+  box-shadow: var(--lp-box-shadow-hover);
+  text-decoration: none;
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--m-2);
+  margin-bottom: var(--m-2);
+}
+
+.iconWrapper {
+  background-color: var(--color-tonal-primary-0);
+  border-radius: 8px;
+  padding: var(--m-1-5);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.titleWrapper {
+  flex: 1;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  color: var(--color-dark-purple);
+}
+
+.subtitle {
+  margin: 0 0 var(--m-2) 0;
+  font-size: var(--fs-header-4);
+  font-weight: bold;
+  font-style: italic;
+}
+
+.content {
+  flex: 1;
+  & > p:last-child {
+    margin-bottom: 0;
+  }
+}
