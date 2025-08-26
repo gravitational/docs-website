@@ -126,6 +126,8 @@ const config: Config = {
   favicon: "/favicon.svg",
   url: process.env.DOCUSAURUS_CONFIG_URL || "https://goteleport.com",
   baseUrl: process.env.DOCUSAURUS_CONFIG_BASE_URL || "/",
+  // configure "noIndex" for all branches except the "main"
+  noIndex: process.env.AWS_BRANCH !== "main",
   // Our hosting infrastructure redirects requests to a docs page that do not
   // contain a trailing slash in the URL, so add trailing slashes to sitemap
   // URLs to prevent clients from receiving non-200 responses.
