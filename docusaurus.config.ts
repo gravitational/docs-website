@@ -148,7 +148,7 @@ const config: Config = {
     },
   },
 
-  onBrokenLinks: "warn",
+  onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "throw",
 
   i18n: {
