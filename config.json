@@ -76,7 +76,7 @@
     },
     {
       "name": "17.x",
-      "branch": "branch/v17"
+      "branch": "travis.rodgers/getting-started-guide-revamp"
     },
     {
       "name": "18.x",
