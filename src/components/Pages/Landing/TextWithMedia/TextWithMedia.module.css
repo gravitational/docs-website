@@ -1,8 +1,8 @@
 .textWithMedia {
-  padding-bottom: var(--m-6);
+  padding-bottom: var(--m-5);
 
   @media (--md-scr) {
-    padding: 0 var(--m-3) var(--m-5) var(--m-3);
+    padding: 0 var(--m-3) var(--m-8) var(--m-3);
   }
 }
 
