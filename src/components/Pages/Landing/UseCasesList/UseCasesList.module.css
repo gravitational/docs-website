@@ -1,6 +1,10 @@
 .useCasesList {
-  padding-bottom: var(--m-4);
+  padding-bottom: var(--m-5);
   background-color: var(--color-white);
+
+  @media (--md-scr) {
+    padding-bottom: var(--m-8);
+  }
 }
 
 .title {
