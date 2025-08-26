@@ -27,6 +27,7 @@ interface IntegrationsProps {
   additionalLinks?: AdditionalLinks;
   desktopColumnsCount?: number;
   noBackgroundColor?: boolean;
+  narrowPadding?: boolean;
 }
 
 const IntegrationCard: React.FC<Integration> = ({
@@ -103,10 +104,16 @@ const Integrations: React.FC<IntegrationsProps> = ({
   mainLink,
   additionalLinks,
   desktopColumnsCount = 5,
-  noBackgroundColor = false
+  noBackgroundColor = false,
+  narrowPadding = false,
 }) => {
   return (
-    <section className={cn(styles.integrations, className, { [styles.noBackgroundColor]: noBackgroundColor })}>
+    <section
+      className={cn(styles.integrations, className, {
+        [styles.noBackgroundColor]: noBackgroundColor,
+        [styles.narrowPadding]: narrowPadding,
+      })}
+    >
       <div className={styles.container}>
         <div className={styles.header}>
           <div>
@@ -135,11 +142,17 @@ const Integrations: React.FC<IntegrationsProps> = ({
         </div>
         {additionalLinks && (
           <div className={styles.additionalLinks}>
-            {additionalLinks.title && <p className={styles.additionalLinksTitle}>{additionalLinks.title}</p>}
+            {additionalLinks.title && (
+              <p className={styles.additionalLinksTitle}>
+                {additionalLinks.title}
+              </p>
+            )}
             <ul className={styles.additionalLinksList}>
               {additionalLinks?.links?.map((link, i) => (
                 <li key={i}>
-                  <a href={link.href}><ArrowRightSvg /> {link.title}</a>
+                  <a href={link.href}>
+                    <ArrowRightSvg /> {link.title}
+                  </a>
                 </li>
               ))}
             </ul>

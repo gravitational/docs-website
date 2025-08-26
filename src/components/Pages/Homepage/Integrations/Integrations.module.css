@@ -1,8 +1,12 @@
 .integrations {
-  padding: 4rem 1rem; /* 64px */
+  padding: var(--m-5) 1rem;
   background-color: #fbfbfc;
   margin-left: -1rem;
   margin-right: -1rem;
+
+  @media (--md-scr) {
+    padding: var(--m-8) 1rem;
+  }
 
   &.noBackgroundColor {
     background-color: transparent;
@@ -13,6 +17,10 @@
 
     .container {
       padding: unset;
+    }
+
+    &.narrowPadding {
+      padding-bottom: var(--m-4);
     }
   }
 }
