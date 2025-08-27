@@ -170,13 +170,6 @@ const config: Config = {
       },
     ],
     [
-      "@docusaurus/plugin-google-gtag",
-      {
-        trackingID: "G-Z1BMQRVFH3",
-        anonymizeIP: true,
-      },
-    ],
-    [
       "@docusaurus/plugin-google-tag-manager",
       {
         containerId: "GTM-WMR7H6",
