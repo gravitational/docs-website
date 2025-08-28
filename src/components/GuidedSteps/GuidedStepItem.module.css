@@ -1,0 +1,18 @@
+.step {
+  &.activeLines {
+    :global(pre) {
+      background-color: rgba(159, 133, 255, 0.25);
+    }
+  }
+
+  :global(pre) {
+    border-radius: 0;
+  }
+  & > div {
+    box-shadow: unset;
+  }
+}
+
+.codeLine {
+  transition: background-color 0.2s ease-in-out;
+}
