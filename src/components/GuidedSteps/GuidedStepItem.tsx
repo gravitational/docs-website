@@ -1,17 +1,20 @@
 import { useImperativeHandle, useRef, forwardRef } from "react";
-import styles from "./Step.module.css";
+import styles from "./GuidedStepItem.module.css";
 import { GuidedStepItemHandle, GuidedStepItemProps } from "./utils";
 
-const GuidedStepItem = forwardRef<GuidedStepItemHandle, GuidedStepItemProps>(({ children }, ref) => {
+const GuidedStepItem = forwardRef<
+  GuidedStepItemHandle,
+  Pick<GuidedStepItemProps, "children">
+>(({ children }, ref) => {
   const stepRef = useRef<HTMLSpanElement | null>(null);
 
-  useImperativeHandle(ref, () => {
-    const current = stepRef.current as HTMLSpanElement;
-    return Object.assign(current, {
-      activate: () => current?.classList.add(styles.activeLines),
-      deactivate: () => current?.classList.remove(styles.activeLines),
-    }) as GuidedStepItemHandle;
-  });
+  useImperativeHandle(
+    ref,
+    (): GuidedStepItemHandle => ({
+      activate: (): void => stepRef.current?.classList.add(styles.activeLines),
+      deactivate: (): void => stepRef.current?.classList.remove(styles.activeLines),
+    })
+  );
 
   return (
     <span className={styles.step} ref={stepRef}>
