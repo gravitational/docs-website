@@ -14,21 +14,14 @@ import {
 
 import styles from "./Category.module.css";
 
-export interface MenuCategoryProps {
-  title: string;
-  link?: string;
-  type?: NavigationItem["type"];
-  testId?: string;
-  dropdownType?: NavigationItem["dropdownType"];
-  navSections?: NavigationItem["navSections"];
-  onClick?: () => void | undefined | Promise<void>;
-}
 
-interface MenuCategoryComponentProps extends MenuCategoryProps {
+interface MenuCategoryComponentProps extends NavigationItem {
   id: number;
   opened: boolean;
   onToggleOpened: (id: number | null) => void;
   onHover: (id: number | null) => void;
+  testId?: string;
+  onClick?: () => void | undefined | Promise<void>;
 }
 
 const MenuCategory = ({
