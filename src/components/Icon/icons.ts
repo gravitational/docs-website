@@ -89,3 +89,6 @@ export { default as windowsDesktops } from "./teleport-svg/windows-desktops.svg"
 export { default as autoDiscovery } from "./teleport-svg/auto-discovery.svg";
 export { default as cloudProviders } from "./teleport-svg/cloud-providers.svg";
 export { default as mcpAndAi } from "./teleport-svg/mcp-and-ai.svg";
+export { default as teleportCommunity } from "./teleport-svg/teleport-community-edition.svg";
+export { default as teleportEnterpriseCloud } from "./teleport-svg/teleport-enterprise-cloud.svg";
+export { default as teleportEnterpriseSelfHosted } from "./teleport-svg/teleport-enterprise-self-hosted.svg";

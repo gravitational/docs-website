@@ -1,0 +1,25 @@
+.grid {
+  padding: 30px 0 0;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.editionCards {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: stretch;
+}
+
+@media (--sm-scr) {
+  .editionCards {
+    flex-direction: column;
+  }
+}
+
+.editionCard {
+  flex: 1;
+}
