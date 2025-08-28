@@ -16,7 +16,7 @@ import styles from "./Category.module.css";
 
 export interface MenuCategoryProps {
   title: string;
-  url?: string;
+  link?: string;
   type?: NavigationItem["type"];
   testId?: string;
   dropdownType?: NavigationItem["dropdownType"];
@@ -38,7 +38,7 @@ const MenuCategory = ({
   type,
   dropdownType,
   navSections,
-  url,
+  link,
   onToggleOpened,
   onHover,
   testId,
@@ -99,7 +99,7 @@ const MenuCategory = ({
       >
         {type === "link" ? (
           <Link
-            href={url || ""}
+            href={link || ""}
             onClick={toggleOpened}
             onMouseEnter={open}
             className={clsx(styles.link, opened ? styles.active : "")}
