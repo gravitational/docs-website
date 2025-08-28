@@ -1,0 +1,32 @@
+.guidedSteps {
+  display: grid;
+  grid-template-columns: minmax(40%, 1fr) minmax(60%, 1fr);
+}
+
+.instructionsPanel {
+  height: calc(100vh - 60px);
+}
+
+.instructions {
+  position: relative;
+  padding-top: var(--m-2);
+  height: max-content;
+}
+
+.instruction {
+  padding: var(--m-2);
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease-in-out;
+  &.active {
+    border-left-color: var(--color-dark-purple);
+    background-color: var(--color-tonal-neutral-0);
+  }
+}
+
+.codePanel {
+  background-color: var(--color-code);
+  overflow: auto;
+  position: sticky;
+  top: 117px;
+  height: calc(100vh - var(--ifm-navbar-height));
+}
