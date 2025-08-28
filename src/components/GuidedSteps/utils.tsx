@@ -1,15 +1,4 @@
-import {
-  Children,
-  cloneElement,
-  createContext,
-  isValidElement,
-  RefObject,
-  useContext,
-  useMemo,
-  useRef,
-  type ReactElement,
-  type ReactNode,
-} from "react";
+import { Children, isValidElement, useMemo, type ReactElement } from "react";
 
 type GuidedStepItem =
   | ReactElement<GuidedStepItemProps>
@@ -17,109 +6,45 @@ type GuidedStepItem =
   | false
   | undefined;
 
-export interface GuidedStepTabProps {
-  title?: string;
-  value: any;
-  instructions: Array<{
-    id: string;
-    title: string;
-    description: string;
-  }>;
-  children: GuidedStepItem | GuidedStepItem[];
-}
-
-type GuidedStepTab =
-  | ReactElement<GuidedStepTabProps>
-  | null
-  | false
-  | undefined;
-
 export interface GuidedStepsProps {
-  children?: GuidedStepTab | GuidedStepTab[];
+  children?: GuidedStepItem | GuidedStepItem[];
 }
 
 export interface GuidedStepItemProps {
+  id: string;
+  title: string;
+  description?: string;
   children: React.ReactNode;
 }
 
-export interface GuidedStepItemHandle extends HTMLSpanElement {
+export interface GuidedStepItemHandle {
   activate: () => void;
   deactivate: () => void;
 }
 
-export const GuidedStepsItemContext = createContext<RefObject<
-  Map<string, GuidedStepItemHandle>
-> | null>(null);
-
-export const GuidedStepTabProvider: React.FC<{
-  children: React.ReactNode;
-}> = ({ children }) => {
-  const stepsRef = useRef<Map<string, GuidedStepItemHandle>>(new Map());
-
-  return (
-    <GuidedStepsContext.Provider value={stepsRef}>
-      {children}
-    </GuidedStepsContext.Provider>
-  );
-};
-
-export const useGuidedStepItemsRef = () => {
-  const ref = useContext(GuidedStepsContext);
-  if (!ref) {
-    throw new Error(
-      "useGuidedStepItemsRef must be used within a GuidedStepsProvider"
-    );
-  }
-  return ref;
-};
-
-export const GuidedStepsContext = createContext<RefObject<
-  Map<string, GuidedStepItemHandle>
-> | null>(null);
-
-export const GuidedStepsProvider: React.FC<{
-  children: React.ReactNode;
-}> = ({ children }) => {
-  const stepsRef = useRef<Map<string, GuidedStepItemHandle>>(new Map());
-
-  return (
-    <GuidedStepsContext.Provider value={stepsRef}>
-      {children}
-    </GuidedStepsContext.Provider>
-  );
-};
-
-const extractGuidedStepTabs = (children: GuidedStepsProps["children"]) => {
+const extractGuidedStepItems = (children: GuidedStepsProps["children"]) => {
   return sanitizeGuidedStepsChildren(children).map(
-    ({ props: { value, title } }) => ({
-      value,
-      title,
-    })
+    ({ props: { id, title, description, children } }) => {
+      return {
+        id,
+        title,
+        description,
+        children,
+      };
+    }
   );
 };
 
-const useGuidedStepTabs = (props: Pick<GuidedStepsProps, "children">) => {
+const useGuidedStepItems = (props: Pick<GuidedStepsProps, "children">) => {
   const { children } = props;
   return useMemo(() => {
-    const tabs = extractGuidedStepTabs(children);
-    return tabs;
+    const items = extractGuidedStepItems(children);
+    return items;
   }, [children]);
 };
 
 export const useGuidedSteps = (props: GuidedStepsProps) => {
-  const tabs = useGuidedStepTabs(props);
-};
-
-const isGuidedStepTab = (
-  component: ReactElement<unknown>
-): component is ReactElement<GuidedStepTabProps> => {
-  const { props, type } = component;
-  return (
-    !!props &&
-    typeof props === "object" &&
-    "value" in props &&
-    (type as React.ComponentType<any>).displayName === "GuidedStepTab"
-  );
+  return useGuidedStepItems(props);
 };
 
 export const sanitizeGuidedStepsChildren = (
@@ -128,15 +53,15 @@ export const sanitizeGuidedStepsChildren = (
   return (Children.toArray(children)
     .filter((child) => child !== "/n")
     .map((child) => {
-      if (!child || (isValidElement(child) && isGuidedStepTab(child))) {
+      if (!child || (isValidElement(child) && isGuidedStepItem(child))) {
         return child;
       }
 
       throw new Error(
-        "All children of the <GuidedSteps> component must be <GuidedStepTab> components"
+        "All children of the <GuidedSteps> component must be <GuidedStepItem> components"
       );
     })
-    ?.filter(Boolean) ?? []) as ReactElement<GuidedStepTabProps>[];
+    ?.filter(Boolean) ?? []) as ReactElement<GuidedStepItemProps>[];
 };
 
 const isGuidedStepItem = (
@@ -149,21 +74,4 @@ const isGuidedStepItem = (
     "children" in props &&
     (type as React.ComponentType<any>).displayName === "GuidedStepItem"
   );
-};
-
-export const sanitizeGuidedStepTabChildren = (
-  children: GuidedStepTabProps["children"]
-) => {
-  return (Children.toArray(children)
-    .filter((child) => child !== "/n")
-    .map((child) => {
-      if (!child || (isValidElement(child) && isGuidedStepItem(child))) {
-        return child;
-      }
-
-      throw new Error(
-        "All children of the <GuidedStepTab> component must be <GuidedStepItem> components"
-      );
-    })
-    ?.filter(Boolean) ?? []) as ReactElement<GuidedStepItemProps>[];
 };
