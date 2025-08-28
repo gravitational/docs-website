@@ -72,6 +72,10 @@ export { default as bitbucket } from "./svg/bitbucket.svg";
 export { default as jenkins } from "./svg/jenkins.svg";
 export { default as githubActions } from "./svg/githubActions.svg";
 export { default as spacelift } from "./svg/spacelift.svg";
+export { default as awsIdentity } from "./svg/awsIdentity.svg";
+export { default as googleCloud } from "./svg/googleCloud.svg";
+export { default as azure } from "./svg/azure.svg";
+export { default as oracle } from "./svg/oracle.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
