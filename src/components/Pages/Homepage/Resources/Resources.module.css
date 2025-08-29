@@ -59,7 +59,7 @@ a.resourceItem {
   &:hover {
     background: var(--color-white);
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(81, 47, 201, 0.15);
+    box-shadow: 0 var(--lp-box-shadow-hover);
     text-decoration: none;
     .resourceTitle {
       color: var(--color-dark-purple);
