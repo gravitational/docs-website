@@ -72,7 +72,7 @@
 
   &:hover {
     background: var(--color-white);
-    box-shadow: 0 var(--lp-box-shadow-hover);
+    box-shadow: var(--lp-box-shadow-hover);
   }
 }
 
