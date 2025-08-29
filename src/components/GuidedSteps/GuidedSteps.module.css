@@ -1,0 +1,47 @@
+.guidedSteps {
+  display: grid;
+  grid-template-columns: minmax(40%, 1fr) minmax(60%, 1fr);
+  gap: var(--m-2);
+  margin-bottom: var(--ifm-leading);
+}
+
+.instructions {
+  position: relative;
+  height: max-content;
+}
+
+.instruction {
+  padding: var(--m-2) var(--m-1);
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease-in-out;
+  min-height: 100px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-tonal-neutral-1);
+  scroll-margin: var(--ifm-navbar-height);
+
+  &.active {
+    border-left-color: var(--color-dark-purple);
+    background-color: var(--color-tonal-neutral-0);
+  }
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @media (--md-scr) {
+    padding: var(--m-2);
+  }
+}
+
+.codePanel {
+  background-color: var(--color-code);
+  overflow: auto;
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + var(--m-2));
+  border-top-left-radius: var(--r-default);
+  border-bottom-left-radius: var(--r-default);
+  height: max-content;
+
+  @media (--md-scr) {
+    border-radius: var(--r-default);
+  }
+}
