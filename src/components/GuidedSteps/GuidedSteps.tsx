@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import cn from "classnames";
 import {
   GuidedStepItemHandle,
@@ -8,12 +8,12 @@ import {
 } from "./utils";
 import styles from "./GuidedSteps.module.css";
 import GuidedStepItem from "./GuidedStepItem";
+import Icon from "../Icon";
 
 const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
   const items = useGuidedSteps(props);
-  const [activeStepId, setActiveStepId] = useState<string | null>(
-    items[0]?.id || null
-  );
+  const [activeStepId, setActiveStepId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const observerContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -21,6 +21,8 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
 
   const lastHighlightTime = useRef<number>(0);
   const pendingHighlight = useRef<string | undefined>(undefined);
+
+  const ignoreIntersection = useRef<boolean>(false);
 
   const instructionsRef = useRef<HTMLElement[]>([]);
 
@@ -34,17 +36,19 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
       const debounceDelay = 200;
 
       const debounceHighlightedStep = (stepId: string) => {
+        if (ignoreIntersection.current) return;
+
         const now = Date.now();
         pendingHighlight.current = stepId;
 
         if (now - lastHighlightTime.current > debounceDelay) {
-          highlightStep(stepId);
+          highlightStep(stepId, true);
           lastHighlightTime.current = now;
           pendingHighlight.current = undefined;
         } else {
           setTimeout(() => {
             if (pendingHighlight.current === stepId) {
-              highlightStep(stepId);
+              highlightStep(stepId, true);
               lastHighlightTime.current = Date.now();
               pendingHighlight.current = undefined;
             }
@@ -52,16 +56,19 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
         }
       };
 
-      const rootTopMargin = document.body.getBoundingClientRect().height - 200;
+      const rootBottomMargin =
+        document.body.getBoundingClientRect().height - 200;
 
       const options = {
-        rootMargin: `-128px 0px -${rootTopMargin}px 0px`,
-        threshold: [0.2, 0.3, 0.4, 0.5, 0.6, 0.7],
+        rootMargin: `-128px 0px -${rootBottomMargin}px 0px`,
+        threshold: [0.3, 0.4, 0.5, 0.6, 0.7],
       };
 
       observerRef.current = new IntersectionObserver((entries) => {
+        if (ignoreIntersection.current) return;
+
         const visibleEntries = entries.filter(
-          (entry) => entry.isIntersecting && entry.intersectionRatio > 0.3
+          (entry) => entry.isIntersecting && entry.intersectionRatio > 0.4
         );
 
         if (visibleEntries.length > 0) {
@@ -96,10 +103,55 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
     };
   }, []);
 
-  const highlightStep = (stepId: string) => {
-    setActiveStepId(stepId);
-    stepsRef.current.forEach((step) => step.deactivate());
-    stepsRef.current.get(stepId)?.activate();
+  const highlightStep = useCallback(
+    (stepId: string, fromObserver = false) => {
+      console.log(stepId, activeStepId);
+      if (stepId === activeStepId) return;
+      setActiveStepId(stepId);
+      stepsRef.current.forEach((step) => step.deactivate());
+      stepsRef.current.get(stepId)?.activate();
+
+      // Only set the ignore flag if this was triggered with a click
+      if (!fromObserver) {
+        ignoreIntersection.current = true;
+
+        setTimeout(() => {
+          ignoreIntersection.current = false;
+        }, 1000);
+      }
+    },
+    [activeStepId]
+  );
+
+  // Handle anchor links when the page loads
+  useLayoutEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+
+    if (hash) {
+      const index = items.findIndex((item) => item.id === hash);
+
+      if (index !== -1) {
+        highlightStep(hash);
+
+        instructionsRef.current[index]?.scrollIntoView({
+          block: "start",
+        });
+      }
+    } else if (items.length > 0) {
+      highlightStep(items[0].id);
+    }
+  }, [items]);
+
+  const copyLinkToClipboard = (id: string, event: React.MouseEvent) => {
+    const link = `${window.location.origin}${window.location.pathname}#${id}`;
+    window.history.pushState({}, "", `#${id}`);
+    navigator.clipboard.writeText(link);
+
+    setCopiedId(id);
+
+    setTimeout(() => {
+      setCopiedId(null);
+    }, 1000);
   };
 
   return (
@@ -124,6 +176,18 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
           >
             <h3>{title}</h3>
             {description && <p>{description}</p>}
+            <button
+              className={cn(styles.instructionLinkCopyButton, {
+                [styles.active]: copiedId === id,
+              })}
+              onClick={(e) => copyLinkToClipboard(id, e)}
+            >
+              {copiedId === id ? (
+                <span className={styles.copiedText}>Copied!</span>
+              ) : (
+                <Icon name="link" size="sm" />
+              )}
+            </button>
           </div>
         ))}
       </div>
