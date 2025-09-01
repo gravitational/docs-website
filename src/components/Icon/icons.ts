@@ -108,6 +108,7 @@ export { default as redis } from "./svg/redis.svg";
 export { default as mariaDb } from "./svg/maria-db.svg";
 export { default as hashicorpVault } from "./svg/hashicorp-vault.svg";
 export { default as notion } from "./svg/notion.svg";
+export { default as link } from "./svg/link.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
