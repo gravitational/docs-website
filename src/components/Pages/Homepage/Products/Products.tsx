@@ -66,9 +66,7 @@ const Products: React.FC<ProductsProps> = ({
                 <div className={styles.categoryHeader}>
                   <h3 className={styles.categoryTitle}>
                     {category.href ? (
-                      <a className="link-arrow-on-hover" href={category.href}>
-                        {category.title}
-                      </a>
+                      <a href={category.href}>{category.title}</a>
                     ) : (
                       category.title
                     )}
