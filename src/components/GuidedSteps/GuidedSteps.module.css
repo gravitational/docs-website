@@ -1,6 +1,6 @@
 .guidedSteps {
   display: grid;
-  grid-template-columns: minmax(40%, 1fr) minmax(60%, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--m-2);
   margin-bottom: var(--ifm-leading);
 }
