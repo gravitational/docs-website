@@ -6,7 +6,7 @@ interface TextWithMediaProps {
   className?: string;
   title?: string;
   image?: any;
-  youtubeVideoUrl?: string;
+  videoSrc?: string;
   children: React.ReactNode;
 }
 
@@ -14,7 +14,7 @@ const TextWithMedia: React.FC<TextWithMediaProps> = ({
   className = "",
   title,
   image,
-  youtubeVideoUrl,
+  videoSrc,
   children,
 }) => {
   return (
@@ -26,15 +26,8 @@ const TextWithMedia: React.FC<TextWithMediaProps> = ({
         </div>
         <div className={styles.media}>
           {image && <img src={image} alt={title} className={styles.image} />}
-          {youtubeVideoUrl && (
-            <iframe
-              src={getEmbedYouTubeUrl(youtubeVideoUrl, {
-                autoplayMutedLoop: true,
-              })}
-              title={title}
-              className={styles.video}
-              allowFullScreen
-            />
+          {videoSrc && (
+            <video src={videoSrc} title={title} className={styles.video} autoPlay muted loop />
           )}
         </div>
       </div>
