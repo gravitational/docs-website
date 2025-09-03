@@ -27,7 +27,8 @@
 
 .container {
   width: 100%;
-  max-width: 1400px;
+  max-width: var(--lp-section-max-width);
+  padding: 0 1rem;
   margin: 0 auto;
 }
 
@@ -80,6 +81,7 @@
   height: 48px;
   fill: currentColor;
   color: initial;
+
   @media (--sm-scr) {
     width: 32px;
     height: 32px;
@@ -160,7 +162,7 @@
   &:hover {
     background: var(--color-white);
     border-color: rgba(0, 0, 0, 0);
-    box-shadow: 0 4px 12px rgba(81, 47, 201, 0.15);
+    box-shadow: var(--lp-box-shadow-hover);
   }
 }
 
