@@ -15,7 +15,6 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
   const [activeStepId, setActiveStepId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const observerContainerRef = useRef<HTMLDivElement | null>(null);
 
   const stepsRef = useRef<Map<string, GuidedStepItemHandle>>(new Map());
 
@@ -28,12 +27,7 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
 
   useLayoutEffect(() => {
     const initializeObserver = () => {
-      const instructionsHeight =
-        observerContainerRef.current?.getBoundingClientRect().height;
-      if (instructionsHeight) {
-        observerContainerRef.current.parentElement.style.height = `calc(100px + ${instructionsHeight}px)`;
-      }
-      const debounceDelay = 200;
+      const debounceDelay = 10;
 
       const debounceHighlightedStep = (stepId: string) => {
         if (ignoreIntersection.current) return;
@@ -56,19 +50,24 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
         }
       };
 
+      const navHeight =
+        parseInt(
+          document.documentElement.style.getPropertyValue("--ifm-navbar-height")
+        ) || 117;
+
       const rootBottomMargin =
-        document.body.getBoundingClientRect().height - 200;
+        document.body.getBoundingClientRect().height - navHeight * 2;
 
       const options = {
-        rootMargin: `-128px 0px -${rootBottomMargin}px 0px`,
-        threshold: [0.3, 0.4, 0.5, 0.6, 0.7],
+        rootMargin: `-${navHeight + 16}px 0px -${rootBottomMargin}px 0px`,
+        threshold: Array.from({ length: 1000 }, (_, i) => i / 1000),
       };
 
       observerRef.current = new IntersectionObserver((entries) => {
         if (ignoreIntersection.current) return;
 
         const visibleEntries = entries.filter(
-          (entry) => entry.isIntersecting && entry.intersectionRatio > 0.4
+          (entry) => entry.isIntersecting && entry.intersectionRatio > 0.3
         );
 
         if (visibleEntries.length > 0) {
@@ -105,7 +104,6 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
 
   const highlightStep = useCallback(
     (stepId: string, fromObserver = false) => {
-      console.log(stepId, activeStepId);
       if (stepId === activeStepId) return;
       setActiveStepId(stepId);
       stepsRef.current.forEach((step) => step.deactivate());
@@ -156,7 +154,7 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
 
   return (
     <div className={styles.guidedSteps}>
-      <div ref={observerContainerRef} className={styles.instructions}>
+      <div className={styles.instructions}>
         {items.map(({ id, title, description }, index) => (
           <div
             role="button"
