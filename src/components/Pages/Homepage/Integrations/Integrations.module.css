@@ -161,8 +161,8 @@
 
   &:hover {
     background: var(--color-white);
-    border-color: rgba(0, 0, 0, 0);
     box-shadow: var(--lp-box-shadow-hover);
+    border-color: rgba(0, 0, 0, 0);
   }
 }
 

@@ -1,0 +1,25 @@
+.grid {
+  padding: 30px 0 0;
+}
+
+.container {
+  max-width: var(--lp-section-max-width);
+  margin: 0 auto;
+}
+
+.editionCards {
+  display: flex;
+  flex-direction: row;
+  gap: var(--m-3);
+  align-items: stretch;
+}
+
+@media (--sm-scr) {
+  .editionCards {
+    flex-direction: column;
+  }
+}
+
+.editionCard {
+  flex: 1;
+}

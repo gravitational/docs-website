@@ -39,3 +39,9 @@ data/*
 
 # remark node dependencies
 .remark-build
+
+# Submodule config for local development
+.gitmodules
+
+# gravitational/teleport archives
+.downloads

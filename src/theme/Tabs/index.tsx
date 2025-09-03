@@ -2,7 +2,6 @@ import React, { type ReactNode } from "react";
 import Tabs from "@theme-original/Tabs";
 import type TabsType from "@theme/Tabs";
 import type { WrapperProps } from "@docusaurus/types";
-import { useId } from "react";
 
 type Props = WrapperProps<typeof TabsType>;
 
@@ -17,7 +16,7 @@ export default function TabsWrapper(props: Props): ReactNode {
   // The Tabs component checks TabItems for the value property, so we need to
   // assign it here rather than in TabItem.
   const newProps = {
-    children: React.Children.toArray(children).map((child) => {
+    children: React.Children.toArray(children).map((child, idx) => {
       if (typeof child.props != "object" || !("label" in child.props)) {
         return child;
       }
@@ -28,7 +27,7 @@ export default function TabsWrapper(props: Props): ReactNode {
         ...child,
         props: {
           ...child.props,
-          value: useId(),
+          value: idx,
         },
       };
     }),

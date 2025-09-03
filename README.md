@@ -8,6 +8,15 @@ This a port of the Teleport docs from the original custom engine to [Docusaurus]
 $ yarn
 ```
 
+## Initialize content modules
+
+This loads the Teleport content branches that are used in the versions.
+
+```
+$ cp .gitmodules.example .gitmodules
+$ yarn git-update
+```
+
 ## Local Development
 
 ```

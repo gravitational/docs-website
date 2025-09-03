@@ -24,6 +24,7 @@
   --color-tonal-primary-0: rgba(81, 47, 201, 0.1);
   --color-tonal-primary-1: rgba(81, 47, 201, 0.18);
   --color-tonal-primary-2: rgba(81, 47, 201, 0.25);
+  --color-background-depth-2: #fbfbfc;
 
   --color-warning: #ffb400;
   --color-danger: #f80061;
@@ -107,7 +108,20 @@
 
   /* landing page font sizes */
   --lp-header-1: 40px;
+  --lp-header-1-5: 36px;
   --lp-header-2: 32px;
+
+  /* max width for landing page sections */
+  --lp-section-max-width: 1400px;
+
+  /* consistent spacings between landing page sections */
+  --lp-section-padding-lg: 84px;
+  --lp-section-padding-md: 80px;
+  --lp-section-padding-sm: 32px;
+
+  /* landing page component shadows */
+  --lp-box-shadow: 0 5px 20px 0 rgba(19, 19, 19, 0.1);
+  --lp-box-shadow-hover: 0 4px 12px rgba(81, 47, 201, 0.15);
 }
 
 @media (max-width: 996px) {

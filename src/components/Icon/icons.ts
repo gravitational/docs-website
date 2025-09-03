@@ -26,6 +26,7 @@ export { default as docker } from "./svg/docker.svg";
 export { default as download } from "./svg/download.svg";
 export { default as earth } from "./svg/earth.svg";
 export { default as ec2 } from "./svg/aws-ec2.svg";
+export { default as ecs } from "./svg/aws-ecs.svg";
 export { default as edit } from "./svg/edit.svg";
 export { default as ellipsis } from "./svg/ellipsis.svg";
 export { default as error } from "./svg/error.svg";
@@ -71,6 +72,10 @@ export { default as bitbucket } from "./svg/bitbucket.svg";
 export { default as jenkins } from "./svg/jenkins.svg";
 export { default as githubActions } from "./svg/githubActions.svg";
 export { default as spacelift } from "./svg/spacelift.svg";
+export { default as awsIdentity } from "./svg/awsIdentity.svg";
+export { default as googleCloud } from "./svg/googleCloud.svg";
+export { default as azure } from "./svg/azure.svg";
+export { default as oracle } from "./svg/oracle.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
@@ -84,3 +89,6 @@ export { default as windowsDesktops } from "./teleport-svg/windows-desktops.svg"
 export { default as autoDiscovery } from "./teleport-svg/auto-discovery.svg";
 export { default as cloudProviders } from "./teleport-svg/cloud-providers.svg";
 export { default as mcpAndAi } from "./teleport-svg/mcp-and-ai.svg";
+export { default as teleportCommunity } from "./teleport-svg/teleport-community-edition.svg";
+export { default as teleportEnterpriseCloud } from "./teleport-svg/teleport-enterprise-cloud.svg";
+export { default as teleportEnterpriseSelfHosted } from "./teleport-svg/teleport-enterprise-self-hosted.svg";

@@ -22,7 +22,7 @@ const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
           if (submenuTitle && submenuTitleLink?.length > 0) {
             return (
               <Link
-                href={submenuTitle}
+                href={submenuTitleLink}
                 className={styles.submenuLink}
                 key={`submenu-${submenuTitle}-${index}`}
               >

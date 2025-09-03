@@ -1,7 +1,7 @@
 .products {
   padding-bottom: 5.25rem; /* 84px */
   background-color: var(--color-white);
-  max-width: 1400px;
+  max-width: var(--lp-section-max-width);
   margin: 0 auto;
 }
 
@@ -126,7 +126,7 @@
 
   &:hover {
     background: var(--color-white);
-    box-shadow: 0 4px 12px rgba(81, 47, 201, 0.15);
+    box-shadow: var(--lp-box-shadow-hover);
   }
 }
 
