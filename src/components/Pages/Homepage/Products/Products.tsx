@@ -10,6 +10,7 @@ interface ProductFeature {
 interface ProductCategory {
   id: string;
   title: string;
+  href?: string;
   description: string;
   iconColor?: string;
   iconComponent: any;
@@ -63,7 +64,15 @@ const Products: React.FC<ProductsProps> = ({
 
               <div className={styles.categoryContent}>
                 <div className={styles.categoryHeader}>
-                  <h3 className={styles.categoryTitle}>{category.title}</h3>
+                  <h3 className={styles.categoryTitle}>
+                    {category.href ? (
+                      <a className="link-arrow-on-hover" href={category.href}>
+                        {category.title}
+                      </a>
+                    ) : (
+                      category.title
+                    )}
+                  </h3>
                   <p className={styles.categoryDescription}>
                     {category.description}
                   </p>
