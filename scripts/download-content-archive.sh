@@ -25,7 +25,7 @@ if [[ "$?" -ne 0 ]]; then
 fi
 echo "Found major version $MAJOR";
 
-BRANCH_TAR_URL="https://api.github.com/repos/gravitational/teleport/tarball/${2}"
+BRANCH_TAR_URL="https://api.github.com/repos/aatuvai/teleport/tarball/${2}"
 
 # Use curl's ETag support to compare the tarball we want to download with the one in the cache. 
 # Save the tarball as .downloads/$1.tar.gz
