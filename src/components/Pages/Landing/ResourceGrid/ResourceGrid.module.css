@@ -1,0 +1,118 @@
+.resourceGrid {
+  padding-bottom: var(--m-5);
+
+  @media (--md-scr) {
+    padding-bottom: var(--m-8);
+  }
+}
+
+.container {
+  max-width: var(--lp-section-max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--m-2);
+
+  @media (--md-scr) {
+    grid-template-columns: minmax(0, 56.1%) minmax(0, 43.9%);
+  }
+}
+
+.content {
+  margin: auto 0;
+}
+
+.title {
+  font-size: var(--fs-header-3);
+  margin-bottom: var(--m-1);
+  margin-top: 0;
+}
+
+.text {
+  font-size: 15px;
+  color: var(--color-foreground-slightly-muted);
+  b,
+  strong {
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-text-lg);
+    margin-bottom: unset;
+  }
+
+  p,
+  ul,
+  ol {
+    margin-bottom: var(--m-2);
+  }
+
+  a {
+    color: var(--color-foreground-slightly-muted);
+    text-decoration: underline;
+    font-weight: var(--fw-regular);
+
+    &:hover {
+      color: var(--color-dark-purple);
+    }
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--m-2);
+}
+
+.iconSvg {
+  height: 72px;
+  width: max-content;
+  margin-bottom: var(--m-1-5);
+  @media (--sm-scr) {
+    height: 48px;
+  }
+}
+
+.resourceItem {
+  padding: var(--m-3);
+  border-radius: 12px;
+  border: 1.5px solid var(--color-tonal-neutral-0);
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+}
+
+a.resourceItem {
+  &:hover {
+    background: var(--color-white);
+    cursor: pointer;
+    box-shadow: var(--lp-box-shadow-hover);
+    text-decoration: none;
+    .resourceTitle {
+      color: var(--color-dark-purple);
+    }
+  }
+}
+
+.resourceTitle {
+  font-size: var(--fs-header-4);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--m-0-5) 0;
+  font-family: var(--font-base);
+  line-height: 1.5;
+  text-decoration: none;
+  display: block;
+  transition: color 0.2s ease-in-out;
+
+  @media (max-width: 576px) {
+    font-size: 1rem;
+  }
+}
+
+.resourceDescription {
+  font-size: var(--fs-text-lg);
+  color: var(--color-foreground-slightly-muted);
+  margin: 0;
+  line-height: 1.625;
+  font-family: var(--font-base);
+}
