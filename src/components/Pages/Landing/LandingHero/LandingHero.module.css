@@ -143,6 +143,7 @@
 }
 
 .links {
+  --desktop-column-count: 2;
   grid-area: links;
   display: grid;
   gap: var(--m-2);
@@ -150,8 +151,7 @@
   margin-top: var(--m-2);
 
   @media (--md-scr) {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--desktop-column-count), 1fr);
   }
 
   .link {
