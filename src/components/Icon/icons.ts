@@ -76,6 +76,8 @@ export { default as awsIdentity } from "./svg/awsIdentity.svg";
 export { default as googleCloud } from "./svg/googleCloud.svg";
 export { default as azure } from "./svg/azure.svg";
 export { default as oracle } from "./svg/oracle.svg";
+export { default as aws } from "./svg/aws.svg";
+export { default as jetbrains } from "./svg/jetbrains.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
