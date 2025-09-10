@@ -22,6 +22,7 @@
 }
 
 .items {
+  --desktop-column-count: 3;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -34,7 +35,7 @@
   }
 
   @media (--lg-scr) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--desktop-column-count), minmax(0, 1fr));
   }
 
   li {
@@ -83,5 +84,83 @@ a.item:hover {
   border-color: rgba(0, 0, 0, 0);
   h3 {
     color: var(--color-dark-purple);
+  }
+}
+
+.tags {
+  display: flex;
+  gap: var(--m-1);
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0 !important;
+  align-items: center;
+  margin-top: var(--m-2);
+}
+
+.tagIcon {
+  width: var(--m-3);
+  height: var(--m-3);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tagArrow {
+  width: var(--m-2);
+  height: var(--m-2);
+}
+
+.tag {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-tonal-neutral-0);
+  border-radius: var(--m-1);
+  padding: var(--m-1) var(--m-2);
+  font-size: var(--fs-text-md);
+  display: flex;
+  align-items: center;
+  gap: var(--m-1);
+  color: var(--color-black);
+  text-decoration: none;
+  font-weight: var(--fw-regular);
+  position: relative;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    color: var(--color-black);
+    text-decoration: none;
+    box-shadow: var(--lp-box-shadow-hover);
+  }
+
+  @media (--md-scr) {
+    font-size: var(--fs-text-lg);
+  }
+}
+
+.linkTitle {
+  color: var(--color-black);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  &::after {
+    content: "";
+    position: absolute;
+    background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2218%22%20height%3D%2216%22%20viewBox%3D%220%200%2018%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M11.0303%201.19233C10.7374%200.899433%2010.2626%200.899433%209.96967%201.19233C9.67678%201.48522%209.67678%201.96009%209.96967%202.25299L15.4393%207.72266H0.75C0.335786%207.72266%200%208.05844%200%208.47266C0%208.88687%200.335786%209.22266%200.75%209.22266H15.4393L9.96967%2014.6923C9.67678%2014.9852%209.67678%2015.4601%209.96967%2015.753C10.2626%2016.0459%2010.7374%2016.0459%2011.0303%2015.753L17.7803%209.00299C17.9268%208.85654%2018%208.6646%2018%208.47266C18%208.37096%2017.9798%208.274%2017.9431%208.18557C17.9065%208.09711%2017.8522%208.01423%2017.7803%207.94233L11.0303%201.19233Z%22%20fill%3D%22%23512FC9%22%2F%3E%3C%2Fsvg%3E");
+    width: 18px;
+    height: 15px;
+    right: -29px;
+    top: 50%;
+    opacity: 0;
+    transform: translateY(-50%);
+    transition: opacity 0.15s ease-in-out;
+  }
+  &:hover {
+    text-decoration: none;
+    h3 {
+      color: var(--color-dark-purple);
+    }
+    &::after {
+      opacity: 1;
+    }
   }
 }
