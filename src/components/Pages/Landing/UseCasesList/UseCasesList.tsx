@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./UseCasesList.module.css";
 import cn from "classnames";
+import Link from "@docusaurus/Link";
 
 interface UseCasesListProps {
   className?: string;
@@ -25,10 +26,11 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
           {useCases.map((caseItem, index) => (
             <li key={index}>
               {caseItem.href ? (
-                <a className={styles.item} href={caseItem.href}>
+                // @ts-ignore
+                <Link className={styles.item} to={caseItem.href}>
                   <h3>{caseItem.title}</h3>
                   <p className={styles.description}>{caseItem.description}</p>
-                </a>
+                </Link>
               ) : (
                 <div className={styles.item}>
                   <h3>{caseItem.title}</h3>
