@@ -52,6 +52,10 @@
   text-decoration: none;
   height: 100%;
 
+  &.hasTags {
+    padding: var(--m-3);
+  }
+
   h3 {
     margin: 0 !important;
     font-weight: var(--fw-bold);
@@ -65,7 +69,7 @@
     }
   }
 
-  p {
+  .description {
     color: var(--color-foreground-muted);
     margin: 0;
     line-height: 1.625;
@@ -73,6 +77,10 @@
 
     @media (--md-scr) {
       font-size: var(--fs-text-lg);
+    }
+
+    &.hasTags {
+      color: var(--color-forground-slightly-muted);
     }
   }
 }

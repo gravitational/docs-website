@@ -52,7 +52,11 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                   <p className={styles.description}>{caseItem.description}</p>
                 </Link>
               ) : (
-                <div className={styles.item}>
+                <div
+                  className={cn(styles.item, {
+                    [styles.hasTags]: caseItem.tags?.length > 0,
+                  })}
+                >
                   {caseItem.href ? (
                     // @ts-ignore
                     <Link className={styles.linkTitle} to={caseItem.href}>
@@ -61,7 +65,13 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                   ) : (
                     <h3>{caseItem.title}</h3>
                   )}
-                  <p className={styles.description}>{caseItem.description}</p>
+                  <p
+                    className={cn(styles.description, {
+                      [styles.hasTags]: caseItem.tags?.length > 0,
+                    })}
+                  >
+                    {caseItem.description}
+                  </p>
                   {caseItem.tags?.length > 0 && (
                     <ul className={styles.tags}>
                       {caseItem.tags.map((tag, tagIndex) => (
