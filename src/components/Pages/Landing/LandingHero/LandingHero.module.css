@@ -67,16 +67,15 @@
       padding-left: 1.5em;
     }
 
-    h3 {
-      font-size: var(--fs-header-4);
-      @media (--md-scr) {
-        font-size: var(--fs-header-3);
-      }
-    }
-
-    h3, h4 {
+    h2, h3, h4 {
       margin-bottom: var(--m-1);
       color: var(--color-black);
+      font-size: var(--fs-header-4);
+      
+      @media (--md-scr) {
+        margin-top: var(--m-4);
+        font-size: var(--fs-header-3);
+      }
     }
 
     * {
