@@ -229,4 +229,78 @@ Step 3 instructions
       expect(getReasons(tc.input)).toEqual(tc.expected);
     });
   });
+
+  describe("linting the presence of an intro paragraph", () => {
+    interface testCase {
+      description: string;
+      input: string;
+      expected: Array<string>;
+    }
+
+    const testCases: Array<testCase> = [
+      {
+        description: `missing intro paragraph`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
+
+## Prerequisites
+
+- A Teleport cluster
+
+## Concepts
+
+Here's some conceptual information.
+`,
+        expected: [
+          "This guide is missing at least one introductory paragraph before the first H2. Use introductory paragraphs to explain the purpose and scope of this guide. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.",
+        ],
+      },
+      {
+        description: `one intro paragraph`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
+
+This is an intro paragraph.
+
+## Prerequisites
+
+- A Teleport cluster
+
+## Concepts
+
+Here's some conceptual information.
+`,
+        expected: [],
+      },
+      {
+        description: `multiple intro paragraphs`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
+
+This is an intro paragraph.
+
+This is another intro paragraph.
+
+## Prerequisites
+
+- A Teleport cluster
+
+## Concepts
+
+Here's some conceptual information.
+`,
+        expected: [],
+      },
+    ];
+
+    test.each(testCases)("$description", (tc) => {
+      expect(getReasons(tc.input)).toEqual(tc.expected);
+    });
+  });
 });
