@@ -73,6 +73,8 @@ export { default as jenkins } from "./svg/jenkins.svg";
 export { default as githubActions } from "./svg/githubActions.svg";
 export { default as spacelift } from "./svg/spacelift.svg";
 export { default as link } from "./svg/link.svg";
+export { default as file } from "./svg/file.svg";
+export { default as terminal } from "./svg/terminal.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
