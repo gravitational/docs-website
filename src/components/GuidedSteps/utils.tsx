@@ -1,77 +1,162 @@
-import { Children, isValidElement, useMemo, type ReactElement } from "react";
+import React, {
+  Children,
+  isValidElement,
+  useMemo,
+  type ReactElement,
+} from "react";
+import {
+  CodeBlockProps,
+  FileProps as File,
+  GuidedStepsProps,
+  StepProps,
+} from "./types";
 
-type GuidedStepItem =
-  | ReactElement<GuidedStepItemProps>
-  | null
-  | false
-  | undefined;
+// Extract the instruction steps which are displayed on the left column.
+const extractSteps = (children: GuidedStepsProps["children"]) => {
+  return (
+    (Children.toArray(children)
+      .filter((child) => child !== "/n")
+      .map((child) => {
+        if (!child || (isValidElement(child) && isStep(child))) {
+          return child;
+        }
+        return null;
+      })
+      ?.filter(Boolean) ?? []) as ReactElement<StepProps>[]
+  ).map(({ props: { id, children } }) => {
+    return {
+      id,
+      children,
+    };
+  });
+};
 
-export interface GuidedStepsProps {
-  children?: GuidedStepItem | GuidedStepItem[];
-}
-
-export interface GuidedStepItemProps {
-  id: string;
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-}
-
-export interface GuidedStepItemHandle {
-  activate: () => void;
-  deactivate: () => void;
-}
-
-const extractGuidedStepItems = (children: GuidedStepsProps["children"]) => {
-  return sanitizeGuidedStepsChildren(children).map(
-    ({ props: { id, title, description, children } }) => {
+// Extract the code files which are displayed on the right column.
+const extractFiles = (children: GuidedStepsProps["children"]) => {
+  return sanitizeRightColumnChildren(children).map(
+    ({ props: { name, icon, children } }) => {
       return {
-        id,
-        title,
-        description,
+        name,
+        icon,
         children,
       };
     }
   );
 };
 
-const useGuidedStepItems = (props: Pick<GuidedStepsProps, "children">) => {
-  const { children } = props;
-  return useMemo(() => {
-    const items = extractGuidedStepItems(children);
-    return items;
-  }, [children]);
+// Extract the code blocks from a File component in order to map them to the instruction steps.
+const extractCodeBlocksFromFile = (child: File) => {
+  return (
+    (Children.toArray(child.children)
+      .filter((child) => child !== "/n")
+      .map((child) => {
+        if (!child || (isValidElement(child) && isCodeBlock(child))) {
+          return child;
+        }
+        return null;
+      })
+      ?.filter(Boolean) ?? []) as ReactElement<CodeBlockProps>[]
+  ).map(({ props: { stepId, children } }) => {
+    return {
+      stepId,
+      children,
+    };
+  });
 };
 
 export const useGuidedSteps = (props: GuidedStepsProps) => {
-  return useGuidedStepItems(props);
+  const { children } = props;
+  return useMemo(() => {
+    const steps = extractSteps(children);
+    const files = extractFiles(children);
+    return { steps, files };
+  }, [children]);
 };
 
-export const sanitizeGuidedStepsChildren = (
+export const sanitizeLeftColumnChildren = (
+  children: GuidedStepsProps["children"]
+) => {
+  let stepSectionIndex = 0;
+
+  return (Children.toArray(children)
+    .map((child) => {
+      if (!child || (isValidElement(child) && !isFile(child))) {
+        // If it's a StepSection, add the index prop
+        if (child && isValidElement(child) && isStepSection(child)) {
+          stepSectionIndex++;
+          return React.cloneElement(
+            child as ReactElement<{
+              index?: number;
+              children: React.ReactNode;
+            }>,
+            { index: stepSectionIndex }
+          );
+        }
+        return child;
+      }
+    })
+    ?.filter(Boolean) ?? []) as ReactElement[];
+};
+
+export const sanitizeRightColumnChildren = (
   children: GuidedStepsProps["children"]
 ) => {
   return (Children.toArray(children)
-    .filter((child) => child !== "/n")
     .map((child) => {
-      if (!child || (isValidElement(child) && isGuidedStepItem(child))) {
-        return child;
+      if (child && isValidElement(child) && isFile(child)) {
+        const stepIds: Array<string> = [];
+        const codeBlocks = extractCodeBlocksFromFile(child.props);
+        codeBlocks.forEach(({ stepId }) => {
+          stepIds.push(stepId);
+        });
+        return React.cloneElement(child, { stepIds });
       }
-
-      throw new Error(
-        "All children of the <GuidedSteps> component must be <GuidedStepItem> components"
-      );
     })
-    ?.filter(Boolean) ?? []) as ReactElement<GuidedStepItemProps>[];
+    ?.filter(Boolean) ?? []) as ReactElement[];
 };
 
-const isGuidedStepItem = (
+const isStep = (
   component: ReactElement<unknown>
-): component is ReactElement<GuidedStepItemProps> => {
+): component is ReactElement<StepProps> => {
   const { props, type } = component;
   return (
     !!props &&
     typeof props === "object" &&
     "children" in props &&
-    (type as React.ComponentType<any>).displayName === "GuidedStepItem"
+    "id" in props &&
+    (type as React.ComponentType<any>).displayName === "Step"
+  );
+};
+
+const isFile = (
+  component: ReactElement<unknown>
+): component is ReactElement<File> => {
+  const { props, type } = component;
+  return (
+    !!props &&
+    typeof props === "object" &&
+    "children" in props &&
+    "name" in props &&
+    (type as React.ComponentType<any>).displayName === "File"
+  );
+};
+
+const isStepSection = (
+  component: ReactElement<unknown>
+): component is ReactElement<{ index?: number; children: React.ReactNode }> => {
+  const { type } = component;
+  return (type as React.ComponentType<any>).displayName === "StepSection";
+};
+
+const isCodeBlock = (
+  component: ReactElement<unknown>
+): component is ReactElement<{ stepId: string; children: React.ReactNode }> => {
+  const { props, type } = component;
+  return (
+    !!props &&
+    typeof props === "object" &&
+    "children" in props &&
+    "stepId" in props &&
+    (type as React.ComponentType<any>).displayName === "CodeBlock"
   );
 };

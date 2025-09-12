@@ -1,19 +1,22 @@
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import cn from "classnames";
 import {
-  GuidedStepItemHandle,
-  GuidedStepsProps,
-  sanitizeGuidedStepsChildren,
-  useGuidedSteps,
+  sanitizeLeftColumnChildren,
 } from "./utils";
 import styles from "./GuidedSteps.module.css";
-import GuidedStepItem from "./GuidedStepItem";
 import Icon from "../Icon";
+import GuidedStepsContextProvider, { GuidedStepsContext } from "./context";
+import { GuidedStepsProps } from "./types";
 
 const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
-  const items = useGuidedSteps(props);
-  const [activeStepId, setActiveStepId] = useState<string | null>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const { steps, files, setActiveFileName } = useContext(GuidedStepsContext);
+  /*   const [copiedId, setCopiedId] = useState<string | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   const stepsRef = useRef<Map<string, GuidedStepItemHandle>>(new Map());
@@ -150,62 +153,42 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
     setTimeout(() => {
       setCopiedId(null);
     }, 1000);
-  };
+  }; */
 
   return (
     <div className={styles.guidedSteps}>
       <div className={styles.instructions}>
-        {items.map(({ id, title, description }, index) => (
-          <div
-            role="button"
-            key={id}
-            ref={(el) => (instructionsRef.current[index] = el)}
-            id={id}
-            className={cn(styles.instruction, {
-              [styles.active]: id === activeStepId,
-            })}
-            onClick={() => {
-              highlightStep(id);
-              instructionsRef.current[index]?.scrollIntoView({
-                block: "start",
-                behavior: "smooth",
-              });
-            }}
-          >
-            <h3>{title}</h3>
-            {description && <p>{description}</p>}
-            <button
-              className={cn(styles.instructionLinkCopyButton, {
-                [styles.active]: copiedId === id,
-              })}
-              onClick={(e) => copyLinkToClipboard(id, e)}
-            >
-              {copiedId === id ? (
-                <span className={styles.copiedText}>Copied!</span>
-              ) : (
-                <Icon name="link" size="sm" />
-              )}
-            </button>
-          </div>
-        ))}
+        {sanitizeLeftColumnChildren(props.children)}
       </div>
 
       <div className={styles.codePanel}>
-        {items.map(({ id, children }) => (
-          <GuidedStepItem key={id} ref={(el) => stepsRef.current.set(id, el)}>
-            {children}
-          </GuidedStepItem>
-        ))}
+        <ul className={styles.fileTabs}>
+          {files.map(({ name, icon }) => (
+            <li key={name} className={styles.fileTab}>
+              {icon && <Icon name={icon} className={styles.fileTabIcon} />}
+              <button
+                className={cn(styles.fileTabButton, {
+                  [styles.activeFileTabButton]: name === files[0].name,
+                })}
+                onClick={() => {
+                  setActiveFileName(name);
+                }}
+              >
+                {name}
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 };
 
-const GuidedSteps: React.FC<GuidedStepsProps> = ({ children }) => {
+const GuidedSteps: React.FC<GuidedStepsProps> = (props) => {
   return (
-    <GuidedStepsComponent>
-      {sanitizeGuidedStepsChildren(children)}
-    </GuidedStepsComponent>
+    <GuidedStepsContextProvider>
+      <GuidedStepsComponent {...props} />
+    </GuidedStepsContextProvider>
   );
 };
 
