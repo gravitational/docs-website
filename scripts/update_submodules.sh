@@ -16,7 +16,8 @@ if [[ -n ${AWS_APP_ID} || -n ${CI} ]]; then
      mkdir -p "content/$v";
 
      BRANCH=$(jq --arg ver "$v" -r '.versions[] | select(.name==$ver) | .branch' config.json);
-     scripts/download-content-archive.sh "content/$v" "$BRANCH";
+     REPO=$(jq --arg ver "$v" -r '.versions[] | select(.name==$ver) | .repo_path' config.json);
+     scripts/download-content-archive.sh "content/$v" "$BRANCH" "$REPO";
   done
 else
   git submodule update --init --remote --progress;
