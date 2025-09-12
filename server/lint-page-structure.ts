@@ -1,6 +1,6 @@
 import { lintRule } from "unified-lint-rule";
 import { visit } from "unist-util-visit";
-import type { Heading, Text } from "mdast";
+import type { Heading, Paragraph, Text } from "mdast";
 import type { EsmNode, MdxAnyElement, MdxastNode } from "./types-unist";
 import type { Node, Position } from "unist";
 
@@ -19,6 +19,7 @@ export const remarkLintPageStructure = lintRule(
   "remark-lint:page-structure",
   (root: Node, vfile) => {
     const h2s: Array<Text> = [];
+    const paras: Array<Paragraph> = [];
     visit(root, undefined, (node: Node) => {
       const hed = node as Heading;
       if (hed.type == "heading" && hed.depth == 2) {
@@ -26,7 +27,25 @@ export const remarkLintPageStructure = lintRule(
         // heading text.
         h2s.push(hed.children[0] as Text);
       }
+
+      const para = node as Paragraph;
+      if (para.type == "paragraph") {
+        paras.push(para);
+      }
     });
+
+    if (
+      h2s.length > 0 &&
+      !paras.some((para) => {
+        return para.position.end.line < h2s[0].position.start.line;
+      })
+    ) {
+      vfile.message(
+        "This guide is missing at least one introductory paragraph before the first H2. Use introductory paragraphs to explain the purpose and scope of this guide. " +
+          messageSuffix,
+        h2s[0].position,
+      );
+    }
 
     const hasStep = h2s.some((h) => h.value.match(/^Step [0-9]/) !== null);
     if (hasStep && h2s[0].value !== "How it works") {
