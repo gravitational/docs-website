@@ -1,18 +1,18 @@
 import {
   useCallback,
   useContext,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import cn from "classnames";
-import {
-  sanitizeLeftColumnChildren,
-} from "./utils";
+import { sanitizeLeftColumnChildren } from "./utils";
 import styles from "./GuidedSteps.module.css";
 import Icon from "../Icon";
 import GuidedStepsContextProvider, { GuidedStepsContext } from "./context";
 import { GuidedStepsProps } from "./types";
+import File, { FileTabs } from "./File";
 
 const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
   const { steps, files, setActiveFileName } = useContext(GuidedStepsContext);
@@ -162,23 +162,8 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
       </div>
 
       <div className={styles.codePanel}>
-        <ul className={styles.fileTabs}>
-          {files.map(({ name, icon }) => (
-            <li key={name} className={styles.fileTab}>
-              {icon && <Icon name={icon} className={styles.fileTabIcon} />}
-              <button
-                className={cn(styles.fileTabButton, {
-                  [styles.activeFileTabButton]: name === files[0].name,
-                })}
-                onClick={() => {
-                  setActiveFileName(name);
-                }}
-              >
-                {name}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <FileTabs />
+        <File />
       </div>
     </div>
   );

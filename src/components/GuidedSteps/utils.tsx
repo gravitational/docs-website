@@ -45,7 +45,7 @@ const extractFiles = (children: GuidedStepsProps["children"]) => {
 };
 
 // Extract the code blocks from a File component in order to map them to the instruction steps.
-const extractCodeBlocksFromFile = (child: File) => {
+export const extractCodeBlocksFromFile = (child: File) => {
   return (
     (Children.toArray(child.children)
       .filter((child) => child !== "/n")
@@ -69,6 +69,7 @@ export const useGuidedSteps = (props: GuidedStepsProps) => {
   return useMemo(() => {
     const steps = extractSteps(children);
     const files = extractFiles(children);
+    console.log(files);
     return { steps, files };
   }, [children]);
 };
@@ -103,6 +104,7 @@ export const sanitizeRightColumnChildren = (
 ) => {
   return (Children.toArray(children)
     .map((child) => {
+      console.log(child);
       if (child && isValidElement(child) && isFile(child)) {
         const stepIds: Array<string> = [];
         const codeBlocks = extractCodeBlocksFromFile(child.props);
@@ -124,7 +126,7 @@ const isStep = (
     typeof props === "object" &&
     "children" in props &&
     "id" in props &&
-    (type as React.ComponentType<any>).displayName === "Step"
+    (type as React.ComponentType<any>).name === "Step"
   );
 };
 
@@ -137,7 +139,7 @@ const isFile = (
     typeof props === "object" &&
     "children" in props &&
     "name" in props &&
-    (type as React.ComponentType<any>).displayName === "File"
+    (type as React.ComponentType<any>).name === "FileComponent"
   );
 };
 
@@ -145,7 +147,7 @@ const isStepSection = (
   component: ReactElement<unknown>
 ): component is ReactElement<{ index?: number; children: React.ReactNode }> => {
   const { type } = component;
-  return (type as React.ComponentType<any>).displayName === "StepSection";
+  return (type as React.ComponentType<any>).name === "StepSection";
 };
 
 const isCodeBlock = (

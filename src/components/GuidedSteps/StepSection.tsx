@@ -5,7 +5,7 @@ const StepSection: React.FC<{ index?: number; children: React.ReactNode }> = ({
   children,
 }) => (
   <div className={styles.stepSection}>
-    <div className={styles.icon}>{index}</div>
+    <div className={styles.index}>{index}</div>
     {children}
   </div>
 );

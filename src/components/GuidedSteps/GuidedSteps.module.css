@@ -8,6 +8,8 @@
 .instructions {
   position: relative;
   height: max-content;
+  display: grid;
+  gap: var(--m-1);
 }
 
 .instruction {
@@ -83,12 +85,10 @@
 
 .codePanel {
   background-color: var(--color-code);
-  overflow: auto;
   position: sticky;
   top: calc(var(--ifm-navbar-height) + var(--m-2));
   border-top-left-radius: var(--r-default);
   border-bottom-left-radius: var(--r-default);
-  height: max-content;
 
   @media (--md-scr) {
     border-radius: var(--r-default);

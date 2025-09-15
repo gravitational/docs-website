@@ -1,0 +1,76 @@
+.files {
+  position: relative;
+  height: 100%;
+}
+
+.file {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+
+  &.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  :global(pre) {
+    border-radius: 0;
+    transition: all 0.2s ease-in-out;
+    opacity: 0.4;
+  }
+  & > div {
+    box-shadow: unset;
+  }
+}
+
+.fileTabs {
+  display: flex;
+  padding: var(--m-1) var(--m-2);
+  background-color: var(----color-interactive-tonal-neutral-dark-0);
+  gap: var(--m-0-5);
+}
+
+.fileTab {
+  display: flex;
+  align-items: center;
+  padding: var(--m-0-5) var(--m-2);
+  gap: 2px;
+  border-radius: 36px;
+  color: var(--color-white);
+  transition: all 0.2s ease-in-out;
+
+  &.active {
+    background-color: var(--color-interactive-primary);
+    color: var(--color-black);
+    svg {
+      filter: brightness(0);
+    }
+    &:hover {
+      background-color: var(--color-interactive-primary);
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--color-tonal-primary-2);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    filter: brightness(0) invert(1);
+    transform: translateY(10%);
+  }
+}
+
+.codeBlock {
+  padding: var(--m-2);
+  :global(pre) {
+    padding: 0;
+  }
+}
