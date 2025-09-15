@@ -29,7 +29,7 @@ interface FileProps {
     | React.ReactElement<CodeBlockProps>[];
 }
 
-interface GuidedStepItemHandle {
+interface CodeBlockHandle {
   activate: () => void;
   deactivate: () => void;
 }
@@ -41,5 +41,5 @@ export {
     CodeBlockProps,
     StepProps,
     FileProps,
-    GuidedStepItemHandle
+    CodeBlockHandle
 }
