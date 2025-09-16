@@ -69,10 +69,17 @@
   font-weight: var(--fw-regular);
   font-size: var(--fs-text-sm);
   padding: var(--m-1) var(--m-4);
+  transition: all 0.2s ease-in-out;
 
   @media (--md-scr) {
     font-size: var(--fs-text-md);
     padding: var(--fs-text-xs) var(--m-4);
+  }
+
+  &:hover {
+    text-decoration: none;
+    background-color: var(--color-tonal-neutral-1);
+    color: var(--color-black);
   }
 }
 

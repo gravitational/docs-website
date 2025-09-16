@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Resources.module.css";
+import Link from "@docusaurus/Link";
 
 interface Resource {
   title: string;
@@ -29,9 +30,10 @@ const ResourceCard: React.FC<Resource> = ({
     </>
   );
   return href ? (
-    <a href={href} className={styles.resourceItem}>
+    // @ts-ignore
+    <Link to={href} className={styles.resourceItem}>
       {cardContent}
-    </a>
+    </Link>
   ) : (
     <div className={styles.resourceItem}>{cardContent}</div>
   );
@@ -47,15 +49,15 @@ const Resources: React.FC<ResourcesProps> = ({
       <div className={styles.resourcesContainer}>
         <h2 className={styles.resourcesTitle}>{title}</h2>
         <div className={styles.resourcesGrid}>
-        {resources.map((resource, i) => (
-          <ResourceCard
-            key={i}
-            title={resource.title}
-            description={resource.description}
-            href={resource.href}
-            iconComponent={resource.iconComponent}
-          />
-        ))}
+          {resources.map((resource, i) => (
+            <ResourceCard
+              key={i}
+              title={resource.title}
+              description={resource.description}
+              href={resource.href}
+              iconComponent={resource.iconComponent}
+            />
+          ))}
         </div>
       </div>
     </section>

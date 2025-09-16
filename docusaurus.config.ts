@@ -150,7 +150,6 @@ const config: Config = {
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "throw",
-
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
@@ -170,10 +169,9 @@ const config: Config = {
       },
     ],
     [
-      "@docusaurus/plugin-google-gtag",
+      "@docusaurus/plugin-google-tag-manager",
       {
-        trackingID: "G-Z1BMQRVFH3",
-        anonymizeIP: true,
+        containerId: "GTM-WMR7H6",
       },
     ],
     "@docusaurus/theme-classic",
@@ -221,7 +219,7 @@ const config: Config = {
 
           return orderSidebarItems(
             removeRedundantItems(items, item.dirName),
-            getDocPageByID
+            getDocPageByID,
           );
         },
         // Host docs on the root page, later it will be exposed on goteleport.com/docs
@@ -273,6 +271,7 @@ const config: Config = {
             },
           ],
         ],
+        onInlineTags: "throw",
       },
     ],
     // This is for allowing to import images in .mdx files using the @content alias
@@ -286,7 +285,7 @@ const config: Config = {
           const alias: string = path.resolve(
             __dirname,
             "./content",
-            currentVersion
+            currentVersion,
           );
 
           return {

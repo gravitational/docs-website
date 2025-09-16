@@ -1,0 +1,102 @@
+# This file configures all allowed tags in the docs site. We need to restrict
+# the number of allowed tags to ensure that users who navigate to a list of all
+# pages with a given tag can see a useful cross-section of docs content.
+#
+# For more information about tagging in Docusaurus, see the Docusaurus docs:
+#
+# https://docusaurus.io/docs/create-doc#doc-tags
+#
+# This file is copied into the docs and versioned_docs content directories in
+# scripts/prepare-files.mts.
+#
+# Note that Docusaurus uses the "description" field to populate the first
+# paragraph of a tag page, so make sure the description of each tag is a
+# complete, informative sentence.
+
+# Teleport products
+
+identity-governance:
+  label: "Identity Governance"
+  description: "These guides explain capabilities of the Identity Governance product."
+
+identity-security:
+  label: "Identity Security"
+  description: "These guides explain capabilities of the Identity Security product."
+
+zero-trust:
+  label: "Zero Trust Access"
+  description: "These guides explain features of the Teleport Zero Trust Access product."
+
+mwi: 
+  label: "Machine & Workload Identity"
+  description: "These guides explain Features of the Machine & Workload Identity product."
+
+platform-wide:
+  label: "Teleport platform"
+  description: "Teleport guides explain capabilities of the Teleport platform."
+
+# Guide types
+
+how-to:
+  label: "How-to guides"
+  description: "How-to guides provide step-by-step instructions for completing a task."
+
+conceptual:
+  label: "Conceptual guides"
+  description: "Conceptual guides explain Teleport terms and architecture."
+
+reference:
+  label: "Reference guides"
+  description: "Reference guides provide comprehensive lists of configuration fields, commands, and other ways of interacting with Teleport."
+
+get-started:
+  label: "Getting started guides"
+  description: "Getting started guides provide step-by-step instructions for beginners to Teleport and its features."
+
+faq:
+  label: "Frequently Asked Questions"
+  description: "You can find FAQ pages for Teleport as a whole, plus individual Teleport editions and features."
+
+# Cloud providers
+
+aws:
+  label: "AWS"
+  description: "These articles provide information on Teleport capabilities that integrate with AWS."
+
+azure:
+  label: "Azure"
+  description: "These articles provide information on Teleport capabilities that integrate with Microsoft Azure."
+
+google-cloud:
+  label: "Google Cloud"
+  description: "These articles provide information on Teleport capabilities that integrate with Google Cloud."
+
+# Use cases
+
+ai:
+  label: "AI infrastructure"
+  description: "These guides are about using Teleport to protect AI infrastructure."
+
+mcp:
+  label: "MCP"
+  description: "These guides are about using Teleport to protect model context protocol infrastructure."
+
+privileged-access:
+  label: "Privileged access"
+  description: "These guides are about using Teleport to set up privileged access in your organization."
+
+infrastructure-identity:
+  label: "Infrastructure identity"
+  description: "These guides are about using Teleport to stop breaches before they start with identity-first infrastructure security."
+
+audit:
+  label: "Auditing"
+  description: "These guides are about using Teleport to achieve compliance."
+
+resiliency:
+  label: "Resiliency"
+  description: "These guides are about using Teleport to recover quickly from security breaches."
+
+access-risks:
+  label: "Identifying access risks"
+  description: "These guides are about using Teleport to identify weaknesses in your security posture."
