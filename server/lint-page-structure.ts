@@ -12,7 +12,7 @@ interface stepNumber {
 
 const stepNumberPattern = `^Step ([0-9]+)/([0-9]+)`;
 const messageSuffix = `Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`;
-const varPattern = /<Var\s+name="([^"]+)"/g;
+const varPattern = /<Var\s+name=["']([^"']+)["']/g;
 
 export const remarkLintPageStructure = lintRule(
   "remark-lint:page-structure",
@@ -67,7 +67,7 @@ export const remarkLintPageStructure = lintRule(
       }
     });
 
-    if (vfile.path.includes("oracle-exadata.mdx")) {
+    if (vfile.path.includes("cockroachdb-self-hosted.mdx")) {
       console.log("varNames in exadata:", varNames);
     }
 

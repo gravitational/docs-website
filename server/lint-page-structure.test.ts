@@ -257,6 +257,24 @@ This is an introduction.
         ],
       },
       {
+        description: `var in code block with single quotes`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
+
+This is an introduction.
+
+\`\`\`code
+<Var name='myvar' />
+\`\`\`
+
+`,
+        expected: [
+          'There is only a single instance of the Var named "myvar" on this page. Add another instance, making it explicit that the user can assign the variable. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.',
+        ],
+      },
+      {
         description: `single instance of a Var in paragraph`,
         input: `---
 title: Docs Page
