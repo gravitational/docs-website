@@ -286,7 +286,22 @@ This is an introduction, including <Var name="myvar" />.
 `,
         expected: [],
       },
+      {
+        description: `valid case with inline code`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
 
+This is an introduction, including \`<Var name="myvar" />\`.
+
+\`\`\`code
+<Var name="myvar" />
+\`\`\`
+
+`,
+        expected: [],
+      },
       {
         description: `multiple violations`,
         input: `---
