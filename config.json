@@ -6,7 +6,8 @@
     },
     {
       "name": "18.x",
-      "branch": "aatuvai:aatuvai/guided-steps",
+      "branch": "aatuvai/guided-steps",
+      "repo_path": "aatuvai/teleport",
       "isDefault": true
     },
     {
