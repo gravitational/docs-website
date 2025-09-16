@@ -4,8 +4,6 @@ import type { Heading, Text, Code } from "mdast";
 import type { EsmNode, MdxAnyElement, MdxastNode } from "./types-unist";
 import type { Node, Position } from "unist";
 
-const mdxNodeTypes = new Set(["mdxJsxFlowElement", "mdxJsxTextElement"]);
-
 interface stepNumber {
   numerator: number;
   denominator: number;
@@ -14,7 +12,7 @@ interface stepNumber {
 
 const stepNumberPattern = `^Step ([0-9]+)/([0-9]+)`;
 const messageSuffix = `Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`;
-const varPattern = /<Var\s+name="([^"]+)"/g
+const varPattern = /<Var\s+name="([^"]+)"/g;
 
 export const remarkLintPageStructure = lintRule(
   "remark-lint:page-structure",
@@ -31,6 +29,22 @@ export const remarkLintPageStructure = lintRule(
     const varPositions = new Map();
 
     visit(root, undefined, (node: Node) => {
+      // Collect the names of Vars that are outside of code blocks.
+      //
+      const el = node as MdxAnyElement;
+      if (el.type == "mdxJsxTextElement" && el.name == "Var") {
+        el.attributes.forEach((a) => {
+          if (a.name == "name") {
+            if (!varNames.has(a.value)) {
+              varNames.set(a.value, 0);
+              varPositions.set(a.value, el.position);
+              return;
+            }
+            varNames.set(a.value, varNames.get(a.value) + 1);
+          }
+        });
+      }
+
       const hed = node as Heading;
       if (hed.type == "heading" && hed.depth == 2) {
         // A Heading as parsed by remark-mdx only has a single child, the
@@ -42,9 +56,9 @@ export const remarkLintPageStructure = lintRule(
       // expressions.
       const code = node as Code;
       if (code.type == "code") {
-      	  console.log("code.value:", code.value);
+        console.log("code.value:", code.value);
         const vars = code.value.matchAll(varPattern);
-          console.log("vars:", JSON.stringify(vars, null, 2));
+        console.log("vars:", JSON.stringify(vars, null, 2));
         vars.forEach((v) => {
           const varName = v[1];
           if (!varNames.has(varName)) {

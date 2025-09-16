@@ -256,10 +256,23 @@ This is an introduction.
           'There is only a single instance of the Var named "myvar" on this page. Add another instance, making it explicit that the user can assign the variable. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.',
         ],
       },
+      {
+        description: `single instance of a Var in paragraph`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
 
-      	//TODO: single instance outside of a code block
-      	//TODO valid case: code block and no code block
-      	//TODO: multiple separate violations
+This is an introduction, including <Var name="myvar" />.
+
+`,
+        expected: [
+          'There is only a single instance of the Var named "myvar" on this page. Add another instance, making it explicit that the user can assign the variable. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.',
+        ],
+      },
+
+      //TODO valid case: code block and no code block
+      //TODO: multiple separate violations
     ];
 
     test.each(testCases)("$description", (tc) => {
