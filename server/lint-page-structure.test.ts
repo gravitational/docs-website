@@ -270,8 +270,23 @@ This is an introduction, including <Var name="myvar" />.
           'There is only a single instance of the Var named "myvar" on this page. Add another instance, making it explicit that the user can assign the variable. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.',
         ],
       },
+      {
+        description: `valid case`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
 
-      //TODO valid case: code block and no code block
+This is an introduction, including <Var name="myvar" />.
+
+\`\`\`code
+<Var name="myvar" />
+\`\`\`
+
+`,
+        expected: [],
+      },
+
       //TODO: multiple separate violations
     ];
 
