@@ -80,7 +80,7 @@
     },
     {
       "name": "18.x",
-      "branch": "travis.rodgers/identity-security-product-page",
+      "branch": "branch/v18",
       "isDefault": true
     },
     {
