@@ -17,8 +17,6 @@ const varPattern = /<Var\s+name="([^"]+)"/g;
 export const remarkLintPageStructure = lintRule(
   "remark-lint:page-structure",
   (root: Node, vfile) => {
-    console.log("root:", JSON.stringify(root, null, 2));
-
     // Declare data structures for collecting page structure elements when we
     // traverse the tree. After traversal, we'll explore these data structures
     // to identify issues.
@@ -56,9 +54,7 @@ export const remarkLintPageStructure = lintRule(
       // expressions.
       const code = node as Code;
       if (code.type == "code") {
-        console.log("code.value:", code.value);
         const vars = code.value.matchAll(varPattern);
-        console.log("vars:", JSON.stringify(vars, null, 2));
         vars.forEach((v) => {
           const varName = v[1];
           if (!varNames.has(varName)) {
@@ -70,8 +66,6 @@ export const remarkLintPageStructure = lintRule(
         });
       }
     });
-
-    console.log("varNames", varNames);
 
     varNames.forEach((val, key) => {
       if (val > 0) {
