@@ -2,9 +2,12 @@
 set -o pipefail;
 # This script assumes that the name of each first-level child directory in
 # content is content/v<MAJOR_VERSION>.x, e.g., content/v17.x.
+#
 # $1 is the relative path of the content directory to the project root.
 # $2 is the name of the branch on GitHub from which to fetch an archive, e.g.,
 # master or branch/v17.
+# $3 is an optional repository path in <owner>/<name> format. the default is
+# gravitational/teleport
 
 if [[ -n $(find "$1" -name "docs") ]]; then
     echo "Content directory $1 already includes a docs directory. Skipping."
@@ -25,7 +28,16 @@ if [[ "$?" -ne 0 ]]; then
 fi
 echo "Found major version $MAJOR";
 
-BRANCH_TAR_URL="https://api.github.com/repos/gravitational/teleport/tarball/${2}"
+if [ -z "$3" ] || [ "$3" = "null" ]; then
+    REPO="gravitational/teleport";
+elif $(echo "$3" | grep -vqE "^[a-z-]+/[a-z-]+$"); then
+    echo "Invalid GitHub repo: $3. Must be of the format <owner>/<name>";
+    exit 1;
+else
+    REPO="$3";
+fi
+
+BRANCH_TAR_URL="https://api.github.com/repos/${REPO}/tarball/${2}"
 
 # Use curl's ETag support to compare the tarball we want to download with the one in the cache. 
 # Save the tarball as .downloads/$1.tar.gz

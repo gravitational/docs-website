@@ -1,13 +1,14 @@
 import React from "react";
 import styles from "./VersionHighlights.module.css";
 import cn from "classnames";
+import FIRST_WHATS_NEW_IMAGE from "../../../../../static/server-mcp-white-bg.png";
+import SECOND_WHATS_NEW_IMAGE from "../../../../../static/database-mcp-white-bg.png";
 
 interface VersionHighlight {
   title: string;
   description: string;
   href: string;
   tag: string;
-  image: any;
 }
 
 interface Link {
@@ -56,7 +57,7 @@ const VersionHighlights: React.FC<VersionHighlightsProps> = ({
               <a href={highlight.href} className={styles.highlightItem}>
                 <div className={styles.highlightImage}>
                 <img
-                  src={highlight.image}
+                  src={index === 0 ? FIRST_WHATS_NEW_IMAGE : SECOND_WHATS_NEW_IMAGE}
                   alt={highlight.title}
                   className={styles.image}
                   width={323}
