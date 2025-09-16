@@ -53,7 +53,7 @@ export const remarkLintPageStructure = lintRule(
       // In a code block, Vars are strings, so find them using regular
       // expressions.
       const code = node as Code;
-      if (code.type == "code") {
+      if (code.type == "code" || code.type == "inlineCode") {
         const vars = code.value.matchAll(varPattern);
         vars.forEach((v) => {
           const varName = v[1];
@@ -66,6 +66,10 @@ export const remarkLintPageStructure = lintRule(
         });
       }
     });
+
+    if (vfile.path.includes("oracle-exadata.mdx")) {
+      console.log("varNames in exadata:", varNames);
+    }
 
     varNames.forEach((val, key) => {
       if (val > 0) {
