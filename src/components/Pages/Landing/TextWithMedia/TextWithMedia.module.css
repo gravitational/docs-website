@@ -2,7 +2,7 @@
   padding-bottom: var(--m-5);
 
   @media (--md-scr) {
-    padding: 0 var(--m-3) var(--m-8) var(--m-3);
+    padding-bottom: var(--m-8);
   }
 }
 
