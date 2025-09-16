@@ -80,7 +80,8 @@
     },
     {
       "name": "18.x",
-      "branch": "branch/v18",
+      "branch": "aatuvai/integrations-width-fix-demo",
+      "repo_path": "aatuvai/teleport",
       "isDefault": true
     },
     {
