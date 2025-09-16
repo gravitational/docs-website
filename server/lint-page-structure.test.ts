@@ -229,4 +229,37 @@ Step 3 instructions
       expect(getReasons(tc.input)).toEqual(tc.expected);
     });
   });
+
+  describe("linting improper Var component use", () => {
+    interface testCase {
+      description: string;
+      input: string;
+      expected: Array<string>;
+    }
+
+    const testCases: Array<testCase> = [
+      {
+        description: `single instance of a Var`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
+
+This is an introduction.
+
+\`\`\`code
+<Var name="myvar" />
+\`\`\`
+
+`,
+        expected: [
+          'There is only a single instance of the Var named "myvar" on this page. Add another instance, making it explicit that the user can assign the variable. {/* lint ignore page-structure remark-lint */} before this line.',
+        ],
+      },
+    ];
+
+    test.each(testCases)("$description", (tc) => {
+      expect(getReasons(tc.input)).toEqual(tc.expected);
+    });
+  });
 });
