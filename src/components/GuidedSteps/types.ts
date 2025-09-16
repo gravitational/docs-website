@@ -11,11 +11,13 @@ interface GuidedStepsProps {
 
 interface CodeBlockProps {
   stepId: string;
+  fileName?: string;
   children: React.ReactNode;
 }
 
 interface StepProps {
   id: string;
+  index: number;
   children: React.ReactNode;
 }
 
@@ -35,11 +37,11 @@ interface CodeBlockHandle {
 }
 
 export {
-    Step,
-    File,
-    GuidedStepsProps,
-    CodeBlockProps,
-    StepProps,
-    FileProps,
-    CodeBlockHandle
-}
+  Step,
+  File,
+  GuidedStepsProps,
+  CodeBlockProps,
+  StepProps,
+  FileProps,
+  CodeBlockHandle,
+};

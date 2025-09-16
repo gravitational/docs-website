@@ -1,32 +1,26 @@
 import {
   useCallback,
   useContext,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
-import cn from "classnames";
 import { sanitizeLeftColumnChildren } from "./utils";
 import styles from "./GuidedSteps.module.css";
-import Icon from "../Icon";
 import GuidedStepsContextProvider, { GuidedStepsContext } from "./context";
 import { GuidedStepsProps } from "./types";
 import File, { FileTabs } from "./File";
 
 const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
-  const { steps, files, setActiveFileName } = useContext(GuidedStepsContext);
-  /*   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const { steps, activeStepId, codeBlockRefs, stepRefs, setActiveStepId } =
+    useContext(GuidedStepsContext);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
-
-  const stepsRef = useRef<Map<string, GuidedStepItemHandle>>(new Map());
 
   const lastHighlightTime = useRef<number>(0);
   const pendingHighlight = useRef<string | undefined>(undefined);
 
   const ignoreIntersection = useRef<boolean>(false);
-
-  const instructionsRef = useRef<HTMLElement[]>([]);
 
   useLayoutEffect(() => {
     const initializeObserver = () => {
@@ -82,13 +76,11 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
         }
       }, options);
 
-      instructionsRef.current.forEach((step) => {
+      stepRefs.current.forEach((step) => {
         if (observerRef.current) {
           observerRef.current.observe(step);
         }
       });
-
-      stepsRef.current.get(items[0].id)?.activate();
     };
 
     initializeObserver();
@@ -109,8 +101,8 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
     (stepId: string, fromObserver = false) => {
       if (stepId === activeStepId) return;
       setActiveStepId(stepId);
-      stepsRef.current.forEach((step) => step.deactivate());
-      stepsRef.current.get(stepId)?.activate();
+      codeBlockRefs.current.forEach((step) => step.deactivate());
+      codeBlockRefs.current.get(stepId)?.activate();
 
       // Only set the ignore flag if this was triggered with a click
       if (!fromObserver) {
@@ -129,19 +121,19 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
     const hash = window.location.hash.replace("#", "");
 
     if (hash) {
-      const index = items.findIndex((item) => item.id === hash);
+      const index = steps.findIndex((item) => item.id === hash);
 
       if (index !== -1) {
         highlightStep(hash);
 
-        instructionsRef.current[index]?.scrollIntoView({
+        stepRefs.current[index]?.scrollIntoView({
           block: "start",
         });
       }
-    } else if (items.length > 0) {
-      highlightStep(items[0].id);
+    } else if (steps.length > 0) {
+      highlightStep(steps[0].id);
     }
-  }, [items]);
+  }, [steps]);
 
   const copyLinkToClipboard = (id: string, event: React.MouseEvent) => {
     const link = `${window.location.origin}${window.location.pathname}#${id}`;
@@ -153,7 +145,7 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
     setTimeout(() => {
       setCopiedId(null);
     }, 1000);
-  }; */
+  };
 
   return (
     <div className={styles.guidedSteps}>

@@ -1,15 +1,17 @@
-import React, {
+import {
   createContext,
   useState,
   useMemo,
   useCallback,
   ReactElement,
+  useEffect,
+  useRef,
+  MutableRefObject,
 } from "react";
 import { useGuidedSteps } from "./utils";
 import {
   StepProps as Step,
   FileProps as File,
-  GuidedStepsProps,
   CodeBlockHandle,
 } from "./types";
 
@@ -18,7 +20,8 @@ interface GuidedStepsContextValue {
   files: File[];
   activeStepId: string | null;
   activeFileName?: string | null;
-  codeBlockRefs: React.MutableRefObject<Map<string, CodeBlockHandle>>;
+  codeBlockRefs: MutableRefObject<Map<string, CodeBlockHandle>>;
+  stepRefs: MutableRefObject<HTMLElement[]>;
   setActiveStepId?: (id: string | null) => void;
   setActiveFileName?: (name: string | null) => void;
   setCodeBlockRef?: (stepId: string, ref: any) => void;
@@ -34,11 +37,18 @@ const GuidedStepsProvider: React.FC<{ children: ReactElement }> = ({
   });
   const [activeStepId, setActiveStepId] = useState<string | null>(null);
   const [activeFileName, setActiveFileName] = useState<string | null>(null);
-  const codeBlockRefs = React.useRef<Map<string, CodeBlockHandle>>(new Map());
+  const codeBlockRefs = useRef<Map<string, CodeBlockHandle>>(new Map());
+  const stepRefs = useRef<HTMLElement[]>([]);
 
   const setCodeBlockRef = useCallback((stepId: string, ref: any) => {
     codeBlockRefs.current.set(stepId, ref);
   }, []);
+
+  useEffect(() => {
+    if (files.length > 0 && !activeFileName) {
+      setActiveFileName(files[0].name);
+    }
+  }, [files]);
 
   const value = useMemo<GuidedStepsContextValue>(
     () => ({
@@ -47,6 +57,7 @@ const GuidedStepsProvider: React.FC<{ children: ReactElement }> = ({
       activeStepId,
       activeFileName,
       codeBlockRefs,
+      stepRefs,
       setActiveStepId,
       setActiveFileName,
       setCodeBlockRef,

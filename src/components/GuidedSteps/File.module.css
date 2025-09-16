@@ -1,26 +1,29 @@
 .files {
   position: relative;
-  height: 100%;
+  height: max-content;
+  border-bottom-left-radius: var(--m-1);
+  border-bottom-right-radius: var(--m-1);
 }
 
 .file {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  pointer-events: none;
+  height: 0;
   opacity: 0;
-  transition: opacity 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--m-2);
 
   &.active {
     opacity: 1;
+    height: auto;
+    position: relative;
     pointer-events: auto;
   }
 
   :global(pre) {
     border-radius: 0;
-    transition: all 0.2s ease-in-out;
-    opacity: 0.4;
+    transition: all 0.2s ease-in;
   }
   & > div {
     box-shadow: unset;
@@ -28,10 +31,17 @@
 }
 
 .fileTabs {
+  position: sticky;
+  top: 0;
   display: flex;
-  padding: var(--m-1) var(--m-2);
-  background-color: var(----color-interactive-tonal-neutral-dark-0);
+  padding: var(--m-2);
+  border-bottom: 1.5px solid var(--color-tonal-neutral-1-white);
+  background-color: #0e1435;
+  border-top-left-radius: var(--m-1);
+  border-top-right-radius: var(--m-1);
+  z-index: 1;
   gap: var(--m-0-5);
+  margin-bottom: 0;
 }
 
 .fileTab {
@@ -41,6 +51,9 @@
   gap: 2px;
   border-radius: 36px;
   color: var(--color-white);
+  font-size: var(--fs-text-md);
+  line-height: 1.42857;
+  margin-top: 0 !important;
   transition: all 0.2s ease-in-out;
 
   &.active {
@@ -62,15 +75,40 @@
   svg {
     width: 16px;
     height: 16px;
-    position: relative;
     filter: brightness(0) invert(1);
-    transform: translateY(10%);
+  }
+
+  span {
+    line-height: 1;
   }
 }
 
 .codeBlock {
-  padding: var(--m-2);
+  position: relative;
+  pointer-events: none;
+  scroll-margin-top: 72px;
   :global(pre) {
-    padding: 0;
+    padding: 0 0 0 var(--m-2);
+    opacity: 0.52;
+    background-color: transparent !important;
+  }
+
+  & > div {
+    background-color: transparent !important;
+  }
+
+  &.activeLines {
+    &::after {
+      opacity: 0;
+    }
+
+    :global(pre) {
+      background-color: var(--color-code) !important;
+      opacity: 1;
+    }
+
+    & > div {
+      background-color: var(--color-code) !important;
+    }
   }
 }

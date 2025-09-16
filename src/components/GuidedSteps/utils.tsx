@@ -23,9 +23,10 @@ const extractSteps = (children: GuidedStepsProps["children"]) => {
         return null;
       })
       ?.filter(Boolean) ?? []) as ReactElement<StepProps>[]
-  ).map(({ props: { id, children } }) => {
+  ).map(({ props: { id, index, children } }) => {
     return {
       id,
+      index,
       children,
     };
   });
@@ -34,10 +35,11 @@ const extractSteps = (children: GuidedStepsProps["children"]) => {
 // Extract the code files which are displayed on the right column.
 const extractFiles = (children: GuidedStepsProps["children"]) => {
   return sanitizeRightColumnChildren(children).map(
-    ({ props: { name, icon, children } }) => {
+    ({ props: { name, icon, stepIds, children } }) => {
       return {
         name,
         icon,
+        stepIds,
         children,
       };
     }
@@ -69,7 +71,6 @@ export const useGuidedSteps = (props: GuidedStepsProps) => {
   return useMemo(() => {
     const steps = extractSteps(children);
     const files = extractFiles(children);
-    console.log(files);
     return { steps, files };
   }, [children]);
 };
@@ -78,7 +79,7 @@ export const sanitizeLeftColumnChildren = (
   children: GuidedStepsProps["children"]
 ) => {
   let stepSectionIndex = 0;
-
+  let stepIndex = 0;
   return (Children.toArray(children)
     .map((child) => {
       if (!child || (isValidElement(child) && !isFile(child))) {
@@ -93,6 +94,18 @@ export const sanitizeLeftColumnChildren = (
             { index: stepSectionIndex }
           );
         }
+
+        // if it's a Step, add the index prop
+        if (child && isValidElement(child) && isStep(child)) {
+          const indexedStep = React.cloneElement(
+            child as ReactElement<StepProps>,
+            {
+              index: stepIndex,
+            }
+          );
+          stepIndex++;
+          return indexedStep;
+        }
         return child;
       }
     })
@@ -104,14 +117,21 @@ export const sanitizeRightColumnChildren = (
 ) => {
   return (Children.toArray(children)
     .map((child) => {
-      console.log(child);
       if (child && isValidElement(child) && isFile(child)) {
         const stepIds: Array<string> = [];
         const codeBlocks = extractCodeBlocksFromFile(child.props);
         codeBlocks.forEach(({ stepId }) => {
           stepIds.push(stepId);
         });
-        return React.cloneElement(child, { stepIds });
+        return React.cloneElement(
+          child as ReactElement<{
+            name: string;
+            icon?: string;
+            stepIds?: Array<string>;
+            children: React.ReactNode;
+          }>,
+          { stepIds }
+        );
       }
     })
     ?.filter(Boolean) ?? []) as ReactElement[];

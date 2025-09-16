@@ -7,7 +7,8 @@ import CodeBlock from "./CodeBlock";
 import Icon from "../Icon";
 
 export const FileTabs: React.FC = () => {
-  const { files, setActiveFileName } = useContext(GuidedStepsContext);
+  const { files, activeFileName, setActiveFileName } =
+    useContext(GuidedStepsContext);
 
   return (
     <ul className={styles.fileTabs}>
@@ -15,7 +16,7 @@ export const FileTabs: React.FC = () => {
         <li
           key={name}
           className={cn(styles.fileTab, {
-            [styles.active]: name === files[0].name,
+            [styles.active]: name === activeFileName,
           })}
           role="button"
           onClick={() => {
@@ -44,7 +45,11 @@ const FileComponent: React.FC = () => {
           })}
         >
           {extractCodeBlocksFromFile(file).map(({ stepId, children }, i) => (
-            <CodeBlock key={i} ref={(el) => setCodeBlockRef(stepId, el)}>
+            <CodeBlock
+              key={i}
+              ref={(el) => setCodeBlockRef(stepId, el)}
+              fileName={file.name}
+            >
               {children}
             </CodeBlock>
           ))}

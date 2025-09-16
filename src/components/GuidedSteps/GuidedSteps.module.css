@@ -8,6 +8,7 @@
 .instructions {
   position: relative;
   height: max-content;
+  padding-bottom: 150%;
   display: grid;
   gap: var(--m-1);
 }
@@ -84,12 +85,12 @@
 }
 
 .codePanel {
-  background-color: var(--color-code);
   position: sticky;
-  top: calc(var(--ifm-navbar-height) + var(--m-2));
-  border-top-left-radius: var(--r-default);
-  border-bottom-left-radius: var(--r-default);
-
+  top: var(--ifm-navbar-height);
+  background-color: #060918;
+  max-height: calc(100dvh - var(--ifm-navbar-height));
+  overflow-y: scroll;
+  height: 100%;
   @media (--md-scr) {
     border-radius: var(--r-default);
   }
