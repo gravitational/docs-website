@@ -5,9 +5,14 @@ import styles from "./Step.module.css";
 import cn from "classnames";
 import Icon from "../Icon";
 
-const Step: React.FC<StepProps> = ({ id, children }) => {
-  const { files, codeBlockRefs, activeStepId, setActiveStepId } =
-    useContext(GuidedStepsContext);
+const Step: React.FC<StepProps> = ({ id, index, children }) => {
+  const {
+    files,
+    codeBlockRefs,
+    stepRefs,
+    activeStepId,
+    setActiveStepId,
+  } = useContext(GuidedStepsContext);
 
   const [relatedCodeBlock, setRelatedCodeBlock] =
     useState<CodeBlockHandle | null>(null);
@@ -25,19 +30,21 @@ const Step: React.FC<StepProps> = ({ id, children }) => {
   const activateStep = useCallback(() => {
     setActiveStepId?.(id);
     codeBlockRefs.current.forEach((step) => step.deactivate());
-    relatedCodeBlock?.activate();
+    if (activeStepId !== id) relatedCodeBlock?.activate();
   }, [codeBlockRefs, relatedCodeBlock]);
 
   return (
     <div
       className={cn(styles.step, { [styles.active]: activeStepId === id })}
       role="button"
+      ref={(el) => (stepRefs.current[index] = el)}
       onClick={activateStep}
+      id={id}
     >
       <div>{children}</div>
       <div className={styles.fileLabel}>
         <Icon name={relatedFile.icon || "file"} className={styles.fileIcon} />
-        {relatedFile.name}
+        <span>{relatedFile.name}</span>
       </div>
     </div>
   );
