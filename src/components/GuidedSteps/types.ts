@@ -12,6 +12,7 @@ interface GuidedStepsProps {
 interface CodeBlockProps {
   stepId: string;
   fileName?: string;
+  copyButtonActive?: boolean;
   children: React.ReactNode;
 }
 
@@ -34,6 +35,7 @@ interface FileProps {
 interface CodeBlockHandle {
   activate: () => void;
   deactivate: () => void;
+  innerText: string;
 }
 
 export {

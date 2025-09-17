@@ -5,21 +5,32 @@ import {
   useRef,
   useState,
 } from "react";
+import cn from "classnames";
 import { sanitizeLeftColumnChildren } from "./utils";
 import styles from "./GuidedSteps.module.css";
 import GuidedStepsContextProvider, { GuidedStepsContext } from "./context";
 import { GuidedStepsProps } from "./types";
 import File, { FileTabs } from "./File";
+import Icon from "../Icon";
 
 const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
-  const { steps, activeStepId, codeBlockRefs, stepRefs, setActiveStepId } =
-    useContext(GuidedStepsContext);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const {
+    steps,
+    activeStepId,
+    activeFileName,
+    codeBlockRefs,
+    stepRefs,
+    fileRefs,
+    showCopyButton,
+    fileNameHasType,
+    setActiveStepId,
+    setShowCopyButton,
+  } = useContext(GuidedStepsContext);
+  const [copiedIndicator, setCopiedIndicator] = useState<boolean>(false);
 
+  const observerRef = useRef<IntersectionObserver | null>(null);
   const lastHighlightTime = useRef<number>(0);
   const pendingHighlight = useRef<string | undefined>(undefined);
-
   const ignoreIntersection = useRef<boolean>(false);
 
   useLayoutEffect(() => {
@@ -116,35 +127,16 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
     [activeStepId]
   );
 
-  // Handle anchor links when the page loads
-  useLayoutEffect(() => {
-    const hash = window.location.hash.replace("#", "");
-
-    if (hash) {
-      const index = steps.findIndex((item) => item.id === hash);
-
-      if (index !== -1) {
-        highlightStep(hash);
-
-        stepRefs.current[index]?.scrollIntoView({
-          block: "start",
-        });
-      }
-    } else if (steps.length > 0) {
-      highlightStep(steps[0].id);
-    }
-  }, [steps]);
-
-  const copyLinkToClipboard = (id: string, event: React.MouseEvent) => {
-    const link = `${window.location.origin}${window.location.pathname}#${id}`;
-    window.history.pushState({}, "", `#${id}`);
-    navigator.clipboard.writeText(link);
-
-    setCopiedId(id);
-
+  const handleCopyCode = () => {
+    const noFileType = activeFileName?.split(".").length === 1;
+    const codeText = noFileType
+      ? codeBlockRefs.current.get(activeStepId).innerText
+      : fileRefs.current.get(activeFileName)?.innerText;
+    navigator.clipboard.writeText(codeText);
+    setCopiedIndicator(true);
     setTimeout(() => {
-      setCopiedId(null);
-    }, 1000);
+      setCopiedIndicator(false);
+    }, 1500);
   };
 
   return (
@@ -153,9 +145,21 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
         {sanitizeLeftColumnChildren(props.children)}
       </div>
 
-      <div className={styles.codePanel}>
+      <div
+        className={cn(styles.codePanel, {
+          [styles.copyButtonActive]: showCopyButton && fileNameHasType,
+        })}
+        onMouseEnter={() => setShowCopyButton(true)}
+        onMouseLeave={() => setShowCopyButton(false)}
+      >
         <FileTabs />
         <File />
+        {showCopyButton && (
+          <button className={styles.copyButton} onClick={handleCopyCode}>
+            <Icon name={copiedIndicator ? "check2" : "copy2"} size="sm" />
+            <span>{copiedIndicator ? "Copied!" : "Copy Code"}</span>
+          </button>
+        )}
       </div>
     </div>
   );

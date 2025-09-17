@@ -3,16 +3,19 @@
   height: max-content;
   border-bottom-left-radius: var(--m-1);
   border-bottom-right-radius: var(--m-1);
+
+  &.copyButtonActive {
+    background-color: var(--color-code);
+  }
 }
 
 .file {
   position: absolute;
   height: 0;
   opacity: 0;
-  transition: opacity 0.2s ease-in;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
-  padding-top: var(--m-2);
 
   &.active {
     opacity: 1;
@@ -42,6 +45,7 @@
   z-index: 1;
   gap: var(--m-0-5);
   margin-bottom: 0;
+  min-height: 65px;
 }
 
 .fileTab {
@@ -83,6 +87,38 @@
   }
 }
 
+.downloadButton {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--m-0-5);
+  background-color: var(--color-tonal-neutral-0-white);
+  border: none;
+  color: var(--color-foreground-slightly-muted-white);
+  font-size: var(--fs-text-sm);
+  cursor: pointer;
+  font-weight: var(--fw-medium);
+  line-height: 1rem;
+  padding: var(--m-1) var(--m-2);
+  border-radius: var(--m-0-5);
+  transition: all 0.2s ease-in-out;
+
+  svg {
+    filter: brightness(0) invert(1);
+    opacity: 0.72;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  &:hover {
+    background-color: var(--color-tonal-neutral-1-white);
+    color: var(--color-white);
+
+    svg {
+      opacity: 1;
+    }
+  }
+}
+
 .codeBlock {
   position: relative;
   pointer-events: none;
@@ -91,17 +127,28 @@
     padding: 0 0 0 var(--m-2);
     opacity: 0.52;
     background-color: transparent !important;
+    transition: opacity 0.2s ease-in;
+  }
+
+  &:first-of-type {
+    & > div {
+      padding-top: var(--m-2);
+    }
+  }
+
+  &:last-of-type {
+    & > div {
+      padding-bottom: var(--m-2);
+    }
   }
 
   & > div {
     background-color: transparent !important;
+    box-shadow: unset !important;
   }
 
-  &.activeLines {
-    &::after {
-      opacity: 0;
-    }
-
+  &.activeLines,
+  &.copyButtonActive {
     :global(pre) {
       background-color: var(--color-code) !important;
       opacity: 1;
