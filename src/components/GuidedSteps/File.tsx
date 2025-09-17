@@ -7,8 +7,13 @@ import CodeBlock from "./CodeBlock";
 import Icon from "../Icon";
 
 export const FileTabs: React.FC = () => {
-  const { files, activeFileName, setActiveFileName } =
-    useContext(GuidedStepsContext);
+  const {
+    files,
+    fileRefs,
+    activeFileName,
+    fileNameHasType,
+    setActiveFileName,
+  } = useContext(GuidedStepsContext);
 
   return (
     <ul className={styles.fileTabs}>
@@ -27,13 +32,51 @@ export const FileTabs: React.FC = () => {
           <span>{name}</span>
         </li>
       ))}
+      {fileNameHasType && (
+        <button
+          className={styles.downloadButton}
+          onClick={(e) => {
+            e.stopPropagation();
+            const activeFileContent = fileRefs.current.get(activeFileName);
+            if (activeFileContent) {
+              // Create a blob with the file content
+              const blob = new Blob([activeFileContent.innerText], {
+                type:
+                  activeFileName?.split(".").pop() === "yaml"
+                    ? "application/yaml"
+                    : "text/plain",
+              });
+
+              // Create a download link and trigger it
+              const downloadLink = document.createElement("a");
+              downloadLink.href = URL.createObjectURL(blob);
+              downloadLink.download = activeFileName;
+              document.body.appendChild(downloadLink);
+              downloadLink.click();
+              document.body.removeChild(downloadLink);
+
+              // Clean up the URL object
+              URL.revokeObjectURL(downloadLink.href);
+            }
+          }}
+        >
+          <Icon name="download2" size="sm" />
+          Download
+        </button>
+      )}
     </ul>
   );
 };
 
 const FileComponent: React.FC = () => {
-  const { files, activeFileName, setCodeBlockRef } =
-    useContext(GuidedStepsContext);
+  const {
+    files,
+    activeFileName,
+    showCopyButton,
+    fileNameHasType,
+    setCodeBlockRef,
+    setFileRef,
+  } = useContext(GuidedStepsContext);
 
   return (
     <div className={styles.files}>
@@ -43,11 +86,13 @@ const FileComponent: React.FC = () => {
           className={cn(styles.file, {
             [styles.active]: activeFileName === file.name,
           })}
+          ref={(el) => setFileRef(file.name, el)}
         >
           {extractCodeBlocksFromFile(file).map(({ stepId, children }, i) => (
             <CodeBlock
               key={i}
               ref={(el) => setCodeBlockRef(stepId, el)}
+              copyButtonActive={showCopyButton && fileNameHasType}
               fileName={file.name}
             >
               {children}
