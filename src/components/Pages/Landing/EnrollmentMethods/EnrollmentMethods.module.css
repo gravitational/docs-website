@@ -155,7 +155,7 @@
   &:hover {
     color: var(--color-black);
     text-decoration: none;
-    box-shadow: var(--lp-box-shadow-hover);
+    box-shadow: var(--lp-box-shadow-hover-tag);
   }
 }
 

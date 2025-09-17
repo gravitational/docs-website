@@ -87,6 +87,7 @@ a.resourceItem {
     cursor: pointer;
     box-shadow: var(--lp-box-shadow-hover);
     text-decoration: none;
+    border-color: transparent;
     .resourceTitle {
       color: var(--color-dark-purple);
     }
