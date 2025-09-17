@@ -50,4 +50,6 @@ const Step: React.FC<StepProps> = ({ id, index, children }) => {
   );
 };
 
+Step.displayName = "Step";
+
 export default Step;
