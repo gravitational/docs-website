@@ -128,6 +128,16 @@
     opacity: 0.52;
     background-color: transparent !important;
     transition: opacity 0.2s ease-in;
+
+    code {
+      color: var(--color-data-purple-tertiary);
+      :global(.hljs-attr) {
+        color: var(--color-data-purple-tertiary);
+      }
+      :global(.hljs-string), :global(.hljs-built_in) {
+        color: var(--color-data-caribbean-tertiary);
+      }
+    }
   }
 
   &:first-of-type {
