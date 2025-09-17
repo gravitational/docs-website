@@ -88,6 +88,9 @@ export { default as panther } from "./svg/panther.svg";
 export { default as youtube } from "./svg/youtube.svg";
 export { default as aws } from "./svg/aws.svg";
 export { default as terraform } from "./svg/terraform.svg";
+export { default as copy2 } from "./svg/copy2.svg";
+export { default as download2 } from "./svg/download2.svg";
+export { default as check2 } from "./svg/check2.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";

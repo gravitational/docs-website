@@ -21,6 +21,7 @@
   --color-tonal-neutral-0: rgba(0, 0, 0, 0.06);
   --color-tonal-neutral-1: rgba(0, 0, 0, 0.13);
   --color-tonal-neutral-2: rgba(0, 0, 0, 0.18);
+  --color-foreground-slightly-muted-white: rgba(255, 255, 255, 0.72);
   --color-foreground-muted-white: rgba(255, 255, 255, 0.54);
   --color-foreground-disabled-white: rgba(255, 255, 255, 0.36);
   --color-foreground-tooltip-white: rgba(255, 255, 255, 0.8);
@@ -63,6 +64,7 @@
 
   /* font weights */
   --fw-regular: 400;
+  --fw-medium: 500;
   --fw-bold: 700;
   --fw-black: 900;
 

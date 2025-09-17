@@ -13,85 +13,50 @@
   gap: var(--m-1);
 }
 
-.instruction {
-  padding: var(--m-2) var(--m-1);
-  border-left: 4px solid transparent;
-  transition: all 0.2s ease-in-out;
-  min-height: 100px;
-  cursor: pointer;
-  position: relative;
-  border-bottom: 1px solid var(--color-tonal-neutral-1);
-  scroll-margin: var(--ifm-navbar-height);
-
-  &.active {
-    border-left-color: var(--color-dark-purple);
-    background-color: var(--color-tonal-neutral-0);
-  }
-  &:last-child {
-    border-bottom: none;
-  }
-
-  &:hover {
-    border-left-color: var(--color-tonal-neutral-1);
-    .instructionLinkCopyButton {
-      opacity: 1;
-    }
-  }
-
-  @media (--md-scr) {
-    padding: var(--m-2);
-  }
-}
-
-.instructionLinkCopyButton {
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  background-color: transparent;
-  position: absolute;
-  top: var(--m-1);
-  right: -8px;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 52px;
-  :global(svg) {
-    fill: var(--color-dark-purple);
-    stroke: var(--color-dark-purple);
-  }
-  &.active {
-    opacity: 1;
-  }
-}
-
-.copiedText {
-  user-select: none;
-  font-size: 12px;
-  color: var(--color-dark-purple);
-  font-weight: 500;
-  animation: fadeIn 0.2s ease-in-out;
-  transform: translateX(-25%);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .codePanel {
   position: sticky;
-  top: var(--ifm-navbar-height);
+  top: calc(var(--ifm-navbar-height) + var(--m-4));
   background-color: #060918;
-  max-height: calc(100dvh - var(--ifm-navbar-height));
+  max-height: calc(100dvh - var(--ifm-navbar-height) - var(--m-8));
   overflow-y: scroll;
   height: 100%;
   @media (--md-scr) {
     border-radius: var(--r-default);
+  }
+
+  &.copyButtonActive {
+    background-color: var(--color-code);
+  }
+}
+
+.copyButton {
+  position: absolute;
+  bottom: 53px;
+  left: 50%;
+  max-width: 136px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--m-0-5);
+  white-space: nowrap;
+  transform: translateX(-50%);
+  padding: var(--m-1) var(--m-2);
+  background-color: var(--color-white);
+  border: 1.5px solid transparent;
+  border-radius: 36px;
+  cursor: pointer;
+  font-size: var(--fs-text-lg);
+  transition:
+    box-shadow 0.1s ease-in-out,
+    border-color 0.1s ease-in-out;
+  span {
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  &:hover {
+    box-shadow: 0 0 25px 0 rgba(81, 47, 201, 0.5);
+    border-color: var(--color-interactive-primary);
   }
 }
