@@ -146,7 +146,7 @@ const isStep = (
     typeof props === "object" &&
     "children" in props &&
     "id" in props &&
-    (type as React.ComponentType<any>).name === "Step"
+    (type as React.ComponentType<any>).displayName === "Step"
   );
 };
 
@@ -159,7 +159,7 @@ const isFile = (
     typeof props === "object" &&
     "children" in props &&
     "name" in props &&
-    (type as React.ComponentType<any>).name === "FileComponent"
+    (type as React.ComponentType<any>).displayName === "File"
   );
 };
 
@@ -167,7 +167,7 @@ const isStepSection = (
   component: ReactElement<unknown>
 ): component is ReactElement<{ index?: number; children: React.ReactNode }> => {
   const { type } = component;
-  return (type as React.ComponentType<any>).name === "StepSection";
+  return (type as React.ComponentType<any>).displayName === "StepSection";
 };
 
 const isCodeBlock = (

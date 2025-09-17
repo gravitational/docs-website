@@ -10,4 +10,6 @@ const StepSection: React.FC<{ index?: number; children: React.ReactNode }> = ({
   </div>
 );
 
+StepSection.displayName = "StepSection";
+
 export default StepSection;

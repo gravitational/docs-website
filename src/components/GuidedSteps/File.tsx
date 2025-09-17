@@ -59,4 +59,6 @@ const FileComponent: React.FC = () => {
   );
 };
 
+FileComponent.displayName = "File";
+
 export default FileComponent;
