@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./Integrations.module.css";
 import cn from "classnames";
 import ArrowRightSvg from "@site/src/components/Icon/teleport-svg/arrow-circle-right.svg";
+import Link from "@docusaurus/Link";
 
 interface Integration {
   title: string;
@@ -65,8 +66,8 @@ const IntegrationCard: React.FC<Integration> = ({
   );
 
   return href ? (
-    <a
-      href={href}
+    <Link
+      to={href}
       className={cn(styles.integrationItem, {
         [styles.defaultIcon]: !iconColor,
         [styles.rowLayout]: layout === "row",
@@ -78,7 +79,7 @@ const IntegrationCard: React.FC<Integration> = ({
       }
     >
       {cardContent}
-    </a>
+    </Link>
   ) : (
     <div
       className={cn(styles.integrationItem, {
@@ -123,9 +124,9 @@ const Integrations: React.FC<IntegrationsProps> = ({
             )}
           </div>
           {mainLink && (
-            <a href={mainLink.href} className={styles.mainLink}>
+            <Link to={mainLink.href} className={styles.mainLink}>
               {mainLink.title}
-            </a>
+            </Link>
           )}
         </div>
         <div
@@ -150,9 +151,9 @@ const Integrations: React.FC<IntegrationsProps> = ({
             <ul className={styles.additionalLinksList}>
               {additionalLinks?.links?.map((link, i) => (
                 <li key={i}>
-                  <a href={link.href}>
-                    <ArrowRightSvg /> {link.title}
-                  </a>
+                  <Link to={link.href}>
+                    <LinkrrowRightSvg /> {link.title}
+                  </Link>
                 </li>
               ))}
             </ul>

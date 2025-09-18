@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Products.module.css";
+import Link from "@docusaurus/Link";
 
 interface ProductFeature {
   title: string;
@@ -35,9 +36,9 @@ const ProductCard: React.FC<ProductFeature> = ({
   );
 
   return href ? (
-    <a href={href} className={styles.featureItem}>
+    <Link to={href} className={styles.featureItem}>
       {cardContent}
-    </a>
+    </Link>
   ) : (
     <div className={styles.featureItem}>{cardContent}</div>
   );
@@ -66,7 +67,7 @@ const Products: React.FC<ProductsProps> = ({
                 <div className={styles.categoryHeader}>
                   <h3 className={styles.categoryTitle}>
                     {category.href ? (
-                      <a href={category.href}>{category.title}</a>
+                      <Link to={category.href}>{category.title}</Link>
                     ) : (
                       category.title
                     )}
@@ -84,7 +85,7 @@ const Products: React.FC<ProductsProps> = ({
                   key={index}
                   title={feature.title}
                   description={feature.description}
-                  href={feature.href}
+                  to={feature.href}
                 />
               ))}
             </div>

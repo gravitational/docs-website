@@ -1,3 +1,4 @@
+import Link from "@docusaurus/Link";
 import styles from "./LandingHero.module.css";
 
 interface GetStartedLink {
@@ -75,13 +76,13 @@ const LandingHero: React.FC<LandingHeroProps> = ({
             }
           >
             {links.map((link, i) => (
-              <a href={link.href} key={i} className={styles.link}>
+              <Link to={link.href} key={i} className={styles.link}>
                 <div className={styles.linkContent}>
                   <h3 className={styles.linkTitle}>{link.title}</h3>
                   <p className={styles.linkDescription}>{link.description}</p>
                   <link.icon className={styles.linkIcon} />
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         )}

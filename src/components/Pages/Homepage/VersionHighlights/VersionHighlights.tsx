@@ -3,6 +3,7 @@ import styles from "./VersionHighlights.module.css";
 import cn from "classnames";
 import FIRST_WHATS_NEW_IMAGE from "../../../../../static/server-mcp-white-bg.png";
 import SECOND_WHATS_NEW_IMAGE from "../../../../../static/database-mcp-white-bg.png";
+import Link from "@docusaurus/Link";
 
 interface VersionHighlight {
   title: string;
@@ -45,16 +46,16 @@ const VersionHighlights: React.FC<VersionHighlightsProps> = ({
           <h2 className={styles.title}>{title}</h2>
           <div className={styles.links}>
             {mainLinks.map((link, index) => (
-              <a key={index} href={link.href} className={styles.link}>
+              <Link key={index} to={link.href} className={styles.link}>
                 {link.title}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
         <ul className={styles.highlightsList}>
           {highlights.map((highlight, index) => (
             <li key={index}>
-              <a href={highlight.href} className={styles.highlightItem}>
+              <Link to={highlight.href} className={styles.highlightItem}>
                 <div className={styles.highlightImage}>
                 <img
                   src={index === 0 ? FIRST_WHATS_NEW_IMAGE : SECOND_WHATS_NEW_IMAGE}
@@ -72,7 +73,7 @@ const VersionHighlights: React.FC<VersionHighlightsProps> = ({
                   </p>
                   <p className={styles.highlightLink}>Read more</p>
                 </div>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
