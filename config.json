@@ -80,7 +80,8 @@
     },
     {
       "name": "18.x",
-      "branch": "travis.rodgers/identity-security-product-page",
+      "branch": "aatuvai/zta-page",
+      "repo_path": "aatuvai/teleport",
       "isDefault": true
     },
     {
