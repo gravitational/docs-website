@@ -85,7 +85,7 @@ const Products: React.FC<ProductsProps> = ({
                   key={index}
                   title={feature.title}
                   description={feature.description}
-                  to={feature.href}
+                  href={feature.href}
                 />
               ))}
             </div>
