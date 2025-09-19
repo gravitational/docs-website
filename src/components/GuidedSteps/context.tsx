@@ -8,7 +8,7 @@ import {
   useRef,
   MutableRefObject,
 } from "react";
-import { useGuidedSteps } from "./utils";
+import { useGuidedStepsData } from "./hooks";
 import { StepProps as Step, FileProps as File, CodeBlockHandle } from "./types";
 
 interface GuidedStepsContextValue {
@@ -33,7 +33,7 @@ const GuidedStepsContext = createContext<GuidedStepsContextValue>(null);
 const GuidedStepsProvider: React.FC<{ children: ReactElement }> = ({
   children,
 }) => {
-  const { steps, files } = useGuidedSteps({
+  const { steps, files } = useGuidedStepsData({
     children: children.props.children,
   });
   const [activeStepId, setActiveStepId] = useState<string | null>(null);

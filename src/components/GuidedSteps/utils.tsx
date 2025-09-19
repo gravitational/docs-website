@@ -1,9 +1,4 @@
-import React, {
-  Children,
-  isValidElement,
-  useMemo,
-  type ReactElement,
-} from "react";
+import React, { Children, isValidElement, type ReactElement } from "react";
 import {
   CodeBlockProps,
   FileProps as File,
@@ -12,7 +7,7 @@ import {
 } from "./types";
 
 // Extract the instruction steps which are displayed on the left column.
-const extractSteps = (children: GuidedStepsProps["children"]) => {
+export const extractSteps = (children: GuidedStepsProps["children"]) => {
   return (
     (Children.toArray(children)
       .filter((child) => child !== "/n")
@@ -33,7 +28,7 @@ const extractSteps = (children: GuidedStepsProps["children"]) => {
 };
 
 // Extract the code files which are displayed on the right column.
-const extractFiles = (children: GuidedStepsProps["children"]) => {
+export const extractFiles = (children: GuidedStepsProps["children"]) => {
   return sanitizeRightColumnChildren(children).map(
     ({ props: { name, icon, stepIds, children } }) => {
       return {
@@ -66,15 +61,7 @@ export const extractCodeBlocksFromFile = (child: File) => {
   });
 };
 
-export const useGuidedSteps = (props: GuidedStepsProps) => {
-  const { children } = props;
-  return useMemo(() => {
-    const steps = extractSteps(children);
-    const files = extractFiles(children);
-    return { steps, files };
-  }, [children]);
-};
-
+// Sanitize the children of the left column: File components are filtered out.
 export const sanitizeLeftColumnChildren = (
   children: GuidedStepsProps["children"]
 ) => {
@@ -83,7 +70,7 @@ export const sanitizeLeftColumnChildren = (
   return (Children.toArray(children)
     .map((child) => {
       if (!child || (isValidElement(child) && !isFile(child))) {
-        // If it's a StepSection, add the index prop
+        // If it's a StepSection, add the index prop in order to number the sections
         if (child && isValidElement(child) && isStepSection(child)) {
           stepSectionIndex++;
           return React.cloneElement(
@@ -95,7 +82,7 @@ export const sanitizeLeftColumnChildren = (
           );
         }
 
-        // if it's a Step, add the index prop
+        // if it's a Step, add the index prop in order to keep track of the step refs
         if (child && isValidElement(child) && isStep(child)) {
           const indexedStep = React.cloneElement(
             child as ReactElement<StepProps>,
@@ -112,6 +99,7 @@ export const sanitizeLeftColumnChildren = (
     ?.filter(Boolean) ?? []) as ReactElement[];
 };
 
+// Sanitize the children of the right column: Only File components are kept.
 export const sanitizeRightColumnChildren = (
   children: GuidedStepsProps["children"]
 ) => {
@@ -136,6 +124,8 @@ export const sanitizeRightColumnChildren = (
     })
     ?.filter(Boolean) ?? []) as ReactElement[];
 };
+
+// Type guards to identify the different child components.
 
 const isStep = (
   component: ReactElement<unknown>
