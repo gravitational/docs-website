@@ -6,6 +6,7 @@
   justify-content: center;
   background-color: #f1f2f4;
   border-radius: var(--m-1);
+  scroll-margin-top: calc(var(--ifm-navbar-height) + var(--m-1));
 
   &::after {
     content: "";

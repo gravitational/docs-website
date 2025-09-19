@@ -6,13 +6,8 @@ import cn from "classnames";
 import Icon from "../Icon";
 
 const Step: React.FC<StepProps> = ({ id, index, children }) => {
-  const {
-    files,
-    codeBlockRefs,
-    stepRefs,
-    activeStepId,
-    setActiveStepId,
-  } = useContext(GuidedStepsContext);
+  const { files, codeBlockRefs, stepRefs, activeStepId, setActiveStepId } =
+    useContext(GuidedStepsContext);
 
   const [relatedCodeBlock, setRelatedCodeBlock] =
     useState<CodeBlockHandle | null>(null);
@@ -29,6 +24,20 @@ const Step: React.FC<StepProps> = ({ id, index, children }) => {
 
   const activateStep = useCallback(() => {
     setActiveStepId?.(id);
+    const stepRef = stepRefs.current[index];
+    const stepRefRect = stepRef?.getBoundingClientRect();
+    const navbarHeight =
+      parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--ifm-navbar-height"
+        )
+      ) || 0;
+    if (
+      stepRefRect &&
+      (stepRefRect.top < navbarHeight ||
+        stepRefRect.bottom > window.innerHeight - navbarHeight)
+    )
+      stepRef?.scrollIntoView({ behavior: "smooth", block: "start" });
     codeBlockRefs.current.forEach((step) => step.deactivate());
     if (activeStepId !== id) relatedCodeBlock?.activate();
   }, [codeBlockRefs, relatedCodeBlock]);
