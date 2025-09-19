@@ -29,6 +29,7 @@ const CodeBlock = forwardRef<
           behavior: "smooth",
           block: "nearest",
           inline: "start",
+          container: "nearest",
         });
       },
       deactivate: (): void => setActiveLines(false),

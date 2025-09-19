@@ -1,6 +1,6 @@
 .files {
   position: relative;
-  height: max-content;
+  height: 110%;
   border-bottom-left-radius: var(--m-1);
   border-bottom-right-radius: var(--m-1);
 
@@ -134,7 +134,8 @@
       :global(.hljs-attr) {
         color: var(--color-data-purple-tertiary);
       }
-      :global(.hljs-string), :global(.hljs-built_in) {
+      :global(.hljs-string),
+      :global(.hljs-built_in) {
         color: var(--color-data-caribbean-tertiary);
       }
     }
