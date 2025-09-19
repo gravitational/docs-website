@@ -86,8 +86,9 @@
 
     p > a {
       &:only-child {
+        display: block;
         position: relative;
-        padding-left: 21.5px;
+        padding-left: var(--m-4);
         font-weight: 500;
         &::before {
             content: "";
