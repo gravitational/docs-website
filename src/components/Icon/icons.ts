@@ -72,6 +72,9 @@ export { default as bitbucket } from "./svg/bitbucket.svg";
 export { default as jenkins } from "./svg/jenkins.svg";
 export { default as githubActions } from "./svg/githubActions.svg";
 export { default as spacelift } from "./svg/spacelift.svg";
+export { default as link } from "./svg/link.svg";
+export { default as file } from "./svg/file.svg";
+export { default as terminal } from "./svg/terminal.svg";
 export { default as awsIdentity } from "./svg/awsIdentity.svg";
 export { default as googleCloud } from "./svg/googleCloud.svg";
 export { default as azure } from "./svg/azure.svg";
@@ -85,6 +88,9 @@ export { default as panther } from "./svg/panther.svg";
 export { default as youtube } from "./svg/youtube.svg";
 export { default as aws } from "./svg/aws.svg";
 export { default as terraform } from "./svg/terraform.svg";
+export { default as copy2 } from "./svg/copy2.svg";
+export { default as download2 } from "./svg/download2.svg";
+export { default as check2 } from "./svg/check2.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
