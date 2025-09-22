@@ -1,4 +1,4 @@
-import { useDoc } from '@docusaurus/plugin-content-docs/client';
+import { useDoc } from "@docusaurus/plugin-content-docs/client";
 
 interface TemplateConfig {
   hideTitleSection?: boolean;
@@ -7,21 +7,25 @@ interface TemplateConfig {
 }
 
 const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
-  'default': {},
-  'no-toc': {
+  default: {},
+  "no-toc": {
     removeTOCSidebar: true,
   },
-  'landing-page': {
+  "landing-page": {
     removeTOCSidebar: true,
     hideTitleSection: true,
     fullWidth: true,
-  }
+  },
+  "doc-page": {
+    removeTOCSidebar: true,
+    fullWidth: true,
+  },
 };
 
 export function useDocTemplate(): TemplateConfig {
   const { frontMatter } = useDoc();
-  const templateName = (frontMatter as any).template || 'default';
-  
+  const templateName = (frontMatter as any).template || "default";
+
   const config = TEMPLATE_CONFIGS[templateName] || TEMPLATE_CONFIGS.default;
   return {
     hideTitleSection: config.hideTitleSection ?? false,
