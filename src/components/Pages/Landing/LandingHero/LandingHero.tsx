@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import styles from "./LandingHero.module.css";
 
 interface GetStartedLink {
@@ -22,12 +23,27 @@ const LandingHero: React.FC<LandingHeroProps> = ({
   links = [],
   children,
 }) => {
-
+  const mdRef = useRef<HTMLDivElement>(null);
   const getEmbedYouTubeUrl = (url: string) => {
     const videoId = url.split("v=")[1];
     return `https://www.youtube.com/embed/${videoId}`;
   };
-  
+
+  useEffect(() => {
+    if (mdRef.current) {
+      const anchors = mdRef.current.querySelectorAll("a");
+      anchors.forEach((anchor) => {
+        const parent = anchor.parentElement;
+        if (
+          parent &&
+          parent.childNodes.length === 1 &&
+          parent.firstChild === anchor
+        ) {
+          anchor.classList.add(styles.buttonLink);
+        }
+      });
+    }
+  }, []);
   return (
     <section className={styles.landingHero}>
       <div className={styles.container}>
