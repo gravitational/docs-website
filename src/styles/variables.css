@@ -21,15 +21,28 @@
   --color-tonal-neutral-0: rgba(0, 0, 0, 0.06);
   --color-tonal-neutral-1: rgba(0, 0, 0, 0.13);
   --color-tonal-neutral-2: rgba(0, 0, 0, 0.18);
+  --color-foreground-slightly-muted-white: rgba(255, 255, 255, 0.72);
+  --color-foreground-muted-white: rgba(255, 255, 255, 0.54);
+  --color-foreground-disabled-white: rgba(255, 255, 255, 0.36);
+  --color-foreground-tooltip-white: rgba(255, 255, 255, 0.8);
+  --color-tonal-neutral-0-white: rgba(255, 255, 255, 0.06);
+  --color-tonal-neutral-1-white: rgba(255, 255, 255, 0.13);
+  --color-tonal-neutral-2-white: rgba(255, 255, 255, 0.18);
   --color-tonal-primary-0: rgba(81, 47, 201, 0.1);
   --color-tonal-primary-1: rgba(81, 47, 201, 0.18);
   --color-tonal-primary-2: rgba(81, 47, 201, 0.25);
+  --color-interactive-tonal-neutral-dark-0: rgba(255, 255, 255, 0.07);
+
+  --color-interactive-primary: #9f85ff;
+  --color-interactive-primary-hover: #4126a1;
   --color-background-depth-2: #fbfbfc;
+  --color-data-purple-tertiary: #b9a6ff;
+  --color-data-caribbean-tertiary: #2effd5;
 
   --color-warning: #ffb400;
   --color-danger: #f80061;
   --color-text: #263238;
-  --color-code: #01172c;
+  --color-code: #0e1435;
   --color-tip: #00c7ae;
   --color-note: #009cf1;
 
@@ -54,6 +67,7 @@
 
   /* font weights */
   --fw-regular: 400;
+  --fw-medium: 500;
   --fw-bold: 700;
   --fw-black: 900;
 
@@ -123,6 +137,7 @@
   --lp-box-shadow: 0 5px 20px 0 rgba(19, 19, 19, 0.1);
   --lp-box-shadow-hover: 0 4px 12px rgba(81, 47, 201, 0.15);
   --lp-box-shadow-hover-tag: 0 2px 12px 0 rgba(19, 19, 19, 0.05);
+  --lp-box-shadow-button-hover: 0 3px 5px -1px rgba(0, 0, 0, 0.20), 0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 1px 14px 0 rgba(0, 0, 0, 0.12);
 }
 
 @media (max-width: 996px) {
