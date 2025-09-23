@@ -176,10 +176,19 @@
     }
 
     .linkDescription {
-      font-size: 15.95px;
+      font-size: var(--fs-text-lg);
       margin-bottom: unset;
       color: var(--color-black);
       line-height: 1.625;
+
+      @media (--md-scr) {
+        line-height: 1.75;
+      }
+
+      @media (--lg-scr) {
+        font-size: var(--fs-text-xl);
+        line-height: 1.66667;
+      }
     }
 
     .linkIcon {

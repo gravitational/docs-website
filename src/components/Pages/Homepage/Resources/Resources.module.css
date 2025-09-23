@@ -118,5 +118,15 @@ a.resourceItem {
   color: var(--color-foreground-slightly-muted);
   margin: 0;
   line-height: 1.625;
-  font-family: var(--font-base);
+
+  &.docVariant {
+    @media (--md-scr) {
+      line-height: 1.75;
+    }
+
+    @media (--lg-scr) {
+      font-size: var(--fs-text-xl);
+      line-height: 1.66667;
+    }
+  }
 }
