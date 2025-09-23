@@ -163,7 +163,7 @@
   --desktop-column-count: 2;
   grid-area: links;
   display: grid;
-  gap: var(--m-2);
+  gap: var(--m-3);
   grid-template-columns: minmax(0, 1fr);
   margin-top: var(--m-5);
 
