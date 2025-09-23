@@ -81,6 +81,8 @@
   border: 1.5px solid var(--color-tonal-neutral-0);
   transition: all 0.2s ease-in-out;
   text-decoration: none;
+  display: flex;
+  flex-direction: column;
 }
 
 a.resourceItem {
