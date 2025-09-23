@@ -15,7 +15,9 @@ interface Tag {
 interface UseCasesListProps {
   className?: string;
   title?: string;
+  description?: string;
   desktopColumnsCount?: number;
+  variant?: "landing" | "doc";
   useCases: Array<{
     title: string;
     description: string;
@@ -27,13 +29,24 @@ interface UseCasesListProps {
 const UseCasesList: React.FC<UseCasesListProps> = ({
   className = "",
   title = `Use Cases`,
+  description,
   desktopColumnsCount = 3,
   useCases = [],
+  variant = "landing",
 }) => {
   return (
     <section className={cn(styles.useCasesList, className)}>
       <div className={styles.container}>
-        <h2 className={styles.title}>{title}</h2>
+        <div className={styles.header}>
+          <h2
+            className={cn(styles.title, {
+              [styles.docVariant]: variant === "doc",
+            })}
+          >
+            {title}
+          </h2>
+          {description && <p className={styles.description}>{description}</p>}
+        </div>
         <ul
           className={styles.items}
           style={
@@ -49,7 +62,13 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                 // @ts-ignore
                 <Link className={styles.item} to={caseItem.href}>
                   <h3>{caseItem.title}</h3>
-                  <p className={styles.description}>{caseItem.description}</p>
+                  <p
+                    className={cn(styles.description, {
+                      [styles.docVariant]: variant === "doc",
+                    })}
+                  >
+                    {caseItem.description}
+                  </p>
                 </Link>
               ) : (
                 <div
@@ -68,6 +87,7 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                   <p
                     className={cn(styles.description, {
                       [styles.hasTags]: caseItem.tags?.length > 0,
+                      [styles.docVariant]: variant === "doc",
                     })}
                   >
                     {caseItem.description}
