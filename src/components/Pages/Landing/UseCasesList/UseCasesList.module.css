@@ -111,7 +111,8 @@
       font-size: var(--fs-text-lg);
     }
 
-    &.docVariant, &.hasTags {
+    &.docVariant,
+    &.hasTags {
       color: var(--color-foreground-slightly-muted);
 
       @media (--lg-scr) {
