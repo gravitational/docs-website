@@ -35,7 +35,13 @@ const ResourceCard: React.FC<Resource> = ({
         })}
       />
       <h4 className={styles.resourceTitle}>{title}</h4>
-      <p className={styles.resourceDescription}>{description}</p>
+      <p
+        className={cn(styles.resourceDescription, {
+          [styles.docVariant]: variant === "doc",
+        })}
+      >
+        {description}
+      </p>
     </>
   );
   return href ? (
