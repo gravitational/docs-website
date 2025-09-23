@@ -56,3 +56,84 @@ body {
   white-space: nowrap;
   border: 0;
 }
+
+.theme-doc-breadcrumbs {
+  max-width: var(--lp-section-max-width);
+  margin: 0 auto 0.875rem auto !important;
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+  }
+
+  .breadcrumbs__item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .breadcrumbs__link {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    font-weight: var(--fw-bold);
+    color: var(--color-foreground-slightly-muted);
+    padding: 0;
+    font-size: var(--fs-text-md);
+
+    @media (--md-scr) {
+      font-size: var(--fs-text-lg);
+    }
+
+    &::after {
+      height: 11px;
+      width: 6px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='12' viewBox='0 0 7 12' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0.529259 0.646447C0.724521 0.451184 1.0411 0.451184 1.23637 0.646447L6.23637 5.64645C6.43163 5.84171 6.43163 6.15829 6.23637 6.35355L1.23637 11.3536C1.0411 11.5488 0.724521 11.5488 0.529259 11.3536C0.333997 11.1583 0.333997 10.8417 0.529259 10.6464L5.17571 6L0.529259 1.35355C0.333997 1.15829 0.333997 0.841709 0.529259 0.646447Z' fill='black' fill-opacity='0.72'/%3E%3C/svg%3E");
+    }
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+.col {
+  padding: var(--m-4) var(--m-2);
+
+  @media (--md-scr) {
+    padding: var(--m-4) var(--m-5);
+  }
+}
+
+.docItemTitle {
+  color: var(--color-dark-purple);
+  font-size: var(--fs-header-1);
+  line-height: 1.375;
+  margin-bottom: var(--m-0-5) !important;
+
+  @media (--md-scr) {
+    font-size: var(--fs-title-md);
+    line-height: 1.333;
+  }
+
+  @media (--lg-scr) {
+    font-size: var(--fs-title-lg);
+    line-height: 1.3;
+  }
+}
+
+.docItemDescription {
+  color: var(--color-foreground-slightly-muted);
+  font-size: var(--fs-text-lg);
+  line-height: 1.625;
+  margin-bottom: 0;
+  font-weight: var(--fw-medium);
+
+  @media (--md-scr) {
+    line-height: 1.75;
+  }
+
+  @media (--lg-scr) {
+    font-size: var(--fs-text-xl);
+    line-height: 1.66667;
+  }
+}

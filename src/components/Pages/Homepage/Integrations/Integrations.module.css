@@ -1,11 +1,11 @@
 .integrations {
-  padding: var(--m-5) 1rem;
+  padding: var(--m-5) var(--m-5);
   background-color: #fbfbfc;
-  margin-left: -1rem;
-  margin-right: -1rem;
+  margin-left: -40px;
+  margin-right: -40px;
 
   @media (--md-scr) {
-    padding: var(--m-8) 1rem;
+    padding: var(--m-8) var(--m-5);
   }
 
   &.noBackgroundColor {

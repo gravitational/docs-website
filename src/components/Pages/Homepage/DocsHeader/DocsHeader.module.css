@@ -1,8 +1,9 @@
 .docsHeader {
   position: relative;
   z-index: 1;
-  margin-left: -1rem;
-  margin-right: -1rem;
+  margin-left: -40px;
+  margin-right: -40px;
+  margin-top: -32px !important;
   margin-bottom: var(--ifm-paragraph-margin-bottom);
   @media (--lg-scr) {
     margin-bottom: 50px;
