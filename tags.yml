@@ -100,3 +100,19 @@ resiliency:
 access-risks:
   label: "Identifying access risks"
   description: "These guides are about using Teleport to identify weaknesses in your security posture."
+
+ci-cd:
+  label: "Securing CI/CD pipelines"
+  description: "These guides are about using Teleport to secure CI/CD pipelines."
+
+infrastructure-as-code:
+  label: "Infrastructure as code"
+  description: "These guides are about using infrastructure as code tools to manage Teleport resources."
+
+session-recording:
+  label: "Session recording"
+  description: "These guides are about recording and playing back interactive sessions with a Teleport-protected resource."
+
+teleport-as-idp:
+  label: "Teleport as an identity provider"
+  description: "These guides are about using Teleport as an identity provider for authenticating to internal and external applications."
