@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import Link from "@docusaurus/Link";
+import cn from "classnames";
 import styles from "./DocHero.module.css";
 
 interface GetStartedLink {
@@ -8,11 +9,19 @@ interface GetStartedLink {
   icon?: any;
 }
 
+interface CtaLink {
+  title: string;
+  href: string;
+  variant?: "primary" | "secondary";
+  arrow?: boolean;
+}
+
 interface DocHeroProps {
   title: string;
   image?: any;
   youtubeVideoUrl?: string;
   links?: GetStartedLink[];
+  ctaLinks?: CtaLink[];
   children?: React.ReactNode;
 }
 
@@ -21,29 +30,13 @@ const DocHero: React.FC<DocHeroProps> = ({
   image,
   youtubeVideoUrl,
   links = [],
+  ctaLinks = [],
   children,
 }) => {
-  const mdRef = useRef<HTMLDivElement>(null);
   const getEmbedYouTubeUrl = (url: string) => {
     const videoId = url.split("v=")[1];
     return `https://www.youtube.com/embed/${videoId}`;
   };
-
-  useEffect(() => {
-    if (mdRef.current) {
-      const anchors = mdRef.current.querySelectorAll("a");
-      anchors.forEach((anchor) => {
-        const parent = anchor.parentElement;
-        if (
-          parent &&
-          parent.childNodes.length === 1 &&
-          parent.firstChild === anchor
-        ) {
-          anchor.classList.add(styles.buttonLink);
-        }
-      });
-    }
-  }, []);
 
   return (
     <section className={styles.docHero}>
@@ -51,9 +44,23 @@ const DocHero: React.FC<DocHeroProps> = ({
         <div className={styles.main}>
           <div className={styles.content}>
             <h2 className={styles.title}>{title}</h2>
-            <div className={styles.description} ref={mdRef}>
-              {children}
-            </div>
+            <div className={styles.description}>{children}</div>
+            {ctaLinks.length > 0 && (
+              <div className={styles.ctaLinks}>
+                {ctaLinks.map((link, i) => (
+                  <Link
+                    key={i}
+                    to={link.href}
+                    className={cn(styles.ctaLink, {
+                      [styles.secondary]: link.variant === "secondary",
+                      [styles.arrow]: link.arrow,
+                    })}
+                  >
+                    {link.title}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
           <div className={styles.media}>
             {image && !youtubeVideoUrl && (
