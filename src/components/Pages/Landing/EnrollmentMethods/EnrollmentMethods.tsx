@@ -57,7 +57,6 @@ export const Method: React.FC<EnrollmentMethod> = ({
               {tagList.tags.map((tag, tagIndex) => (
                 <li key={tagIndex}>
                   {tag.href ? (
-                    // @ts-ignore
                     <Link className={styles.tag} to={tag.href}>
                       {tag.icon && (
                         <Icon
@@ -68,7 +67,6 @@ export const Method: React.FC<EnrollmentMethod> = ({
                       )}
                       {tag.name}
                       {tag.arrow && (
-                        // @ts-ignore
                         <ArrowRightSvg className={styles.tagArrow} />
                       )}
                     </Link>
@@ -83,7 +81,6 @@ export const Method: React.FC<EnrollmentMethod> = ({
                       )}
                       {tag.name}
                       {tag.arrow && (
-                        // @ts-ignore
                         <ArrowRightSvg className={styles.tagArrow} />
                       )}
                     </span>
