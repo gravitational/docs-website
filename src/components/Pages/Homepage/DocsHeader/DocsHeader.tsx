@@ -1,6 +1,7 @@
-import React from 'react';
-import { InlineSearch } from './InlineSearch';
-import styles from './DocsHeader.module.css';
+import React from "react";
+import { InlineSearch } from "./InlineSearch";
+import styles from "./DocsHeader.module.css";
+import Link from "@docusaurus/Link";
 
 interface DocsHeaderProps {
   title?: string;
@@ -15,7 +16,7 @@ interface DocsHeaderProps {
 function DocsHeader({
   title = "Teleport Documentation",
   hideTitleSection = false,
-  quickActions = []
+  quickActions = [],
 }: DocsHeaderProps) {
   return (
     <section className={styles.docsHeader}>
@@ -33,9 +34,13 @@ function DocsHeader({
           <div className={styles.quickActions}>
             <span className={styles.exampleText}>Example</span>
             {quickActions.map((action, index) => (
-              <a key={index} href={action.href} className={styles.actionButton}>
+              <Link
+                key={index}
+                to={action.href}
+                className={styles.actionButton}
+              >
                 {action.label}
-              </a>
+              </Link>
             ))}
           </div>
         )}
