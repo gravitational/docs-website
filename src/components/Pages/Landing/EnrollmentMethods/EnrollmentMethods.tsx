@@ -1,11 +1,13 @@
 import Icon, { IconName } from "@site/src/components/Icon";
 import styles from "./EnrollmentMethods.module.css";
 import Link from "@docusaurus/Link";
+import ArrowRightSvg from "@site/src/components/Icon/teleport-svg/arrow-right.svg";
 
 interface Tag {
   name: string;
   icon?: IconName;
   href?: string;
+  arrow?: boolean;
 }
 
 interface TagList {
@@ -65,6 +67,10 @@ export const Method: React.FC<EnrollmentMethod> = ({
                         />
                       )}
                       {tag.name}
+                      {tag.arrow && (
+                        // @ts-ignore
+                        <ArrowRightSvg className={styles.tagArrow} />
+                      )}
                     </Link>
                   ) : (
                     <span className={styles.tag}>
@@ -76,6 +82,10 @@ export const Method: React.FC<EnrollmentMethod> = ({
                         />
                       )}
                       {tag.name}
+                      {tag.arrow && (
+                        // @ts-ignore
+                        <ArrowRightSvg className={styles.tagArrow} />
+                      )}
                     </span>
                   )}
                 </li>

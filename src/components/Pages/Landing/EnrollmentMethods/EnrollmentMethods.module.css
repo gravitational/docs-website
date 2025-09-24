@@ -136,17 +136,21 @@
   height: var(--m-3);
 }
 
+.tagArrow {
+  width: var(--m-2);
+  height: var(--m-2);
+}
+
 .tag {
   background-color: var(--color-white);
   border: 1px solid var(--color-tonal-neutral-0);
   border-radius: var(--m-1);
   padding: var(--m-1) var(--m-2);
-  font-size: var(--fs-text-lg);
+  font-size: var(--fs-text-md);
   display: flex;
   align-items: center;
   gap: var(--m-1);
   color: var(--color-black);
-  white-space: nowrap;
   text-decoration: none;
   font-weight: var(--fw-regular);
   position: relative;
@@ -156,6 +160,10 @@
     color: var(--color-black);
     text-decoration: none;
     box-shadow: var(--lp-box-shadow-hover-tag);
+  }
+
+  @media (--md-scr) {
+    font-size: var(--fs-text-lg);
   }
 }
 
