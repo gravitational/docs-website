@@ -116,3 +116,11 @@ session-recording:
 teleport-as-idp:
   label: "Teleport as an identity provider"
   description: "These guides are about using Teleport as an identity provider for authenticating to internal and external applications."
+
+sso:
+  label: "Single Sign-On"
+  description: "These guides are about configuring Teleport to enable users to authenticate using single sign-on providers."
+
+access-requests:
+  label: "Access Requests"
+  description: "These guides are about setting up Just-In-Time Access Requests for temporary elevated permissions."
