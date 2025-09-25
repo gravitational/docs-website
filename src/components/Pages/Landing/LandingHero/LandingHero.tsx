@@ -11,6 +11,8 @@ interface LandingHeroProps {
   title: string;
   image?: any;
   youtubeVideoUrl?: string;
+  linksTitle?: string;
+  linksColumnCount?: number;
   links?: GetStartedLink[];
   children?: React.ReactNode;
 }
@@ -19,15 +21,16 @@ const LandingHero: React.FC<LandingHeroProps> = ({
   title,
   image,
   youtubeVideoUrl,
+  linksTitle,
+  linksColumnCount = 2,
   links = [],
   children,
 }) => {
-
   const getEmbedYouTubeUrl = (url: string) => {
     const videoId = url.split("v=")[1];
     return `https://www.youtube.com/embed/${videoId}`;
   };
-  
+
   return (
     <section className={styles.landingHero}>
       <div className={styles.container}>
@@ -59,8 +62,18 @@ const LandingHero: React.FC<LandingHeroProps> = ({
             )}
           </div>
         </div>
+        {linksTitle && links.length > 0 && (
+          <h2 className={styles.linksTitle}>{linksTitle}</h2>
+        )}
         {links.length > 0 && (
-          <div className={styles.links}>
+          <div
+            className={styles.links}
+            style={
+              {
+                "--desktop-column-count": linksColumnCount,
+              } as React.CSSProperties
+            }
+          >
             {links.map((link, i) => (
               <a href={link.href} key={i} className={styles.link}>
                 <div className={styles.linkContent}>
