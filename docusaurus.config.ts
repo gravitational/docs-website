@@ -43,7 +43,19 @@ const config: Config = {
     },
     // This speeds up build by a lot and should resolve memory issues during build
     // https://docusaurus.io/blog/releases/3.6
-    experimental_faster: true,
+    experimental_faster: {
+      swcJsLoader: true,
+      swcJsMinimizer: true,
+      lightningCssMinimizer: true,
+      rspackBundler: true,
+      // Using the persistent cache causes unexpected issues with retrieving
+      // stale data in CI/CD since it is stored in `node_modules`, which is
+      // often cached. For local development, the cache is unnecessary since
+      // the user changes docs files anyway.
+      rspackPersistentCache: false,
+      mdxCrossCompilerCache: true,
+      ssgWorkerThreads: true,
+    },
   },
   customFields: {
     inkeepConfig: {
