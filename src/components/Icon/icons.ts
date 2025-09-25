@@ -86,6 +86,9 @@ export { default as gSuite } from "./svg/g-suite.svg";
 export { default as panther } from "./svg/panther.svg";
 export { default as youtube } from "./svg/youtube.svg";
 export { default as terraform } from "./svg/terraform.svg";
+export { default as cloud3 } from "./svg/cloud3.svg";
+export { default as tcp } from "./svg/tcp.svg";
+export { default as appWindow } from "./svg/app-window.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
