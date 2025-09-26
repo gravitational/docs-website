@@ -1,3 +1,4 @@
+import React from "react";
 import clsx from "clsx";
 import { useWindowSize } from "@docusaurus/theme-common";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
@@ -54,6 +55,23 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   const {
     metadata: { unlisted },
   } = useDoc();
+
+    // Add template-full-width class to main element when fullWidth template is used
+  React.useEffect(() => {
+    if (!fullWidth) return;
+
+    const mainElement = document.querySelector('main');
+    if (mainElement) {
+      mainElement.classList.add('template-full-width');
+    }
+
+    return () => {
+      const mainElement = document.querySelector('main');
+      if (mainElement) {
+        mainElement.classList.remove('template-full-width');
+      }
+    };
+  }, [fullWidth]);
 
   return (
     <div className="row">
