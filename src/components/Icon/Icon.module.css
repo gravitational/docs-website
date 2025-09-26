@@ -1,7 +1,7 @@
 .wrapper {
   display: block;
-  width: var(--size);
   height: var(--size);
+  width: auto;
 
   &.xxs {
     --size: 10px;

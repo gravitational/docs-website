@@ -79,7 +79,7 @@ main() {
     sleep 3
     
     yarn prepare-files
-    yarn prepare-sanity-data
+    yarn prepare-navigation-data
     
     sync_content
     

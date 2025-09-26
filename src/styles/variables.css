@@ -14,9 +14,17 @@
   --color-dark-gray: #455a64;
   --color-darkest: #37474f;
   --color-black: #000;
-  --color-foreground-slightly-muted: #000000b8;
-  --color-tonal-neutral-0: #0000000f;
-  --color-tonal-neutral-1: #00000021;
+  --color-foreground-slightly-muted: rgba(0, 0, 0, 0.72);
+  --color-foreground-muted: rgba(0, 0, 0, 0.54);
+  --color-foreground-disabled: rgba(0, 0, 0, 0.36);
+  --color-foreground-tooltip: rgba(0, 0, 0, 0.8);
+  --color-tonal-neutral-0: rgba(0, 0, 0, 0.06);
+  --color-tonal-neutral-1: rgba(0, 0, 0, 0.13);
+  --color-tonal-neutral-2: rgba(0, 0, 0, 0.18);
+  --color-tonal-primary-0: rgba(81, 47, 201, 0.1);
+  --color-tonal-primary-1: rgba(81, 47, 201, 0.18);
+  --color-tonal-primary-2: rgba(81, 47, 201, 0.25);
+  --color-background-depth-2: #fbfbfc;
 
   --color-warning: #ffb400;
   --color-danger: #f80061;
@@ -102,7 +110,21 @@
 
   /* landing page font sizes */
   --lp-header-1: 40px;
+  --lp-header-1-5: 36px;
   --lp-header-2: 32px;
+
+  /* max width for landing page sections */
+  --lp-section-max-width: 1400px;
+
+  /* consistent spacings between landing page sections */
+  --lp-section-padding-lg: 84px;
+  --lp-section-padding-md: 80px;
+  --lp-section-padding-sm: 32px;
+
+  /* landing page component shadows */
+  --lp-box-shadow: 0 5px 20px 0 rgba(19, 19, 19, 0.1);
+  --lp-box-shadow-hover: 0 4px 12px rgba(81, 47, 201, 0.15);
+  --lp-box-shadow-hover-tag: 0 2px 12px 0 rgba(19, 19, 19, 0.05);
 }
 
 @media (max-width: 996px) {
@@ -110,4 +132,3 @@
     --ifm-navbar-height: 96px;
   }
 }
-

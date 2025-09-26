@@ -19,6 +19,7 @@ const docusaurusVersions = getDocusaurusVersions();
 const currentVersion = getCurrentVersion();
 const defaultVersion = getLatestVersion();
 const versions = getVersionNames();
+const tagFileYAML = "tags.yml";
 
 const writeSidebar = (version: string) => {
   copyFileSync(
@@ -60,6 +61,9 @@ versions.forEach((version) => {
 
     copyFileSync(oldPath, newPath);
   });
+
+  // Copy the tags file to each content directory
+  copyFileSync(tagFileYAML, join(destination, tagFileYAML))
 
   writeSidebar(version);
 });

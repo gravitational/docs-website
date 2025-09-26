@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 import { useClickAway } from "react-use";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-import type { NavigationItem } from "../../../server/sanity-types";
+import type { NavigationItem } from "../../../server/strapi-types";
 import Icon from "../Icon";
 import Link from "../Link";
 import {
@@ -14,33 +14,24 @@ import {
 
 import styles from "./Category.module.css";
 
-export interface MenuCategoryProps {
-  title: string;
-  url?: string;
-  isDropdown?: string;
-  testId?: string;
-  menuType?: string;
-  columns?: NavigationItem["columns"];
-  submenus?: NavigationItem["submenus"];
-  onClick?: () => void | undefined | Promise<void>;
-}
 
-interface MenuCategoryComponentProps extends MenuCategoryProps {
+interface MenuCategoryComponentProps extends NavigationItem {
   id: number;
   opened: boolean;
   onToggleOpened: (id: number | null) => void;
   onHover: (id: number | null) => void;
+  testId?: string;
+  onClick?: () => void | undefined | Promise<void>;
 }
 
 const MenuCategory = ({
   id,
   opened,
   title,
-  menuType,
-  isDropdown,
-  columns,
-  submenus,
-  url,
+  type,
+  dropdownType,
+  navSections,
+  link,
   onToggleOpened,
   onHover,
   testId,
@@ -67,12 +58,8 @@ const MenuCategory = ({
     }
   });
 
-  const children =
-    isDropdown === "dropdown"
-      ? menuType === "submenus"
-        ? submenus
-        : columns
-      : null;
+  const children = type !== "link" ? navSections : null;
+
   const toggleOpened = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
       if (children) {
@@ -91,7 +78,7 @@ const MenuCategory = ({
     [id, onHover],
   );
 
-  const containsSubCategories = !!columns || !!submenus;
+  const containsSubCategories = !!navSections;
 
   return (
     <>
@@ -103,9 +90,9 @@ const MenuCategory = ({
         ref={ref}
         onMouseLeave={() => toggleOpened(null)}
       >
-        {isDropdown === "link" ? (
+        {type === "link" ? (
           <Link
-            href={url || ""}
+            href={link || ""}
             onClick={toggleOpened}
             onMouseEnter={open}
             className={clsx(styles.link, opened ? styles.active : "")}
@@ -121,7 +108,7 @@ const MenuCategory = ({
             data-testid={testId}
           >
             {title}
-            {isDropdown === "dropdown" && (
+            {type === "dropdown" && (
               <div className={styles.iconWrapper}>
                 <Icon
                   name="arrowRight"
@@ -139,18 +126,18 @@ const MenuCategory = ({
             data-testid={menuTestId}
           >
             <DropdownMenu>
-              {menuType === "submenus" ? (
-                <DropdownSubMenu items={submenus} />
+              {dropdownType === "submenus" && !!navSections ? (
+                <DropdownSubMenu items={navSections} />
               ) : (
-                columns.map(({ columnSections }, index) => (
+                navSections.map(({ submenuSections }, index) => (
                   <div
                     className={clsx(
                       styles.columnBox,
-                      index !== columns?.length - 1 && styles.showBorder,
+                      index !== navSections?.length - 1 && styles.showBorder
                     )}
                     key={`columnBox${index}`}
                   >
-                    {columnSections?.map((sectionProps, i) => (
+                    {submenuSections?.map((sectionProps, i) => (
                       <DropdownSection
                         key={`${
                           sectionProps?.title || "dropdown-section"
@@ -176,7 +163,7 @@ const MenuCategory = ({
                                 sectionItemProps?.title || "dropdown-menu-item"
                               }-${idx}`}
                               {...sectionItemProps}
-                              itemAmount={columns.length}
+                              itemAmount={navSections.length}
                             />
                           ),
                         )}

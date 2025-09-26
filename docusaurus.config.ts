@@ -6,6 +6,7 @@ import { useDocById } from "@docusaurus/plugin-content-docs/client";
 import { getFromSecretOrEnv } from "./utils/general";
 import { loadConfig } from "./server/config-docs";
 import {
+  getCurrentVersion,
   getDocusaurusConfigVersionOptions,
   getLatestVersion,
 } from "./server/config-site";
@@ -29,6 +30,8 @@ import {
 import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
+import path from "path";
+import fs from "fs";
 
 const latestVersion = getLatestVersion();
 
@@ -40,7 +43,19 @@ const config: Config = {
     },
     // This speeds up build by a lot and should resolve memory issues during build
     // https://docusaurus.io/blog/releases/3.6
-    experimental_faster: true,
+    experimental_faster: {
+      swcJsLoader: true,
+      swcJsMinimizer: true,
+      lightningCssMinimizer: true,
+      rspackBundler: true,
+      // Using the persistent cache causes unexpected issues with retrieving
+      // stale data in CI/CD since it is stored in `node_modules`, which is
+      // often cached. For local development, the cache is unnecessary since
+      // the user changes docs files anyway.
+      rspackPersistentCache: false,
+      mdxCrossCompilerCache: true,
+      ssgWorkerThreads: true,
+    },
   },
   customFields: {
     inkeepConfig: {
@@ -123,6 +138,8 @@ const config: Config = {
   favicon: "/favicon.svg",
   url: process.env.DOCUSAURUS_CONFIG_URL || "https://goteleport.com",
   baseUrl: process.env.DOCUSAURUS_CONFIG_BASE_URL || "/",
+  // configure "noIndex" for all branches except the "main"
+  noIndex: process.env.AWS_BRANCH !== "main",
   // Our hosting infrastructure redirects requests to a docs page that do not
   // contain a trailing slash in the URL, so add trailing slashes to sitemap
   // URLs to prevent clients from receiving non-200 responses.
@@ -143,9 +160,8 @@ const config: Config = {
     },
   },
 
-  onBrokenLinks: "warn",
+  onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "throw",
-
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
@@ -165,10 +181,9 @@ const config: Config = {
       },
     ],
     [
-      "@docusaurus/plugin-google-gtag",
+      "@docusaurus/plugin-google-tag-manager",
       {
-        trackingID: "G-Z1BMQRVFH3",
-        anonymizeIP: true,
+        containerId: "GTM-WMR7H6",
       },
     ],
     "@docusaurus/theme-classic",
@@ -268,8 +283,33 @@ const config: Config = {
             },
           ],
         ],
+        onInlineTags: "throw",
       },
     ],
+    // This is for allowing to import images in .mdx files using the @content alias
+    // TODO: create a remark plugin for processing image paths inside the attributes of MdxJsxFlowElement nodes.
+    // See https://github.com/facebook/docusaurus/blob/main/packages/docusaurus-mdx-loader/src/remark/transformImage/index.ts#L267
+    function contentAlias() {
+      return {
+        name: "content-loader",
+        configureWebpack() {
+          const currentVersion = getLatestVersion();
+          const alias: string = path.resolve(
+            __dirname,
+            "./content",
+            currentVersion,
+          );
+
+          return {
+            resolve: {
+              alias: {
+                "@content": alias,
+              },
+            },
+          };
+        },
+      };
+    },
     extendedPostcssConfigPlugin,
     process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
   ].filter(Boolean),

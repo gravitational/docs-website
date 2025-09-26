@@ -63,7 +63,7 @@
   width: 100%;
   border-radius: var(--r-lg);
   background: var(--color-white);
-  box-shadow: 0 5px 20px 0 rgba(19, 19, 19, 0.1);
+  box-shadow: var(--lp-box-shadow);
   position: relative;
   overflow: visible;
   z-index: 1000;
