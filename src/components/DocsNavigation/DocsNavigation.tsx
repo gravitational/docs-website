@@ -2,8 +2,6 @@ import { useDocById } from "@docusaurus/plugin-content-docs/lib/client/docsUtils
 import styles from "./DocsNavigation.module.css";
 import DocsNavList from "./DocsNavList";
 import { useLocation } from "@docusaurus/router";
-import { useDocsVersion } from "@docusaurus/plugin-content-docs/client";
-import { getVersionedUrl } from "@site/utils/general";
 
 export type DocsNavigationItem = {
   label: string;
@@ -19,7 +17,6 @@ type DocsNavigationProps = {
 
 const DocsNavigation: React.FC<DocsNavigationProps> = ({ items }) => {
   const location = useLocation();
-  const version = useDocsVersion();
 
   let leftItems = items;
   let rightItems = [];
@@ -36,8 +33,10 @@ const DocsNavigation: React.FC<DocsNavigationProps> = ({ items }) => {
   const filterBrokenLinks = (item: DocsNavigationItem) => {
     if (!item.href) return true;
     const docId =
-      item.href === "/" ? "index" : item.href.split("/").slice(1).join("/");
-    const docIdLeaf = item.href.split("/").pop();
+      item.href === "./"
+        ? "index"
+        : item.href.split("./").slice(1).join("/").split("/")[0];
+    const docIdLeaf = item.href.split("./")[1].split("/")[0];
 
     // First check the document without inner paths
     if (checkIfDocExists(docId)) {
@@ -50,6 +49,7 @@ const DocsNavigation: React.FC<DocsNavigationProps> = ({ items }) => {
 
   const filterNestedItems = (item: DocsNavigationItem): DocsNavigationItem => {
     if (item.items?.length > 0) {
+      console.log("Filtered items:", item.items.filter(filterBrokenLinks));
       return {
         ...item,
         items: item.items.filter(filterBrokenLinks).map(filterNestedItems),
@@ -68,15 +68,11 @@ const DocsNavigation: React.FC<DocsNavigationProps> = ({ items }) => {
   // utilize useDocById to make sure that only existing documents are displayed
   const availableLeftItems = (leftItems as Array<DocsNavigationItem>)
     .filter(filterBrokenLinks)
-    .map((item) =>
-      filterNestedItems({ ...item, href: getVersionedUrl(version, item.href) })
-    );
+    .map((item) => filterNestedItems(item));
 
   const availableRightItems = (rightItems as Array<DocsNavigationItem>)
     .filter(filterBrokenLinks)
-    .map((item) =>
-      filterNestedItems({ ...item, href: getVersionedUrl(version, item.href) })
-    );
+    .map((item) => filterNestedItems(item));
 
   return (
     <nav id="docs-navigation" className={styles.docsNavigation}>

@@ -4,6 +4,7 @@ import ListSvg from "@site/src/components/Icon/svg/list-more-lines.svg";
 import cn from "classnames";
 import { DocsNavigationItem } from "./DocsNavigation";
 import Icon from "../Icon";
+import Link from "@docusaurus/Link";
 
 interface DocsNavListProps {
   leftItems: Array<DocsNavigationItem>;
@@ -18,9 +19,9 @@ const DocNavItem: React.FC<DocsNavigationItem> = ({ label, href, items }) => {
     return (
       <li className={cn(styles.navItem, styles.navItemDropdown)}>
         {href ? (
-          <a href={href} className={styles.navLink}>
+          <Link to={href} className={styles.navLink}>
             {label}
-          </a>
+          </Link>
         ) : (
           <span className={styles.navLink}>{label}</span>
         )}
@@ -30,9 +31,9 @@ const DocNavItem: React.FC<DocsNavigationItem> = ({ label, href, items }) => {
         <ul className={styles.subNavList}>
           {items.map((item, index) => (
             <li key={index} className={styles.subNavItem}>
-              <a href={item.href} className={styles.subNavLink}>
+              <Link to={item.href} className={styles.subNavLink}>
                 {item.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

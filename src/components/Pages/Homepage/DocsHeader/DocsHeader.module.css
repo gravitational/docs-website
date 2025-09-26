@@ -43,8 +43,8 @@
   @media (--md-scr) {
     gap: var(--m-4);
   }
-  @media (--sm-scr) {
-    padding: var(--m-8) var(--m-5) var(--m-8) var(--m-5);
+  @media (max-width: 1060px) {
+    padding: var(--m-8) var(--m-5);
   }
 }
 
