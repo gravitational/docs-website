@@ -56,15 +56,15 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
     metadata: { unlisted },
   } = useDoc();
 
-  // Add template-full-width class to main element when fullWidth template is used
+    // Add template-full-width class to main element when fullWidth template is used
   React.useEffect(() => {
     if (!fullWidth) return;
-    
+
     const mainElement = document.querySelector('main');
     if (mainElement) {
       mainElement.classList.add('template-full-width');
     }
-    
+
     return () => {
       const mainElement = document.querySelector('main');
       if (mainElement) {
@@ -86,17 +86,20 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
         <div className={styles.docItemContainer}>
           <article>
             {!hideTitleSection && <DocBreadcrumbs />}
-            <div className={styles.sidebar}>
-              <DocVersionBadge />
-              <NavbarMobileSidebarToggle />
-            </div>
+            {
+              !fullWidth && 
+              <div className={styles.sidebar}>
+                <DocVersionBadge />
+                <NavbarMobileSidebarToggle />
+              </div>
+            }
             {docTOC.mobile}
             <DocItemContent>
               <PositionProvider>{children}</PositionProvider>
             </DocItemContent>
             <DocItemFooter />
           </article>
-          <DocItemPaginator />
+          {!fullWidth && <DocItemPaginator />}
         </div>
       </div>
       {!docTOC.removed && (

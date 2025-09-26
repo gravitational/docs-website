@@ -56,3 +56,13 @@ body {
   white-space: nowrap;
   border: 0;
 }
+
+.theme-doc-sidebar-container {
+  & > div {
+    top: var(--docs-top-nav-height);
+  }
+}
+
+html.fullWidthPage aside {
+  display: none !important;
+}
