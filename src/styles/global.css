@@ -62,3 +62,7 @@ body {
     top: var(--docs-top-nav-height);
   }
 }
+
+html.fullWidthPage aside {
+  display: none !important;
+}
