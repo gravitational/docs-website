@@ -41,7 +41,7 @@ const ResourceCard: React.FC<Resource> = ({
 
 const Resources: React.FC<ResourcesProps> = ({
   className = "",
-  title = "Enroll Resources",
+  title = "Enroll resources",
   resources,
 }) => {
   return (
