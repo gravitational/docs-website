@@ -1,6 +1,10 @@
 import { describe, expect, test } from "@jest/globals";
 import { basename, dirname } from "node:path";
-import { orderSidebarItems, removeRedundantItems } from "./sidebar-order";
+import {
+  orderSidebarItems,
+  removeRedundantSidebarLabelWords,
+  removeRedundantItems,
+} from "./sidebar-order";
 import type { docPage } from "./sidebar-order";
 import type { NormalizedSidebarItem } from "@docusaurus/plugin-content-docs/src/sidebars/types.ts";
 
@@ -1251,4 +1255,270 @@ describe("removeRedundantItems", () => {
     const actual = removeRedundantItems(c.input, c.dirname);
     expect(actual).toEqual(c.expected);
   });
+});
+
+describe("removeRedundantSidebarLabelWords", () => {
+  describe("sidebar label", () => {
+    const idToDocPage = {
+      "page-a": {
+        title: "Page A",
+        id: "page-a",
+        frontMatter: {
+          title: "Page A",
+          sidebar_label: "Page Z",
+          description: "Page A",
+        },
+        source: "@site/docs/page-a.mdx",
+        sourceDirName: "",
+      },
+      "page-b": {
+        title: "Page B",
+        id: "page-b",
+        frontMatter: {
+          title: "Page B",
+          sidebar_label: "Page W",
+          description: "Page B",
+        },
+        source: "@site/docs/page-b.mdx",
+        sourceDirName: "",
+      },
+      "page-c": {
+        title: "Page C",
+        id: "page-c",
+        frontMatter: {
+          title: "Page C",
+          sidebar_label: "Page X",
+          description: "Page C",
+        },
+        source: "@site/docs/page-c.mdx",
+        sourceDirName: "",
+      },
+      "page-d": {
+        title: "D Page",
+        id: "page-d",
+        frontMatter: {
+          title: "D Page",
+          description: "D Page",
+        },
+        source: "@site/docs/page-d.mdx",
+        sourceDirName: "",
+      },
+      "page-e": {
+        title: "E Page",
+        id: "page-e",
+        frontMatter: {
+          title: "E Page",
+          description: "E Page",
+        },
+        source: "@site/docs/page-e.mdx",
+        sourceDirName: "",
+      },
+      "page-f": {
+        title: "F Page",
+        id: "page-f",
+        frontMatter: {
+          title: "F Page",
+          description: "F Page",
+        },
+        source: "@site/docs/page-d.mdx",
+        sourceDirName: "",
+      },
+    };
+
+    interface testCase {
+      description: string;
+      input: Array<NormalizedSidebarItem>;
+      expected: Array<NormalizedSidebarItem>;
+    }
+
+    const testCases: Array<testCase> = [
+      // TODO:  one word at beginning
+      // TODO: one word at end
+      // TODO: two words at beginning
+      // TODO: two words at end
+    ];
+
+    test.each(testCases)("$description", (c) => {
+      const actual = removeRedundantSidebarLabelWords(
+        c.input,
+        (id: string): docPage => {
+          return idToDocPage[id];
+        },
+      );
+      expect(actual).toEqual(c.expected);
+    });
+  });
+
+  // TODO: make this a test for removing duplicate words in a sidebar section that
+  // encompasses both regular pages and category index pages.
+  //   describe("ordering category index pages", () => {
+  //     const idToDocPage = {
+  //       "section-a/section-a": {
+  //         title: "Section A",
+  //         id: "section-a/section-a",
+  //         frontMatter: {
+  //           title: "Section A",
+  //           description: "Section A",
+  //         },
+  //         source: "@site/docs/section-a/section-a.mdx",
+  //         sourceDirName: "section-a",
+  //       },
+  //       "section-a/page-a": {
+  //         title: "Section A Page A",
+  //         id: "section-a/page-a",
+  //         frontMatter: {
+  //           title: "Section A Page A",
+  //           description: "Page A",
+  //         },
+  //         source: "@site/docs/section-a/page-a.mdx",
+  //         sourceDirName: "",
+  //       },
+  //       "section-a/page-b": {
+  //         title: "Section A Page B",
+  //         id: "section-a/page-b",
+  //         frontMatter: {
+  //           title: "Section A Page B",
+  //           description: "Page B",
+  //         },
+  //         source: "@site/docs/section-a/page-b.mdx",
+  //         sourceDirName: "",
+  //       },
+  //       "section-b/section-b": {
+  //         title: "Section B",
+  //         id: "section-b/section-b",
+  //         frontMatter: {
+  //           title: "Section B",
+  //           description: "Section B",
+  //         },
+  //         source: "@site/docs/section-b/section-b.mdx",
+  //         sourceDirName: "section-b",
+  //         sidebarPosition: 2,
+  //       },
+  //       "section-b/page-a": {
+  //         title: "Section B Page A",
+  //         id: "section-b/page-a",
+  //         frontMatter: {
+  //           title: "Section B Page A",
+  //           description: "Page A",
+  //         },
+  //         source: "@site/docs/section-b/page-a.mdx",
+  //         sourceDirName: "section-b",
+  //         sidebarPosition: 2,
+  //       },
+  //       "section-b/page-b": {
+  //         title: "Section B Page B",
+  //         id: "section-b/page-b",
+  //         frontMatter: {
+  //           title: "Section B Page B",
+  //           description: "Page B",
+  //         },
+  //         source: "@site/docs/section-b/page-b.mdx",
+  //         sourceDirName: "section-b",
+  //       },
+  //       intro: {
+  //         title: "Introduction",
+  //         id: "intro",
+  //         frontMatter: {
+  //           title: "Introduction",
+  //           description: "Introduction",
+  //         },
+  //         source: "@site/docs/intro.mdx",
+  //         sourceDirName: "",
+  //       },
+  //     };
+  //
+  //     const input: Array<NormalizedSidebarItem> = [
+  //       {
+  //         type: "category",
+  //         label: "Section A",
+  //         link: {
+  //           type: "doc",
+  //           id: "section-a/section-a",
+  //         },
+  //         items: [
+  //           {
+  //             type: "doc",
+  //             id: "section-a/page-a",
+  //           },
+  //           {
+  //             type: "doc",
+  //             id: "section-a/page-b",
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         type: "category",
+  //         label: "Section B",
+  //         link: {
+  //           type: "doc",
+  //           id: "section-b/section-b",
+  //         },
+  //         items: [
+  //           {
+  //             type: "doc",
+  //             id: "section-b/page-a",
+  //           },
+  //           {
+  //             type: "doc",
+  //             id: "section-b/page-b",
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         type: "doc",
+  //         id: "intro",
+  //       },
+  //     ];
+  //
+  //     // The index page in Section B has a sidebar position of 2, so we sort
+  //     // Introduction and Section A around it.
+  //     const expected: Array<NormalizedSidebarItem> = [
+  //       {
+  //         type: "doc",
+  //         id: "intro",
+  //       },
+  //       {
+  //         type: "category",
+  //         label: "Section B",
+  //         link: {
+  //           type: "doc",
+  //           id: "section-b/section-b",
+  //         },
+  //         items: [
+  //           // Page B has a sidebar position
+  //           {
+  //             type: "doc",
+  //             id: "section-b/page-b",
+  //           },
+  //           {
+  //             type: "doc",
+  //             id: "section-b/page-a",
+  //           },
+  //         ],
+  //       },
+  //       {
+  //         type: "category",
+  //         label: "Section A",
+  //         link: {
+  //           type: "doc",
+  //           id: "section-a/section-a",
+  //         },
+  //         items: [
+  //           {
+  //             type: "doc",
+  //             id: "section-a/page-a",
+  //           },
+  //           {
+  //             type: "doc",
+  //             id: "section-a/page-b",
+  //           },
+  //         ],
+  //       },
+  //     ];
+  //
+  //     const actual = orderSidebarItems(input, (id: string): docPage => {
+  //       return idToDocPage[id];
+  //     });
+  //     expect(actual).toEqual(expected);
+  //   });
 });
