@@ -174,3 +174,10 @@ export const removeRedundantItems = (
     );
   });
 };
+
+export const removeRedundantSidebarLabelWords = (
+  items: Array<NormalizedSidebarItem>,
+  getter: (id: string) => docPage,
+): Array<NormalizedSidebarItem> => {
+  return [];
+};
