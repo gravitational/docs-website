@@ -7,6 +7,9 @@ export type DocsNavigationItem = {
   label: string;
   href?: string;
   items?: Array<DocsNavigationItem>;
+  location: {
+    pathname: string;
+  };
 };
 
 type DocsNavigationItemSplit = "split";
@@ -33,10 +36,10 @@ const DocsNavigation: React.FC<DocsNavigationProps> = ({ items }) => {
   const filterBrokenLinks = (item: DocsNavigationItem) => {
     if (!item.href) return true;
     const docId =
-      item.href === "./"
+      item.href === "/"
         ? "index"
-        : item.href.split("./").slice(1).join("/").split("/")[0];
-    const docIdLeaf = item.href.split("./")[1].split("/")[0];
+        : item.href.split("/").slice(1).join("/").split("/")[0];
+    const docIdLeaf = item.href.split("/")[1].split("/")[0];
 
     // First check the document without inner paths
     if (checkIfDocExists(docId)) {
@@ -49,7 +52,6 @@ const DocsNavigation: React.FC<DocsNavigationProps> = ({ items }) => {
 
   const filterNestedItems = (item: DocsNavigationItem): DocsNavigationItem => {
     if (item.items?.length > 0) {
-      console.log("Filtered items:", item.items.filter(filterBrokenLinks));
       return {
         ...item,
         items: item.items.filter(filterBrokenLinks).map(filterNestedItems),

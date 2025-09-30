@@ -14,16 +14,53 @@ interface DocsNavListProps {
   };
 }
 
-const DocNavItem: React.FC<DocsNavigationItem> = ({ label, href, items }) => {
+function includesPath(
+  path: string | undefined,
+  comparedPath: string | undefined
+): boolean {
+  const normalizePath = (path: string | undefined) => {
+    if (!path) return path;
+    return path.endsWith("/") ? path.toLowerCase() : `${path}/`.toLowerCase();
+  };
+
+  if (comparedPath === "/")
+    return normalizePath(comparedPath) === normalizePath(path);
+
+  return path.includes(normalizePath(comparedPath));
+}
+
+const DocNavItem: React.FC<DocsNavigationItem> = ({
+  label,
+  href,
+  items,
+  location,
+}) => {
   if (items?.length > 0) {
     return (
       <li className={cn(styles.navItem, styles.navItemDropdown)}>
         {href ? (
-          <Link to={href} className={styles.navLink}>
+          <Link
+            to={href}
+            className={cn(styles.navLink, {
+              [styles.active]:
+                includesPath(location.pathname, href) ||
+                items.some((item) =>
+                  includesPath(location.pathname, item.href)
+                ),
+            })}
+          >
             {label}
           </Link>
         ) : (
-          <span className={styles.navLink}>{label}</span>
+          <span
+            className={cn(styles.navLink, {
+              [styles.active]: items.some((item) =>
+                includesPath(location.pathname, item.href)
+              ),
+            })}
+          >
+            {label}
+          </span>
         )}
         <div className={styles.iconWrapper}>
           <Icon name="arrowRight" className={styles.icon} size="sm" />
@@ -31,7 +68,12 @@ const DocNavItem: React.FC<DocsNavigationItem> = ({ label, href, items }) => {
         <ul className={styles.subNavList}>
           {items.map((item, index) => (
             <li key={index} className={styles.subNavItem}>
-              <Link to={item.href} className={styles.subNavLink}>
+              <Link
+                to={item.href}
+                className={cn(styles.subNavLink, {
+                  [styles.active]: includesPath(location.pathname, item.href),
+                })}
+              >
                 {item.label}
               </Link>
             </li>
@@ -42,9 +84,14 @@ const DocNavItem: React.FC<DocsNavigationItem> = ({ label, href, items }) => {
   }
   return (
     <li className={styles.navItem}>
-      <a href={href} className={styles.navLink}>
+      <Link
+        to={href}
+        className={cn(styles.navLink, {
+          [styles.active]: includesPath(location.pathname, href),
+        })}
+      >
         {label}
-      </a>
+      </Link>
     </li>
   );
 };
@@ -73,7 +120,7 @@ const DocsNavList: React.FC<DocsNavListProps> = ({
       </p>
       <ul className={cn(styles.navList, { [styles.open]: navOpen })}>
         {leftItems.map((item, index) => (
-          <DocNavItem key={index} {...item} />
+          <DocNavItem key={index} {...item} location={location} />
         ))}
       </ul>
       {rightItems?.length > 0 && (
@@ -83,7 +130,7 @@ const DocsNavList: React.FC<DocsNavListProps> = ({
           })}
         >
           {rightItems.map((item, index) => (
-            <DocNavItem key={index} {...item} />
+            <DocNavItem key={index} {...item} location={location} />
           ))}
         </ul>
       )}

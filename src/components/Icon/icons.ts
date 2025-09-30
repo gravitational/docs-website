@@ -33,7 +33,7 @@ export { default as error } from "./svg/error.svg";
 export { default as flag } from "./svg/flag.svg";
 export { default as gamepad } from "./svg/gamepad.svg";
 export { default as github } from "./svg/github.svg";
-export { default as hamburger } from "./svg/hamburger.svg";
+export { default as hamburger } from "./svg/list-more-lines.svg";
 export { default as help } from "./svg/help.svg";
 export { default as home } from "./svg/home.svg";
 export { default as integrations } from "./svg/integrations.svg";

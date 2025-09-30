@@ -12,47 +12,47 @@ export default function LayoutWrapper(props: Props): ReactNode {
         items={[
           {
             label: "Docs Home",
-            href: "./",
+            href: "/",
           },
           {
             label: "Get Started",
-            href: "./get-started/",
+            href: "/get-started/",
           },
           {
             label: "Zero Trust Access",
-            href: "./zero-trust-access/",
+            href: "/zero-trust-access/",
           },
           {
             label: "Machine & Workload Identity",
-            href: "./machine-workload-identity/",
+            href: "/machine-workload-identity/",
           },
           {
             label: "Identity Governance",
-            href: "./identity-governance/",
+            href: "/identity-governance/",
           },
           {
             label: "Identity Security",
-            href: "./identity-security/",
+            href: "/identity-security/",
           },
           "split",
           {
             label: "References",
-            href: "./reference/",
+            href: "/reference/",
           },
           {
             label: "Help & Support",
             items: [
               {
                 label: "FAQ",
-                href: "./faq/",
+                href: "/faq/",
               },
               {
                 label: "Changelog",
-                href: "./changelog/",
+                href: "/changelog/",
               },
               {
                 label: "Upcoming Releases",
-                href: "./upcoming-releases/",
+                href: "/upcoming-releases/",
               },
             ],
           },

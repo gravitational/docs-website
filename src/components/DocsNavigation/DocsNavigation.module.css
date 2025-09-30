@@ -1,5 +1,5 @@
 .docsNavigation {
-  position: fixed;
+  display: none;
   top: var(--ifm-navbar-height);
   background-color: var(--color-white);
   z-index: 2;
@@ -72,17 +72,23 @@
     visibility: hidden;
     height: 0;
 
-    @media (--md-scr) {
+    @media (--nav) {
       width: max-content;
       flex-direction: row;
-      margin: 0 26px;
       height: auto;
+      margin-left: 12px;
       visibility: visible;
     }
 
+    @media (--lg-scr) {
+      margin-left: 26px;
+    }
+
     &.navListRight {
-      @media (--md-scr) {
+      margin-right: 12px;
+      @media (--lg-scr) {
         margin-left: auto;
+        margin-right: var(--m-5);
       }
     }
 
@@ -143,6 +149,11 @@
 
           &:hover {
             color: var(--color-dark-purple);
+          }
+
+          &.active {
+            color: var(--color-dark-purple);
+            font-weight: var(--fw-bold);
           }
 
           @media (--md-scr) {
