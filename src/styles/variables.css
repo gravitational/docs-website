@@ -100,7 +100,9 @@
   --ifm-color-primary-lighter: #359962;
   --ifm-color-primary-lightest: #3cad6e;
 
-  --ifm-navbar-height: 117px;
+  --ifm-navbar-height: 122px;
+
+  --ifm-navbar-sidebar-width: 100vw;
 
   --docs-top-nav-height: 45px;
 
