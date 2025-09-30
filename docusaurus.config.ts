@@ -12,6 +12,7 @@ import {
 } from "./server/config-site";
 import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkIncludes from "./server/remark-includes";
+import remarkNoH1 from "./server/remark-no-h1";
 import remarkVariables from "./server/remark-variables";
 import remarkVersionAlias from "./server/remark-version-alias";
 import remarkCodeSnippet from "./server/remark-code-snippet";
@@ -258,6 +259,7 @@ const config: Config = {
                 loadConfig(getVersionFromVFile(vfile), ".").variables,
             },
           ],
+          remarkNoH1,
           [
             remarkCodeSnippet,
             {
