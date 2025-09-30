@@ -1,6 +1,7 @@
 import { resolve } from "path";
 import remarkVariables from "./.remark-build/server/remark-variables.mjs";
 import remarkIncludes from "./.remark-build/server/remark-includes.mjs";
+import remarkNoH1 from "./.remark-build/server/remark-no-h1.mjs";
 import { remarkLintTeleportDocsLinks } from "./.remark-build/server/lint-teleport-docs-links.mjs";
 import {
   getVersion,
@@ -65,6 +66,7 @@ const configLint = {
         },
       },
     ],
+    remarkNoH1,
     // validate-links must be run after remarkVariables since some links
     // include variables in their references, e.g.,
     // [CM-08 Information System Component Inventory]((=fedramp.control_url=)CM-8)
