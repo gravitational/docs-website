@@ -24,7 +24,9 @@ function includesPath(
   };
 
   if (comparedPath === "/")
-    return normalizePath(comparedPath) === normalizePath(path);
+    return (
+      normalizePath(comparedPath) === normalizePath(path) || path === "/docs/"
+    );
 
   return path.includes(normalizePath(comparedPath));
 }
