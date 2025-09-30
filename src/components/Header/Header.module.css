@@ -110,6 +110,7 @@
   @media (--nav) {
     padding: 14px var(--m-3);
     :global(input) {
+      padding: 0 20px;
       font-size: var(--fs-text-lg);
     }
   }
