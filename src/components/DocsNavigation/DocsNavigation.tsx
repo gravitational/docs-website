@@ -1,7 +1,11 @@
-import { useDocById } from "@docusaurus/plugin-content-docs/lib/client/docsUtils.js";
+import {
+  useDocsVersion,
+  useDocById,
+} from "@docusaurus/plugin-content-docs/client";
 import styles from "./DocsNavigation.module.css";
 import DocsNavList from "./DocsNavList";
 import { useLocation } from "@docusaurus/router";
+import { getVersionedUrl } from "@site/utils/general";
 
 export type DocsNavigationItem = {
   label: string;
@@ -20,6 +24,7 @@ type DocsNavigationProps = {
 
 const DocsNavigation: React.FC<DocsNavigationProps> = ({ items }) => {
   const location = useLocation();
+  const version = useDocsVersion();
 
   let leftItems = items;
   let rightItems = [];
@@ -70,11 +75,15 @@ const DocsNavigation: React.FC<DocsNavigationProps> = ({ items }) => {
   // utilize useDocById to make sure that only existing documents are displayed
   const availableLeftItems = (leftItems as Array<DocsNavigationItem>)
     .filter(filterBrokenLinks)
-    .map((item) => filterNestedItems(item));
+    .map((item) =>
+      filterNestedItems({ ...item, href: getVersionedUrl(version, item.href) })
+    );
 
   const availableRightItems = (rightItems as Array<DocsNavigationItem>)
     .filter(filterBrokenLinks)
-    .map((item) => filterNestedItems(item));
+    .map((item) =>
+      filterNestedItems({ ...item, href: getVersionedUrl(version, item.href) })
+    );
 
   return (
     <nav id="docs-navigation" className={styles.docsNavigation}>
