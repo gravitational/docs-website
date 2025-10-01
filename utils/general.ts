@@ -73,7 +73,7 @@ export const getVersionedUrl = (
   href?: string
 ): string => {
   const { isLast, label } = version;
-  const isProduction = process.env.AWS_APP_ID !== undefined
+  const isProduction = typeof process !== "undefined" && process.env.AWS_APP_ID;
   const basePath = isProduction ? "/docs" : "";
 
   if (!href) return href;
