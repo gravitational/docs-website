@@ -8,7 +8,12 @@
   .versions {
     display: flex;
     align-items: center;
-    padding-top: var(--m-2);
+    padding: var(--m-1) 0 0 var(--m-1);
+    color: var(--color-foreground-slightly-muted);
+
+    * {
+      color: var(--color-foreground-slightly-muted);
+    }
   }
 
   .sidebar {
@@ -18,19 +23,32 @@
     padding: var(--ifm-navbar-height) 0 var(--m-2) var(--m-1);
     width: var(--doc-sidebar-width);
     background-color: var(--color-background-depth-2);
+    border-right: 1px solid var(--color-tonal-neutral-0);
 
     :global(nav.menu.thin-scrollbar) {
-      padding: var(--m-2) 0;
+      padding: 0 0 var(--m-2) 0;
     }
 
     :global(.menu__list) {
       padding-left: 0;
       margin: 0;
     }
-    
 
     :global(.menu__list-item) {
       margin-top: var(--m-0-5);
+
+      &:not(:global(.menu__list-item--collapsed)) {
+        :global(.menu__link) {
+          &::after {
+            transform: rotate(180deg);
+          }
+          & ~ :global(.menu__caret) {
+            &::before {
+              transform: rotate(180deg);
+            }
+          }
+        }
+      }
     }
 
     :global(.menu__link) {
@@ -43,7 +61,9 @@
         width: var(--m-2);
         height: var(--m-2);
         min-width: var(--m-2);
-        background: var(--ifm-menu-link-sublist-icon) 50% / 1rem 1rem;
+        background: var(--ifm-menu-link-sublist-icon) 50% / 0.85rem 0.85rem
+          no-repeat;
+        transform: rotate(0deg);
       }
 
       &:global(.menu__link--sublist-caret) {
@@ -51,7 +71,6 @@
       }
 
       & ~ :global(.menu__caret) {
-
         &:hover {
           background-color: transparent;
         }
@@ -59,7 +78,9 @@
           width: var(--m-2);
           height: var(--m-2);
           min-width: var(--m-2);
-          background: var(--ifm-menu-link-sublist-icon) 50% / 1rem 1rem;
+          background: var(--ifm-menu-link-sublist-icon) 50% / 0.85rem 0.85rem
+            no-repeat;
+          transform: rotate(0deg);
         }
       }
     }
@@ -68,8 +89,6 @@
       font-weight: var(--fw-bold);
       color: var(--color-dark-purple);
       background-color: var(--color-tonal-primary-0);
-      border-left: 3px solid var(--color-primary);
-      padding-left: calc(var(--m-2) - 3px);
     }
 
     :global(.menu__list-item-collapsible--active) {
