@@ -56,7 +56,7 @@ const ResourceCard: React.FC<Resource> = ({
 
 const Resources: React.FC<ResourcesProps> = ({
   className = "",
-  title = "Enroll Resources",
+  title = "Enroll resources",
   variant = "homepage",
   desktopColumnsCount = 4,
   resources,

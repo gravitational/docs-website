@@ -32,7 +32,7 @@ function useSyntheticTitle(): string | null {
 
 export default function DocItemContent({ children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
-  const { hideTitleSection } = useDocTemplate();
+  const { hideTitleSection, displayDescription } = useDocTemplate();
   const {frontMatter} = useDoc();
   const location = useLocation();
 
@@ -41,7 +41,7 @@ export default function DocItemContent({ children }: Props): ReactNode {
       {syntheticTitle && (
         <header className={hideTitleSection ? "hide-title-section" : undefined}>
           <Heading as="h1" className="docItemTitle">{syntheticTitle}</Heading>
-          {frontMatter.description && <p className="docItemDescription">{frontMatter.description}</p>}
+          {displayDescription && frontMatter.description && <p className="docItemDescription">{frontMatter.description}</p>}
           <PageActions pathname={location.pathname} />
         </header>
       )}
