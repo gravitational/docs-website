@@ -11,10 +11,9 @@ import DocItemTOCDesktop from "@theme/DocItem/TOC/Desktop";
 import DocItemContent from "@theme/DocItem/Content";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import Unlisted from "@theme/ContentVisibility/Unlisted";
-import NavbarMobileSidebarToggle from "@theme/Navbar/MobileSidebar/Toggle";
 import type { Props } from "@theme/DocItem/Layout";
-import ThumbsFeedback from '@site/src/components/ThumbsFeedback';
-import { useDocTemplate } from '@site/src/hooks/useDocTemplate';
+import ThumbsFeedback from "@site/src/components/ThumbsFeedback";
+import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 import { PositionProvider } from "/src/components/PositionProvider";
 
 import styles from "./styles.module.css";
@@ -31,7 +30,9 @@ function useDocTOC(removeTOCSidebar: boolean) {
   const windowSize = useWindowSize();
 
   const hidden = frontMatter.hide_table_of_contents;
-  const removed = (frontMatter as ExtendedFrontMatter).remove_table_of_contents || removeTOCSidebar;
+  const removed =
+    (frontMatter as ExtendedFrontMatter).remove_table_of_contents ||
+    removeTOCSidebar;
   const canRender = !hidden && !removed && toc.length > 0;
 
   const mobile = canRender ? <DocItemTOCMobile /> : undefined;
@@ -59,16 +60,16 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   // Add template-full-width class to main element when fullWidth template is used
   React.useEffect(() => {
     if (!fullWidth) return;
-    
-    const mainElement = document.querySelector('main');
+
+    const mainElement = document.querySelector("main");
     if (mainElement) {
-      mainElement.classList.add('template-full-width');
+      mainElement.classList.add("template-full-width");
     }
-    
+
     return () => {
-      const mainElement = document.querySelector('main');
+      const mainElement = document.querySelector("main");
       if (mainElement) {
-        mainElement.classList.remove('template-full-width');
+        mainElement.classList.remove("template-full-width");
       }
     };
   }, [fullWidth]);
@@ -78,7 +79,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
       <div
         className={clsx(
           "col",
-          !docTOC.hidden && !docTOC.removed && styles.docItemCol,
+          !docTOC.hidden && !docTOC.removed && styles.docItemCol
         )}
       >
         {unlisted && <Unlisted />}
@@ -86,17 +87,18 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
         <div className={styles.docItemContainer}>
           <article>
             {!hideTitleSection && <DocBreadcrumbs />}
-            <div className={styles.sidebar}>
-              <DocVersionBadge />
-              <NavbarMobileSidebarToggle />
-            </div>
+            {!fullWidth && (
+              <div className={styles.sidebar}>
+                <DocVersionBadge />
+              </div>
+            )}
             {docTOC.mobile}
             <DocItemContent>
               <PositionProvider>{children}</PositionProvider>
             </DocItemContent>
             <DocItemFooter />
           </article>
-          <DocItemPaginator />
+          {!fullWidth && <DocItemPaginator />}
         </div>
       </div>
       {!docTOC.removed && (

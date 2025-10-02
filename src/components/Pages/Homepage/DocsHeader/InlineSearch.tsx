@@ -4,13 +4,22 @@ import clsx from "clsx";
 import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
 import Icon from "../../../Icon";
 import styles from "./InlineSearch.module.css";
+import { useWindowSize } from "@docusaurus/theme-common";
 
 type InlineSearchProps = {
   className?: string;
   version?: string;
+  desktopPlaceholder?: string;
+  mobilePlaceholder?: string;
 };
 
-export function InlineSearch({ className = "", version }: InlineSearchProps) {
+export function InlineSearch({
+  className = "",
+  version,
+  desktopPlaceholder = "",
+  mobilePlaceholder,
+}: InlineSearchProps) {
+  const window = useWindowSize({ desktopBreakpoint: 1124 });
   const {
     message,
     setMessage,
@@ -29,8 +38,15 @@ export function InlineSearch({ className = "", version }: InlineSearchProps) {
       /Mac|Macintosh|MacIntel|MacPPC|iPad|iPhone/.test(navigator.platform) ||
       /Mac|Macintosh|MacIntel|MacPPC/.test(navigator.userAgent);
     return isMac
-      ? "Search Docs or Press ⌘ + K"
-      : "Search Docs or Press Ctrl + K";
+      ? "Search Documentation (⌘ + K)"
+      : "Search Documentation (Ctrl + K)";
+  }
+
+  function getKeyCombinationByPlatform() {
+    const isMac =
+      /Mac|Macintosh|MacIntel|MacPPC|iPad|iPhone/.test(navigator.platform) ||
+      /Mac|Macintosh|MacIntel|MacPPC/.test(navigator.userAgent);
+    return isMac ? "⌘ K" : "Ctrl K";
   }
 
   return (
@@ -42,7 +58,11 @@ export function InlineSearch({ className = "", version }: InlineSearchProps) {
             <>
               <input
                 type="text"
-                placeholder={getPlaceholderByPlatform()}
+                placeholder={
+                  window === "mobile" && mobilePlaceholder
+                    ? mobilePlaceholder
+                    : getPlaceholderByPlatform()
+                }
                 className={styles.searchInput}
                 onClick={() => setIsOpen(true)}
                 onFocus={() => setIsOpen(true)}
@@ -53,6 +73,11 @@ export function InlineSearch({ className = "", version }: InlineSearchProps) {
               {ModalSearchAndChat && (
                 <ModalSearchAndChat {...inkeepModalProps} />
               )}
+              {window === "mobile" && mobilePlaceholder ? (
+                <div className={styles.mobileKeyCombination}>
+                  {getKeyCombinationByPlatform()}
+                </div>
+              ) : null}
             </>
           );
         }}
