@@ -2,7 +2,7 @@
   background-color: var(--color-background-depth-2);
   border: 2px solid var(--color-tonal-neutral-0);
   border-radius: 12px;
-  padding: var(--m-3) var(--m-2);
+  padding: var(--m-3) var(--m-4);
   margin: var(--m-5) 0;
 }
 
