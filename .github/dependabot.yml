@@ -11,6 +11,17 @@ updates:
       # Check for updates to GitHub Actions every week
       interval: "weekly"
     open-pull-requests-limit: 5
+    groups:
+      gh-actions:
+        patterns:
+          - "actions/*"
+          - "github/*"
+      aws-actions:
+        patterns:
+          - "aws-actions/*"
+      docker-actions:
+        patterns:
+          - "docker/*"
     reviewers:
       - emargetis
       - taraspos
@@ -24,7 +35,7 @@ updates:
       - "nodejs"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 8
     groups:
       docusaurus:
         patterns:
