@@ -2,6 +2,8 @@ import React from "react";
 import cn from "classnames";
 import styles from "./Resources.module.css";
 import Link from "@docusaurus/Link";
+import { Tag } from "../../Landing/UseCasesList/UseCasesList";
+import Icon from "@site/src/components/Icon";
 
 interface Resource {
   title: string;
@@ -9,6 +11,7 @@ interface Resource {
   iconComponent: any;
   href?: string;
   variant?: "homepage" | "doc";
+  tags?: Tag[];
 }
 
 interface ResourcesProps {
@@ -17,6 +20,7 @@ interface ResourcesProps {
   variant?: "homepage" | "doc";
   desktopColumnsCount?: number;
   resources: Resource[];
+  narrowBottomPadding?: boolean;
 }
 
 const ResourceCard: React.FC<Resource> = ({
@@ -25,6 +29,7 @@ const ResourceCard: React.FC<Resource> = ({
   href,
   iconComponent,
   variant,
+  tags,
 }) => {
   const IconComponent = iconComponent;
   const cardContent = (
@@ -34,7 +39,9 @@ const ResourceCard: React.FC<Resource> = ({
           [styles.docVariant]: variant === "doc",
         })}
       />
-      <h4 className={styles.resourceTitle}>{title}</h4>
+      <h4 className={styles.resourceTitle}>
+        {tags?.length > 0 ? <Link to={href}>{title}</Link> : title}
+      </h4>
       <p
         className={cn(styles.resourceDescription, {
           [styles.docVariant]: variant === "doc",
@@ -42,9 +49,49 @@ const ResourceCard: React.FC<Resource> = ({
       >
         {description}
       </p>
+      {tags?.length > 0 && (
+        <ul className={styles.tags}>
+          {tags.map((tag, tagIndex) => (
+            <li key={tagIndex}>
+              {tag.href ? (
+                // @ts-ignore
+                <Link className={styles.tag} to={tag.href}>
+                  {tag.icon && (
+                    <Icon
+                      name={tag.icon}
+                      size="md"
+                      className={styles.tagIcon}
+                    />
+                  )}
+                  {tag.name}
+                  {tag.arrow && (
+                    // @ts-ignore
+                    <ArrowRightSvg className={styles.tagArrow} />
+                  )}
+                </Link>
+              ) : (
+                <span className={styles.tag}>
+                  {tag.icon && (
+                    <Icon
+                      name={tag.icon}
+                      size="md"
+                      className={styles.tagIcon}
+                    />
+                  )}
+                  {tag.name}
+                  {tag.arrow && (
+                    // @ts-ignore
+                    <ArrowRightSvg className={styles.tagArrow} />
+                  )}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
-  return href ? (
+  return href && (!tags || tags.length === 0) ? (
     // @ts-ignore
     <Link to={href} className={styles.resourceItem}>
       {cardContent}
@@ -60,22 +107,26 @@ const Resources: React.FC<ResourcesProps> = ({
   variant = "homepage",
   desktopColumnsCount = 4,
   resources,
+  narrowBottomPadding = false,
 }) => {
   const Heading = variant === "doc" ? "h3" : "h2";
   return (
     <section
       className={cn(styles.resources, className, {
         [styles.docVariant]: variant === "doc",
+        [styles.narrowBottomPadding]: narrowBottomPadding,
       })}
     >
       <div className={styles.resourcesContainer}>
-        <Heading
-          className={cn(styles.resourcesTitle, {
-            [styles.docVariant]: variant === "doc",
-          })}
-        >
-          {title}
-        </Heading>
+        {title && (
+          <Heading
+            className={cn(styles.resourcesTitle, {
+              [styles.docVariant]: variant === "doc",
+            })}
+          >
+            {title}
+          </Heading>
+        )}
         <div
           className={styles.resourcesGrid}
           style={
@@ -92,6 +143,7 @@ const Resources: React.FC<ResourcesProps> = ({
               href={resource.href}
               variant={variant}
               iconComponent={resource.iconComponent}
+              tags={resource.tags}
             />
           ))}
         </div>
