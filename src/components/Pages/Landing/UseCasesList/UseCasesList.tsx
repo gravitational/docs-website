@@ -5,7 +5,7 @@ import Icon, { IconName } from "@site/src/components/Icon";
 import Link from "@docusaurus/Link";
 import ArrowRightSvg from "@site/src/components/Icon/teleport-svg/arrow-right.svg";
 
-interface Tag {
+export interface Tag {
   name: string;
   icon: IconName;
   href: string;
@@ -24,6 +24,7 @@ interface UseCasesListProps {
     href?: string;
     tags?: Tag[];
   }>;
+  narrowBottomPadding?: boolean;
 }
 
 const UseCasesList: React.FC<UseCasesListProps> = ({
@@ -33,18 +34,25 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
   desktopColumnsCount = 3,
   useCases = [],
   variant = "landing",
+  narrowBottomPadding = false,
 }) => {
   return (
-    <section className={cn(styles.useCasesList, className)}>
+    <section
+      className={cn(styles.useCasesList, className, {
+        [styles.narrowBottomPadding]: narrowBottomPadding,
+      })}
+    >
       <div className={styles.container}>
-        <div className={styles.header}>
-          <h2
-            className={cn(styles.title, {
-              [styles.docVariant]: variant === "doc",
-            })}
-          >
-            {title}
-          </h2>
+        <div className={cn(styles.header, { [styles.hasTitle]: !!title })}>
+          {title && (
+            <h2
+              className={cn(styles.title, {
+                [styles.docVariant]: variant === "doc",
+              })}
+            >
+              {title}
+            </h2>
+          )}
           {description && <p className={styles.description}>{description}</p>}
         </div>
         <ul

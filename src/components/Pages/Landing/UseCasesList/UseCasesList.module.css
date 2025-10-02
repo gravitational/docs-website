@@ -5,10 +5,19 @@
   @media (--md-scr) {
     padding-bottom: var(--m-8);
   }
+
+  &.narrowBottomPadding {
+    padding-bottom: var(--m-2);
+    @media (--md-scr) {
+      padding-bottom: var(--m-2);
+    }
+  }
 }
 
 .header {
-  margin-bottom: var(--m-3);
+  &.hasTitle {
+    margin-bottom: var(--m-3);
+  }
 }
 
 .title {
@@ -63,7 +72,10 @@
   grid-template-columns: minmax(0, 1fr);
 
   @media (--md-scr) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(
+      min(2, var(--desktop-column-count)),
+      minmax(0, 1fr)
+    );
   }
 
   @media (--lg-scr) {
@@ -79,7 +91,7 @@
   display: block;
   padding: var(--m-2) var(--m-3);
   border-radius: 12px;
-  border: 1px solid var(--color-tonal-neutral-1);
+  border: 1px solid var(--color-tonal-neutral-0);
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   height: 100%;
