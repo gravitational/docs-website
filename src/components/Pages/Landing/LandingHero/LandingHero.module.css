@@ -172,6 +172,10 @@
   margin-top: var(--m-2);
 
   @media (--md-scr) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (--lg-scr) {
     grid-template-columns: repeat(var(--desktop-column-count), 1fr);
   }
 
