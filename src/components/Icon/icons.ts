@@ -76,6 +76,8 @@ export { default as awsIdentity } from "./svg/awsIdentity.svg";
 export { default as googleCloud } from "./svg/googleCloud.svg";
 export { default as azure } from "./svg/azure.svg";
 export { default as oracle } from "./svg/oracle.svg";
+export { default as aws } from "./svg/aws.svg";
+export { default as jetbrains } from "./svg/jetbrains.svg";
 export { default as okta } from "./svg/okta.svg";
 export { default as entraId } from "./svg/ms-entra-id.svg";
 export { default as datadog } from "./svg/datadog.svg";
@@ -83,8 +85,10 @@ export { default as elasticStack } from "./svg/elastic-stack.svg";
 export { default as gSuite } from "./svg/g-suite.svg";
 export { default as panther } from "./svg/panther.svg";
 export { default as youtube } from "./svg/youtube.svg";
-export { default as aws } from "./svg/aws.svg";
 export { default as terraform } from "./svg/terraform.svg";
+export { default as cloud3 } from "./svg/cloud3.svg";
+export { default as tcp } from "./svg/tcp.svg";
+export { default as appWindow } from "./svg/app-window.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
