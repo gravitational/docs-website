@@ -7,7 +7,7 @@ import { visit, CONTINUE, SKIP } from "unist-util-visit";
 
 const versionedDocsPattern = `versioned_docs/version-([0-9]+\\.x)/`;
 
-export default function remarkVersionAlias(latestVersion: string): Transformer {
+export default function remarkVersionAlias(currentVersion: string): Transformer {
   return (root: Root, vfile: VFile) => {
     visit(root, (node: Node) => {
       if (node.type != "mdxjsEsm") {
@@ -21,7 +21,7 @@ export default function remarkVersionAlias(latestVersion: string): Transformer {
         return CONTINUE;
       }
 
-      let version: string = latestVersion;
+      let version: string = currentVersion;
       let newVal: Array<string> = [];
       const versionedPathParts = vfile.path.match(versionedDocsPattern);
       if (versionedPathParts) {
