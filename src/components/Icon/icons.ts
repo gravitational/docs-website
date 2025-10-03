@@ -60,6 +60,7 @@ export { default as success } from "./svg/success.svg";
 export { default as thumbsUp } from "./svg/thumbs-up.svg";
 export { default as thumbsDown } from "./svg/thumbs-down.svg";
 export { default as wand } from "./svg/magic-wand.svg";
+export { default as wand2 } from "./svg/magic-wand2.svg";
 export { default as users } from "./svg/users.svg";
 export { default as warning } from "./svg/warning.svg";
 export { default as window } from "./svg/window.svg";
@@ -85,6 +86,7 @@ export { default as panther } from "./svg/panther.svg";
 export { default as youtube } from "./svg/youtube.svg";
 export { default as aws } from "./svg/aws.svg";
 export { default as terraform } from "./svg/terraform.svg";
+export { default as clipboard } from "./svg/clipboard-text.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";

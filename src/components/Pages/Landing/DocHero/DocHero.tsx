@@ -1,56 +1,66 @@
-import { useEffect, useRef } from "react";
-import styles from "./LandingHero.module.css";
+import Link from "@docusaurus/Link";
+import cn from "classnames";
+import styles from "./DocHero.module.css";
 
 interface GetStartedLink {
   title: string;
   description: string;
   href: string;
-  icon: any;
+  icon?: any;
 }
 
-interface LandingHeroProps {
+interface CtaLink {
+  title: string;
+  href: string;
+  variant?: "primary" | "secondary";
+  arrow?: boolean;
+}
+
+interface DocHeroProps {
   title: string;
   image?: any;
   youtubeVideoUrl?: string;
   links?: GetStartedLink[];
+  ctaLinks?: CtaLink[];
   children?: React.ReactNode;
 }
 
-const LandingHero: React.FC<LandingHeroProps> = ({
+const DocHero: React.FC<DocHeroProps> = ({
   title,
   image,
   youtubeVideoUrl,
   links = [],
+  ctaLinks = [],
   children,
 }) => {
-  const mdRef = useRef<HTMLDivElement>(null);
   const getEmbedYouTubeUrl = (url: string) => {
     const videoId = url.split("v=")[1];
     return `https://www.youtube.com/embed/${videoId}`;
   };
 
-  useEffect(() => {
-    if (mdRef.current) {
-      const anchors = mdRef.current.querySelectorAll("a");
-      anchors.forEach((anchor) => {
-        const parent = anchor.parentElement;
-        if (
-          parent &&
-          parent.childNodes.length === 1 &&
-          parent.firstChild === anchor
-        ) {
-          anchor.classList.add(styles.buttonLink);
-        }
-      });
-    }
-  }, []);
   return (
-    <section className={styles.landingHero}>
+    <section className={styles.docHero}>
       <div className={styles.container}>
         <div className={styles.main}>
           <div className={styles.content}>
-            <h1 className={styles.title}>{title}</h1>
+            <h2 className={styles.title}>{title}</h2>
             <div className={styles.description}>{children}</div>
+            {ctaLinks.length > 0 && (
+              <div className={styles.ctaLinks}>
+                {ctaLinks.map((link, i) => (
+                  <Link
+                    key={i}
+                    to={link.href}
+                    className={cn(styles.ctaLink, {
+                      [styles.secondary]: link.variant === "secondary",
+                      [styles.arrow]: link.arrow,
+                    })}
+                  >
+                    {link.title}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
           <div className={styles.media}>
             {image && !youtubeVideoUrl && (
@@ -82,7 +92,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
                 <div className={styles.linkContent}>
                   <h3 className={styles.linkTitle}>{link.title}</h3>
                   <p className={styles.linkDescription}>{link.description}</p>
-                  <link.icon className={styles.linkIcon} />
+                  {link.icon && <link.icon className={styles.linkIcon} />}
                 </div>
               </a>
             ))}
@@ -93,4 +103,4 @@ const LandingHero: React.FC<LandingHeroProps> = ({
   );
 };
 
-export default LandingHero;
+export default DocHero;
