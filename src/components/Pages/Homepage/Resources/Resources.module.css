@@ -150,6 +150,15 @@ a.resourceItem {
       }
     }
   }
+
+  &.smallSize {
+    font-size: var(--fs-text-lg);
+    color: var(--color-foreground-slightly-muted);
+
+    @media (--md-scr) {
+      font-size: var(--fs-text-xl);
+    }
+  }
 }
 
 .resourceDescription {

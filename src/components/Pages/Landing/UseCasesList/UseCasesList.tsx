@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./UseCasesList.module.css";
 import cn from "classnames";
 import Icon, { IconName } from "@site/src/components/Icon";
@@ -10,6 +10,7 @@ export interface Tag {
   icon: IconName;
   href: string;
   arrow?: boolean;
+  hidden?: boolean;
 }
 
 interface UseCasesListProps {
@@ -26,6 +27,106 @@ interface UseCasesListProps {
   }>;
   narrowBottomPadding?: boolean;
 }
+
+const Tags: React.FC<{ tags?: Tag[] }> = ({ tags = [] }) => {
+  const [showHiddenTags, setShowHiddenTags] = useState(false);
+  const hiddenTags = tags.filter((tag) => tag.hidden);
+  return (
+    <ul className={styles.tags}>
+      {tags
+        .filter((tag) => !tag.hidden)
+        .map((tag, tagIndex) => {
+          return (
+            <li key={tagIndex}>
+              {tag.href ? (
+                // @ts-ignore
+                <Link className={styles.tag} to={tag.href}>
+                  {tag.icon && (
+                    <Icon
+                      name={tag.icon}
+                      size="md"
+                      className={styles.tagIcon}
+                    />
+                  )}
+                  {tag.name}
+                  {tag.arrow && (
+                    // @ts-ignore
+                    <ArrowRightSvg className={styles.tagArrow} />
+                  )}
+                </Link>
+              ) : (
+                <span className={styles.tag}>
+                  {tag.icon && (
+                    <Icon
+                      name={tag.icon}
+                      size="md"
+                      className={styles.tagIcon}
+                    />
+                  )}
+                  {tag.name}
+                  {tag.arrow && (
+                    // @ts-ignore
+                    <ArrowRightSvg className={styles.tagArrow} />
+                  )}
+                </span>
+              )}
+            </li>
+          );
+        })}
+      {hiddenTags.length > 0 && (
+        <>
+          {showHiddenTags &&
+            hiddenTags.map((tag, tagIndex) => (
+              <li key={tagIndex}>
+                {tag.href ? (
+                  // @ts-ignore
+                  <Link className={styles.tag} to={tag.href}>
+                    {tag.icon && (
+                      <Icon
+                        name={tag.icon}
+                        size="md"
+                        className={styles.tagIcon}
+                      />
+                    )}
+                    {tag.name}
+                    {tag.arrow && (
+                      // @ts-ignore
+                      <ArrowRightSvg className={styles.tagArrow} />
+                    )}
+                  </Link>
+                ) : (
+                  <span className={styles.tag}>
+                    {tag.icon && (
+                      <Icon
+                        name={tag.icon}
+                        size="md"
+                        className={styles.tagIcon}
+                      />
+                    )}
+                    {tag.name}
+                    {tag.arrow && (
+                      // @ts-ignore
+                      <ArrowRightSvg className={styles.tagArrow} />
+                    )}
+                  </span>
+                )}
+              </li>
+            ))}
+          <li>
+            <button
+              className={cn(styles.expandTags, {
+                [styles.expanded]: showHiddenTags,
+              })}
+              onClick={() => setShowHiddenTags(!showHiddenTags)}
+            >
+              {showHiddenTags ? "Show less" : "Show more"}
+            </button>
+          </li>
+        </>
+      )}
+    </ul>
+  );
+};
 
 const UseCasesList: React.FC<UseCasesListProps> = ({
   className = "",
@@ -104,46 +205,7 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                     >
                       {caseItem.description}
                     </p>
-                    {caseItem.tags?.length > 0 && (
-                      <ul className={styles.tags}>
-                        {caseItem.tags.map((tag, tagIndex) => (
-                          <li key={tagIndex}>
-                            {tag.href ? (
-                              // @ts-ignore
-                              <Link className={styles.tag} to={tag.href}>
-                                {tag.icon && (
-                                  <Icon
-                                    name={tag.icon}
-                                    size="md"
-                                    className={styles.tagIcon}
-                                  />
-                                )}
-                                {tag.name}
-                                {tag.arrow && (
-                                  // @ts-ignore
-                                  <ArrowRightSvg className={styles.tagArrow} />
-                                )}
-                              </Link>
-                            ) : (
-                              <span className={styles.tag}>
-                                {tag.icon && (
-                                  <Icon
-                                    name={tag.icon}
-                                    size="md"
-                                    className={styles.tagIcon}
-                                  />
-                                )}
-                                {tag.name}
-                                {tag.arrow && (
-                                  // @ts-ignore
-                                  <ArrowRightSvg className={styles.tagArrow} />
-                                )}
-                              </span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                    {caseItem.tags?.length > 0 && <Tags tags={caseItem.tags} />}
                   </div>
                 )}
               </li>
