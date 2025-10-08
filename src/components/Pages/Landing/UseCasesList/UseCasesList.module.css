@@ -88,7 +88,8 @@
     padding: var(--m-3);
   }
 
-  h3 {
+  h3,
+  h4 {
     margin: 0 !important;
     font-weight: var(--fw-bold);
     line-height: 1.5;
@@ -127,7 +128,8 @@ a.item:hover {
   background: var(--color-white);
   box-shadow: var(--lp-box-shadow-hover);
   border-color: rgba(0, 0, 0, 0);
-  h3 {
+  h3,
+  h4 {
     color: var(--color-dark-purple);
   }
 }
@@ -201,7 +203,8 @@ a.item:hover {
   }
   &:hover {
     text-decoration: none;
-    h3 {
+    h3,
+    h4 {
       color: var(--color-dark-purple);
     }
     &::after {
