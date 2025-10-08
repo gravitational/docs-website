@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./UseCasesList.module.css";
 import cn from "classnames";
 import Icon, { IconName } from "@site/src/components/Icon";
@@ -31,88 +31,57 @@ interface UseCasesListProps {
 const Tags: React.FC<{ tags?: Tag[] }> = ({ tags = [] }) => {
   const [showHiddenTags, setShowHiddenTags] = useState(false);
   const hiddenTags = tags.filter((tag) => tag.hidden);
+
+  const renderTag = (tag: Tag, tagIndex: number) => {
+    return (
+      <li
+        key={tagIndex}
+        className={
+          tag.hidden
+            ? cn(styles.hiddenTag, { [styles.visible]: showHiddenTags })
+            : undefined
+        }
+      >
+        {tag.href ? (
+          // @ts-ignore
+          <Link className={styles.tag} to={tag.href}>
+            {tag.icon && (
+              <Icon name={tag.icon} size="md" className={styles.tagIcon} />
+            )}
+            {tag.name}
+            {tag.arrow && (
+              // @ts-ignore
+              <ArrowRightSvg className={styles.tagArrow} />
+            )}
+          </Link>
+        ) : (
+          <span className={styles.tag}>
+            {tag.icon && (
+              <Icon name={tag.icon} size="md" className={styles.tagIcon} />
+            )}
+            {tag.name}
+            {tag.arrow && (
+              // @ts-ignore
+              <ArrowRightSvg className={styles.tagArrow} />
+            )}
+          </span>
+        )}
+      </li>
+    );
+  };
+
   return (
     <ul className={styles.tags}>
       {tags
         .filter((tag) => !tag.hidden)
-        .map((tag, tagIndex) => {
-          return (
-            <li key={tagIndex}>
-              {tag.href ? (
-                // @ts-ignore
-                <Link className={styles.tag} to={tag.href}>
-                  {tag.icon && (
-                    <Icon
-                      name={tag.icon}
-                      size="md"
-                      className={styles.tagIcon}
-                    />
-                  )}
-                  {tag.name}
-                  {tag.arrow && (
-                    // @ts-ignore
-                    <ArrowRightSvg className={styles.tagArrow} />
-                  )}
-                </Link>
-              ) : (
-                <span className={styles.tag}>
-                  {tag.icon && (
-                    <Icon
-                      name={tag.icon}
-                      size="md"
-                      className={styles.tagIcon}
-                    />
-                  )}
-                  {tag.name}
-                  {tag.arrow && (
-                    // @ts-ignore
-                    <ArrowRightSvg className={styles.tagArrow} />
-                  )}
-                </span>
-              )}
-            </li>
-          );
-        })}
+        .map((tag, tagIndex) => renderTag(tag, tagIndex))}
+
       {hiddenTags.length > 0 && (
         <>
-          {showHiddenTags &&
-            hiddenTags.map((tag, tagIndex) => (
-              <li key={tagIndex}>
-                {tag.href ? (
-                  // @ts-ignore
-                  <Link className={styles.tag} to={tag.href}>
-                    {tag.icon && (
-                      <Icon
-                        name={tag.icon}
-                        size="md"
-                        className={styles.tagIcon}
-                      />
-                    )}
-                    {tag.name}
-                    {tag.arrow && (
-                      // @ts-ignore
-                      <ArrowRightSvg className={styles.tagArrow} />
-                    )}
-                  </Link>
-                ) : (
-                  <span className={styles.tag}>
-                    {tag.icon && (
-                      <Icon
-                        name={tag.icon}
-                        size="md"
-                        className={styles.tagIcon}
-                      />
-                    )}
-                    {tag.name}
-                    {tag.arrow && (
-                      // @ts-ignore
-                      <ArrowRightSvg className={styles.tagArrow} />
-                    )}
-                  </span>
-                )}
-              </li>
-            ))}
-          <li>
+          {hiddenTags.map((tag, tagIndex) =>
+            renderTag(tag, tagIndex + tags.length)
+          )}
+          <li className={styles.expandTagsItem}>
             <button
               className={cn(styles.expandTags, {
                 [styles.expanded]: showHiddenTags,
