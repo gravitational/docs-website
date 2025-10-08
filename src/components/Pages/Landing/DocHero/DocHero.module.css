@@ -103,6 +103,10 @@
   line-height: 1.5;
   width: max-content;
 
+  @media (--lg-scr) {
+    font-size: var(--fs-text-lg);
+  }
+
   &.arrow {
     &::after {
       content: "";

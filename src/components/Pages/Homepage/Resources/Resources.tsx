@@ -61,6 +61,7 @@ const Resources: React.FC<ResourcesProps> = ({
   desktopColumnsCount = 4,
   resources,
 }) => {
+  const Heading = variant === "doc" ? "h3" : "h2";
   return (
     <section
       className={cn(styles.resources, className, {
@@ -68,13 +69,13 @@ const Resources: React.FC<ResourcesProps> = ({
       })}
     >
       <div className={styles.resourcesContainer}>
-        <h2
+        <Heading
           className={cn(styles.resourcesTitle, {
             [styles.docVariant]: variant === "doc",
           })}
         >
           {title}
-        </h2>
+        </Heading>
         <div
           className={styles.resourcesGrid}
           style={
