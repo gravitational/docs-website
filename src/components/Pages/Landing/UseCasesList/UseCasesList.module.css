@@ -154,6 +154,7 @@ a.item:hover {
   padding: 0 !important;
   align-items: center;
   margin-top: var(--m-2);
+  transition: all 0.3s ease-out;
 }
 
 .tagIcon {
@@ -183,7 +184,7 @@ a.item:hover {
   text-decoration: none;
   font-weight: var(--fw-regular);
   position: relative;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease-out;
 
   &:hover {
     color: var(--color-black);
@@ -225,6 +226,11 @@ a.item:hover {
   }
 }
 
+.expandTagsItem {
+  flex-basis: 100%;
+  padding-top: var(--m-1);
+}
+
 .expandTags {
   padding: var(--m-1) var(--m-3);
   font-size: var(--fs-text-sm);
@@ -240,8 +246,9 @@ a.item:hover {
   justify-content: space-between;
   font-weight: var(--fw-medium);
   gap: var(--m-1);
+  transition: all 0.3s ease-out;
 
-    &::before {
+  &::before {
     content: "";
     position: relative;
     width: 12px;
@@ -249,6 +256,7 @@ a.item:hover {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M6.5 0.5C6.5 0.223858 6.27614 0 6 0C5.72386 0 5.5 0.223858 5.5 0.5V5.5H0.5C0.223858 5.5 0 5.72386 0 6C0 6.27614 0.223858 6.5 0.5 6.5H5.5V11.5C5.5 11.7761 5.72386 12 6 12C6.27614 12 6.5 11.7761 6.5 11.5V6.5H11.5C11.7761 6.5 12 6.27614 12 6C12 5.72386 11.7761 5.5 11.5 5.5H6.5V0.5Z' fill='black' fill-opacity='0.72'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
+    transition: transform 0.3s ease-out;
   }
 
   &.expanded {
@@ -256,4 +264,23 @@ a.item:hover {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M2 8C2 7.72386 2.22386 7.5 2.5 7.5H13.5C13.7761 7.5 14 7.72386 14 8C14 8.27614 13.7761 8.5 13.5 8.5H2.5C2.22386 8.5 2 8.27614 2 8Z' fill='black' fill-opacity='0.72'/%3E%3C/svg%3E");
     }
   }
+}
+
+.hiddenTag {
+  opacity: 0;
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  transition:
+    opacity 0.3s ease-out,
+    max-height 0.3s ease-out;
+  margin-top: -0.5rem;
+  pointer-events: none; /* Prevent interaction when hidden */
+}
+
+.hiddenTag.visible {
+  opacity: 1;
+  max-height: max-content;
+  max-width: max-content;
+  pointer-events: auto; /* Re-enable interactions when visible */
 }
