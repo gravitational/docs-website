@@ -90,7 +90,7 @@ const DocHero: React.FC<DocHeroProps> = ({
             {links.map((link, i) => (
               <a href={link.href} key={i} className={styles.link}>
                 <div className={styles.linkContent}>
-                  <h3 className={styles.linkTitle}>{link.title}</h3>
+                  <h4 className={styles.linkTitle}>{link.title}</h4>
                   <p className={styles.linkDescription}>{link.description}</p>
                   {link.icon && <link.icon className={styles.linkIcon} />}
                 </div>
