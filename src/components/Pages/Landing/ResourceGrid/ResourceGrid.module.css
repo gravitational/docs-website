@@ -16,17 +16,17 @@
 }
 
 .title {
-  font-size: var(--fs-header-4);
+  font-size: 1.375rem; /* 22px */
   margin-bottom: var(--m-1);
   margin-top: 0;
 
   @media (--md-scr) {
-    font-size: var(--lp-header-3);
+    font-size: var(--fs-header-3);
   }
 }
 
 .text {
-  font-size: 15px;
+  font-size: var(--fs-text-lg);
   color: var(--color-foreground-slightly-muted);
   b,
   strong {
@@ -38,7 +38,10 @@
   p,
   ul,
   ol {
-    margin-bottom: var(--m-2);
+    margin-bottom: 0;
+    &:not(:last-child) {
+      margin-bottom: var(--m-2);
+    }
   }
 
   a {

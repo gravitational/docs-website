@@ -11,7 +11,7 @@ interface Tag {
 }
 
 interface TagList {
-  title: string;
+  title?: string;
   tags: Tag[];
 }
 
@@ -37,8 +37,8 @@ export const Method: React.FC<EnrollmentMethod> = ({
 }) => {
   return (
     <li className={styles.method}>
+      <IconComponent className={styles.methodIcon} />
       <h3 className={styles.methodTitle}>
-        <IconComponent className={styles.methodIcon} />
         {href ? (
           // @ts-ignore
           <Link to={href} className={styles.methodLink}>
@@ -52,7 +52,9 @@ export const Method: React.FC<EnrollmentMethod> = ({
       {tagLists.length > 0 &&
         tagLists.map((tagList, index) => (
           <div key={index} className={styles.tagList}>
-            <h4 className={styles.tagListTitle}>{tagList.title}</h4>
+            {tagList.title && (
+              <h4 className={styles.tagListTitle}>{tagList.title}</h4>
+            )}
             <ul className={styles.tags}>
               {tagList.tags.map((tag, tagIndex) => (
                 <li key={tagIndex}>

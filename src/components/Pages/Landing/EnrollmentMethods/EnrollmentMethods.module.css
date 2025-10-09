@@ -37,17 +37,16 @@
 .method {
   padding: var(--m-3);
   border-radius: 12px;
-  border: 1px solid var(--color-tonal-neutral-0);
-  background-color: var(--color-background-depth-2);
+  border: 1.5px solid var(--color-tonal-neutral-0);
 }
 
 .methodTitle {
   font-size: var(--fs-header-4);
   font-weight: var(--fw-bold);
   color: var(--color-text);
-  margin: 0 0 var(--m-1) 0;
+  margin: 0 0 var(--m-0-5) 0;
   font-family: var(--font-base);
-  text-decoration: underline;
+  line-height: 1.5;
   display: flex;
   align-items: center;
 
@@ -79,15 +78,15 @@
 }
 
 .methodIcon {
-  width: 56px;
-  height: 56px;
+  width: var(--m-6);
+  height: var(--m-6);
   aspect-ratio: 1 / 1;
-  margin-right: var(--m-2);
 }
 
 .methodDescription {
   font-size: 15px;
   color: var(--color-foreground-slightly-muted);
+  line-height: 1.625;
   b,
   strong {
     font-weight: var(--fw-bold);
@@ -114,12 +113,14 @@
 }
 
 .tagList {
-  margin-top: var(--m-3);
+  margin-top: var(--m-2);
 }
 
 .tagListTitle {
   font-size: var(--fs-text-lg);
   font-weight: var(--fw-bold);
+  color: var(--color-foreground-slightly-muted);
+  margin-bottom: var(--m-1);
 }
 
 .tags {
