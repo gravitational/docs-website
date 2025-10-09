@@ -29,7 +29,6 @@ const LandingHero: React.FC<LandingHeroProps> = ({
   const getEmbedYouTubeUrl = (videoId: string) => {
     return `https://www.youtube.com/embed/${videoId}`;
   };
-
   return (
     <section className={styles.landingHero}>
       <div className={styles.container}>
