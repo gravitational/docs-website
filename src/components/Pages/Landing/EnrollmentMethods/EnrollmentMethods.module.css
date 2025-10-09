@@ -41,7 +41,7 @@
 }
 
 .methodTitle {
-  font-size: var(--fs-header-4);
+  font-size: var(--fs-text-xl);
   font-weight: var(--fw-bold);
   color: var(--color-text);
   margin: 0 0 var(--m-0-5) 0;
@@ -49,6 +49,10 @@
   line-height: 1.5;
   display: flex;
   align-items: center;
+
+  @media (--md-scr) {
+    font-size: var(--fs-header-4);
+  }
 
   a {
     color: var(--color-black);
@@ -84,7 +88,7 @@
 }
 
 .methodDescription {
-  font-size: 15px;
+  font-size: var(--fs-text-lg);
   color: var(--color-foreground-slightly-muted);
   line-height: 1.625;
   b,

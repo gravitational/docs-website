@@ -152,7 +152,7 @@
 }
 
 .linksTitle {
-  font-size: var(--fs-header-3);
+  font-size: 1.375rem; /* 22px */
   margin-bottom: var(--m-2);
   margin-top: var(--m-3);
   line-height: 1.3;
@@ -160,6 +160,7 @@
 
   @media (--md-scr) {
     margin-top: var(--m-5);
+    font-size: var(--fs-header-3);
   }
 }
 
@@ -206,12 +207,16 @@
 
     .linkTitle {
       font-weight: var(--fw-bold);
-      font-size: var(--fs-header-4);
+      font-size: var(--fs-text-xl);
       color: var(--color-black);
       margin-bottom: unset;
       line-height: 1.5;
       max-width: calc(100% - 24px);
       transition: color 0.2s ease-in-out;
+
+      @media (--md-scr) {
+        font-size: var(--fs-header-4);
+      }
     }
 
     .linkDescription {
