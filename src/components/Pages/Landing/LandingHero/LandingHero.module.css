@@ -96,8 +96,7 @@
       }
     }
 
-    h3,
-    h4 {
+    h3, h4 {
       margin-bottom: var(--m-1);
       color: var(--color-black);
     }

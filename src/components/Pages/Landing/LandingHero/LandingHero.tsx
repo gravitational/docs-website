@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import styles from "./LandingHero.module.css";
 
 interface GetStartedLink {
