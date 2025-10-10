@@ -41,7 +41,7 @@
     "pre-commit": "yarn lint-staged"
   },
   "dependencies": {
-    "@csstools/postcss-global-data": "^2.1.1",
+    "@csstools/postcss-global-data": "^3.1.0",
     "@docusaurus/core": "^3.8.1",
     "@docusaurus/faster": "^3.8.1",
     "@docusaurus/plugin-client-redirects": "^3.8.1",
