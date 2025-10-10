@@ -152,7 +152,7 @@ const Integrations: React.FC<IntegrationsProps> = ({
               {additionalLinks?.links?.map((link, i) => (
                 <li key={i}>
                   <Link to={link.href}>
-                    <LinkrrowRightSvg /> {link.title}
+                    <ArrowRightSvg /> {link.title}
                   </Link>
                 </li>
               ))}
