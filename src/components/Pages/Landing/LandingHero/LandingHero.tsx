@@ -10,7 +10,7 @@ interface GetStartedLink {
 interface LandingHeroProps {
   title: string;
   image?: any;
-  youtubeVideoUrl?: string;
+  youtubeVideoId?: string;
   linksTitle?: string;
   linksColumnCount?: number;
   links?: GetStartedLink[];
@@ -20,14 +20,13 @@ interface LandingHeroProps {
 const LandingHero: React.FC<LandingHeroProps> = ({
   title,
   image,
-  youtubeVideoUrl,
+  youtubeVideoId,
   linksTitle,
   linksColumnCount = 2,
   links = [],
   children,
 }) => {
-  const getEmbedYouTubeUrl = (url: string) => {
-    const videoId = url.split("v=")[1];
+  const getEmbedYouTubeUrl = (videoId: string) => {
     return `https://www.youtube.com/embed/${videoId}`;
   };
 
@@ -40,7 +39,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
             <div className={styles.description}>{children}</div>
           </div>
           <div className={styles.media}>
-            {image && !youtubeVideoUrl && (
+            {image && !youtubeVideoId && (
               <img
                 className={styles.image}
                 src={image}
@@ -49,12 +48,12 @@ const LandingHero: React.FC<LandingHeroProps> = ({
                 height={225}
               />
             )}
-            {youtubeVideoUrl && (
+            {youtubeVideoId && (
               <iframe
                 className={styles.video}
                 width={400}
                 height={225}
-                src={getEmbedYouTubeUrl(youtubeVideoUrl)}
+                src={getEmbedYouTubeUrl(youtubeVideoId)}
                 title={title}
                 frameBorder="0"
                 allowFullScreen

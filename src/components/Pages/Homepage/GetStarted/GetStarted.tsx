@@ -15,19 +15,18 @@ interface GetStartedLink {
 
 interface GetStartedProps {
   title: string;
-  youtubeVideoUrl: string;
+  youtubeVideoId: string;
   steps?: GetStartedStep[];
   links?: GetStartedLink[];
 }
 
 const GetStarted: React.FC<GetStartedProps> = ({
   title = "Get Started",
-  youtubeVideoUrl,
+  youtubeVideoId,
   steps = [],
   links = [],
 }) => {
-  const getEmbedYouTubeUrl = (url: string) => {
-    const videoId = url.split("v=")[1];
+  const getEmbedYouTubeUrl = (videoId: string) => {
     return `https://www.youtube.com/embed/${videoId}`;
   };
   return (
@@ -45,7 +44,7 @@ const GetStarted: React.FC<GetStartedProps> = ({
           </div>
           <div className={styles.video}>
             <iframe
-              src={getEmbedYouTubeUrl(youtubeVideoUrl)}
+              src={getEmbedYouTubeUrl(youtubeVideoId)}
               title={title}
               allowFullScreen
               className={styles.videoIframe}
