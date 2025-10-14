@@ -303,4 +303,94 @@ Here's some conceptual information.
       expect(getReasons(tc.input)).toEqual(tc.expected);
     });
   });
+
+  describe("linting the presence of an intro paragraph as a child of a jsx component", () => {
+    interface testCase {
+      description: string;
+      input: string;
+      expected: Array<string>;
+    }
+
+    const testCases: Array<testCase> = [
+      {
+        description: `missing intro paragraph in jsx component`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+template: landing-page
+---
+import Hero from '@site/src/components/Hero';
+
+<Hero
+  title="Docs Page"
+>
+## Prerequisites
+
+- A Teleport cluster
+</Hero>
+
+## Concepts
+
+Here's some conceptual information.
+`,
+        expected: [
+          "This guide is missing at least one introductory paragraph before the first H2. Use introductory paragraphs to explain the purpose and scope of this guide. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.",
+        ],
+      },
+      {
+        description: `multiple intro paragraphs in a jsx component`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+template: landing-page
+---
+import Hero from '@site/src/components/Hero';
+
+<Hero
+  title="Docs Page"
+>
+This is an intro paragraph.
+
+## Prerequisites
+
+- A Teleport cluster
+</Hero>
+
+## Concepts
+
+Here's some conceptual information.
+`,
+        expected: [],
+      },
+      {
+        description: `one intro paragraph in jsx component`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+template: landing-page
+---
+import Hero from '@site/src/components/Hero';
+
+<Hero
+  title="Docs Page"
+>
+This is an intro paragraph.
+
+## Prerequisites
+
+- A Teleport cluster
+</Hero>
+
+## Concepts
+
+Here's some conceptual information.
+`,
+        expected: [],
+      },
+    ];
+
+    test.each(testCases)("$description", (tc) => {
+      expect(getReasons(tc.input)).toEqual(tc.expected);
+    });
+  });
 });

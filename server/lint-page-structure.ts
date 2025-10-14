@@ -1,7 +1,7 @@
 import { lintRule } from "unified-lint-rule";
 import { visit } from "unist-util-visit";
 import type { Heading, Paragraph, Text } from "mdast";
-import type { EsmNode, MdxAnyElement, MdxastNode } from "./types-unist";
+import type { MdxJsxFlowElement } from "./types-unist";
 import type { Node, Parent, Position } from "unist";
 
 const mdxNodeTypes = new Set(["mdxJsxFlowElement", "mdxJsxTextElement"]);
@@ -50,6 +50,28 @@ export const remarkLintPageStructure = lintRule(
           rootIndex: idx,
         });
       }
+
+      // Also check for possible h2 headings in jsx components.
+      const jsx = node as MdxJsxFlowElement;
+      if (jsx.type === "mdxJsxFlowElement" && jsx.children) {
+        (jsx as Parent).children.forEach((child, childIdx) => {
+          const hed = child as Heading;
+          if (hed.type == "heading" && hed.depth == 2) {
+            h2s.push({
+              node: hed.children[0] as Text,
+              rootIndex: idx + (childIdx + 1) / 1000, // Make sure the index is between idx and idx+1
+            });
+          }
+
+          const para = child as Paragraph;
+          if (para.type == "paragraph") {
+            paras.push({
+              node: para,
+              rootIndex: idx + (childIdx + 1) / 1000,
+            });
+          }
+        });
+      }
     });
 
     // See if there is a paragraph that comes before the first H2 in root's
@@ -64,7 +86,7 @@ export const remarkLintPageStructure = lintRule(
       vfile.message(
         "This guide is missing at least one introductory paragraph before the first H2. Use introductory paragraphs to explain the purpose and scope of this guide. " +
           messageSuffix,
-        h2s[0].node.position,
+        h2s[0].node.position
       );
     }
 
@@ -73,7 +95,7 @@ export const remarkLintPageStructure = lintRule(
       vfile.message(
         "In a how-to guide, the first H2-level section must be called `## How it works`. Use this section to include 1-3 paragraphs that describe the high-level architecture of the setup shown in the guide. " +
           messageSuffix,
-        h2s[0].node.position,
+        h2s[0].node.position
       );
     }
     const stepNumbers: Array<stepNumber> = [];
@@ -98,9 +120,9 @@ export const remarkLintPageStructure = lintRule(
         vfile.message(
           `This guide has an incorrect sequence of steps - expecting a section called "## Step ${expectedNumerator}/${expectedDenominator}". ` +
             messageSuffix,
-          stepNumbers[i].position,
+          stepNumbers[i].position
         );
       }
     }
-  },
+  }
 );
