@@ -1,3 +1,4 @@
+import Link from "@docusaurus/Link";
 import Icon, { type IconName } from "@site/src/components/Icon";
 import styles from "./TeleportEditionCard.module.css";
 
@@ -21,7 +22,12 @@ const TeleportEditionCard: React.FC<TeleportEditionCardProps> = ({
   children,
 }) => {
   return (
-    <a href={href} className={`${styles.card} ${className}`} id={id}>
+    // @ts-ignore
+    <Link
+      to={href}
+      className={`${styles.card} ${className}`}
+      id={id}
+    >
       <div className={styles.header}>
         <div className={styles.iconWrapper}>
           <Icon name={iconName} size="md" />
@@ -38,7 +44,7 @@ const TeleportEditionCard: React.FC<TeleportEditionCardProps> = ({
       <div className={styles.content}>
         {children}
       </div>
-    </a>
+    </Link>
   );
 };
 
