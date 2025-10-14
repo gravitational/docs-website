@@ -78,3 +78,6 @@ jobs:
 
       - name: Build the docs with the latest content
         run: yarn build
+
+      - name: Check config.json
+        run: scripts/validate-docs-config.sh
