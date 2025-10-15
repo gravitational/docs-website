@@ -50,7 +50,7 @@ function useDocTOC(removeTOCSidebar: boolean) {
 }
 
 export default function DocItemLayout({ children }: Props): JSX.Element {
-  const { hideTitleSection, removeTOCSidebar, fullWidth } = useDocTemplate();
+  const { hideTitleSection, removeTOCSidebar, fullWidth, alternateHeader } = useDocTemplate();
   const docTOC = useDocTOC(removeTOCSidebar);
   const {
     metadata: { unlisted },
@@ -79,12 +79,13 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
         className={clsx(
           "col",
           !docTOC.hidden && !docTOC.removed && styles.docItemCol,
+          fullWidth && styles.largeColumnPadding
         )}
       >
         {unlisted && <Unlisted />}
         <DocVersionBanner />
         <div className={styles.docItemContainer}>
-          <article>
+          <article className={alternateHeader ? styles.alternateBreadcrumbs : undefined}>
             {!hideTitleSection && <DocBreadcrumbs />}
             <div className={styles.sidebar}>
               <DocVersionBadge />

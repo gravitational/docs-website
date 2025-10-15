@@ -19,8 +19,9 @@ interface CtaLink {
 interface DocHeroProps {
   title: string;
   image?: any;
-  youtubeVideoUrl?: string;
+  youtubeVideoId?: string;
   links?: GetStartedLink[];
+  linksDesktopColumnCount?: number;
   ctaLinks?: CtaLink[];
   children?: React.ReactNode;
 }
@@ -28,13 +29,13 @@ interface DocHeroProps {
 const DocHero: React.FC<DocHeroProps> = ({
   title,
   image,
-  youtubeVideoUrl,
+  youtubeVideoId,
   links = [],
   ctaLinks = [],
+  linksDesktopColumnCount = 2,
   children,
 }) => {
-  const getEmbedYouTubeUrl = (url: string) => {
-    const videoId = url.split("v=")[1];
+  const getEmbedYouTubeUrl = (videoId: string) => {
     return `https://www.youtube.com/embed/${videoId}`;
   };
 
@@ -63,7 +64,7 @@ const DocHero: React.FC<DocHeroProps> = ({
             )}
           </div>
           <div className={styles.media}>
-            {image && !youtubeVideoUrl && (
+            {image && !youtubeVideoId && (
               <img
                 className={styles.image}
                 src={image}
@@ -72,12 +73,12 @@ const DocHero: React.FC<DocHeroProps> = ({
                 height={225}
               />
             )}
-            {youtubeVideoUrl && (
+            {youtubeVideoId && (
               <iframe
                 className={styles.video}
                 width={400}
                 height={225}
-                src={getEmbedYouTubeUrl(youtubeVideoUrl)}
+                src={getEmbedYouTubeUrl(youtubeVideoId)}
                 title={title}
                 frameBorder="0"
                 allowFullScreen
@@ -86,7 +87,14 @@ const DocHero: React.FC<DocHeroProps> = ({
           </div>
         </div>
         {links.length > 0 && (
-          <div className={styles.links}>
+          <div
+            className={styles.links}
+            style={
+              {
+                "--desktop-column-count": linksDesktopColumnCount,
+              } as React.CSSProperties
+            }
+          >
             {links.map((link, i) => (
               <a href={link.href} key={i} className={styles.link}>
                 <div className={styles.linkContent}>
