@@ -181,6 +181,7 @@
     height: 100%;
     border: 1.5px solid var(--color-tonal-neutral-0);
     text-decoration: none;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       cursor: pointer;
