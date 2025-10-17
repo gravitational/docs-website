@@ -10,8 +10,7 @@
     },
     {
       "name": "18.x",
-      "branch": "aatuvai/linux-servers-page",
-      "repo_path": "aatuvai/teleport",
+      "branch": "branch/v18",
       "isDefault": true
     },
     {
