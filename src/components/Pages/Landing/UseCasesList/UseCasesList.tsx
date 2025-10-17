@@ -26,6 +26,7 @@ interface UseCasesListProps {
     tags?: Tag[];
   }>;
   narrowBottomPadding?: boolean;
+  itemLayout?: "column" | "row";
 }
 
 const Tags: React.FC<{ tags?: Tag[] }> = ({ tags = [] }) => {
@@ -105,6 +106,7 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
   useCases = [],
   variant = "landing",
   narrowBottomPadding = false,
+  itemLayout = "column",
 }) => {
   const Heading = variant === "doc" ? "h3" : "h2";
 
@@ -156,24 +158,27 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                   <div
                     className={cn(styles.item, {
                       [styles.hasTags]: caseItem.tags?.length > 0,
+                      [styles.rowLayout]: itemLayout === "row",
                     })}
                   >
-                    {caseItem.href ? (
-                      // @ts-ignore
-                      <Link className={styles.linkTitle} to={caseItem.href}>
+                    <div>
+                      {caseItem.href ? (
+                        // @ts-ignore
+                        <Link className={styles.linkTitle} to={caseItem.href}>
+                          <UseCaseHeading>{caseItem.title}</UseCaseHeading>
+                        </Link>
+                      ) : (
                         <UseCaseHeading>{caseItem.title}</UseCaseHeading>
-                      </Link>
-                    ) : (
-                      <UseCaseHeading>{caseItem.title}</UseCaseHeading>
-                    )}
-                    <p
-                      className={cn(styles.description, {
-                        [styles.hasTags]: caseItem.tags?.length > 0,
-                        [styles.docVariant]: variant === "doc",
-                      })}
-                    >
-                      {caseItem.description}
-                    </p>
+                      )}
+                      <p
+                        className={cn(styles.description, {
+                          [styles.hasTags]: caseItem.tags?.length > 0,
+                          [styles.docVariant]: variant === "doc",
+                        })}
+                      >
+                        {caseItem.description}
+                      </p>
+                    </div>
                     {caseItem.tags?.length > 0 && <Tags tags={caseItem.tags} />}
                   </div>
                 )}
