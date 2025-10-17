@@ -99,6 +99,14 @@
   &.hasTags {
     padding: var(--m-3);
   }
+  
+  &.rowLayout {
+    @media (--lg-scr) {
+      display: grid;
+      gap: var(--m-2);
+      grid-template-columns: minmax(0, 29.5%) minmax(0, 70.5%);
+    }
+  }
 
   h3,
   h4 {
@@ -155,6 +163,10 @@ a.item:hover {
   align-items: center;
   margin-top: var(--m-2);
   transition: all 0.3s ease-out;
+
+  @media (--md-scr) {
+    margin-top: 0;
+  }
 }
 
 .tagIcon {
