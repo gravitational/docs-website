@@ -338,7 +338,7 @@ Here's some conceptual information.
         ],
       },
       {
-        description: `multiple intro paragraphs in a jsx component`,
+        description: `one intro paragraph in jsx component`,
         input: `---
 title: Docs Page
 description: Provides instructions about a feature.
@@ -363,7 +363,7 @@ Here's some conceptual information.
         expected: [],
       },
       {
-        description: `one intro paragraph in jsx component`,
+        description: `multiple intro paragraphs in a jsx component`,
         input: `---
 title: Docs Page
 description: Provides instructions about a feature.
@@ -375,6 +375,8 @@ import Hero from '@site/src/components/Hero';
   title="Docs Page"
 >
 This is an intro paragraph.
+
+This is another intro paragraph.
 
 ## Prerequisites
 
