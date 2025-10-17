@@ -91,3 +91,35 @@
   font-size: var(--fs-text-md);
   letter-spacing: 0.035px;
 }
+
+.askAIButton {
+  background-color: var(--color-tonal-neutral-0);
+  color: var(--color-foreground-slightly-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: max-content;
+  gap: 0.75rem; /* 12px; */
+  border-radius: var(--m-0-5);
+  border: none;
+  padding: var(--m-1);
+  transition: background-color 0.2s ease-in-out;
+  span {
+    display: none;
+    padding: 0 !important;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--color-tonal-neutral-1);
+  }
+
+  @media (--nav) {
+    padding: 0.75rem var(--m-3);
+    span {
+      display: block;
+      white-space: nowrap;
+      padding: 0.75rem var(--m-3);
+    }
+  }
+}

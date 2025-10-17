@@ -17,6 +17,7 @@ import data from "../../../data/navbar.json";
 import { InlineSearch } from "../Pages/Homepage/DocsHeader/InlineSearch";
 import { useNavbarMobileSidebar } from "@docusaurus/theme-common/internal";
 import { translate } from "@docusaurus/Translate";
+import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
 
 const Header = () => {
   const { toggle, shown } = useNavbarMobileSidebar();
@@ -27,6 +28,9 @@ const Header = () => {
     setIsNavigationVisible((value) => !value);
     toggle();
   }, [isNavigationVisible]);
+  const { setIsOpen } = useInkeepSearch({
+    enableAIChat: true,
+  });
 
   const { menuItems, rightSide } = data as unknown as HeaderNavigation;
   const mobileBtn = rightSide?.mobileButton;
@@ -89,13 +93,14 @@ const Header = () => {
             <DocsLogo className={styles.logo} />
           </a>
         </div>
-        <div className={styles.searchBar}>
+        <div className={styles.centerSection}>
           <InlineSearch
             className={styles.inlineSearch}
             mobilePlaceholder="Search"
+            displayAskAiButton
           />
         </div>
-        <div className={styles.content}>
+        <div className={styles.rightSection}>
           {rightSide && <HeaderCTA rightSide={rightSide} />}
         </div>
       </header>

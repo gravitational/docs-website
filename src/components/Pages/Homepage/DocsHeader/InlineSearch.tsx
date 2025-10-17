@@ -9,29 +9,23 @@ import { useWindowSize } from "@docusaurus/theme-common";
 type InlineSearchProps = {
   className?: string;
   version?: string;
-  desktopPlaceholder?: string;
+  displayAskAiButton?: boolean;
   mobilePlaceholder?: string;
 };
 
 export function InlineSearch({
   className = "",
   version,
-  desktopPlaceholder = "",
+  displayAskAiButton = false,
   mobilePlaceholder,
 }: InlineSearchProps) {
   const window = useWindowSize({ desktopBreakpoint: 1124 });
-  const {
-    message,
-    setMessage,
-    isOpen,
-    setIsOpen,
-    ModalSearchAndChat,
-    inkeepModalProps,
-  } = useInkeepSearch({
-    version,
-    enableKeyboardShortcut: true,
-    keyboardShortcut: "k", // ⌘+K for inline search
-  });
+  const { message, setMessage, isOpen, setIsOpen, Modal, inkeepModalProps } =
+    useInkeepSearch({
+      version,
+      enableKeyboardShortcut: true,
+      keyboardShortcut: "k", // ⌘+K for inline search
+    });
 
   function getPlaceholderByPlatform() {
     const isMac =
@@ -50,38 +44,42 @@ export function InlineSearch({
   }
 
   return (
-    <div className={clsx(styles.wrapper, className)}>
-      <Icon name="magnify" className={styles.searchIcon} inline />
-      <BrowserOnly>
-        {() => {
-          return (
-            <>
-              <input
-                type="text"
-                placeholder={
-                  window === "mobile" && mobilePlaceholder
-                    ? mobilePlaceholder
-                    : getPlaceholderByPlatform()
-                }
-                className={styles.searchInput}
-                onClick={() => setIsOpen(true)}
-                onFocus={() => setIsOpen(true)}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                readOnly
-              />
-              {ModalSearchAndChat && (
-                <ModalSearchAndChat {...inkeepModalProps} />
-              )}
-              {window === "mobile" && mobilePlaceholder ? (
-                <div className={styles.mobileKeyCombination}>
-                  {getKeyCombinationByPlatform()}
-                </div>
-              ) : null}
-            </>
-          );
-        }}
-      </BrowserOnly>
-    </div>
+    <>
+      <div className={clsx(styles.wrapper, className)}>
+        <Icon name="magnify" className={styles.searchIcon} inline />
+        <BrowserOnly>
+          {() => {
+            return (
+              <>
+                <input
+                  type="text"
+                  placeholder={
+                    window === "mobile" && mobilePlaceholder
+                      ? mobilePlaceholder
+                      : getPlaceholderByPlatform()
+                  }
+                  className={styles.searchInput}
+                  onClick={() => setIsOpen(true)}
+                  onFocus={() => setIsOpen(true)}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  readOnly
+                />
+                {Modal && <Modal {...inkeepModalProps} />}
+              </>
+            );
+          }}
+        </BrowserOnly>
+      </div>
+      {displayAskAiButton && (
+        <button
+          className={styles.askAIButton}
+          onClick={() => setIsOpen(true, true)}
+        >
+          <Icon name="wand2" size="md" />
+          <span>Ask AI</span>
+        </button>
+      )}
+    </>
   );
 }
