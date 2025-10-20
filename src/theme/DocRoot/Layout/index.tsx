@@ -11,10 +11,6 @@ export default function LayoutWrapper(props: Props): ReactNode {
       <DocsNavigation
         items={[
           {
-            label: "Docs Home",
-            href: "/",
-          },
-          {
             label: "Get Started",
             href: "/get-started/",
           },
