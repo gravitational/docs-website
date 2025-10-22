@@ -75,6 +75,64 @@ const config: Config = {
         autoCollapseCategories: true,
       },
     },
+    navbar: {
+      items: [
+        {
+          label: "Get Started",
+          type: "docSidebar",
+          sidebarId: "start",
+          href: "/get-started/",
+        },
+        {
+          label: "Zero Trust Access",
+          type: "docSidebar",
+          sidebarId: "zta",
+          href: "/zero-trust-access/",
+        },
+        {
+          label: "Machine & Workload Identity",
+          type: "docSidebar",
+          sidebarId: "mwi",
+          href: "/machine-workload-identity/",
+        },
+        {
+          label: "Identity Governance",
+          type: "docSidebar",
+          sidebarId: "idg",
+          href: "/identity-governance/",
+        },
+        {
+          label: "Identity Security",
+          type: "docSidebar",
+          sidebarId: "ids",
+          href: "/identity-security/",
+        },
+        {
+          label: "References",
+          type: "docSidebar",
+          sidebarId: "ref",
+          href: "/reference/",
+        },
+        {
+          label: "Help & Support",
+          type: "dropdown",
+          items: [
+            {
+              label: "FAQ",
+              href: "/faq/",
+            },
+            {
+              label: "Changelog",
+              href: "/changelog/",
+            },
+            {
+              label: "Upcoming Releases",
+              href: "/upcoming-releases/",
+            },
+          ],
+        },
+      ],
+    },
     image: "/og-image.png",
     colorMode: {
       defaultMode: "light",

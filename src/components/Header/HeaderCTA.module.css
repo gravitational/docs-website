@@ -1,15 +1,13 @@
 .wrapper {
   display: none;
-  @media (--nav) {
+  @media (--md-scr) {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
-    margin-right: 32px;
     max-width: 100%;
     box-sizing: border-box;
     margin-top: 0;
-    margin-left: auto;
     width: auto;
     padding-left: 0;
     padding-right: 0;
@@ -27,8 +25,8 @@
   font-weight: var(--fw-regular);
   width: auto;
   height: auto !important;
-  padding: var(--m-1-5) var(--m-4) !important;
   border-radius: var(--m-0-5);
+  padding: var(--m-1) var(--m-2) !important;
   text-decoration: none !important;
 
   &:hover {
@@ -36,19 +34,21 @@
     border-color: #4126a1 !important;
     color: var(--color-white) !important;
   }
+
+  @media (--nav) {
+    padding: var(--m-1-5) var(--m-4) !important;
+  }
 }
 .actionButtonFlex {
-  display: flex;
+  display: none;
   flex-direction: row;
   width: 100%;
   gap: 16px;
   padding: 16px;
   margin-top: 16px;
   border-top: 1px solid #f0f2f4;
-  @media (--nav) {
-    display: none;
-  }
 }
+
 .styledLink {
   white-space: nowrap;
   display: flex;
