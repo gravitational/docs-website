@@ -19,7 +19,7 @@ export function InlineSearch({
   displayAskAiButton = false,
   mobilePlaceholder,
 }: InlineSearchProps) {
-  const window = useWindowSize({ desktopBreakpoint: 1124 });
+  const window = useWindowSize({ desktopBreakpoint: 997 });
   const { message, setMessage, isOpen, setIsOpen, Modal, inkeepModalProps } =
     useInkeepSearch({
       version,
