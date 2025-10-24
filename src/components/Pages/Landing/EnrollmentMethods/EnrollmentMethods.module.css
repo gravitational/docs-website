@@ -38,6 +38,7 @@
   padding: var(--m-3);
   border-radius: 12px;
   border: 1.5px solid var(--color-tonal-neutral-0);
+  margin-top: 0 !important;
 }
 
 .methodTitle {
@@ -134,6 +135,10 @@
   list-style: none;
   padding: 0 !important;
   align-items: center;
+
+  li {
+    margin-top: 0 !important;
+  }
 }
 
 .tagIcon {
