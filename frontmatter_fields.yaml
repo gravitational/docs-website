@@ -1,0 +1,33 @@
+# Permitted fields for docs page frontmatter
+allowedFields:
+  # The fields below are used natively by Docusaurus. See the Docusaurus docs:
+  # https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter
+  - custom_edit_url
+  - description
+  - displayed_sidebar
+  - draft
+  - hide_table_of_contents
+  - hide_title
+  - id
+  - image
+  - keywords
+  - last_update
+  - pagination_label
+  - pagination_next
+  - pagination_prev
+  - parse_number_prefixes
+  - sidebar_class_name
+  - sidebar_custom_props
+  - sidebar_key
+  - sidebar_label
+  - sidebar_position
+  - slug
+  - tags
+  - title
+  - toc_max_heading_level
+  - toc_min_heading_level
+  - unlisted
+
+  # The fields below are used in custom components
+  - template
+  - videoBanner

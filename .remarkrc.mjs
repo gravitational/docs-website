@@ -3,6 +3,7 @@ import remarkVariables from "./.remark-build/server/remark-variables.mjs";
 import remarkIncludes from "./.remark-build/server/remark-includes.mjs";
 import remarkNoH1 from "./.remark-build/server/remark-no-h1.mjs";
 import { remarkLintTeleportDocsLinks } from "./.remark-build/server/lint-teleport-docs-links.mjs";
+import { remarkLintFrontmatter } from "./.remark-build/server/lint-frontmatter.mjs";
 import {
   getVersion,
   getVersionRootPath,
@@ -10,6 +11,9 @@ import {
 import { remarkLintPageStructure } from "./.remark-build/server/lint-page-structure.mjs";
 import { loadConfig } from "./.remark-build/server/config-docs.mjs";
 import { updatePathsInIncludes } from "./.remark-build/server/asset-path-helpers.mjs";
+import * as yaml from "yaml";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 const configFix = {
   settings: {
@@ -26,6 +30,11 @@ const configFix = {
   },
   plugins: ["frontmatter", "mdx"],
 };
+
+const allowedFrontmatterConfig = fs.readFileSync(
+  path.join(".", "frontmatter_fields.yaml"),
+  "utf-8",
+);
 
 const configLint = {
   plugins: [
@@ -49,6 +58,7 @@ const configLint = {
     ["lint-maximum-heading-length", false],
     ["lint-no-shortcut-reference-link", false],
     ["lint-no-file-name-irregular-characters", false],
+    [remarkLintFrontmatter, yaml.parse(allowedFrontmatterConfig)],
     [
       remarkIncludes, // Lints (!include.ext!) syntax
       {
