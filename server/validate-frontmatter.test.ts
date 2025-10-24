@@ -7,20 +7,25 @@ describe("validateFrontmatter", () => {
   interface testCase {
     description: string;
     input: Frontmatter;
-    errorSubstring: string;
+    errorRegExp: RegExp;
   }
 
-  const testCases: Array<testCase> = {};
+  const testCases: Array<testCase> = {
+    // TODO: all fields
+    // TODO: no fields (okay)
+    // TODO: missing fields (okay)
+    // TODO: extra fields (include both in error)
+  };
 
   test.each(testCases)("$description", (tc) => {
-    if (tc.errorSubstring == "") {
+    if (tc.errorRegExp == "") {
       expect(() => {
         validateFrontmatter(tc.input, allowedFields).not.toThrow();
       });
     }
 
     expect(() => {
-      validateFrontmatter(tc.input, allowedFields).toThrow(tc.errorSubstring);
+      validateFrontmatter(tc.input, allowedFields).toThrow(tc.errorRegExp);
     });
   });
 });
