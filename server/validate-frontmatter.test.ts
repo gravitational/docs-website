@@ -48,11 +48,11 @@ describe("validateFrontmatter", () => {
   test.each(testCases)("$description", (tc) => {
     if (tc.errorRegExpPattern == "") {
       expect(() => {
-        validateFrontmatter(tc.input, allowedFields);
+        validateFrontmatter("mypage.mdx", tc.input, allowedFields);
       }).not.toThrow();
     } else {
       expect(() => {
-        validateFrontmatter(tc.input, allowedFields);
+        validateFrontmatter("mypage.mdx", tc.input, allowedFields);
       }).toThrow(new RegExp(tc.errorRegExpPattern));
     }
   });
