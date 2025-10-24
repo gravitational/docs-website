@@ -116,6 +116,7 @@ export const getDocusaurusConfigVersionOptions = (): Record<
       label: isCurrent ? `${name} (unreleased)` : name,
       // Configure root path for the version. Latest in the root, others in the `ver/XX.x` folder.
       path: isDefault ? "" : `ver/${name}`,
+      noIndex: !isDefault,
     };
 
     // Banner will show message for the current version that it is still WIP.
