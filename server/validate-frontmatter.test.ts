@@ -42,7 +42,15 @@ describe("validateFrontmatter", () => {
       },
       errorRegExpPattern: `labels`,
     },
-    // TODO: two extra fields (include both in error)
+    {
+      description: "two extra fields",
+      input: {
+        title: "My page",
+        descrption: "Description for my page",
+        labels: ["one", "two", "three"],
+      },
+      errorRegExpPattern: `description, labels`,
+    },
   ];
 
   test.each(testCases)("$description", (tc) => {
