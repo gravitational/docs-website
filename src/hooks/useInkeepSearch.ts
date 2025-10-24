@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { useState, useRef, useCallback, useEffect } from "react";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import type {
   InkeepAIChatSettings,
   InkeepSearchSettings,
@@ -7,7 +7,9 @@ import type {
   InkeepBaseSettings,
   AIChatFunctions,
   SearchFunctions,
-} from '@inkeep/cxkit-react';
+  InkeepCallbackEvent,
+} from "@inkeep/cxkit-react";
+import { trackEvent } from "../utils/analytics";
 
 interface UseInkeepSearchOptions {
   version?: string;
@@ -18,15 +20,15 @@ interface UseInkeepSearchOptions {
 }
 
 export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
-  const { 
-    version, 
-    enableKeyboardShortcut = false, 
-    keyboardShortcut = 'k',
+  const {
+    version,
+    enableKeyboardShortcut = false,
+    keyboardShortcut = "k",
     enableAIChat = false,
     autoOpenOnInput = false,
   } = options;
-  
-  const [message, setMessage] = useState('');
+
+  const [message, setMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [ModalSearchAndChat, setModalSearchAndChat] = useState(null);
 
@@ -39,7 +41,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
   // Load the modal component dynamically
   useEffect(() => {
     (async () => {
-      const { InkeepModalSearchAndChat } = await import('@inkeep/cxkit-react');
+      const { InkeepModalSearchAndChat } = await import("@inkeep/cxkit-react");
       setModalSearchAndChat(() => InkeepModalSearchAndChat);
     })();
   }, []);
@@ -55,61 +57,78 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [enableKeyboardShortcut, keyboardShortcut]);
 
   const inkeepBaseSettings: InkeepBaseSettings = {
-    apiKey: inkeepConfig.apiKey || '',
-    organizationDisplayName: 'Teleport',
-    primaryBrandColor: '#512FC9',
-    aiApiBaseUrl: 'https://goteleport.com/inkeep-proxy',
-    analyticsApiBaseUrl: 'https://goteleport.com/inkeep-proxy/analytics',
+    apiKey: inkeepConfig.apiKey || "",
+    organizationDisplayName: "Teleport",
+    primaryBrandColor: "#512FC9",
+    aiApiBaseUrl: "https://goteleport.com/inkeep-proxy",
+    analyticsApiBaseUrl: "https://goteleport.com/inkeep-proxy/analytics",
     privacyPreferences: {
       optOutAllAnalytics: false,
     },
     transformSource: (source) => {
       const isDocs =
-        source.contentType === 'docs' ||
-        source.type === 'documentation';
+        source.contentType === "docs" || source.type === "documentation";
       if (!isDocs) {
         return source;
       }
       return {
         ...source,
-        tabs: ['Docs', ...(source.tabs ?? [])],
-        icon: { builtIn: 'IoDocumentTextOutline' },
+        tabs: ["Docs", ...(source.tabs ?? [])],
+        icon: { builtIn: "IoDocumentTextOutline" },
       };
     },
     colorMode: {
-      forcedColorMode: 'light',
+      forcedColorMode: "light",
     },
     theme: {
       zIndex: {
-        overlay: '2100',
-        modal: '2200',
-        popover: '2300',
-        skipLink: '2400',
-        toast: '2500',
-        tooltip: '2600',
+        overlay: "2100",
+        modal: "2200",
+        popover: "2300",
+        skipLink: "2400",
+        toast: "2500",
+        tooltip: "2600",
       },
+    },
+    // reference: https://docs.inkeep.com/cloud/ui-components/customization-guides/use-your-own-analytics
+    onEvent: (event: InkeepCallbackEvent) => {
+      const { eventName, properties } = event;
+
+      const eventsToTrack = [
+        "user_message_submitted",
+        "search_query_submitted",
+      ];
+
+      if (!eventsToTrack.includes(eventName)) {
+        return;
+      }
+
+      trackEvent({
+        event_name: `inkeep_${eventName}`,
+        custom_parameters: properties,
+      });
     },
   };
 
   const inkeepSearchSettings: InkeepSearchSettings = {
-    placeholder: 'Search Docs',
+    placeholder: "Search Docs",
     tabs: [
-      ['Docs', { isAlwaysVisible: true }],
-      ['GitHub', { isAlwaysVisible: true }],
+      ["Docs", { isAlwaysVisible: true }],
+      ["GitHub", { isAlwaysVisible: true }],
     ],
     shouldOpenLinksInNewTab: true,
-    view: 'dual-pane',
+    view: "dual-pane",
   };
 
   const inkeepAIChatSettings: InkeepAIChatSettings | undefined = enableAIChat
     ? {
-        aiAssistantName: 'Teleport',
-        aiAssistantAvatar: 'https://goteleport.com/static/pam-standing.svg',
+        aiAssistantName: "Teleport",
+        aiAssistantAvatar: "https://goteleport.com/static/pam-standing.svg",
       }
     : undefined;
 
@@ -152,13 +171,14 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     },
     searchSettings: dynamicSearchSettings,
     modalSettings: modalSettings,
-    ...(enableAIChat && inkeepAIChatSettings && {
-      aiChatSettings: {
-        ...inkeepAIChatSettings,
-        chatFunctionsRef: chatCallableFunctionsRef,
-        onInputMessageChange: handleChange,
-      },
-    }),
+    ...(enableAIChat &&
+      inkeepAIChatSettings && {
+        aiChatSettings: {
+          ...inkeepAIChatSettings,
+          chatFunctionsRef: chatCallableFunctionsRef,
+          onInputMessageChange: handleChange,
+        },
+      }),
   };
 
   return {
