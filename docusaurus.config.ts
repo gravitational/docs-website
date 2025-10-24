@@ -33,6 +33,7 @@ import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
 import fs from "fs";
+import { validateFrontmatter } from "./server/validate-frontmatter";
 
 const latestVersion = getLatestVersion();
 
@@ -149,6 +150,16 @@ const config: Config = {
   markdown: {
     parseFrontMatter: async (params) => {
       const result = await params.defaultParseFrontMatter(params);
+      const { filePath } = params;
+
+      validateFrontmatter(filePath, result.frontMatter, [
+        "description",
+        "keywords",
+        "sidebar_label",
+        "sidebar_position",
+        "tags",
+        "title",
+      ]);
 
       // If we have videoBanner file in config, we load this vide data through YouTube API.
       const { videoBanner } = result.frontMatter;

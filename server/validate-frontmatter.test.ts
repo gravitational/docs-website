@@ -49,7 +49,7 @@ describe("validateFrontmatter", () => {
         descrption: "Description for my page",
         labels: ["one", "two", "three"],
       },
-      errorRegExpPattern: `description, labels`,
+      errorRegExpPattern: `descrption, labels`,
     },
   ];
 
