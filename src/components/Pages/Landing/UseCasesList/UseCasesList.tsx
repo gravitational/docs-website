@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./UseCasesList.module.css";
 import cn from "classnames";
 import Icon, { IconName } from "@site/src/components/Icon";
@@ -10,6 +10,7 @@ export interface Tag {
   icon: IconName;
   href: string;
   arrow?: boolean;
+  hidden?: boolean;
 }
 
 interface UseCasesListProps {
@@ -25,7 +26,77 @@ interface UseCasesListProps {
     tags?: Tag[];
   }>;
   narrowBottomPadding?: boolean;
+  itemLayout?: "column" | "row";
 }
+
+const Tags: React.FC<{ tags?: Tag[] }> = ({ tags = [] }) => {
+  const [showHiddenTags, setShowHiddenTags] = useState(false);
+  const hiddenTags = tags.filter((tag) => tag.hidden);
+
+  const renderTag = (tag: Tag, tagIndex: number) => {
+    return (
+      <li
+        key={tagIndex}
+        className={
+          tag.hidden
+            ? cn(styles.hiddenTag, { [styles.visible]: showHiddenTags })
+            : undefined
+        }
+      >
+        {tag.href ? (
+          // @ts-ignore
+          <Link className={styles.tag} to={tag.href}>
+            {tag.icon && (
+              <Icon name={tag.icon} size="md" className={styles.tagIcon} />
+            )}
+            {tag.name}
+            {tag.arrow && (
+              // @ts-ignore
+              <ArrowRightSvg className={styles.tagArrow} />
+            )}
+          </Link>
+        ) : (
+          <span className={styles.tag}>
+            {tag.icon && (
+              <Icon name={tag.icon} size="md" className={styles.tagIcon} />
+            )}
+            {tag.name}
+            {tag.arrow && (
+              // @ts-ignore
+              <ArrowRightSvg className={styles.tagArrow} />
+            )}
+          </span>
+        )}
+      </li>
+    );
+  };
+
+  return (
+    <ul className={styles.tags}>
+      {tags
+        .filter((tag) => !tag.hidden)
+        .map((tag, tagIndex) => renderTag(tag, tagIndex))}
+
+      {hiddenTags.length > 0 && (
+        <>
+          {hiddenTags.map((tag, tagIndex) =>
+            renderTag(tag, tagIndex + tags.length)
+          )}
+          <li className={styles.expandTagsItem}>
+            <button
+              className={cn(styles.expandTags, {
+                [styles.expanded]: showHiddenTags,
+              })}
+              onClick={() => setShowHiddenTags(!showHiddenTags)}
+            >
+              {showHiddenTags ? "Show less" : "Show more"}
+            </button>
+          </li>
+        </>
+      )}
+    </ul>
+  );
+};
 
 const UseCasesList: React.FC<UseCasesListProps> = ({
   className = "",
@@ -35,6 +106,7 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
   useCases = [],
   variant = "landing",
   narrowBottomPadding = false,
+  itemLayout = "column",
 }) => {
   const Heading = variant === "doc" ? "h3" : "h2";
 
@@ -86,64 +158,28 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                   <div
                     className={cn(styles.item, {
                       [styles.hasTags]: caseItem.tags?.length > 0,
+                      [styles.rowLayout]: itemLayout === "row",
                     })}
                   >
-                    {caseItem.href ? (
-                      // @ts-ignore
-                      <Link className={styles.linkTitle} to={caseItem.href}>
+                    <div>
+                      {caseItem.href ? (
+                        // @ts-ignore
+                        <Link className={styles.linkTitle} to={caseItem.href}>
+                          <UseCaseHeading>{caseItem.title}</UseCaseHeading>
+                        </Link>
+                      ) : (
                         <UseCaseHeading>{caseItem.title}</UseCaseHeading>
-                      </Link>
-                    ) : (
-                      <UseCaseHeading>{caseItem.title}</UseCaseHeading>
-                    )}
-                    <p
-                      className={cn(styles.description, {
-                        [styles.hasTags]: caseItem.tags?.length > 0,
-                        [styles.docVariant]: variant === "doc",
-                      })}
-                    >
-                      {caseItem.description}
-                    </p>
-                    {caseItem.tags?.length > 0 && (
-                      <ul className={styles.tags}>
-                        {caseItem.tags.map((tag, tagIndex) => (
-                          <li key={tagIndex}>
-                            {tag.href ? (
-                              // @ts-ignore
-                              <Link className={styles.tag} to={tag.href}>
-                                {tag.icon && (
-                                  <Icon
-                                    name={tag.icon}
-                                    size="md"
-                                    className={styles.tagIcon}
-                                  />
-                                )}
-                                {tag.name}
-                                {tag.arrow && (
-                                  // @ts-ignore
-                                  <ArrowRightSvg className={styles.tagArrow} />
-                                )}
-                              </Link>
-                            ) : (
-                              <span className={styles.tag}>
-                                {tag.icon && (
-                                  <Icon
-                                    name={tag.icon}
-                                    size="md"
-                                    className={styles.tagIcon}
-                                  />
-                                )}
-                                {tag.name}
-                                {tag.arrow && (
-                                  // @ts-ignore
-                                  <ArrowRightSvg className={styles.tagArrow} />
-                                )}
-                              </span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                      )}
+                      <p
+                        className={cn(styles.description, {
+                          [styles.hasTags]: caseItem.tags?.length > 0,
+                          [styles.docVariant]: variant === "doc",
+                        })}
+                      >
+                        {caseItem.description}
+                      </p>
+                    </div>
+                    {caseItem.tags?.length > 0 && <Tags tags={caseItem.tags} />}
                   </div>
                 )}
               </li>

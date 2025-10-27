@@ -39,16 +39,22 @@ const ResourceCard: React.FC<Resource> = ({
           [styles.docVariant]: variant === "doc",
         })}
       />
-      <h4 className={styles.resourceTitle}>
-        {tags?.length > 0 ? <Link to={href}>{title}</Link> : title}
-      </h4>
-      <p
-        className={cn(styles.resourceDescription, {
-          [styles.docVariant]: variant === "doc",
+      <h4
+        className={cn(styles.resourceTitle, {
+          [styles.smallSize]: variant === "doc" && !description,
         })}
       >
-        {description}
-      </p>
+        {tags?.length > 0 ? <Link to={href}>{title}</Link> : title}
+      </h4>
+      {description && (
+        <p
+          className={cn(styles.resourceDescription, {
+            [styles.docVariant]: variant === "doc",
+          })}
+        >
+          {description}
+        </p>
+      )}
       {tags?.length > 0 && (
         <ul className={styles.tags}>
           {tags.map((tag, tagIndex) => (
