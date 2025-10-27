@@ -54,21 +54,6 @@ button {
   }
 }
 
-.navbar-sidebar__items {
-  .navbar-sidebar__item {
-    &:first-child {
-      transform: translateY(-46px);
-    }
-  }
-  &.navbar-sidebar__items--show-secondary {
-    .navbar-sidebar__item {
-      &:first-child {
-        transform: unset;
-      }
-    }
-  }
-}
-
 .navbar-sidebar__search,
 .navbar-sidebar__item.menu {
   padding: var(--m-1-5) var(--m-2);
