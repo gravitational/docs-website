@@ -1,16 +1,25 @@
-import React, {type ComponentProps, type ReactNode} from 'react';
-import {useThemeConfig} from '@docusaurus/theme-common';
-import {useNavbarSecondaryMenu} from '@docusaurus/theme-common/internal';
-import Translate from '@docusaurus/Translate';
+import React, { type ComponentProps, type ReactNode } from "react";
+import { useThemeConfig } from "@docusaurus/theme-common";
+import { useNavbarSecondaryMenu } from "@docusaurus/theme-common/internal";
+import Translate from "@docusaurus/Translate";
+import cn from "classnames";
+import styles from "./styles.module.css";
 
-function SecondaryMenuBackButton(props: ComponentProps<'button'>) {
+function SecondaryMenuBackButton(props: ComponentProps<"button">) {
   return (
-    <button {...props} type="button" className="clean-btn navbar-sidebar__back">
-      <Translate
-        id="theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel"
-        description="The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)">
-        Back to main menu
-      </Translate>
+    <button
+      {...props}
+      type="button"
+      className={cn("clean-btn", "navbar-sidebar__back", styles.backButton)}
+    >
+      <span>
+        <Translate
+          id="theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel"
+          description="The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)"
+        >
+          Back to main menu
+        </Translate>
+      </span>
     </button>
   );
 }
