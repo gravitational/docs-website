@@ -79,5 +79,10 @@ jobs:
       - name: Build the docs with the latest content
         run: yarn build
 
+      # Prevent a change in the linter from failing on unexpected docs content
+      # changes.
+      - name: Run the docs formatting linter
+        run: yarn markdown-lint
+
       - name: Check config.json
         run: scripts/validate-docs-config.sh
