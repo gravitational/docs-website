@@ -63,7 +63,7 @@
     "lowlight": "^3.1.0",
     "mdast-util-from-markdown": "^2.0.1",
     "nanoid": "^5.1.5",
-    "postcss-preset-env": "^10.3.1",
+    "postcss-preset-env": "^10.4.0",
     "prism-react-renderer": "^2.3.0",
     "raw-loader": "^4.0.2",
     "react": "^19.2.0",
