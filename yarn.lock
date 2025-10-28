@@ -2116,19 +2116,19 @@
   dependencies:
     "@hapi/hoek" "^11.0.2"
 
-"@inkeep/cxkit-color-mode@^0.5.96":
-  version "0.5.96"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-color-mode/-/cxkit-color-mode-0.5.96.tgz#5d6a7ef4e626c4e5d230dc672dd385ce0a4510ab"
-  integrity sha512-Z/W17xfnQgw0ZyGWCwq9RLBWZa7DSyOpbhdYtnNxmzI414dSZLMt8RWQRACn9KQ7S8TD/D0dr03fU2IUop1F5w==
+"@inkeep/cxkit-color-mode@^0.5.103":
+  version "0.5.103"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-color-mode/-/cxkit-color-mode-0.5.103.tgz#29721f40d61fc0275d6d59e5af02875bf9b45ae0"
+  integrity sha512-yhqpAtTg8M9N/ARLcLLJ3+lOju7dqjdTF+vtV3QB0NX321MgAFgdthh+EhQvUaUJusqgszaaq97mWEt7abcraA==
 
-"@inkeep/cxkit-primitives@0.5.96":
-  version "0.5.96"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-primitives/-/cxkit-primitives-0.5.96.tgz#4e6bd08667c0fb2327bfd2c4f4396286eca7f3c9"
-  integrity sha512-FK0ikjA8T7pKZV7Wh20nqzNfXicq3oTuhb83st+MxebDe5gOb/k23YLY60vHaVkqCkaC+VYkqyfR0GSoZzIuzg==
+"@inkeep/cxkit-primitives@0.5.103":
+  version "0.5.103"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-primitives/-/cxkit-primitives-0.5.103.tgz#670fc256c74548eb27d3053efee4d0ef3fdaaba3"
+  integrity sha512-8NMygNVHWunCj1zGGZEj2SaBaBIZEBNYHL4Eq+k5bsyuzmbNwCjGuv3egLp7VGt+7tJybMXNcjBTdjtHC/BF+w==
   dependencies:
-    "@inkeep/cxkit-color-mode" "^0.5.96"
-    "@inkeep/cxkit-theme" "0.5.96"
-    "@inkeep/cxkit-types" "0.5.96"
+    "@inkeep/cxkit-color-mode" "^0.5.103"
+    "@inkeep/cxkit-theme" "0.5.103"
+    "@inkeep/cxkit-types" "0.5.103"
     "@radix-ui/number" "^1.1.1"
     "@radix-ui/primitive" "^1.1.1"
     "@radix-ui/react-avatar" "1.1.2"
@@ -2177,37 +2177,37 @@
     unist-util-visit "^5.0.0"
     use-sync-external-store "^1.4.0"
 
-"@inkeep/cxkit-react@^0.5.96":
-  version "0.5.96"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-react/-/cxkit-react-0.5.96.tgz#b2c081eb53dd0c99390c9e2365cc8ac7e5c033bc"
-  integrity sha512-X7ixJw53OrowoQ9fZ48nzoKIro+g+NVyJkJLTnekLXkklW4tustMbdWeA1f7mQrThNvgEc11S5PbuxNcwJskHA==
+"@inkeep/cxkit-react@^0.5.103":
+  version "0.5.103"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-react/-/cxkit-react-0.5.103.tgz#792593e0899e932c3484268dffbaf9b445d70adb"
+  integrity sha512-m3Qu3RTMQW29515zKgcg+6QkpHk8DYpkl/ryQn91I0YQU4JHJBJc2hFCPT8QT6DTCByXFflicBckukub5tWe3w==
   dependencies:
-    "@inkeep/cxkit-styled" "0.5.96"
+    "@inkeep/cxkit-styled" "0.5.103"
     "@radix-ui/react-use-controllable-state" "^1.1.0"
     lucide-react "^0.503.0"
 
-"@inkeep/cxkit-styled@0.5.96":
-  version "0.5.96"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-styled/-/cxkit-styled-0.5.96.tgz#156f18f9f8fce4d148388f6e648c685a2b06d94a"
-  integrity sha512-NLumV2BHutLLKlnhHRpMrCe1lxxvMht2a4JyjwNNDd4qx54jfYUpA2Cyqa+jHtxqb9CXreU1a/TxhCHu0WS9mw==
+"@inkeep/cxkit-styled@0.5.103":
+  version "0.5.103"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-styled/-/cxkit-styled-0.5.103.tgz#5de5b427f4bdc9d9ed30b1e5795c4bddb764ff51"
+  integrity sha512-TFCFhwovZ12jMV8TrW6Jkb0VYi6Eeg/De3BkNxloyW7FOQY0LJEareAC7flz9w1ZLgi7H/fgVQjW4y7fH3xqAg==
   dependencies:
-    "@inkeep/cxkit-primitives" "0.5.96"
+    "@inkeep/cxkit-primitives" "0.5.103"
     class-variance-authority "0.7.1"
     clsx "2.1.1"
     merge-anything "5.1.7"
     tailwind-merge "2.6.0"
 
-"@inkeep/cxkit-theme@0.5.96":
-  version "0.5.96"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-theme/-/cxkit-theme-0.5.96.tgz#9333574b0435acaf4dd79a2de6492934df1ec465"
-  integrity sha512-shIZhv/4xM5WF2xSNieI40rbVA/5oBJDarldFSfmwEjbcHZY9fz5efZmi6sqHLlJeT6TMv10IknZ7VIKT8ekiw==
+"@inkeep/cxkit-theme@0.5.103":
+  version "0.5.103"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-theme/-/cxkit-theme-0.5.103.tgz#139724f63bab09047d244c2a6610f697f2af1059"
+  integrity sha512-/oXKlcttBUPQGCfAizElF2F7SzqVLdc5krsuJAZzT4s0TQrBVjHBZxmssLWCnYfZwTUQZ26XXu4mJjSHPpdBbQ==
   dependencies:
     colorjs.io "0.5.2"
 
-"@inkeep/cxkit-types@0.5.96":
-  version "0.5.96"
-  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-types/-/cxkit-types-0.5.96.tgz#833630e97b304ea11c28b49059f80c87d399294b"
-  integrity sha512-ljOudxIY5JC4LLXyAi5hNUfJcQGirmBv4Okup0EczF4tosSDZFG6fzLYXOZ/wNvJ4vNq+TGsXu2yJuAvp9crMA==
+"@inkeep/cxkit-types@0.5.103":
+  version "0.5.103"
+  resolved "https://registry.yarnpkg.com/@inkeep/cxkit-types/-/cxkit-types-0.5.103.tgz#76b038d131d3e185528fbe533a1c6818970979bc"
+  integrity sha512-gmbNZkfaq3iphl1X4mlLL7brEnDniPhr3ITgEUoRVuaqT12YlBf98AdExCpVlUTx7WaUzeHVNK4RNP07JG4V6Q==
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
