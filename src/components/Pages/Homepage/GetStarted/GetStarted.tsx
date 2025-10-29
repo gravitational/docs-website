@@ -22,7 +22,7 @@ interface GetStartedProps {
 }
 
 const GetStarted: React.FC<GetStartedProps> = ({
-  title = "Get Started",
+  title = "Get started",
   youtubeVideoId,
   steps = [],
   links = [],
