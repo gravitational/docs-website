@@ -8,8 +8,10 @@ import type {
   AIChatFunctions,
   SearchFunctions,
   InkeepCallbackEvent,
+  ConversationMessage,
 } from "@inkeep/cxkit-react";
 import { trackEvent } from "../utils/analytics";
+import { debounce } from "@site/utils/general";
 
 interface UseInkeepSearchOptions {
   version?: string;
@@ -18,6 +20,13 @@ interface UseInkeepSearchOptions {
   enableAIChat?: boolean;
   autoOpenOnInput?: boolean; // Auto-open modal when typing
 }
+
+const debouncedTrackEvent = debounce((eventName: string, properties: any) => {
+  trackEvent({
+    event_name: eventName,
+    custom_parameters: properties,
+  });
+}, 1000);
 
 export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
   const {
@@ -102,16 +111,137 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
       const eventsToTrack = [
         "user_message_submitted",
         "search_query_submitted",
+        "search_result_clicked",
+        "assistant_source_item_clicked",
+        "assistant_negative_feedback_submitted",
+        "assistant_positive_feedback_submitted",
+        "assistant_message_inline_link_opened",
+        "assistant_message_copied",
+        "assistant_code_block_copied",
       ];
 
       if (!eventsToTrack.includes(eventName)) {
         return;
       }
 
-      trackEvent({
-        event_name: `inkeep_${eventName}`,
-        custom_parameters: properties,
-      });
+      const getLatestMessage = (
+        messages: ConversationMessage[],
+        role: "assistant" | "system" | "user"
+      ) => {
+        return (
+          messages.filter((msg) => msg.role === role).slice(-1)[0]?.content ||
+          ""
+        );
+      };
+
+      try {
+        switch (eventName) {
+          case "search_query_submitted": {
+            // For search queries, we debounce to avoid spamming analytics
+            debouncedTrackEvent("search", {
+              search_term: properties.searchQuery,
+            });
+            break;
+          }
+          case "user_message_submitted": {
+            // Also debounce Ask AI chat message input
+            debouncedTrackEvent(`inkeep_${eventName}`, {
+              latest_message: getLatestMessage(
+                properties.conversation.messages,
+                "user"
+              ),
+            });
+            break;
+          }
+          case "search_result_clicked": {
+            trackEvent({
+              event_name: `inkeep_${eventName}`,
+              custom_parameters: {
+                search_term: properties.searchQuery,
+                title: properties.title,
+                url: properties.url,
+              },
+            });
+            break;
+          }
+          case "assistant_source_item_clicked": {
+            trackEvent({
+              event_name: `inkeep_${eventName}`,
+              custom_parameters: {
+                latest_message: getLatestMessage(
+                  properties.conversation.messages,
+                  "user"
+                ),
+                title: properties.link.title,
+                url: properties.link.url,
+              },
+            });
+            break;
+          }
+          case "assistant_positive_feedback_submitted":
+          case "assistant_negative_feedback_submitted": {
+            trackEvent({
+              event_name: `inkeep_${eventName}`,
+              custom_parameters: {
+                latest_message: getLatestMessage(
+                  properties.conversation.messages,
+                  "assistant"
+                ),
+                feedback_reason_labels:
+                  properties?.reasons?.map((r) => r.label).join(", ") || "",
+                feedback_reason_details:
+                  properties?.reasons?.map((r) => r.details).join(", ") || "",
+              },
+            });
+            break;
+          }
+          case "assistant_message_inline_link_opened": {
+            trackEvent({
+              event_name: `inkeep_${eventName}`,
+              custom_parameters: {
+                title: properties.title || "",
+                url: properties.url || "",
+              },
+            });
+            break;
+          }
+          case "assistant_message_copied": {
+            trackEvent({
+              event_name: `inkeep_${eventName}`,
+              custom_parameters: {
+                latest_message: getLatestMessage(
+                  properties.conversation.messages,
+                  "assistant"
+                ),
+              },
+            });
+            break;
+          }
+          case "assistant_code_block_copied": {
+            trackEvent({
+              event_name: `inkeep_${eventName}`,
+              custom_parameters: {
+                latest_message: getLatestMessage(
+                  properties.conversation.messages,
+                  "assistant"
+                ),
+                code_language: properties.language || "",
+                code_value: properties.code || "",
+              },
+            });
+            break;
+          }
+          default: {
+            trackEvent({
+              event_name: `inkeep_${eventName}`,
+              custom_parameters: properties,
+            });
+            break;
+          }
+        }
+      } catch (error) {
+        console.error("Error processing Inkeep event:", error);
+      }
     },
   };
 

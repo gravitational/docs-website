@@ -9,10 +9,10 @@
  */
 export const toCopyContent = (
   commandNode: HTMLElement,
-  commandLineClasses: string[],
+  commandLineClasses: string[]
 ): string => {
   const lines = Array.from(
-    commandNode.querySelectorAll(commandLineClasses.join(",")),
+    commandNode.querySelectorAll(commandLineClasses.join(","))
   ).reduce((allLines, commandLine) => {
     allLines.push(commandLine.textContent);
     return allLines;
@@ -58,4 +58,16 @@ export const getFromSecretOrEnv = (name: string): string => {
     ? JSON.parse(process.env.secrets)
     : process.env;
   return configVars[name];
+};
+
+/* Debounce function to limit the rate of function calls */
+export const debounce = (
+  func: (...args: any[] | undefined) => void,
+  wait: number
+) => {
+  let timeout: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
 };

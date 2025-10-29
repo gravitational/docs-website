@@ -23,18 +23,6 @@ export default function MainWrapper(props: Props): ReactNode {
         | HTMLAnchorElement
         | undefined;
 
-      const inkeepSearch = path.find(
-        (el) =>
-          el instanceof HTMLElement &&
-          el.classList?.contains("ikp-ai-search-content")
-      ) as HTMLElement | undefined;
-
-      const inkeepChat = path.find(
-        (el) =>
-          el instanceof HTMLElement &&
-          el.classList?.contains("ikp-ai-chat-content")
-      ) as HTMLElement | undefined;
-
       const navbar = path.find(
         (el) =>
           el instanceof HTMLElement &&
@@ -58,12 +46,6 @@ export default function MainWrapper(props: Props): ReactNode {
           el instanceof HTMLElement &&
           el.classList?.contains("theme-doc-breadcrumbs")
       ) as HTMLElement | undefined;
-
-      if (link && (inkeepSearch || inkeepChat)) {
-        trackEvent({
-          event_name: "inkeep_link_click",
-        });
-      }
 
       if (link && navbar) {
         trackEvent({
