@@ -50,24 +50,36 @@ export default function MainWrapper(props: Props): ReactNode {
       if (link && navbar) {
         trackEvent({
           event_name: "navbar_link_click",
+          custom_parameters: {
+            url: link.href,
+          },
         });
       }
 
       if (link && sidebar) {
         trackEvent({
           event_name: "sidebar_link_click",
+          custom_parameters: {
+            url: link.href,
+          },
         });
       }
 
       if (link && mainContent) {
         trackEvent({
           event_name: "active_page_link_click",
+          custom_parameters: {
+            url: link.href,
+          },
         });
       }
 
       if (link && breadcumbs) {
         trackEvent({
           event_name: "breadcrumbs_link_click",
+          custom_parameters: {
+            url: link.href,
+          },
         });
       }
     };
