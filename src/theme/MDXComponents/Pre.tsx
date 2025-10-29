@@ -20,10 +20,10 @@ const TIMEOUT = 1000;
 interface CodeProps {
   children: ReactNode;
   className?: string;
-  gtag?: (command: string, name: string, params: any) => {};
+  emitEvent?: (command: string, name: string, params: any) => {};
 }
 
-const Pre = ({ children, className, gtag }: CodeProps) => {
+const Pre = ({ children, className, emitEvent }: CodeProps) => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const codeRef = useRef<HTMLDivElement>();
   const buttonRef = useRef<HTMLButtonElement>();
@@ -79,7 +79,7 @@ const Pre = ({ children, className, gtag }: CodeProps) => {
         code_snippet_index_on_page: pos,
         code_snippet_count_on_page: countPres(),
       },
-      gtag: gtag,
+      emitEvent: emitEvent,
     });
 
     if (!navigator.clipboard) {

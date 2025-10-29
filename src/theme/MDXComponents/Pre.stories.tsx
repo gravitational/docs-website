@@ -6,10 +6,10 @@ import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
 import { Var } from "/src/components/Variables/Var";
 import { VarsProvider } from "/src/components/Variables/context";
 import { PositionProvider } from "/src/components/PositionProvider";
-import { collectGtagCalls } from "/src/utils/analytics";
+import { collectEvents } from "/src/utils/analytics";
 
 export const SimplePre = () => (
-  <Pre gtag={collectGtagCalls()}>
+  <Pre emitEvent={collectEvents()}>
     <code className="hljs language-yaml">
       <span className="hljs-attr">key1:</span>{" "}
       <span className="hljs-string">value</span>
@@ -65,7 +65,7 @@ export const CopyVarInPre: Story = {
   render: () => {
     return (
       <VarsProvider>
-        <Pre gtag={collectGtagCalls()}>
+        <Pre emitEvent={collectEvents()}>
           <code className="hljs language-yaml">
             <span className="hljs-attr">key1:</span>{" "}
             <span className="hljs-string">value</span>
@@ -106,8 +106,9 @@ key3:
  - value2
  - value3`,
       );
-      expect(window.gtagCalls).toHaveLength(1);
-      expect(window.gtagCalls[0].params).toEqual({
+      expect(window.events).toHaveLength(1);
+      expect(window.events[0]).toEqual({
+      	event: "code_copy_button",
         label: "yaml",
         // Snippet-level copy button, rather than the copy button for a code
         // line
@@ -122,12 +123,12 @@ export const CopyVarWithThreePres: Story = {
     return (
       <PositionProvider>
         <VarsProvider>
-          <Pre gtag={collectGtagCalls()}>
+          <Pre emitEvent={collectEvents()}>
             <code className="hljs language-text">
               <span className="hljs-string">Some text</span>
             </code>
           </Pre>
-          <Pre gtag={collectGtagCalls()}>
+          <Pre emitEvent={collectEvents()}>
             <code className="hljs language-yaml">
               <span className="hljs-attr">key1:</span>{" "}
               <span className="hljs-string">value</span>
@@ -146,7 +147,7 @@ export const CopyVarWithThreePres: Story = {
               <span className="hljs-string">value3</span>
             </code>
           </Pre>
-          <Pre gtag={collectGtagCalls()}>
+          <Pre emitEvent={collectEvents()}>
             <code className="hljs language-yaml">
               <span className="hljs-attr">key4:</span>{" "}
               <span className="hljs-string">value</span>
@@ -184,8 +185,9 @@ key6:
  - value5
  - value6`,
       );
-      expect(window.gtagCalls).toHaveLength(1);
-      expect(window.gtagCalls[0].params).toEqual({
+      expect(window.events).toHaveLength(1);
+      expect(window.events[0]).toEqual({
+      	event: "code_copy_button",
         label: "yaml",
         // Snippet-level copy button, rather than the copy button for a code
         // line
@@ -202,12 +204,12 @@ export const PreStatsWithTwoCopyButtonClicks: Story = {
     return (
       <PositionProvider>
         <VarsProvider>
-          <Pre gtag={collectGtagCalls()}>
+          <Pre emitEvent={collectEvents()}>
             <code className="hljs language-text">
               <span className="hljs-string">Some text</span>
             </code>
           </Pre>
-          <Pre gtag={collectGtagCalls()}>
+          <Pre emitEvent={collectEvents()}>
             <code className="hljs language-text">
               <span className="hljs-string">More text</span>
             </code>
@@ -223,8 +225,9 @@ export const PreStatsWithTwoCopyButtonClicks: Story = {
     await step("Copy the content", async () => {
       await userEvent.hover(canvas.getByText("Some text"));
       await userEvent.click(canvas.getAllByTestId("copy-button-all")[0]);
-      expect(window.gtagCalls).toHaveLength(1);
-      expect(window.gtagCalls[0].params).toEqual({
+      expect(window.events).toHaveLength(1);
+      expect(window.events[0]).toEqual({
+      	event: "code_copy_button",
         label: "text",
         scope: "snippet",
         code_snippet_index_on_page: 0,
@@ -235,8 +238,9 @@ export const PreStatsWithTwoCopyButtonClicks: Story = {
     await step("Copy the content again", async () => {
       await userEvent.hover(canvas.getByText("Some text"));
       await userEvent.click(canvas.getAllByTestId("copy-button-all")[0]);
-      expect(window.gtagCalls).toHaveLength(2);
-      expect(window.gtagCalls[1].params).toEqual({
+      expect(window.events).toHaveLength(2);
+      expect(window.events[1]).toEqual({
+      	event: "code_copy_button",
         label: "text",
         scope: "snippet",
         code_snippet_index_on_page: 0,

@@ -2,13 +2,13 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { expect } from "@storybook/test";
 import { userEvent, within } from "@storybook/test";
 import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
-import { collectGtagCalls } from "/src/utils/analytics";
+import { collectEvents } from "/src/utils/analytics";
 import Command, { CommandLine } from "./Command";
 
 const commandText = "yarn install";
 
 export const SimpleCommand = () => (
-  <Command gtag={collectGtagCalls()}>
+  <Command emitEvent={collectEvents()}>
     <CommandLine data-content="$ ">{commandText}</CommandLine>
   </Command>
 );
@@ -30,8 +30,9 @@ export const CopyButton: Story = {
       await userEvent.hover(canvas.getByText(commandText));
       await userEvent.click(canvas.getByTestId("copy-button"));
       expect(navigator.clipboard.readText()).toEqual(commandText);
-      expect(window.gtagCalls).toHaveLength(1);
-      expect(window.gtagCalls[0].params).toEqual({
+      expect(window.events).toHaveLength(1);
+      expect(window.events[0]).toEqual({
+      	event: "code_copy_button",
         label: "code",
         scope: "line",
       });

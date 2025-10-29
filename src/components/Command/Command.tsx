@@ -27,12 +27,12 @@ export function CommandComment(props: CommandCommentProps) {
 
 export interface CommandProps {
   children: ReactNode;
-  gtag?: (command: string, name: string, params: any) => {};
+  emitEvent?: (name: string, params: any) => {};
 }
 
 const commandKey = "command";
 
-export default function Command({ children, gtag, ...props }: CommandProps) {
+export default function Command({ children, emitEvent, ...props }: CommandProps) {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const codeRef = useRef<HTMLDivElement>();
   const posProvider = useContext(PositionContext);
@@ -61,7 +61,7 @@ export default function Command({ children, gtag, ...props }: CommandProps) {
         line_index_in_snippet: pos,
         line_count_in_snippet: commandCount,
       },
-      gtag: gtag,
+      emitEvent: emitEvent,
     });
 
     if (!navigator.clipboard) {
