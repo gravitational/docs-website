@@ -51,7 +51,7 @@ export default function MainWrapper(props: Props): ReactNode {
         trackEvent({
           event_name: "navbar_link_click",
           custom_parameters: {
-            url: link.href,
+            clicked_link_url: link.href,
           },
         });
       }
@@ -60,7 +60,7 @@ export default function MainWrapper(props: Props): ReactNode {
         trackEvent({
           event_name: "sidebar_link_click",
           custom_parameters: {
-            url: link.href,
+            clicked_link_url: link.href,
           },
         });
       }
@@ -69,7 +69,7 @@ export default function MainWrapper(props: Props): ReactNode {
         trackEvent({
           event_name: "active_page_link_click",
           custom_parameters: {
-            url: link.href,
+            clicked_link_url: link.href,
           },
         });
       }
@@ -78,7 +78,7 @@ export default function MainWrapper(props: Props): ReactNode {
         trackEvent({
           event_name: "breadcrumbs_link_click",
           custom_parameters: {
-            url: link.href,
+            clicked_link_url: link.href,
           },
         });
       }
