@@ -6,13 +6,10 @@ import InkeepSearchIconSvg from "./inkeepIcon.svg";
 
 export function InkeepSearch() {
   const {
-    message,
-    setMessage,
     isOpen,
     setIsOpen,
     ModalSearchAndChat,
     inkeepModalProps,
-    handleChange,
   } = useInkeepSearch({
     enableAIChat: true,
     autoOpenOnInput: true,
@@ -25,10 +22,8 @@ export function InkeepSearch() {
         <input
           type="text"
           className={styles.input}
-          onChange={(e) => handleChange(e.target.value)}
           onClick={() => setIsOpen(true)}
           placeholder="Search Docs"
-          value={message}
         />
       </div>
       <BrowserOnly fallback={<div />}>
