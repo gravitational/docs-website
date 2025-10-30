@@ -47,6 +47,13 @@ export default function MainWrapper(props: Props): ReactNode {
           el.classList?.contains("theme-doc-breadcrumbs")
       ) as HTMLElement | undefined;
 
+      const toc = path.find(
+        (el) =>
+          el instanceof HTMLElement &&
+          (el.classList?.contains("theme-doc-toc-mobile") ||
+            el.classList?.contains("theme-doc-toc-desktop"))
+      ) as HTMLElement | undefined;
+
       if (link && navbar) {
         trackEvent({
           event_name: "navbar_link_click",
@@ -80,6 +87,12 @@ export default function MainWrapper(props: Props): ReactNode {
           custom_parameters: {
             clicked_link_url: link.href,
           },
+        });
+      }
+
+      if (link && toc) {
+        trackEvent({
+          event_name: "toc_link_click",
         });
       }
     };
