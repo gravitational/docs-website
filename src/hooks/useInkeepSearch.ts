@@ -129,8 +129,10 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
         role: "assistant" | "system" | "user"
       ) => {
         return (
-          messages.filter((msg) => msg.role === role).slice(-1)[0]?.content ||
-          ""
+          messages
+            .filter((msg) => msg.role === role)
+            .slice(-1)[0]
+            ?.content.slice(0, 100) || ""
         );
       };
 
@@ -141,7 +143,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
               trackEvent({
                 event_name: "search",
                 custom_parameters: {
-                  search_term: properties.searchQuery,
+                  search_term: properties.searchQuery.slice(0, 100),
                   total_results: properties.totalResults,
                 },
               });
@@ -164,9 +166,8 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
             trackEvent({
               event_name: `inkeep_${eventName}`,
               custom_parameters: {
-                search_term: properties.searchQuery,
-                title: properties.title,
-                url: properties.url,
+                search_term: properties.searchQuery.slice(0, 100),
+                clicked_link_url: properties.url,
               },
             });
             break;
@@ -179,8 +180,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
                   properties.conversation.messages,
                   "user"
                 ),
-                title: properties.link.title,
-                url: properties.link.url,
+                clicked_link_url: properties.link.url,
               },
             });
             break;
@@ -197,7 +197,9 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
                 feedback_reason_labels:
                   properties?.reasons?.map((r) => r.label).join(", ") || "",
                 feedback_reason_details:
-                  properties?.reasons?.map((r) => r.details).join(", ") || "",
+                  properties?.reasons
+                    ?.map((r) => r.details.slice(0, 100))
+                    .join(", ") || "",
               },
             });
             break;
@@ -206,8 +208,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
             trackEvent({
               event_name: `inkeep_${eventName}`,
               custom_parameters: {
-                title: properties.title || "",
-                url: properties.url || "",
+                clicked_link_url: properties.url,
               },
             });
             break;
@@ -228,12 +229,8 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
             trackEvent({
               event_name: `inkeep_${eventName}`,
               custom_parameters: {
-                latest_assistant_message: getLatestMessage(
-                  properties.conversation.messages,
-                  "assistant"
-                ),
+                code_value: properties.code.slice(0, 100),
                 code_language: properties.language || "",
-                code_value: properties.code || "",
               },
             });
             break;
