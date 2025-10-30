@@ -110,7 +110,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
 
       const eventsToTrack = [
         "user_message_submitted",
-        "search_query_submitted",
+        "search_query_response_received",
         "search_result_clicked",
         "assistant_source_item_clicked",
         "assistant_negative_feedback_submitted",
@@ -136,20 +136,27 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
 
       try {
         switch (eventName) {
-          case "search_query_submitted": {
-            // For search queries, we debounce to avoid spamming analytics
-            debouncedTrackEvent("search", {
-              search_term: properties.searchQuery,
-            });
+          case "search_query_response_received": {
+            if (properties.totalResults) {
+              trackEvent({
+                event_name: "search",
+                custom_parameters: {
+                  search_term: properties.searchQuery,
+                  total_results: properties.totalResults,
+                },
+              });
+            }
             break;
           }
           case "user_message_submitted": {
-            // Also debounce Ask AI chat message input
-            debouncedTrackEvent(`inkeep_${eventName}`, {
-              latest_message: getLatestMessage(
-                properties.conversation.messages,
-                "user"
-              ),
+            trackEvent({
+              event_name: `inkeep_${eventName}`,
+              custom_parameters: {
+                latest_user_message: getLatestMessage(
+                  properties.conversation.messages,
+                  "user"
+                ),
+              },
             });
             break;
           }
@@ -168,7 +175,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
             trackEvent({
               event_name: `inkeep_${eventName}`,
               custom_parameters: {
-                latest_message: getLatestMessage(
+                latest_user_message: getLatestMessage(
                   properties.conversation.messages,
                   "user"
                 ),
@@ -183,7 +190,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
             trackEvent({
               event_name: `inkeep_${eventName}`,
               custom_parameters: {
-                latest_message: getLatestMessage(
+                latest_assistant_message: getLatestMessage(
                   properties.conversation.messages,
                   "assistant"
                 ),
@@ -209,7 +216,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
             trackEvent({
               event_name: `inkeep_${eventName}`,
               custom_parameters: {
-                latest_message: getLatestMessage(
+                latest_assistant_message: getLatestMessage(
                   properties.conversation.messages,
                   "assistant"
                 ),
@@ -221,7 +228,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
             trackEvent({
               event_name: `inkeep_${eventName}`,
               custom_parameters: {
-                latest_message: getLatestMessage(
+                latest_assistant_message: getLatestMessage(
                   properties.conversation.messages,
                   "assistant"
                 ),
@@ -231,13 +238,8 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
             });
             break;
           }
-          default: {
-            trackEvent({
-              event_name: `inkeep_${eventName}`,
-              custom_parameters: properties,
-            });
+          default:
             break;
-          }
         }
       } catch (error) {
         console.error("Error processing Inkeep event:", error);
@@ -265,10 +267,20 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
   const chatCallableFunctionsRef = useRef<AIChatFunctions | null>(null);
   const searchCallableFunctionsRef = useRef<SearchFunctions | null>(null);
 
-  const handleChange = useCallback(
+  const handleSearchChange = useCallback(
+    (str: string) => {
+      searchCallableFunctionsRef.current?.updateQuery(str);
+      setMessage(str);
+      if (autoOpenOnInput && str) {
+        setIsOpen(true);
+      }
+    },
+    [autoOpenOnInput]
+  );
+
+  const handleChatChange = useCallback(
     (str: string) => {
       chatCallableFunctionsRef.current?.updateInputMessage(str);
-      searchCallableFunctionsRef.current?.updateQuery(str);
       setMessage(str);
       if (autoOpenOnInput && str) {
         setIsOpen(true);
@@ -281,7 +293,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
   const dynamicSearchSettings = {
     ...inkeepSearchSettings,
     searchFunctionsRef: searchCallableFunctionsRef,
-    onQueryChange: handleChange,
+    onQueryChange: handleSearchChange,
     // Add version-specific metadata if version is provided
     ...(version && {
       metadata: {
@@ -306,18 +318,15 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
         aiChatSettings: {
           ...inkeepAIChatSettings,
           chatFunctionsRef: chatCallableFunctionsRef,
-          onInputMessageChange: handleChange,
+          onInputMessageChange: handleChatChange,
         },
       }),
   };
 
   return {
-    message,
-    setMessage,
     isOpen,
     setIsOpen,
     ModalSearchAndChat,
     inkeepModalProps,
-    handleChange,
   };
 }
