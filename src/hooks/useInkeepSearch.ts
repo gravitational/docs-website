@@ -11,7 +11,6 @@ import type {
   ConversationMessage,
 } from "@inkeep/cxkit-react";
 import { trackEvent } from "../utils/analytics";
-import { debounce } from "@site/utils/general";
 
 interface UseInkeepSearchOptions {
   version?: string;
@@ -20,13 +19,6 @@ interface UseInkeepSearchOptions {
   enableAIChat?: boolean;
   autoOpenOnInput?: boolean; // Auto-open modal when typing
 }
-
-const debouncedTrackEvent = debounce((eventName: string, properties: any) => {
-  trackEvent({
-    event_name: eventName,
-    custom_parameters: properties,
-  });
-}, 1000);
 
 export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
   const {
