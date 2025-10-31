@@ -34,6 +34,8 @@ import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
 import fs from "fs";
 
+import sidebar from "./sidebars.json"
+
 const latestVersion = getLatestVersion();
 
 const config: Config = {
@@ -75,7 +77,7 @@ const config: Config = {
         autoCollapseCategories: true,
       },
     },
-    navbar: {
+    navbar: Object.keys(sidebar).length > 1 ? {
       items: [
         {
           label: "Get Started",
@@ -132,7 +134,7 @@ const config: Config = {
           ],
         },
       ],
-    },
+    } : undefined,
     image: "/og-image.png",
     colorMode: {
       defaultMode: "light",
