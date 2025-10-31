@@ -42,7 +42,7 @@
   pointer-events: none;
 }
 
-@media (max-width: 768px) {
+@media (--sm-scr) {
   .wrapper {
     text-align: center;
     width: 100%;
@@ -93,9 +93,9 @@
 }
 
 .askAIButton {
+  display: none;
   background-color: var(--color-tonal-neutral-0);
   color: var(--color-foreground-slightly-muted);
-  display: flex;
   align-items: center;
   justify-content: center;
   height: max-content;
@@ -115,6 +115,10 @@
   }
 
   @media (--nav) {
+    display: flex;
+  }
+
+  @media (--lg-scr) {
     padding: 0.75rem var(--m-3);
     span {
       display: block;

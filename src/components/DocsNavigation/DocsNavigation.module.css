@@ -145,7 +145,7 @@
           line-height: 1.5;
           -webkit-font-smoothing: antialiased;
           margin-left: 64px;
-          padding: 14px 0;
+          padding: var(--m-1) 0;
 
           &:hover {
             color: var(--color-dark-purple);
@@ -198,12 +198,13 @@
       display: flex;
       align-items: center;
       position: relative;
-      padding: 14px 0;
+      padding: var(--m-1) var(--m-2) !important;
       margin-left: 64px;
       color: var(--color-black);
       font-size: 13px;
       text-decoration: none;
       line-height: 1.5;
+      transition: all 0.2s ease-in-out;
       -webkit-font-smoothing: antialiased;
 
       &::after {
@@ -211,8 +212,8 @@
         content: "";
         position: absolute;
         bottom: 0;
-        left: 0;
-        width: 100%;
+        left: var(--m-2);
+        width: calc(100% - 2 * var(--m-2));
         height: 1px;
         background-color: transparent;
         transition: background-color var(--t-fast);
@@ -220,7 +221,6 @@
 
       &.active {
         color: var(--color-dark-purple);
-        font-weight: var(--fw-bold);
 
         &::after {
           background-color: var(--color-dark-purple);
@@ -228,7 +228,15 @@
       }
 
       &:hover {
-        color: var(--color-dark-purple);
+        &:not(.active) {
+          background-color: var(--color-tonal-neutral-0);
+        }
+      }
+
+      &:focus {
+        &:not(.active) {
+          background-color: var(--color-tonal-neutral-1);
+        }
       }
 
       @media (--md-scr) {
