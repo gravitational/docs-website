@@ -89,12 +89,9 @@ const extractYouTubeVideoDescription: (description: string) => string | null = (
 
 export interface Meta {
   href: string;
-}
-
-export interface FullMeta extends Meta {
-  title: string;
-  duration: string;
-  thumbnail: string;
+  title?: string;
+  duration?: string;
+  thumbnail?: string;
   description?: string;
 }
 
@@ -131,14 +128,14 @@ interface RawVideoMeta {
   items: RawItem[];
 }
 
-const cache: Record<string, Meta | FullMeta> = {};
+const cache: Record<string, Meta> = {};
 
-export async function fetchVideoMeta(id: string): Promise<Meta | FullMeta> {
+export async function fetchVideoMeta(id: string): Promise<Meta> {
   if (id in cache) {
     return cache[id];
   }
 
-  let data: Meta | FullMeta = {
+  let data: Meta = {
     href: `${YOUTUBE_URL}?v=${id}`,
   };
 

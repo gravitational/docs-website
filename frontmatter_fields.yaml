@@ -31,3 +31,4 @@ allowedFields:
   # The fields below are used in custom components
   - template
   - videoBanner
+  - videoBannerDescription

@@ -151,10 +151,14 @@ const config: Config = {
       const result = await params.defaultParseFrontMatter(params);
 
       // If we have videoBanner file in config, we load this vide data through YouTube API.
-      const { videoBanner } = result.frontMatter;
+      const { videoBanner, videoBannerDescription } = result.frontMatter;
 
       if (typeof videoBanner === "string") {
-        result.frontMatter.videoBanner = await fetchVideoMeta(videoBanner);
+        const videoBannerData = await fetchVideoMeta(videoBanner);
+        if (videoBannerDescription) {
+          videoBannerData.description = videoBannerDescription as string;
+        }
+        result.frontMatter.videoBanner = videoBannerData;
       }
 
       return result;
@@ -232,7 +236,7 @@ const config: Config = {
 
           return orderSidebarItems(
             removeRedundantItems(items, item.dirName),
-            getDocPageByID,
+            getDocPageByID
           );
         },
         // Host docs on the root page, later it will be exposed on goteleport.com/docs
@@ -299,7 +303,7 @@ const config: Config = {
           const alias: string = path.resolve(
             __dirname,
             "./content",
-            currentVersion,
+            currentVersion
           );
 
           return {
