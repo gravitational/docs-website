@@ -48,6 +48,7 @@ export { default as magnify } from "./svg/magnify.svg";
 export { default as map } from "./svg/map.svg";
 export { default as note } from "./svg/note.svg";
 export { default as play } from "./svg/play.svg";
+export { default as play2 } from "./svg/play2.svg";
 export { default as presentation } from "./svg/presentation.svg";
 export { default as protocol } from "./svg/protocol.svg";
 export { default as question } from "./svg/question.svg";
