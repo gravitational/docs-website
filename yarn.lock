@@ -3780,6 +3780,11 @@
     react-docgen-typescript "^2.2.2"
     tslib "^2.0.0"
 
+"@storybook/react-dom-shim@10.0.5":
+  version "10.0.5"
+  resolved "https://registry.yarnpkg.com/@storybook/react-dom-shim/-/react-dom-shim-10.0.5.tgz#18ee43452b073e4834b6585b6c546ffa45503ce9"
+  integrity sha512-bC6pSrQWRHUVmDDxH5uYq/tf2oqIEyzGIC4+3mZl67ngOKwOgjaBatKLnHBDeWrn25pA11mymdFt1VOStbNzGQ==
+
 "@storybook/react-dom-shim@8.6.14":
   version "8.6.14"
   resolved "https://registry.yarnpkg.com/@storybook/react-dom-shim/-/react-dom-shim-8.6.14.tgz#02fc8aeab701040744d93b6ef46b9e5727123370"
@@ -3794,7 +3799,7 @@
     "@storybook/preset-react-webpack" "8.6.14"
     "@storybook/react" "8.6.14"
 
-"@storybook/react@8.6.14", "@storybook/react@^8.6.14":
+"@storybook/react@8.6.14":
   version "8.6.14"
   resolved "https://registry.yarnpkg.com/@storybook/react/-/react-8.6.14.tgz#80136abcbc6e96ef5f747aef5c4e6afc40b3dce4"
   integrity sha512-BOepx5bBFwl/CPI+F+LnmMmsG1wQYmrX/UQXgUbHQUU9Tj7E2ndTnNbpIuSLc8IrM03ru+DfwSg1Co3cxWtT+g==
@@ -3805,6 +3810,14 @@
     "@storybook/preview-api" "8.6.14"
     "@storybook/react-dom-shim" "8.6.14"
     "@storybook/theming" "8.6.14"
+
+"@storybook/react@^10.0.5":
+  version "10.0.5"
+  resolved "https://registry.yarnpkg.com/@storybook/react/-/react-10.0.5.tgz#8cc627e4887b4b4259778fed8b97409fc7b679c8"
+  integrity sha512-FDajPP8HG4n1w3nql7lxQUNKg5+wEa+qJzAPNk583FRaeH6GuxSHlG1vUARQ1QnAZwwlrZzcmgjVNxIucms/5g==
+  dependencies:
+    "@storybook/global" "^5.0.0"
+    "@storybook/react-dom-shim" "10.0.5"
 
 "@storybook/test-runner@^0.24.1":
   version "0.24.1"
