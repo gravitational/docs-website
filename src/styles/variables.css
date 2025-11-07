@@ -115,6 +115,7 @@
   --ifm-color-primary-light: var(--color-light-purple);
   --ifm-color-primary-lighter: #359962;
   --ifm-color-primary-lightest: #3cad6e;
+  --ifm-font-family-base: var(--font-base);
 
   --ifm-navbar-height: 80px;
 
