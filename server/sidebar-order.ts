@@ -16,7 +16,8 @@ export interface docPage {
 }
 
 interface sidebarAttributes {
-  title: string;
+  normalizedLabel: string;
+  label: string;
   isIntroduction: boolean;
   isGettingStarted: boolean;
   sidebarPosition?: number;
@@ -58,7 +59,8 @@ const getSidebarAttributes = (
   }
 
   return {
-    title: title.toLowerCase(),
+    normalizedLabel: title.toLowerCase(),
+    label: title,
     isIntroduction: title.toLowerCase().includes("introduction"),
     isGettingStarted: title.toLowerCase().match(/get(ting)? started/) !== null,
     sidebarPosition: sidebarPosition,
@@ -134,7 +136,7 @@ export const orderSidebarItems = (
 
     // If there's nothing special about one title relative to the other,
     // sort them alphabetically.
-    if (attrsA.title >= attrsB.title) {
+    if (attrsA.normalizedLabel >= attrsB.normalizedLabel) {
       return 1;
     } else {
       return -1;
@@ -188,12 +190,12 @@ export const repetitiveSidebarSections = (
   const ids: Array<string> = [];
   const result: Array<string> = [];
   items.forEach((item) => {
-    const { title, id } = getSidebarAttributes(item, getter);
+    const { label, id } = getSidebarAttributes(item, getter);
     ids.push(`- ${id}`);
 
-    const words = title.split(" ");
+    const words = label.split(" ");
     for (let i = words.length - 1; i > 0; i--) {
-      const beginning = words.slice(0, i + 1).join(" ");
+      const beginning = words.slice(0, i).join(" ");
       const end = words.slice(words.length - i, words.length + 1).join(" ");
 
       const beginningCount = titleSubstrings.get(beginning) || 0;
@@ -203,10 +205,14 @@ export const repetitiveSidebarSections = (
     }
   });
 
+  console.log("titleSubstrings:", titleSubstrings);
+
   titleSubstrings.forEach((val, key) => {
     if (val == items.length) {
       result.push(
-        `the following pages in the same sidebar section have labels that repeat the string "${key}": ${ids.join("\n")}`,
+        `The following pages in the same sidebar section have labels that repeat the string "${key}":
+${ids.join("\n")}
+`,
       );
     }
   });

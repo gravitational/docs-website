@@ -1260,7 +1260,7 @@ describe("removeRedundantItems", () => {
 describe("repetitiveSidebarSections", () => {
   describe("sidebar label", () => {
     const idToDocPage = {
-      "page-a": {
+      "my-section/page-a": {
         title: "Page A",
         id: "my-section/page-a",
         frontMatter: {
@@ -1271,7 +1271,7 @@ describe("repetitiveSidebarSections", () => {
         source: "@site/docs/my-section/page-a.mdx",
         sourceDirName: "",
       },
-      "page-b": {
+      "my-section/page-b": {
         title: "Page B",
         id: "my-section/page-b",
         frontMatter: {
@@ -1282,7 +1282,7 @@ describe("repetitiveSidebarSections", () => {
         source: "@site/docs/my-section/page-b.mdx",
         sourceDirName: "",
       },
-      "page-c": {
+      "my-section/page-c": {
         title: "Page C",
         id: "my-section/page-c",
         frontMatter: {
@@ -1293,7 +1293,7 @@ describe("repetitiveSidebarSections", () => {
         source: "@site/docs/my-section/page-c.mdx",
         sourceDirName: "",
       },
-      "page-d": {
+      "my-section/page-d": {
         title: "D Page",
         id: "my-section/page-d",
         frontMatter: {
@@ -1303,7 +1303,7 @@ describe("repetitiveSidebarSections", () => {
         source: "@site/docs/my-section/page-d.mdx",
         sourceDirName: "",
       },
-      "page-e": {
+      "my-section/page-e": {
         title: "E Page",
         id: "my-section/page-e",
         frontMatter: {
@@ -1313,7 +1313,7 @@ describe("repetitiveSidebarSections", () => {
         source: "@site/docs/my-section/page-e.mdx",
         sourceDirName: "",
       },
-      "page-f": {
+      "my-section/page-f": {
         title: "F Page",
         id: "my-section/page-f",
         frontMatter: {
@@ -1349,7 +1349,11 @@ describe("repetitiveSidebarSections", () => {
           },
         ],
         expected: [
-          `the pages in section my-section have sidebar labels that repeat the string "Page "`,
+          `The following pages in the same sidebar section have labels that repeat the string "Page":
+- my-section/page-a
+- my-section/page-b
+- my-section/page-c
+`,
         ],
       },
       // TODO: one word at end
