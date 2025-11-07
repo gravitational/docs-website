@@ -1294,31 +1294,31 @@ describe("repetitiveSidebarSections", () => {
         sourceDirName: "",
       },
       "my-section/page-d": {
-        title: "D Page",
+        title: "D Docs Page",
         id: "my-section/page-d",
         frontMatter: {
-          title: "D Page",
-          description: "D Page",
+          title: "D Docs Page",
+          description: "D Docs Page",
         },
         source: "@site/docs/my-section/page-d.mdx",
         sourceDirName: "",
       },
       "my-section/page-e": {
-        title: "E Page",
+        title: "E Docs Page",
         id: "my-section/page-e",
         frontMatter: {
-          title: "E Page",
-          description: "E Page",
+          title: "E Docs Page",
+          description: "E Docs Page",
         },
         source: "@site/docs/my-section/page-e.mdx",
         sourceDirName: "",
       },
       "my-section/page-f": {
-        title: "F Page",
+        title: "F Docs Page",
         id: "my-section/page-f",
         frontMatter: {
-          title: "F Page",
-          description: "F Page",
+          title: "F Docs Page",
+          description: "F Docs Page",
         },
         source: "@site/docs/my-section/page-d.mdx",
         sourceDirName: "",
@@ -1356,9 +1356,31 @@ describe("repetitiveSidebarSections", () => {
 `,
         ],
       },
-      // TODO: one word at end
-      // TODO: two words at beginning
-      // TODO: two words at end
+{
+        description: "two words at the end of each item",
+        input: [
+          {
+            type: "doc",
+            id: "my-section/page-d",
+          },
+          {
+            type: "doc",
+            id: "my-section/page-e",
+          },
+          {
+            type: "doc",
+            id: "my-section/page-f",
+          },
+        ],
+        expected: [
+          `The following pages in the same sidebar section have labels that repeat the string "Docs Page":
+- my-section/page-d
+- my-section/page-e
+- my-section/page-f
+`,
+
+        ],
+      }
       // TODO: no repetition
       // TODO: nested section
     ];

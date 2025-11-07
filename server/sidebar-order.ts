@@ -205,17 +205,22 @@ export const repetitiveSidebarSections = (
     }
   });
 
-  console.log("titleSubstrings:", titleSubstrings);
+  const sortedSubstrings = [...titleSubstrings.keys()].sort((a, b) => {
+    return b.length - a.length;
+  });
 
-  titleSubstrings.forEach((val, key) => {
-    if (val == items.length) {
+  // For a given section, return the longest violating substring.
+  for (let i = 0; i < sortedSubstrings.length; i++) {
+    const key = sortedSubstrings[i];
+    if (titleSubstrings.get(key) == items.length) {
       result.push(
         `The following pages in the same sidebar section have labels that repeat the string "${key}":
 ${ids.join("\n")}
 `,
       );
+      break;
     }
-  });
+  }
 
   return result;
 };
