@@ -1349,7 +1349,7 @@ describe("repetitiveSidebarSections", () => {
           },
         ],
         expected: [
-          `The following pages in the same sidebar section have labels that repeat the string "Page":
+          `The following pages in the same sidebar section have labels that repeat the string prefix "Page":
 - my-section/page-a
 - my-section/page-b
 - my-section/page-c
@@ -1373,7 +1373,7 @@ describe("repetitiveSidebarSections", () => {
           },
         ],
         expected: [
-          `The following pages in the same sidebar section have labels that repeat the string "Docs Page":
+          `The following pages in the same sidebar section have labels that repeat the string suffix "Docs Page":
 - my-section/page-d
 - my-section/page-e
 - my-section/page-f
@@ -1415,12 +1415,12 @@ describe("repetitiveSidebarSections", () => {
           },
         ],
         expected: [
-          `The following pages in the same sidebar section have labels that repeat the string "Docs Page":
+          `The following pages in the same sidebar section have labels that repeat the string suffix "Docs Page":
 - my-section/page-d
 - my-section/page-e
 - my-section/page-f
 `,
-          `The following pages in the same sidebar section have labels that repeat the string "Page":
+          `The following pages in the same sidebar section have labels that repeat the string prefix "Page":
 - my-section/page-c
 - my-section/page-a
 - my-section/page-b
