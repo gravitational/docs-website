@@ -178,6 +178,38 @@ export const removeRedundantItems = (
 export const repetitiveSidebarSections = (
   items: Array<NormalizedSidebarItem>,
   getter: (id: string) => docPage,
-): Array<NormalizedSidebarItem> => {
-  return [];
+): Array<string> => {
+  // For each sidebar title, record each possible combination of words from the
+  // beginning and from the end in a map. If there are repeats, use the map to increment a
+  // counter. If there are any word combinations with the same number as
+  // guides in the section, that is, if all guides in a section repeat the
+  // same string, add a warning to the result.
+  const titleSubstrings = new Map();
+  const ids: Array<string> = [];
+  const result: Array<string> = [];
+  items.forEach((item) => {
+    const { title, id } = getSidebarAttributes(item, getter);
+    ids.push(`- ${id}`);
+
+    const words = title.split(" ");
+    for (let i = words.length - 1; i > 0; i--) {
+      const beginning = words.slice(0, i + 1).join(" ");
+      const end = words.slice(words.length - i, words.length + 1).join(" ");
+
+      const beginningCount = titleSubstrings.get(beginning) || 0;
+      titleSubstrings.set(beginning, beginningCount + 1);
+      const endCount = titleSubstrings.get(end) || 0;
+      titleSubstrings.set(end, endCount + 1);
+    }
+  });
+
+  titleSubstrings.forEach((val, key) => {
+    if (val == items.length) {
+      result.push(
+        `the following pages in the same sidebar section have labels that repeat the string "${key}": ${ids.join("\n")}`,
+      );
+    }
+  });
+
+  return result;
 };
