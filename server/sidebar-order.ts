@@ -188,7 +188,7 @@ export const repetitiveSidebarSections = (
   // same string, add a warning to the result.
   const titleSubstrings = new Map();
   const ids: Array<string> = [];
-  const result: Array<string> = [];
+  let result: Array<string> = [];
   items.forEach((item) => {
     const { label, id } = getSidebarAttributes(item, getter);
     ids.push(`- ${id}`);
@@ -202,6 +202,11 @@ export const repetitiveSidebarSections = (
       titleSubstrings.set(beginning, beginningCount + 1);
       const endCount = titleSubstrings.get(end) || 0;
       titleSubstrings.set(end, endCount + 1);
+    }
+
+    const cat = item as NormalizedSidebarItemCategory;
+    if (cat.items) {
+      result = result.concat(repetitiveSidebarSections(cat.items, getter));
     }
   });
 
