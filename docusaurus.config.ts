@@ -27,6 +27,7 @@ import {
 import {
   orderSidebarItems,
   removeRedundantItems,
+  repetitiveSidebarSections,
 } from "./server/sidebar-order";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { rehypeHLJS } from "./server/rehype-hljs";
@@ -233,6 +234,15 @@ const config: Config = {
           const getDocPageByID = (id: string) => {
             return idToDocPage.get(id);
           };
+
+          const repetitiveItems = repetitiveSidebarSections(
+            items,
+            getDocPageByID,
+          );
+
+          if (repetitiveItems.length > 0) {
+            throw new Error(repetitiveItems.join("\n"));
+          }
 
           return orderSidebarItems(
             removeRedundantItems(items, item.dirName),
