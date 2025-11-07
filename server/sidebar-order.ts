@@ -176,6 +176,9 @@ export const removeRedundantItems = (
     );
   });
 };
+const sortByLength = (a, b) => {
+  return b.length - a.length;
+};
 
 export const repetitiveSidebarSections = (
   items: Array<NormalizedSidebarItem>,
@@ -186,7 +189,13 @@ export const repetitiveSidebarSections = (
   // counter. If there are any word combinations with the same number as
   // guides in the section, that is, if all guides in a section repeat the
   // same string, add a warning to the result.
-  const titleSubstrings = new Map();
+
+  // Declare separate maps for substrings taken from the beginning and
+  // substrings taken from the end. This disambiguates substrings found at
+  // both the beginning and the end of some entries.
+  const titleSubstringsFromBeginning = new Map();
+  const titleSubstringsFromEnd = new Map();
+
   const ids: Array<string> = [];
   let result: Array<string> = [];
   items.forEach((item) => {
@@ -198,10 +207,10 @@ export const repetitiveSidebarSections = (
       const beginning = words.slice(0, i).join(" ");
       const end = words.slice(words.length - i, words.length + 1).join(" ");
 
-      const beginningCount = titleSubstrings.get(beginning) || 0;
-      titleSubstrings.set(beginning, beginningCount + 1);
-      const endCount = titleSubstrings.get(end) || 0;
-      titleSubstrings.set(end, endCount + 1);
+      const beginningCount = titleSubstringsFromBeginning.get(beginning) || 0;
+      titleSubstringsFromBeginning.set(beginning, beginningCount + 1);
+      const endCount = titleSubstringsFromEnd.get(end) || 0;
+      titleSubstringsFromEnd.set(end, endCount + 1);
     }
 
     const cat = item as NormalizedSidebarItemCategory;
@@ -210,16 +219,30 @@ export const repetitiveSidebarSections = (
     }
   });
 
-  const sortedSubstrings = [...titleSubstrings.keys()].sort((a, b) => {
-    return b.length - a.length;
-  });
+  const sortedBeginningSubstrings = [
+    ...titleSubstringsFromBeginning.keys(),
+  ].sort(sortByLength);
+  const sortedEndSubstrings = [...titleSubstringsFromEnd.keys()].sort(
+    sortByLength,
+  );
 
   // For a given section, return the longest violating substring.
-  for (let i = 0; i < sortedSubstrings.length; i++) {
-    const key = sortedSubstrings[i];
-    if (titleSubstrings.get(key) == items.length) {
+  for (let i = 0; i < sortedBeginningSubstrings.length; i++) {
+    const key = sortedBeginningSubstrings[i];
+    if (titleSubstringsFromBeginning.get(key) == items.length) {
       result.push(
-        `The following pages in the same sidebar section have labels that repeat the string "${key}":
+        `The following pages in the same sidebar section have labels that repeat the string prefix "${key}":
+${ids.join("\n")}
+`,
+      );
+      break;
+    }
+  }
+  for (let i = 0; i < sortedEndSubstrings.length; i++) {
+    const key = sortedEndSubstrings[i];
+    if (titleSubstringsFromEnd.get(key) == items.length) {
+      result.push(
+        `The following pages in the same sidebar section have labels that repeat the string suffix "${key}":
 ${ids.join("\n")}
 `,
       );
