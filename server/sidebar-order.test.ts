@@ -1441,6 +1441,16 @@ describe("repetitiveSidebarSections", () => {
         ],
         expected: [],
       },
+      {
+        description: "single page",
+        input: [
+          {
+            type: "doc",
+            id: "my-section/page-a",
+          },
+        ],
+        expected: [],
+      },
     ];
 
     test.each(testCases)("$description", (c) => {
