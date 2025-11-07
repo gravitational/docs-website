@@ -184,6 +184,11 @@ export const repetitiveSidebarSections = (
   items: Array<NormalizedSidebarItem>,
   getter: (id: string) => docPage,
 ): Array<string> => {
+  // Special case: repetition is impossible
+  if (items.length <= 1) {
+    return [];
+  }
+
   // For each sidebar title, record each possible combination of words from the
   // beginning and from the end in a map. If there are repeats, use the map to increment a
   // counter. If there are any word combinations with the same number as
