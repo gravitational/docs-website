@@ -15,7 +15,7 @@ export interface docPage {
   sidebarPosition?: number;
 }
 
-interface orderAttributes {
+interface sidebarAttributes {
   title: string;
   isIntroduction: boolean;
   isGettingStarted: boolean;
@@ -23,14 +23,14 @@ interface orderAttributes {
   id?: string;
 }
 
-// getOrderAttributes extracts attributes of a NormalizedSidebarItem's title and
+// getSidebarAttributes extracts attributes of a NormalizedSidebarItem's title and
 // sidebar position for sorting. Titles are lowercased. In the case of a
 // category index page, we use the sidebar position of the page's link, if this
 // is present. Otherwise, we sort by the category label.
-const getOrderAttributes = (
+const getSidebarAttributes = (
   item: NormalizedSidebarItem,
   getter: (id: string) => docPage,
-): orderAttributes => {
+): sidebarAttributes => {
   let title: string;
   let sidebarPosition: number;
   let id: string;
@@ -84,7 +84,7 @@ export const orderSidebarItems = (
     // If the item has a sidebar position, add it to the final array. We'll sort
     // the remaining items automatically before adding them to the empty slots
     // in the final array.
-    const { sidebarPosition, id } = getOrderAttributes(newItem, getter);
+    const { sidebarPosition, id } = getSidebarAttributes(newItem, getter);
     if (!sidebarPosition) {
       unsortedItems.push(newItem);
       return;
@@ -107,8 +107,8 @@ export const orderSidebarItems = (
   });
 
   unsortedItems.sort((a, b) => {
-    const attrsA = getOrderAttributes(a, getter);
-    const attrsB = getOrderAttributes(b, getter);
+    const attrsA = getSidebarAttributes(a, getter);
+    const attrsB = getSidebarAttributes(b, getter);
 
     // We can't sort by title, so don't compare.
     if (attrsA == undefined || attrsB == undefined) {
