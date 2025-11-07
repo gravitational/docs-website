@@ -201,21 +201,20 @@ export const repetitiveSidebarSections = (
   const titleSubstringsFromBeginning = new Map();
   const titleSubstringsFromEnd = new Map();
 
-  const ids: Array<string> = [];
   let result: Array<string> = [];
   items.forEach((item) => {
     const { label, id } = getSidebarAttributes(item, getter);
-    ids.push(`- ${id}`);
-
     const words = label.split(" ");
     for (let i = words.length - 1; i > 0; i--) {
       const beginning = words.slice(0, i).join(" ");
       const end = words.slice(words.length - i, words.length + 1).join(" ");
 
-      const beginningCount = titleSubstringsFromBeginning.get(beginning) || 0;
-      titleSubstringsFromBeginning.set(beginning, beginningCount + 1);
-      const endCount = titleSubstringsFromEnd.get(end) || 0;
-      titleSubstringsFromEnd.set(end, endCount + 1);
+      const prefixSharers = titleSubstringsFromBeginning.get(beginning) || [];
+      prefixSharers.push(id);
+      titleSubstringsFromBeginning.set(beginning, prefixSharers);
+      const suffixSharers = titleSubstringsFromEnd.get(end) || [];
+      suffixSharers.push(id);
+      titleSubstringsFromEnd.set(end, suffixSharers);
     }
 
     const cat = item as NormalizedSidebarItemCategory;
@@ -234,10 +233,13 @@ export const repetitiveSidebarSections = (
   // For a given section, return the longest violating substring.
   for (let i = 0; i < sortedBeginningSubstrings.length; i++) {
     const key = sortedBeginningSubstrings[i];
-    if (titleSubstringsFromBeginning.get(key) > 1) {
+    const substringPages = titleSubstringsFromBeginning.get(key).map((p) => {
+      return `- ${p}`;
+    });
+    if (substringPages.length > 1) {
       result.push(
         `The following pages in the same sidebar section have labels that repeat the string prefix "${key}":
-${ids.join("\n")}
+${substringPages.join("\n")}
 `,
       );
       break;
@@ -245,10 +247,13 @@ ${ids.join("\n")}
   }
   for (let i = 0; i < sortedEndSubstrings.length; i++) {
     const key = sortedEndSubstrings[i];
-    if (titleSubstringsFromEnd.get(key) > 1) {
+    const substringPages = titleSubstringsFromEnd.get(key).map((p) => {
+      return `- ${p}`;
+    });
+    if (substringPages.length > 1) {
       result.push(
         `The following pages in the same sidebar section have labels that repeat the string suffix "${key}":
-${ids.join("\n")}
+${substringPages.join("\n")}
 `,
       );
       break;
