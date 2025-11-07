@@ -175,7 +175,7 @@ export const removeRedundantItems = (
   });
 };
 
-export const removeRedundantSidebarLabelWords = (
+export const repetitiveSidebarSections = (
   items: Array<NormalizedSidebarItem>,
   getter: (id: string) => docPage,
 ): Array<NormalizedSidebarItem> => {

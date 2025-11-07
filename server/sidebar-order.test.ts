@@ -1257,70 +1257,70 @@ describe("removeRedundantItems", () => {
   });
 });
 
-describe("removeRedundantSidebarLabelWords", () => {
+describe("repetitiveSidebarSections", () => {
   describe("sidebar label", () => {
     const idToDocPage = {
       "page-a": {
         title: "Page A",
-        id: "page-a",
+        id: "my-section/page-a",
         frontMatter: {
           title: "Page A",
           sidebar_label: "Page Z",
           description: "Page A",
         },
-        source: "@site/docs/page-a.mdx",
+        source: "@site/docs/my-section/page-a.mdx",
         sourceDirName: "",
       },
       "page-b": {
         title: "Page B",
-        id: "page-b",
+        id: "my-section/page-b",
         frontMatter: {
           title: "Page B",
           sidebar_label: "Page W",
           description: "Page B",
         },
-        source: "@site/docs/page-b.mdx",
+        source: "@site/docs/my-section/page-b.mdx",
         sourceDirName: "",
       },
       "page-c": {
         title: "Page C",
-        id: "page-c",
+        id: "my-section/page-c",
         frontMatter: {
           title: "Page C",
           sidebar_label: "Page X",
           description: "Page C",
         },
-        source: "@site/docs/page-c.mdx",
+        source: "@site/docs/my-section/page-c.mdx",
         sourceDirName: "",
       },
       "page-d": {
         title: "D Page",
-        id: "page-d",
+        id: "my-section/page-d",
         frontMatter: {
           title: "D Page",
           description: "D Page",
         },
-        source: "@site/docs/page-d.mdx",
+        source: "@site/docs/my-section/page-d.mdx",
         sourceDirName: "",
       },
       "page-e": {
         title: "E Page",
-        id: "page-e",
+        id: "my-section/page-e",
         frontMatter: {
           title: "E Page",
           description: "E Page",
         },
-        source: "@site/docs/page-e.mdx",
+        source: "@site/docs/my-section/page-e.mdx",
         sourceDirName: "",
       },
       "page-f": {
         title: "F Page",
-        id: "page-f",
+        id: "my-section/page-f",
         frontMatter: {
           title: "F Page",
           description: "F Page",
         },
-        source: "@site/docs/page-d.mdx",
+        source: "@site/docs/my-section/page-d.mdx",
         sourceDirName: "",
       },
     };
@@ -1328,18 +1328,38 @@ describe("removeRedundantSidebarLabelWords", () => {
     interface testCase {
       description: string;
       input: Array<NormalizedSidebarItem>;
-      expected: Array<NormalizedSidebarItem>;
+      expected: Array<string>;
     }
 
     const testCases: Array<testCase> = [
-      // TODO:  one word at beginning
+      {
+        description: "one word at the beginning of each item",
+        input: [
+          {
+            type: "doc",
+            id: "my-section/page-a",
+          },
+          {
+            type: "doc",
+            id: "my-section/page-b",
+          },
+          {
+            type: "doc",
+            id: "my-section/page-c",
+          },
+        ],
+        expected: [
+          `the pages in section my-section have sidebar labels that repeat the string "Page "`,
+        ],
+      },
       // TODO: one word at end
       // TODO: two words at beginning
       // TODO: two words at end
+      // TODO: no repetition
     ];
 
     test.each(testCases)("$description", (c) => {
-      const actual = removeRedundantSidebarLabelWords(
+      const actual = repetitiveSidebarSections(
         c.input,
         (id: string): docPage => {
           return idToDocPage[id];
@@ -1349,8 +1369,8 @@ describe("removeRedundantSidebarLabelWords", () => {
     });
   });
 
-  // TODO: make this a test for removing duplicate words in a sidebar section that
-  // encompasses both regular pages and category index pages.
+  // TODO: make this a test for identitying  duplicate words in a sidebar
+  // section that encompasses both regular pages and category index pages.
   //   describe("ordering category index pages", () => {
   //     const idToDocPage = {
   //       "section-a/section-a": {
@@ -1516,7 +1536,7 @@ describe("removeRedundantSidebarLabelWords", () => {
   //       },
   //     ];
   //
-  //     const actual = orderSidebarItems(input, (id: string): docPage => {
+  //     const actual = repetitiveSidebarSections(input, (id: string): docPage => {
   //       return idToDocPage[id];
   //     });
   //     expect(actual).toEqual(expected);
