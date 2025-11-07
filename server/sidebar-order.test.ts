@@ -2,7 +2,7 @@ import { describe, expect, test } from "@jest/globals";
 import { basename, dirname } from "node:path";
 import {
   orderSidebarItems,
-  removeRedundantSidebarLabelWords,
+  repetitiveSidebarSections,
   removeRedundantItems,
 } from "./sidebar-order";
 import type { docPage } from "./sidebar-order";
@@ -1356,6 +1356,7 @@ describe("repetitiveSidebarSections", () => {
       // TODO: two words at beginning
       // TODO: two words at end
       // TODO: no repetition
+      // TODO: nested section
     ];
 
     test.each(testCases)("$description", (c) => {
