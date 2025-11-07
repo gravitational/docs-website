@@ -234,7 +234,7 @@ export const repetitiveSidebarSections = (
   // For a given section, return the longest violating substring.
   for (let i = 0; i < sortedBeginningSubstrings.length; i++) {
     const key = sortedBeginningSubstrings[i];
-    if (titleSubstringsFromBeginning.get(key) == items.length) {
+    if (titleSubstringsFromBeginning.get(key) > 1) {
       result.push(
         `The following pages in the same sidebar section have labels that repeat the string prefix "${key}":
 ${ids.join("\n")}
@@ -245,7 +245,7 @@ ${ids.join("\n")}
   }
   for (let i = 0; i < sortedEndSubstrings.length; i++) {
     const key = sortedEndSubstrings[i];
-    if (titleSubstringsFromEnd.get(key) == items.length) {
+    if (titleSubstringsFromEnd.get(key) > 1) {
       result.push(
         `The following pages in the same sidebar section have labels that repeat the string suffix "${key}":
 ${ids.join("\n")}
