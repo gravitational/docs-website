@@ -1451,6 +1451,29 @@ describe("repetitiveSidebarSections", () => {
         ],
         expected: [],
       },
+      {
+        description: "two repeating pages",
+        input: [
+          {
+            type: "doc",
+            id: "my-section/page-a",
+          },
+          {
+            type: "doc",
+            id: "my-section/page-b",
+          },
+          {
+            type: "doc",
+            id: "my-section/page-f",
+          },
+        ],
+        expected: [
+          `The following pages in the same sidebar section have labels that repeat the string prefix "Page":
+- my-section/page-a
+- my-section/page-b
+`,
+        ],
+      },
     ];
 
     test.each(testCases)("$description", (c) => {
