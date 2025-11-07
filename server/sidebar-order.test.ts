@@ -1356,7 +1356,7 @@ describe("repetitiveSidebarSections", () => {
 `,
         ],
       },
-{
+      {
         description: "two words at the end of each item",
         input: [
           {
@@ -1378,11 +1378,57 @@ describe("repetitiveSidebarSections", () => {
 - my-section/page-e
 - my-section/page-f
 `,
-
         ],
-      }
+      },
+      {
+        description: "repetition in inner and outer sections",
+        input: [
+          {
+            type: "category",
+            label: "Page C",
+            items: [
+              {
+                type: "doc",
+                id: "my-section/page-d",
+              },
+              {
+                type: "doc",
+                id: "my-section/page-e",
+              },
+              {
+                type: "doc",
+                id: "my-section/page-f",
+              },
+            ],
+            link: {
+              type: "doc",
+              id: "my-section/page-c",
+            },
+          },
+          {
+            type: "doc",
+            id: "my-section/page-a",
+          },
+          {
+            type: "doc",
+            id: "my-section/page-b",
+          },
+        ],
+        expected: [
+          `The following pages in the same sidebar section have labels that repeat the string "Docs Page":
+- my-section/page-d
+- my-section/page-e
+- my-section/page-f
+`,
+          `The following pages in the same sidebar section have labels that repeat the string "Page":
+- my-section/page-c
+- my-section/page-a
+- my-section/page-b
+`,
+        ],
+      },
+
       // TODO: no repetition
-      // TODO: nested section
     ];
 
     test.each(testCases)("$description", (c) => {
@@ -1395,177 +1441,4 @@ describe("repetitiveSidebarSections", () => {
       expect(actual).toEqual(c.expected);
     });
   });
-
-  // TODO: make this a test for identitying  duplicate words in a sidebar
-  // section that encompasses both regular pages and category index pages.
-  //   describe("ordering category index pages", () => {
-  //     const idToDocPage = {
-  //       "section-a/section-a": {
-  //         title: "Section A",
-  //         id: "section-a/section-a",
-  //         frontMatter: {
-  //           title: "Section A",
-  //           description: "Section A",
-  //         },
-  //         source: "@site/docs/section-a/section-a.mdx",
-  //         sourceDirName: "section-a",
-  //       },
-  //       "section-a/page-a": {
-  //         title: "Section A Page A",
-  //         id: "section-a/page-a",
-  //         frontMatter: {
-  //           title: "Section A Page A",
-  //           description: "Page A",
-  //         },
-  //         source: "@site/docs/section-a/page-a.mdx",
-  //         sourceDirName: "",
-  //       },
-  //       "section-a/page-b": {
-  //         title: "Section A Page B",
-  //         id: "section-a/page-b",
-  //         frontMatter: {
-  //           title: "Section A Page B",
-  //           description: "Page B",
-  //         },
-  //         source: "@site/docs/section-a/page-b.mdx",
-  //         sourceDirName: "",
-  //       },
-  //       "section-b/section-b": {
-  //         title: "Section B",
-  //         id: "section-b/section-b",
-  //         frontMatter: {
-  //           title: "Section B",
-  //           description: "Section B",
-  //         },
-  //         source: "@site/docs/section-b/section-b.mdx",
-  //         sourceDirName: "section-b",
-  //         sidebarPosition: 2,
-  //       },
-  //       "section-b/page-a": {
-  //         title: "Section B Page A",
-  //         id: "section-b/page-a",
-  //         frontMatter: {
-  //           title: "Section B Page A",
-  //           description: "Page A",
-  //         },
-  //         source: "@site/docs/section-b/page-a.mdx",
-  //         sourceDirName: "section-b",
-  //         sidebarPosition: 2,
-  //       },
-  //       "section-b/page-b": {
-  //         title: "Section B Page B",
-  //         id: "section-b/page-b",
-  //         frontMatter: {
-  //           title: "Section B Page B",
-  //           description: "Page B",
-  //         },
-  //         source: "@site/docs/section-b/page-b.mdx",
-  //         sourceDirName: "section-b",
-  //       },
-  //       intro: {
-  //         title: "Introduction",
-  //         id: "intro",
-  //         frontMatter: {
-  //           title: "Introduction",
-  //           description: "Introduction",
-  //         },
-  //         source: "@site/docs/intro.mdx",
-  //         sourceDirName: "",
-  //       },
-  //     };
-  //
-  //     const input: Array<NormalizedSidebarItem> = [
-  //       {
-  //         type: "category",
-  //         label: "Section A",
-  //         link: {
-  //           type: "doc",
-  //           id: "section-a/section-a",
-  //         },
-  //         items: [
-  //           {
-  //             type: "doc",
-  //             id: "section-a/page-a",
-  //           },
-  //           {
-  //             type: "doc",
-  //             id: "section-a/page-b",
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         type: "category",
-  //         label: "Section B",
-  //         link: {
-  //           type: "doc",
-  //           id: "section-b/section-b",
-  //         },
-  //         items: [
-  //           {
-  //             type: "doc",
-  //             id: "section-b/page-a",
-  //           },
-  //           {
-  //             type: "doc",
-  //             id: "section-b/page-b",
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         type: "doc",
-  //         id: "intro",
-  //       },
-  //     ];
-  //
-  //     // The index page in Section B has a sidebar position of 2, so we sort
-  //     // Introduction and Section A around it.
-  //     const expected: Array<NormalizedSidebarItem> = [
-  //       {
-  //         type: "doc",
-  //         id: "intro",
-  //       },
-  //       {
-  //         type: "category",
-  //         label: "Section B",
-  //         link: {
-  //           type: "doc",
-  //           id: "section-b/section-b",
-  //         },
-  //         items: [
-  //           // Page B has a sidebar position
-  //           {
-  //             type: "doc",
-  //             id: "section-b/page-b",
-  //           },
-  //           {
-  //             type: "doc",
-  //             id: "section-b/page-a",
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         type: "category",
-  //         label: "Section A",
-  //         link: {
-  //           type: "doc",
-  //           id: "section-a/section-a",
-  //         },
-  //         items: [
-  //           {
-  //             type: "doc",
-  //             id: "section-a/page-a",
-  //           },
-  //           {
-  //             type: "doc",
-  //             id: "section-a/page-b",
-  //           },
-  //         ],
-  //       },
-  //     ];
-  //
-  //     const actual = repetitiveSidebarSections(input, (id: string): docPage => {
-  //       return idToDocPage[id];
-  //     });
-  //     expect(actual).toEqual(expected);
-  //   });
 });
