@@ -1427,8 +1427,20 @@ describe("repetitiveSidebarSections", () => {
 `,
         ],
       },
-
-      // TODO: no repetition
+      {
+        description: "no repetition",
+        input: [
+          {
+            type: "doc",
+            id: "my-section/page-a",
+          },
+          {
+            type: "doc",
+            id: "my-section/page-f",
+          },
+        ],
+        expected: [],
+      },
     ];
 
     test.each(testCases)("$description", (c) => {
