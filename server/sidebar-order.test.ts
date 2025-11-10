@@ -1452,7 +1452,7 @@ describe("repetitiveSidebarSections", () => {
         expected: [],
       },
       {
-        description: "three repeating pages",
+        description: "3 out of 4 pages repeat",
         input: [
           {
             type: "doc",
@@ -1472,7 +1472,7 @@ describe("repetitiveSidebarSections", () => {
           },
         ],
         expected: [
-          `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels:
+          `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels. Consider a new docs subsection for the 3 repeating pages:
 - my-section/page-a
 - my-section/page-b
 - my-section/page-c

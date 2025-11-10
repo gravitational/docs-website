@@ -232,6 +232,16 @@ export const repetitiveSidebarSections = (
     sortByLength,
   );
 
+  const subsectionWarning = (
+    repeatingPageCount: number,
+    totalItemCount: number,
+  ) => {
+    if (repeatingPageCount < totalItemCount) {
+      return `. Consider a new docs subsection for the ${repeatingPageCount} repeating pages`;
+    } else {
+      return "";
+    }
+  };
   // For a given section, return the longest violating substring.
   for (let i = 0; i < sortedBeginningSubstrings.length; i++) {
     const key = sortedBeginningSubstrings[i];
@@ -240,7 +250,7 @@ export const repetitiveSidebarSections = (
     });
     if (substringPages.length > maxSidebarEntriesWithRepetition) {
       result.push(
-        `The following pages in the same sidebar section have labels that repeat the string prefix "${key}". Use the sidebar_label frontmatter field to simplify their labels:
+        `The following pages in the same sidebar section have labels that repeat the string prefix "${key}". Use the sidebar_label frontmatter field to simplify their labels${subsectionWarning(substringPages.length, items.length)}:
 ${substringPages.join("\n")}
 `,
       );
@@ -254,7 +264,7 @@ ${substringPages.join("\n")}
     });
     if (substringPages.length > maxSidebarEntriesWithRepetition) {
       result.push(
-        `The following pages in the same sidebar section have labels that repeat the string suffix "${key}". Use the sidebar_label frontmatter field to simplify their labels:
+        `The following pages in the same sidebar section have labels that repeat the string suffix "${key}". Use the sidebar_label frontmatter field to simplify their labels${subsectionWarning(substringPages.length, items.length)}:
 ${substringPages.join("\n")}
 `,
       );
