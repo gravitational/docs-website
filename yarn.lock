@@ -3640,10 +3640,10 @@
   dependencies:
     memoizerific "^1.11.3"
 
-"@storybook/addon-webpack5-compiler-swc@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-webpack5-compiler-swc/-/addon-webpack5-compiler-swc-4.0.1.tgz#178d45951dcce0d54b2c1032b0a6cf3b64c0cdaa"
-  integrity sha512-ZwdELxsMAnkE2loDP8mgogcMaMcSvY1xwifIze4TM3rgn2AXjS6QmWCM32MQOn3ej2hK681MPI5y2NLVB7m4hQ==
+"@storybook/addon-webpack5-compiler-swc@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-webpack5-compiler-swc/-/addon-webpack5-compiler-swc-4.0.2.tgz#91f10a02cf9a917fd1ced5f3c836bf049d94b416"
+  integrity sha512-I/B4zXnpk+wLs2YA/VcCzUjF/TtB26X4zIoXw3xaPPUvk5aPc76/dhmZHLMXkICQEur5FkFQv0YGHNxWHbhnfw==
   dependencies:
     "@swc/core" "^1.13.5"
     swc-loader "^0.2.6"
@@ -5375,10 +5375,10 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-axios@^1.12.2, axios@^1.6.1:
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.12.2.tgz#6c307390136cf7a2278d09cec63b136dfc6e6da7"
-  integrity sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==
+axios@^1.13.2, axios@^1.6.1:
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.2.tgz#9ada120b7b5ab24509553ec3e40123521117f687"
+  integrity sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.4"
@@ -15669,12 +15669,12 @@ wait-on@^7.0.0:
     minimist "^1.2.8"
     rxjs "^7.8.1"
 
-wait-on@^9.0.1:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-9.0.1.tgz#c5f2c3094b8e808a241cf41d2aaecd4f762907ec"
-  integrity sha512-noeCAI+XbqWMXY23sKril0BSURhuLYarkVXwJv1uUWwoojZJE7pmX3vJ7kh7SZaNgPGzfsCSQIZM/AGvu0Q9pA==
+wait-on@^9.0.3:
+  version "9.0.3"
+  resolved "https://registry.yarnpkg.com/wait-on/-/wait-on-9.0.3.tgz#3ea858db0b854039e6aff5f323885aaef25e32bf"
+  integrity sha512-13zBnyYvFDW1rBvWiJ6Av3ymAaq8EDQuvxZnPIw3g04UqGi4TyoIJABmfJ6zrvKo9yeFQExNkOk7idQbDJcuKA==
   dependencies:
-    axios "^1.12.2"
+    axios "^1.13.2"
     joi "^18.0.1"
     lodash "^4.17.21"
     minimist "^1.2.8"
