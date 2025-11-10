@@ -1349,7 +1349,7 @@ describe("repetitiveSidebarSections", () => {
           },
         ],
         expected: [
-          `The following pages in the same sidebar section have labels that repeat the string prefix "Page":
+          `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels:
 - my-section/page-a
 - my-section/page-b
 - my-section/page-c
@@ -1373,7 +1373,7 @@ describe("repetitiveSidebarSections", () => {
           },
         ],
         expected: [
-          `The following pages in the same sidebar section have labels that repeat the string suffix "Docs Page":
+          `The following pages in the same sidebar section have labels that repeat the string suffix "Docs Page". Use the sidebar_label frontmatter field to simplify their labels:
 - my-section/page-d
 - my-section/page-e
 - my-section/page-f
@@ -1415,12 +1415,12 @@ describe("repetitiveSidebarSections", () => {
           },
         ],
         expected: [
-          `The following pages in the same sidebar section have labels that repeat the string suffix "Docs Page":
+          `The following pages in the same sidebar section have labels that repeat the string suffix "Docs Page". Use the sidebar_label frontmatter field to simplify their labels:
 - my-section/page-d
 - my-section/page-e
 - my-section/page-f
 `,
-          `The following pages in the same sidebar section have labels that repeat the string prefix "Page":
+          `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels:
 - my-section/page-c
 - my-section/page-a
 - my-section/page-b
@@ -1452,7 +1452,7 @@ describe("repetitiveSidebarSections", () => {
         expected: [],
       },
       {
-        description: "two repeating pages",
+        description: "three repeating pages",
         input: [
           {
             type: "doc",
@@ -1464,13 +1464,18 @@ describe("repetitiveSidebarSections", () => {
           },
           {
             type: "doc",
+            id: "my-section/page-c",
+          },
+          {
+            type: "doc",
             id: "my-section/page-f",
           },
         ],
         expected: [
-          `The following pages in the same sidebar section have labels that repeat the string prefix "Page":
+          `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels:
 - my-section/page-a
 - my-section/page-b
+- my-section/page-c
 `,
         ],
       },

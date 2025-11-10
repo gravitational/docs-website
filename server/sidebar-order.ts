@@ -154,6 +154,8 @@ export const orderSidebarItems = (
   return newItems;
 };
 
+const maxSidebarEntriesWithRepetition = 2;
+
 // removeRedundantItems removes top-level category index pages from the sidebar,
 // since we expect these to be defined as links within each top-level category.
 export const removeRedundantItems = (
@@ -236,9 +238,9 @@ export const repetitiveSidebarSections = (
     const substringPages = titleSubstringsFromBeginning.get(key).map((p) => {
       return `- ${p}`;
     });
-    if (substringPages.length > 1) {
+    if (substringPages.length > maxSidebarEntriesWithRepetition) {
       result.push(
-        `The following pages in the same sidebar section have labels that repeat the string prefix "${key}":
+        `The following pages in the same sidebar section have labels that repeat the string prefix "${key}". Use the sidebar_label frontmatter field to simplify their labels:
 ${substringPages.join("\n")}
 `,
       );
@@ -250,9 +252,9 @@ ${substringPages.join("\n")}
     const substringPages = titleSubstringsFromEnd.get(key).map((p) => {
       return `- ${p}`;
     });
-    if (substringPages.length > 1) {
+    if (substringPages.length > maxSidebarEntriesWithRepetition) {
       result.push(
-        `The following pages in the same sidebar section have labels that repeat the string suffix "${key}":
+        `The following pages in the same sidebar section have labels that repeat the string suffix "${key}". Use the sidebar_label frontmatter field to simplify their labels:
 ${substringPages.join("\n")}
 `,
       );
