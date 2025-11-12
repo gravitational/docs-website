@@ -62,7 +62,8 @@
   width: 100%;
 
   @media (--md-scr) {
-    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
   }
 
   img {
