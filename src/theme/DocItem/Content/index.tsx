@@ -9,6 +9,11 @@ import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 import { useLocation } from "@docusaurus/router";
 import PageActions from "@site/src/components/PageActions";
 import { GitHubIssueLink } from "@site/src/components/GitHubIssueLink";
+import VideoBar, { VideoBarProps } from "@site/src/components/VideoBar";
+
+interface DocFrontMatter {
+  videoBanner: VideoBarProps;
+}
 
 /**
  Title can be declared inside md content or declared through
@@ -34,8 +39,10 @@ function useSyntheticTitle(): string | null {
 export default function DocItemContent({ children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
   const { hideTitleSection, alternateHeader } = useDocTemplate();
-  const {frontMatter} = useDoc();
+  const { frontMatter } = useDoc();
   const location = useLocation();
+
+    const { videoBanner } = frontMatter as DocFrontMatter;
 
   return (
     <div className={clsx(ThemeClassNames.docs.docMarkdown, "markdown")}>
@@ -44,6 +51,7 @@ export default function DocItemContent({ children }: Props): ReactNode {
           <Heading as="h1" className={alternateHeader ? "docItemTitle" : undefined}>{syntheticTitle}</Heading>
           {alternateHeader && frontMatter.description && <p className="docItemDescription">{frontMatter.description}</p>}
           {alternateHeader ? <PageActions pathname={location.pathname} /> : <GitHubIssueLink pathname={location.pathname} />}
+          {videoBanner && <VideoBar {...videoBanner} />}
         </header>
       )}
       <MDXContent>{children}</MDXContent>

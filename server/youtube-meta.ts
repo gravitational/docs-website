@@ -25,14 +25,74 @@ const changeFormatDuration = (duration: string) => {
   return `${hourDuration}${addZero(minutes)}:${addZero(seconds)}`;
 };
 
+/* 
+  This function extracts a clean description from YouTube video description text. 
+  If a proper description can't be extracted, returns null.
+*/
+const extractYouTubeVideoDescription: (description: string) => string | null = (
+  description
+) => {
+  if (!description || description.trim().length === 0) {
+    return null;
+  }
+
+  const lines = description.split("\n");
+  const descriptionLines: string[] = [];
+
+  for (const line of lines) {
+    const trimmedLine = line.trim();
+
+    // skip empty lines, lines with links and lines with timestamps.
+    if (trimmedLine.length === 0) {
+      continue;
+    }
+
+    if (trimmedLine.includes("http://") || trimmedLine.includes("https://")) {
+      continue;
+    }
+
+    if (/^\d{1,2}:\d{2}/.test(trimmedLine)) {
+      continue;
+    }
+
+    // Skip lines that include hashtags or emojis
+    if (
+      trimmedLine.startsWith("#") ||
+      trimmedLine.startsWith("⏰") ||
+      trimmedLine.startsWith("🔗") ||
+      trimmedLine.startsWith("🖥️")
+    ) {
+      continue;
+    }
+
+    // Finally skip common section headers
+    const lowerCaseLine = trimmedLine.toLowerCase();
+    if (
+      lowerCaseLine === "timestamps" ||
+      lowerCaseLine === "mentioned links" ||
+      lowerCaseLine === "links"
+    ) {
+      break;
+    }
+
+    descriptionLines.push(trimmedLine);
+  }
+
+  const result = descriptionLines.join(" ").trim();
+
+  if (result.length < 20) {
+    return null;
+  }
+
+  return result.split(".")[0] + ".";
+};
+
 export interface Meta {
   href: string;
-}
-
-export interface FullMeta extends Meta {
-  title: string;
-  duration: string;
-  thumbnail: string;
+  title?: string;
+  duration?: string;
+  thumbnail?: string;
+  description?: string;
 }
 
 interface RawContentDetails {
@@ -56,6 +116,7 @@ interface RawThumbnailsSize {
 interface RawSnippet {
   thumbnails: RawThumbnailsSize;
   title: string;
+  description: string;
 }
 
 interface RawItem {
@@ -67,21 +128,21 @@ interface RawVideoMeta {
   items: RawItem[];
 }
 
-const cache: Record<string, Meta | FullMeta> = {};
+const cache: Record<string, Meta> = {};
 
-export async function fetchVideoMeta(id: string): Promise<Meta | FullMeta> {
+export async function fetchVideoMeta(id: string): Promise<Meta> {
   if (id in cache) {
     return cache[id];
   }
 
-  let data: Meta | FullMeta = {
+  let data: Meta = {
     href: `${YOUTUBE_URL}?v=${id}`,
   };
 
   if (YOUTUBE_API_KEY) {
     try {
       const response = await fetch(
-        `${YOUTUBE_API_URL}/${REQUEST_PATH}?part=snippet&part=contentDetails&id=${id}&key=${YOUTUBE_API_KEY}`,
+        `${YOUTUBE_API_URL}/${REQUEST_PATH}?part=snippet&part=contentDetails&id=${id}&key=${YOUTUBE_API_KEY}`
       );
 
       const rawData: unknown = await response.json();
@@ -90,7 +151,10 @@ export async function fetchVideoMeta(id: string): Promise<Meta | FullMeta> {
       data = {
         href: data.href,
         title: rawDataItem.snippet.title,
-        thumbnail: rawDataItem.snippet.thumbnails.default.url,
+        description: extractYouTubeVideoDescription(
+          rawDataItem.snippet.description
+        ),
+        thumbnail: rawDataItem.snippet.thumbnails.medium.url,
         duration: changeFormatDuration(rawDataItem.contentDetails.duration),
       };
     } catch (e) {
