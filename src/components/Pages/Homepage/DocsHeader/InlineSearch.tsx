@@ -12,8 +12,6 @@ type InlineSearchProps = {
 
 export function InlineSearch({ className = "", version }: InlineSearchProps) {
   const {
-    message,
-    setMessage,
     isOpen,
     setIsOpen,
     ModalSearchAndChat,
@@ -46,8 +44,6 @@ export function InlineSearch({ className = "", version }: InlineSearchProps) {
                 className={styles.searchInput}
                 onClick={() => setIsOpen(true)}
                 onFocus={() => setIsOpen(true)}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
                 readOnly
               />
               {ModalSearchAndChat && (
