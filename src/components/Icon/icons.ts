@@ -92,6 +92,20 @@ export { default as cloud3 } from "./svg/cloud3.svg";
 export { default as tcp } from "./svg/tcp.svg";
 export { default as appWindow } from "./svg/app-window.svg";
 export { default as clipboard } from "./svg/clipboard-text.svg";
+export { default as amazonDynamoDb } from "./svg/amazon-dynamo-db.svg";
+export { default as amazonElastiCache } from "./svg/amazon-elastiCache.svg";
+export { default as amazonMemoryDb } from "./svg/amazon-memory-db.svg";
+export { default as amazonOpenSearch } from "./svg/amazon-openSearch.svg";
+export { default as amazonRds } from "./svg/amazon-rds.svg";
+export { default as amazonRedshift } from "./svg/amazon-redshift.svg";
+export { default as amazonKeyspaces } from "./svg/amazon-keyspaces.svg";
+export { default as postgresql } from "./svg/postgresql.svg";
+export { default as mysql } from "./svg/mysql.svg";
+export { default as mongoDb } from "./svg/mongodb.svg";
+export { default as clickhouse } from "./svg/clickhouse.svg";
+export { default as cockroachDb } from "./svg/cockroach-db.svg";
+export { default as redis } from "./svg/redis.svg";
+export { default as mariaDb } from "./svg/maria-db.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
@@ -108,3 +122,4 @@ export { default as mcpAndAi } from "./teleport-svg/mcp-and-ai.svg";
 export { default as teleportCommunity } from "./teleport-svg/teleport-community-edition.svg";
 export { default as teleportEnterpriseCloud } from "./teleport-svg/teleport-enterprise-cloud.svg";
 export { default as teleportEnterpriseSelfHosted } from "./teleport-svg/teleport-enterprise-self-hosted.svg";
+export { default as snowflake } from "./teleport-svg/snowflake.svg";
