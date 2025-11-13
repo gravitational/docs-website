@@ -7,6 +7,7 @@ import type {
   InkeepBaseSettings,
   AIChatFunctions,
   SearchFunctions,
+  SourceItem,
 } from '@inkeep/cxkit-react';
 
 interface UseInkeepSearchOptions {
@@ -68,17 +69,26 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     privacyPreferences: {
       optOutAllAnalytics: false,
     },
-    transformSource: (source) => {
-      const isDocs =
-        source.contentType === 'docs' ||
-        source.type === 'documentation';
-      if (!isDocs) {
-        return source;
+    transformSource: (source: SourceItem) => {
+      const { url, tabs } = source;
+      if (url && (url.startsWith('https://www.youtube.com/') || url.includes('goteleport.com/resources/videos'))) {
+        return {
+          ...source,
+          tabs: ['Videos', ...(source.tabs ?? [])],
+          icon: { builtIn: 'IoPlayCircleOutline' },
+        };
       }
+      if (url && url.includes('goteleport.com/docs')) {
+        return {
+          ...source,
+          tabs: ['Docs'],
+          icon: { builtIn: 'IoDocumentTextOutline' },
+        };
+      }
+      const newTabs = tabs && tabs.includes('GitHub') ? ['GitHub'] : ['More'];
       return {
         ...source,
-        tabs: ['Docs', ...(source.tabs ?? [])],
-        icon: { builtIn: 'IoDocumentTextOutline' },
+        tabs: newTabs,
       };
     },
     colorMode: {
@@ -101,6 +111,8 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     tabs: [
       ['Docs', { isAlwaysVisible: true }],
       ['GitHub', { isAlwaysVisible: true }],
+      ['Videos', { isAlwaysVisible: true }],
+      ['More', { isAlwaysVisible: false }],
     ],
     shouldOpenLinksInNewTab: true,
     view: 'dual-pane',
