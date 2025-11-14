@@ -12,7 +12,14 @@ import type {
 } from "@docusaurus/plugin-content-docs";
 import { categoryHrefToDocID } from "./href-to-id";
 
-function DocCardListForCurrentSidebarCategory({ className }: Props) {
+interface DocCardListProps extends Props {
+  kind: "labelOnly" | undefined;
+}
+
+function DocCardListForCurrentSidebarCategory({
+  className,
+  kind,
+}: DocCardListProps) {
   let category: PropSidebarItemCategory;
   // DocCardList only works if the current page has a sidebar entry, but the
   // error Docusaurus currently throws is difficult to understand. Throw an
@@ -27,11 +34,13 @@ function DocCardListForCurrentSidebarCategory({ className }: Props) {
       "The current page does not have a corresponding sidebar entry, so it is not possible to use DocCardList. Make sure that the page is represented on the sidebar.",
     );
   }
-  return <DocCardList items={category.items} className={className} />;
+  return (
+    <DocCardList kind={kind} items={category.items} className={className} />
+  );
 }
 
-export default function DocCardList(props: Props): JSX.Element {
-  const { items, className } = props;
+export default function DocCardList(props: DocCardListProps): JSX.Element {
+  const { items, className, kind } = props;
   if (!items) {
     return <DocCardListForCurrentSidebarCategory {...props} />;
   }
@@ -60,7 +69,8 @@ export default function DocCardList(props: Props): JSX.Element {
     <ul className={className}>
       {filteredItems.map((item, index) => (
         <li key={index}>
-          <a href={item.href}>{item.label}</a>: {item.description}
+          <a href={item.href}>{item.label}</a>
+          {kind == "labelOnly" || ": " + item.description}
         </li>
       ))}
     </ul>
