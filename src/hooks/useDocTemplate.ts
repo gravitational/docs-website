@@ -4,7 +4,6 @@ interface TemplateConfig {
   hideTitleSection?: boolean;
   removeTOCSidebar?: boolean;
   fullWidth?: boolean;
-  alternateHeader?: boolean;
 }
 
 const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
@@ -20,7 +19,6 @@ const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
   "doc-page": {
     removeTOCSidebar: true,
     fullWidth: true,
-    alternateHeader: true,
   },
 };
 
@@ -33,6 +31,5 @@ export function useDocTemplate(): TemplateConfig {
     hideTitleSection: config.hideTitleSection ?? false,
     removeTOCSidebar: config.removeTOCSidebar ?? false,
     fullWidth: config.fullWidth ?? false,
-    alternateHeader: config.alternateHeader ?? false,
   };
 }

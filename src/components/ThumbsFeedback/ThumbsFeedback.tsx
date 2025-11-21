@@ -1,6 +1,7 @@
 import styles from "./ThumbsFeedback.module.css";
-import React, { FormEvent, useState, useEffect } from "react";
+import React, { FormEvent, useState, useEffect, useRef, JSX } from "react";
 import { useLocation } from "@docusaurus/router";
+import cn from "classnames";
 import Icon from "../Icon/Icon";
 import Button from "../Button/Button";
 import { GitHubIssueLink } from "@site/src/components/GitHubIssueLink";
@@ -8,160 +9,428 @@ import { trackEvent } from "@site/src/utils/analytics";
 import { isValidCommentLength, containsPII } from "@site/src/utils/validations";
 
 const MAX_COMMENT_LENGTH: number = 100;
+const MAX_PATHS_IN_STORAGE = 4;
 
 enum FeedbackType {
   UP = "up",
   DOWN = "down",
 }
 
-const ThumbsFeedback = (): JSX.Element => {
-  const [feedback, setFeedback] = useState<FeedbackType | null>(null);
-  const [comment, setComment] = useState<string>("");
-  const [showButtons, setShowButtons] = useState<boolean>(true);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [isSidebarScrollable, setIsSidebarScrollable] = useState<boolean>(true);
-  const location = useLocation();
+interface StoredFeedback {
+  path: string;
+  expiry: number;
+  signal?: FeedbackType;
+}
 
-  // Reset feedback form state when navigating to a different page
-  useEffect(() => {
-    setShowButtons(true);
-    setIsSubmitted(false);
-    setFeedback(null);
-    setComment("");
-  }, [location.pathname]);
+const checkForExpiredFeedback = (
+  itemStr: string,
+  currentPath: string,
+  storageKey:
+    | "feedback_given_paths"
+    | "feedback_thumbs_clicked_paths" = "feedback_given_paths"
+): StoredFeedback[] => {
+  let feedbackGivenPaths: StoredFeedback[] = [];
+  try {
+    const item = JSON.parse(itemStr);
 
-  // Currently feedback will be hidden if sidebar is scrollable AND within 350 of the bottom as this is the height when the textarea is active
-  // Can plan to implement this better going forward
-  useEffect(() => {
-    const checkSidebarScrollable = (): void => {
-      const tocDesktop: Element | null = document.querySelector(
-        ".theme-doc-toc-desktop",
+    if (!item || !Array.isArray(item) || item.length === 0)
+      return feedbackGivenPaths;
+
+    feedbackGivenPaths = item;
+
+    const now = new Date();
+
+    const foundCurrentPath = feedbackGivenPaths.find(
+      (pathItem) => pathItem.path === currentPath
+    );
+
+    if (foundCurrentPath && now.getTime() > foundCurrentPath.expiry) {
+      // Remove expired path and update storage
+      feedbackGivenPaths = feedbackGivenPaths.filter(
+        (pathItem) => pathItem.path !== currentPath
       );
-      if (tocDesktop) {
-        const isScrollable: boolean =
-          tocDesktop.scrollHeight > tocDesktop.clientHeight;
-        const viewportHeight: number = window.innerHeight;
-        const tocRect = tocDesktop.getBoundingClientRect();
-        const spaceBelow: number = viewportHeight - tocRect.bottom;
-        const wouldOverflowWithTextArea: boolean = spaceBelow < 300;
+      localStorage.setItem(storageKey, JSON.stringify(feedbackGivenPaths));
+    }
+  } catch (e) {
+    localStorage.removeItem("feedback_given_paths");
+  }
 
-        setIsSidebarScrollable(isScrollable || wouldOverflowWithTextArea);
+  return feedbackGivenPaths;
+};
+
+const FeedbackForm: React.FC<{
+  formActive: "positive" | "negative" | false;
+  pagePosition: "top" | "bottom";
+  isSubmitted: boolean;
+  comment: string;
+  feedback: FeedbackType | null;
+  setComment: React.Dispatch<React.SetStateAction<string>>;
+  setFormActive: React.Dispatch<
+    React.SetStateAction<"positive" | "negative" | false>
+  >;
+  setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({
+  formActive,
+  pagePosition,
+  isSubmitted,
+  comment,
+  feedback,
+  setComment,
+  setFormActive,
+  setIsSubmitted,
+}) => {
+  const [translateX, setTranslateX] = useState<number>(0);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const translateXRef = useRef(translateX);
+
+  useEffect(() => {
+    translateXRef.current = translateX;
+  }, [translateX]);
+
+  // If page top position, close the popover when clicking outside
+  useEffect(() => {
+    if (!formActive || pagePosition === "bottom") return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        setFormActive(false);
       }
     };
-    checkSidebarScrollable();
 
-    window.addEventListener("resize", checkSidebarScrollable);
-    const timer = setTimeout(checkSidebarScrollable, 100);
-
-    return (): void => {
-      window.removeEventListener("resize", checkSidebarScrollable);
-      clearTimeout(timer);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [location.pathname]);
+  }, [isSubmitted, formActive]);
 
-  const handleFeedbackClick = async (
-    feedbackValue: FeedbackType,
-  ): Promise<void> => {
-    setFeedback(feedbackValue);
-    setShowButtons(false);
+  useEffect(() => {
+    if (!formActive || !modalRef.current) {
+      setTranslateX(0);
+      modalRef.current.style.transform = `translate(0, 100%)`;
+      return;
+    }
 
-    trackEvent({
-      event_name: `docs_feedback_thumbs_${feedbackValue}`,
-    });
-  };
+    const repositionModal = () => {
+      const modalRect = modalRef.current.getBoundingClientRect();
+      const bodyRect = document.body.getBoundingClientRect();
+
+      if (modalRect.right + 16 > bodyRect.right) {
+        const newTranslateX =
+          translateXRef.current - (modalRect.right - bodyRect.right) - 48;
+        setTranslateX(newTranslateX);
+        modalRef.current.style.transform = `translate(${newTranslateX}px, 100%)`;
+      }
+    };
+    repositionModal();
+    window.addEventListener("resize", repositionModal);
+    return () => window.removeEventListener("resize", repositionModal);
+  }, [formActive]);
 
   const handleSubmit = async (
-    event: FormEvent<HTMLFormElement>,
+    event: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
 
-    if (!isValidCommentLength(comment, MAX_COMMENT_LENGTH)) {
+    if (!isValidCommentLength(comment, MAX_COMMENT_LENGTH) || isSubmitted) {
       return;
     }
 
     const trimmedComment = comment.trim();
 
     if (!containsPII(trimmedComment)) {
+      const currentPath = location.pathname;
+      const itemStr = localStorage.getItem("feedback_given_paths");
+
+      let feedbackGivenPaths: StoredFeedback[] = checkForExpiredFeedback(
+        itemStr,
+        currentPath
+      );
+
+      const foundCurrentPath = feedbackGivenPaths.find(
+        (pathItem) => pathItem.path === currentPath
+      );
+
+      if (foundCurrentPath && isSubmitted) {
+        return;
+      } else if (foundCurrentPath) {
+        // Remove existing entry for current path to update with new comment
+        feedbackGivenPaths = feedbackGivenPaths.filter(
+          (pathItem) => pathItem.path !== currentPath
+        );
+      }
+
       trackEvent({
         event_name: `docs_feedback_comment_thumbs_${feedback}`,
         custom_parameters: {
           comment_text: trimmedComment,
         },
       });
+
+      const now = new Date();
+      // Set expiry to 3 months from now
+      const expiry = now.setMonth(now.getMonth() + 3);
+      const itemToStore = {
+        path: currentPath,
+        expiry: expiry,
+      };
+
+      const newFeedbackGivenPaths = [...feedbackGivenPaths, itemToStore];
+
+      localStorage.setItem(
+        "feedback_given_paths",
+        JSON.stringify(newFeedbackGivenPaths)
+      );
     }
 
     setIsSubmitted(true);
   };
 
-  if (isSubmitted) {
-    return <p>Thank you for your feedback.</p>;
-  }
+  return (
+    <div
+      ref={modalRef}
+      className={cn(styles.modal, {
+        [styles.formActive]: !!formActive,
+        [styles.positionBottom]: pagePosition === "bottom",
+      })}
+    >
+      {isSubmitted ? (
+        <div className={styles.thankYouMessage}>
+          <Icon name="checkRound" size="xs" /> Thank you
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="comment" className={styles.formLabel}>
+            {formActive === "positive"
+              ? "Great! Is there anything we can improve?"
+              : "How can we improve this page?"}
+          </label>
+          <textarea
+            id="comment"
+            name="comment"
+            rows={3}
+            value={comment}
+            placeholder="Tell us more about your experience"
+            onChange={(e) => setComment(e.target.value)}
+            className={`${styles.commentTextarea} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ""}`}
+          />
+          <div className={styles.buttons}>
+            <Button
+              as="button"
+              type="submit"
+              disabled={!isValidCommentLength(comment, MAX_COMMENT_LENGTH)}
+            >
+              Submit
+            </Button>
+            <Button as="button" onClick={() => setFormActive(false)}>
+              Cancel
+            </Button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+};
 
-  if (isSidebarScrollable) {
-    return null;
-  }
+const ThumbsFeedback: React.FC<{
+  feedbackLabel?: string;
+  pagePosition?: "top" | "bottom";
+}> = ({
+  feedbackLabel = "Is this page helpful?",
+  pagePosition = "top",
+}): JSX.Element => {
+  const [feedback, setFeedback] = useState<FeedbackType | null>(null);
+  const [comment, setComment] = useState<string>("");
+  const [formActive, setFormActive] = useState<"positive" | "negative" | false>(
+    false
+  );
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const location = useLocation();
+
+  // Reset feedback form state when navigating to a different page
+  useEffect(() => {
+    setFormActive(false);
+    setIsSubmitted(false);
+    setFeedback(null);
+    setComment("");
+
+    const currentPath = location.pathname;
+    const commentItemStr = localStorage.getItem("feedback_given_paths");
+    const clickedPathsItemStr = localStorage.getItem(
+      "feedback_thumbs_clicked_paths"
+    );
+    const feedbackGivenPaths = checkForExpiredFeedback(
+      commentItemStr,
+      currentPath
+    );
+    const clickedPaths = checkForExpiredFeedback(
+      clickedPathsItemStr,
+      currentPath,
+      "feedback_thumbs_clicked_paths"
+    );
+
+    const foundCurrentFeedbackPath = feedbackGivenPaths.find(
+      (pathItem) => pathItem.path === currentPath
+    );
+
+    const foundCurrentFeedbackPathClick = clickedPaths.find(
+      (pathItem) => pathItem.path === currentPath
+    );
+
+    if (foundCurrentFeedbackPath) {
+      setIsSubmitted(true);
+    }
+
+    if (foundCurrentFeedbackPathClick) {
+      setFeedback(foundCurrentFeedbackPathClick.signal || null);
+    }
+
+    const listenForFeedbackUpdate = () => {
+      const feedbackGivenPaths = checkForExpiredFeedback(
+        commentItemStr,
+        currentPath
+      );
+      const clickedPaths = checkForExpiredFeedback(
+        clickedPathsItemStr,
+        currentPath,
+        "feedback_thumbs_clicked_paths"
+      );
+      const foundCurrentFeedbackPath = feedbackGivenPaths.find(
+        (pathItem) => pathItem.path === currentPath
+      );
+      const foundCurrentFeedbackPathClick = clickedPaths.find(
+        (pathItem) => pathItem.path === currentPath
+      );
+
+      if (foundCurrentFeedbackPath) {
+        setIsSubmitted(true);
+      }
+      if (foundCurrentFeedbackPathClick) {
+        setFeedback(foundCurrentFeedbackPathClick.signal || null);
+      }
+    }
+  }, [location.pathname]);
+
+  const handleFeedbackClick = async (
+    feedbackValue: FeedbackType
+  ): Promise<void> => {
+    const currentPath = location.pathname;
+    const itemStr = localStorage.getItem("feedback_thumbs_clicked_paths");
+    let clickedPaths = checkForExpiredFeedback(
+      itemStr,
+      currentPath,
+      "feedback_thumbs_clicked_paths"
+    );
+
+    const foundCurrentPath = clickedPaths.find(
+      (pathItem) => pathItem.path === currentPath
+    );
+
+    if (foundCurrentPath && foundCurrentPath.signal === feedbackValue) {
+      return;
+    } else if (foundCurrentPath) {
+      // Remove existing entry for current path to update with new signal
+      // Also reset the submission state
+      clickedPaths = clickedPaths.filter(
+        (pathItem) => pathItem.path !== currentPath
+      );
+      setIsSubmitted(false);
+    }
+
+    setFeedback(feedbackValue);
+    setFormActive(false);
+
+    trackEvent({
+      event_name: `docs_feedback_thumbs_${feedbackValue}`,
+    });
+
+    const now = new Date();
+    // Set expiry to 3 months from now
+    const expiry = now.setMonth(now.getMonth() + 3);
+    const itemToStore = {
+      path: currentPath,
+      expiry: expiry,
+      signal: feedbackValue,
+    };
+
+    const newFeedbackThumbsClickedPaths = [...clickedPaths, itemToStore];
+
+    if (newFeedbackThumbsClickedPaths.length > MAX_PATHS_IN_STORAGE) {
+      newFeedbackThumbsClickedPaths.splice(
+        0,
+        newFeedbackThumbsClickedPaths.length - MAX_PATHS_IN_STORAGE
+      );
+    }
+
+    localStorage.setItem(
+      "feedback_thumbs_clicked_paths",
+      JSON.stringify(newFeedbackThumbsClickedPaths)
+    );
+  };
 
   return (
-    <div className={styles.thumbsFeedback}>
-      <form onSubmit={handleSubmit}>
-        <p id="feedback" className={styles.feedbackTitle}>
-          Was this page helpful?
-        </p>
-        {showButtons ? (
-          <div className={styles.svgContainer}>
-            <span
-              className={styles.thumbsUp}
-              style={{ cursor: "pointer" }}
-              onClick={() => handleFeedbackClick(FeedbackType.UP)}
-              tabIndex={0}
-              role="button"
-              aria-label="Thumbs up"
-            >
-              <Icon name="thumbsUp" size="md" />
-            </span>
-            <span
-              className={styles.thumbsDown}
-              style={{ cursor: "pointer" }}
-              onClick={() => handleFeedbackClick(FeedbackType.DOWN)}
-              tabIndex={0}
-              role="button"
-              aria-label="Thumbs down"
-            >
-              <Icon name="thumbsDown" size="md" />
-            </span>
-          </div>
-        ) : (
-          <div>
-            <textarea
-              id="comment"
-              name="comment"
-              value={comment}
-              placeholder="Any additional comments..."
-              onChange={(e) => setComment(e.target.value)}
-              className={`${styles.commentTextarea} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ""}`}
+    <div>
+      <div
+        className={cn(styles.feedback, {
+          [styles.positionBottom]: pagePosition === "bottom",
+        })}
+      >
+        <span className={styles.feedbackLabel}>{feedbackLabel}</span>
+        <div className={styles.thumbs}>
+          <button
+            className={cn(styles.thumb, {
+              [styles.active]: feedback === FeedbackType.UP,
+            })}
+            aria-label="Yes, this page is helpful"
+            onClick={() => {
+              handleFeedbackClick(FeedbackType.UP);
+              setFormActive("positive");
+            }}
+          >
+            <Icon name="thumbsUp" size="sm" />
+            {pagePosition === "bottom" && <span>Yes</span>}
+          </button>
+          <button
+            className={cn(styles.thumb, {
+              [styles.active]: feedback === FeedbackType.DOWN,
+            })}
+            aria-label="No, this page is not helpful"
+            onClick={() => {
+              handleFeedbackClick(FeedbackType.DOWN);
+              setFormActive("negative");
+            }}
+          >
+            <Icon name="thumbsDown" size="sm" />
+            {pagePosition === "bottom" && <span>No</span>}
+          </button>
+          {pagePosition === "top" && (
+            <FeedbackForm
+              formActive={formActive}
+              pagePosition={pagePosition}
+              isSubmitted={isSubmitted}
+              comment={comment}
+              feedback={feedback}
+              setComment={setComment}
+              setFormActive={setFormActive}
+              setIsSubmitted={setIsSubmitted}
             />
-            <div
-              className={`${styles.characterCount} ${comment.length > MAX_COMMENT_LENGTH ? styles.error : ""}`}
-            >
-              ({comment.length}/{MAX_COMMENT_LENGTH}) characters allowed
-            </div>
-            <div className={styles.submitButton}>
-              <Button
-                type="submit"
-                as="button"
-                variant="primary"
-                disabled={comment.length > MAX_COMMENT_LENGTH}
-              >
-                Submit
-              </Button>
-              <p className={styles.feedbackTitle}> or </p>
-              <div className={styles.githubLinkWrapper}>
-                <GitHubIssueLink pathname={location.pathname} />
-              </div>
-            </div>
-          </div>
-        )}
-      </form>
+          )}
+        </div>
+      </div>
+      {pagePosition === "bottom" && (
+        <FeedbackForm
+          formActive={formActive}
+          pagePosition={pagePosition}
+          isSubmitted={isSubmitted}
+          comment={comment}
+          feedback={feedback}
+          setComment={setComment}
+          setFormActive={setFormActive}
+          setIsSubmitted={setIsSubmitted}
+        />
+      )}
     </div>
   );
 };

@@ -3,11 +3,11 @@ import styles from "./PageActions.module.css";
 import Icon from "../Icon";
 import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import ThumbsFeedback from "../ThumbsFeedback";
 
 const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
   const { setIsOpen, ModalSearchAndChat, inkeepModalProps } = useInkeepSearch({
     enableAIChat: true,
-    chatOnly: true
   });
   return (
     <div className={styles.pageActions}>
@@ -23,6 +23,7 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
         <Icon size="md" name="clipboard" />
         <span>Report an Issue</span>
       </a>
+      <ThumbsFeedback />
       <BrowserOnly fallback={<div />}>
         {() => {
           return (

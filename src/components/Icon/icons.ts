@@ -8,6 +8,7 @@ export { default as building2 } from "./svg/simple-building.svg";
 export { default as calendar } from "./svg/calendar.svg";
 export { default as card } from "./svg/card.svg";
 export { default as check } from "./svg/check.svg";
+export { default as checkRound } from "./svg/check-round.svg";
 export { default as chip } from "./svg/chip.svg";
 export { default as clock } from "./svg/clock.svg";
 export { default as close } from "./svg/close.svg";
