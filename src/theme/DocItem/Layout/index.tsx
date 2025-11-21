@@ -105,9 +105,6 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
           <div className={styles.stickySidebar}>
             <div className={styles.tocWithFeedback}>
               <div className={styles.tocWrapper}>{docTOC.desktop}</div>
-              <div className={styles.feedbackWrapper}>
-                <ThumbsFeedback />
-              </div>
             </div>
           </div>
         </div>
