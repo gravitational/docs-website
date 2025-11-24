@@ -6,7 +6,7 @@ import {
   ReactElement,
   useEffect,
   useRef,
-  MutableRefObject,
+  RefObject,
 } from "react";
 import { useGuidedStepsData } from "./hooks";
 import { StepProps as Step, FileProps as File, CodeBlockHandle } from "./types";
@@ -16,9 +16,9 @@ interface GuidedStepsContextValue {
   files: File[];
   activeStepId: string | null;
   activeFileName?: string;
-  codeBlockRefs: MutableRefObject<Map<string, CodeBlockHandle>>;
-  stepRefs: MutableRefObject<HTMLElement[]>;
-  fileRefs: MutableRefObject<Map<string, HTMLDivElement | null>>;
+  codeBlockRefs: RefObject<Map<string, CodeBlockHandle>>;
+  stepRefs: RefObject<HTMLElement[]>;
+  fileRefs: RefObject<Map<string, HTMLDivElement | null>>;
   showCopyButton: boolean;
   fileNameHasType: boolean;
   setShowCopyButton: (show: boolean) => void;

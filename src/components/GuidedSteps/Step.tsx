@@ -46,6 +46,7 @@ const Step: React.FC<StepProps> = ({ id, index, children }) => {
     <div
       className={cn(styles.step, { [styles.active]: activeStepId === id })}
       role="button"
+      tabIndex={0}
       ref={(el) => (stepRefs.current[index] = el)}
       onClick={activateStep}
       id={id}
