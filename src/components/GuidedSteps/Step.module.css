@@ -18,7 +18,7 @@
     width: var(--m-2);
     margin-top: var(--m-3);
     margin-bottom: var(--m-3);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='11' viewBox='0 0 12 11' fill='none'%3E%3Cpath d='M7.35355 0.646447C7.15829 0.451184 6.84171 0.451184 6.64645 0.646447C6.45118 0.841709 6.45118 1.15829 6.64645 1.35355L10.2929 5H0.5C0.223858 5 0 5.22386 0 5.5C0 5.77614 0.223858 6 0.5 6H10.2929L6.64645 9.64645C6.45118 9.84171 6.45118 10.1583 6.64645 10.3536C6.84171 10.5488 7.15829 10.5488 7.35355 10.3536L11.8536 5.85355C11.9512 5.75592 12 5.62796 12 5.5C12 5.43221 11.9865 5.36756 11.9621 5.30861C11.9377 5.24964 11.9015 5.19439 11.8536 5.14645L7.35355 0.646447Z' fill='%23512FC9'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M9.35355 3.14645C9.15829 2.95118 8.84171 2.95118 8.64645 3.14645C8.45118 3.34171 8.45118 3.65829 8.64645 3.85355L12.2929 7.5H2.5C2.22386 7.5 2 7.72386 2 8C2 8.27614 2.22386 8.5 2.5 8.5H12.2929L8.64645 12.1464C8.45118 12.3417 8.45118 12.6583 8.64645 12.8536C8.84171 13.0488 9.15829 13.0488 9.35355 12.8536L13.8536 8.35355C13.9512 8.25592 14 8.12796 14 8C14 7.93221 13.9865 7.86756 13.9621 7.80861C13.9377 7.74964 13.9015 7.69439 13.8536 7.64645L9.35355 3.14645Z' fill='black' fill-opacity='0.54'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
     transition: opacity 0.2s ease-in-out;
@@ -26,20 +26,31 @@
 
   &.active {
     border-color: transparent;
-    box-shadow: -5px 0px 0px -2px var(--color-interactive-primary);
+    box-shadow: -5px 0px 0px -2px var(--color-dark-purple);
     background-color: var(--color-tonal-primary-0);
-    &::after {
-      opacity: 1;
-    }
 
     &:hover {
       background-color: var(--color-tonal-primary-0);
     }
   }
 
+  &:active, &:focus-visible {
+    border:  2px solid var(--color-foreground-slightly-muted);
+    outline: none;
+
+  }
   &:hover {
-    background-color: var(--color-tonal-neutral-0);
+    &:not(.active) {
+      border-color: transparent;
+      box-shadow:
+        0 2px 4px -1px rgba(0, 0, 0, 0.2),
+        0 4px 5px 0 rgba(0, 0, 0, 0.14),
+        0 1px 10px 0 rgba(0, 0, 0, 0.12);
+    }
     cursor: pointer;
+    &::after {
+      opacity: 1;
+    }
   }
 }
 
