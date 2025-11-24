@@ -4,8 +4,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #f1f2f4;
   border-radius: var(--m-1);
+  border: 2px solid var(--color-tonal-neutral-0);
   scroll-margin-top: calc(var(--ifm-navbar-height) + var(--m-1));
 
   &::after {
@@ -25,6 +25,8 @@
   }
 
   &.active {
+    border-color: transparent;
+    box-shadow: -5px 0px 0px -2px var(--color-interactive-primary);
     background-color: var(--color-tonal-primary-0);
     &::after {
       opacity: 1;
