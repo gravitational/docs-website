@@ -1,4 +1,4 @@
-import React, { type ReactNode } from "react";
+import React, { useState, type ReactNode } from "react";
 import clsx from "clsx";
 import { ThemeClassNames } from "@docusaurus/theme-common";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
@@ -8,9 +8,10 @@ import type { Props } from "@theme/DocItem/Content";
 import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 import { useLocation } from "@docusaurus/router";
 import PageActions from "@site/src/components/PageActions";
-import { GitHubIssueLink } from "@site/src/components/GitHubIssueLink";
 import VideoBar, { VideoBarProps } from "@site/src/components/VideoBar";
 import ThumbsFeedback from "@site/src/components/ThumbsFeedback";
+import ThumbsFeedbackContext from "@site/src/components/ThumbsFeedback/context";
+import { FeedbackType } from "@site/src/components/ThumbsFeedback/types";
 
 interface DocFrontMatter {
   videoBanner: VideoBarProps;
@@ -42,11 +43,13 @@ export default function DocItemContent({ children }: Props): ReactNode {
   const { hideTitleSection } = useDocTemplate();
   const { frontMatter } = useDoc();
   const location = useLocation();
+  const [feedback, setFeedback] = useState<FeedbackType | null>(null);
 
     const { videoBanner } = frontMatter as DocFrontMatter;
 
   return (
     <div className={clsx(ThemeClassNames.docs.docMarkdown, "markdown")}>
+      <ThumbsFeedbackContext.Provider value={{ feedback, setFeedback }}>
       {syntheticTitle && (
         <header className={hideTitleSection ? "hide-title-section" : undefined}>
           <Heading as="h1" className="docItemTitle">{syntheticTitle}</Heading>
@@ -57,6 +60,7 @@ export default function DocItemContent({ children }: Props): ReactNode {
       )}
       <MDXContent>{children}</MDXContent>
       <ThumbsFeedback feedbackLabel="Was this page helpful?" pagePosition="bottom" />
+      </ThumbsFeedbackContext.Provider>
     </div>
   );
 }

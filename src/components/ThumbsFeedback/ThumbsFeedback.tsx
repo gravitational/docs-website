@@ -1,5 +1,5 @@
 import styles from "./ThumbsFeedback.module.css";
-import React, { FormEvent, useState, useEffect, useRef, JSX } from "react";
+import React, { FormEvent, useState, useEffect, useRef, JSX, useContext } from "react";
 import { useLocation } from "@docusaurus/router";
 import cn from "classnames";
 import Icon from "../Icon/Icon";
@@ -7,20 +7,11 @@ import Button from "../Button/Button";
 import { GitHubIssueLink } from "@site/src/components/GitHubIssueLink";
 import { trackEvent } from "@site/src/utils/analytics";
 import { isValidCommentLength, containsPII } from "@site/src/utils/validations";
+import { FeedbackType, StoredFeedback } from "./types";
+import ThumbsFeedbackContext from "./context";
 
 const MAX_COMMENT_LENGTH: number = 100;
 const MAX_PATHS_IN_STORAGE = 4;
-
-enum FeedbackType {
-  UP = "up",
-  DOWN = "down",
-}
-
-interface StoredFeedback {
-  path: string;
-  expiry: number;
-  signal?: FeedbackType;
-}
 
 const checkForExpiredFeedback = (
   itemStr: string,
@@ -241,7 +232,7 @@ const ThumbsFeedback: React.FC<{
   feedbackLabel = "Is this page helpful?",
   pagePosition = "top",
 }): JSX.Element => {
-  const [feedback, setFeedback] = useState<FeedbackType | null>(null);
+  const { feedback, setFeedback } = useContext(ThumbsFeedbackContext);
   const [comment, setComment] = useState<string>("");
   const [formActive, setFormActive] = useState<"positive" | "negative" | false>(
     false
@@ -285,31 +276,6 @@ const ThumbsFeedback: React.FC<{
 
     if (foundCurrentFeedbackPathClick) {
       setFeedback(foundCurrentFeedbackPathClick.signal || null);
-    }
-
-    const listenForFeedbackUpdate = () => {
-      const feedbackGivenPaths = checkForExpiredFeedback(
-        commentItemStr,
-        currentPath
-      );
-      const clickedPaths = checkForExpiredFeedback(
-        clickedPathsItemStr,
-        currentPath,
-        "feedback_thumbs_clicked_paths"
-      );
-      const foundCurrentFeedbackPath = feedbackGivenPaths.find(
-        (pathItem) => pathItem.path === currentPath
-      );
-      const foundCurrentFeedbackPathClick = clickedPaths.find(
-        (pathItem) => pathItem.path === currentPath
-      );
-
-      if (foundCurrentFeedbackPath) {
-        setIsSubmitted(true);
-      }
-      if (foundCurrentFeedbackPathClick) {
-        setFeedback(foundCurrentFeedbackPathClick.signal || null);
-      }
     }
   }, [location.pathname]);
 
