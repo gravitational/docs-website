@@ -1485,6 +1485,26 @@ describe("repetitiveSidebarSections", () => {
 `,
       ],
     },
+    {
+      description: "whole section ignored",
+      input: [
+        {
+          type: "doc",
+          id: "my-section/page-a",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-b",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-c",
+        },
+      ],
+      ignorePrefixes: ["my-section"],
+      expected: [],
+    },
+      // TODO: one guide ignored
   ];
 
   test.each(testCases)("$description", (c) => {

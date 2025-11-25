@@ -213,6 +213,9 @@ export const repetitiveSidebarSections = (
   let result: Array<string> = [];
   items.forEach((item) => {
     const { label, id } = getSidebarAttributes(item, getter);
+    if (ignorePrefixes.some((p) => id.startsWith(p))) {
+      return;
+    }
     const words = label.split(" ");
     for (let i = words.length - 1; i > 0; i--) {
       const beginning = words.slice(0, i).join(" ");
