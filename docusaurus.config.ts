@@ -238,7 +238,10 @@ const config: Config = {
           const repetitiveItems = repetitiveSidebarSections(
             items,
             getDocPageByID,
-            ["reference/infrastructure-as-code"],
+            [
+              "reference/infrastructure-as-code",
+              "reference/access-controls/access-lists",
+            ],
           );
 
           if (repetitiveItems.length > 0) {
