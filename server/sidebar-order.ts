@@ -182,9 +182,16 @@ const sortByLength = (a, b) => {
   return b.length - a.length;
 };
 
+// repetitiveSidebarSections inspects items and their descendents for sidebar
+// sections in which three or more items contain identical sequences of words at
+// the start or end of their sidebar labels. It returns a list of error
+// messages, one per repetitive prefix or suffix in a given sidebar section.
+//
+// ignorePrefixes specifies a list of Docusaurus ID prefixes to ignore.
 export const repetitiveSidebarSections = (
   items: Array<NormalizedSidebarItem>,
   getter: (id: string) => docPage,
+  ignorePrefixes: Array<string>,
 ): Array<string> => {
   // Special case: repetition is impossible
   if (items.length <= 1) {
