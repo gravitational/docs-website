@@ -1504,7 +1504,25 @@ describe("repetitiveSidebarSections", () => {
       ignorePrefixes: ["my-section"],
       expected: [],
     },
-      // TODO: one guide ignored
+    {
+      description: "one page ignored",
+      input: [
+        {
+          type: "doc",
+          id: "my-section/page-a",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-b",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-c",
+        },
+      ],
+      ignorePrefixes: ["my-section/page-c"],
+      expected: [],
+    },
   ];
 
   test.each(testCases)("$description", (c) => {
