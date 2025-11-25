@@ -238,6 +238,7 @@ const config: Config = {
           const repetitiveItems = repetitiveSidebarSections(
             items,
             getDocPageByID,
+            ["reference/infrastructure-as-code"],
           );
 
           if (repetitiveItems.length > 0) {
@@ -246,7 +247,7 @@ const config: Config = {
 
           return orderSidebarItems(
             removeRedundantItems(items, item.dirName),
-            getDocPageByID
+            getDocPageByID,
           );
         },
         // Host docs on the root page, later it will be exposed on goteleport.com/docs
@@ -313,7 +314,7 @@ const config: Config = {
           const alias: string = path.resolve(
             __dirname,
             "./content",
-            currentVersion
+            currentVersion,
           );
 
           return {
