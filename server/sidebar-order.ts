@@ -228,7 +228,9 @@ export const repetitiveSidebarSections = (
 
     const cat = item as NormalizedSidebarItemCategory;
     if (cat.items) {
-      result = result.concat(repetitiveSidebarSections(cat.items, getter));
+      result = result.concat(
+        repetitiveSidebarSections(cat.items, getter, ignorePrefixes),
+      );
     }
   });
 

@@ -1258,237 +1258,243 @@ describe("removeRedundantItems", () => {
 });
 
 describe("repetitiveSidebarSections", () => {
-  describe("sidebar label", () => {
-    const idToDocPage = {
-      "my-section/page-a": {
+  const idToDocPage = {
+    "my-section/page-a": {
+      title: "Page A",
+      id: "my-section/page-a",
+      frontMatter: {
         title: "Page A",
-        id: "my-section/page-a",
-        frontMatter: {
-          title: "Page A",
-          sidebar_label: "Page Z",
-          description: "Page A",
-        },
-        source: "@site/docs/my-section/page-a.mdx",
-        sourceDirName: "",
+        sidebar_label: "Page Z",
+        description: "Page A",
       },
-      "my-section/page-b": {
+      source: "@site/docs/my-section/page-a.mdx",
+      sourceDirName: "",
+    },
+    "my-section/page-b": {
+      title: "Page B",
+      id: "my-section/page-b",
+      frontMatter: {
         title: "Page B",
-        id: "my-section/page-b",
-        frontMatter: {
-          title: "Page B",
-          sidebar_label: "Page W",
-          description: "Page B",
-        },
-        source: "@site/docs/my-section/page-b.mdx",
-        sourceDirName: "",
+        sidebar_label: "Page W",
+        description: "Page B",
       },
-      "my-section/page-c": {
+      source: "@site/docs/my-section/page-b.mdx",
+      sourceDirName: "",
+    },
+    "my-section/page-c": {
+      title: "Page C",
+      id: "my-section/page-c",
+      frontMatter: {
         title: "Page C",
-        id: "my-section/page-c",
-        frontMatter: {
-          title: "Page C",
-          sidebar_label: "Page X",
-          description: "Page C",
-        },
-        source: "@site/docs/my-section/page-c.mdx",
-        sourceDirName: "",
+        sidebar_label: "Page X",
+        description: "Page C",
       },
-      "my-section/page-d": {
+      source: "@site/docs/my-section/page-c.mdx",
+      sourceDirName: "",
+    },
+    "my-section/page-d": {
+      title: "D Docs Page",
+      id: "my-section/page-d",
+      frontMatter: {
         title: "D Docs Page",
-        id: "my-section/page-d",
-        frontMatter: {
-          title: "D Docs Page",
-          description: "D Docs Page",
-        },
-        source: "@site/docs/my-section/page-d.mdx",
-        sourceDirName: "",
+        description: "D Docs Page",
       },
-      "my-section/page-e": {
+      source: "@site/docs/my-section/page-d.mdx",
+      sourceDirName: "",
+    },
+    "my-section/page-e": {
+      title: "E Docs Page",
+      id: "my-section/page-e",
+      frontMatter: {
         title: "E Docs Page",
-        id: "my-section/page-e",
-        frontMatter: {
-          title: "E Docs Page",
-          description: "E Docs Page",
-        },
-        source: "@site/docs/my-section/page-e.mdx",
-        sourceDirName: "",
+        description: "E Docs Page",
       },
-      "my-section/page-f": {
+      source: "@site/docs/my-section/page-e.mdx",
+      sourceDirName: "",
+    },
+    "my-section/page-f": {
+      title: "F Docs Page",
+      id: "my-section/page-f",
+      frontMatter: {
         title: "F Docs Page",
-        id: "my-section/page-f",
-        frontMatter: {
-          title: "F Docs Page",
-          description: "F Docs Page",
-        },
-        source: "@site/docs/my-section/page-d.mdx",
-        sourceDirName: "",
+        description: "F Docs Page",
       },
-    };
+      source: "@site/docs/my-section/page-d.mdx",
+      sourceDirName: "",
+    },
+  };
 
-    interface testCase {
-      description: string;
-      input: Array<NormalizedSidebarItem>;
-      expected: Array<string>;
-    }
+  interface testCase {
+    description: string;
+    input: Array<NormalizedSidebarItem>;
+    ignorePrefixes: Array<string>;
+    expected: Array<string>;
+  }
 
-    const testCases: Array<testCase> = [
-      {
-        description: "one word at the beginning of each item",
-        input: [
-          {
-            type: "doc",
-            id: "my-section/page-a",
-          },
-          {
-            type: "doc",
-            id: "my-section/page-b",
-          },
-          {
-            type: "doc",
-            id: "my-section/page-c",
-          },
-        ],
-        expected: [
-          `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels:
+  const testCases: Array<testCase> = [
+    {
+      description: "one word at the beginning of each item",
+      input: [
+        {
+          type: "doc",
+          id: "my-section/page-a",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-b",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-c",
+        },
+      ],
+      expected: [
+        `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels:
 - my-section/page-a
 - my-section/page-b
 - my-section/page-c
 `,
-        ],
-      },
-      {
-        description: "two words at the end of each item",
-        input: [
-          {
-            type: "doc",
-            id: "my-section/page-d",
-          },
-          {
-            type: "doc",
-            id: "my-section/page-e",
-          },
-          {
-            type: "doc",
-            id: "my-section/page-f",
-          },
-        ],
-        expected: [
-          `The following pages in the same sidebar section have labels that repeat the string suffix "Docs Page". Use the sidebar_label frontmatter field to simplify their labels:
+      ],
+      ignorePrefixes: [],
+    },
+    {
+      description: "two words at the end of each item",
+      input: [
+        {
+          type: "doc",
+          id: "my-section/page-d",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-e",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-f",
+        },
+      ],
+      expected: [
+        `The following pages in the same sidebar section have labels that repeat the string suffix "Docs Page". Use the sidebar_label frontmatter field to simplify their labels:
 - my-section/page-d
 - my-section/page-e
 - my-section/page-f
 `,
-        ],
-      },
-      {
-        description: "repetition in inner and outer sections",
-        input: [
-          {
-            type: "category",
-            label: "Page C",
-            items: [
-              {
-                type: "doc",
-                id: "my-section/page-d",
-              },
-              {
-                type: "doc",
-                id: "my-section/page-e",
-              },
-              {
-                type: "doc",
-                id: "my-section/page-f",
-              },
-            ],
-            link: {
+      ],
+      ignorePrefixes: [],
+    },
+    {
+      description: "repetition in inner and outer sections",
+      input: [
+        {
+          type: "category",
+          label: "Page C",
+          items: [
+            {
               type: "doc",
-              id: "my-section/page-c",
+              id: "my-section/page-d",
             },
-          },
-          {
+            {
+              type: "doc",
+              id: "my-section/page-e",
+            },
+            {
+              type: "doc",
+              id: "my-section/page-f",
+            },
+          ],
+          link: {
             type: "doc",
-            id: "my-section/page-a",
+            id: "my-section/page-c",
           },
-          {
-            type: "doc",
-            id: "my-section/page-b",
-          },
-        ],
-        expected: [
-          `The following pages in the same sidebar section have labels that repeat the string suffix "Docs Page". Use the sidebar_label frontmatter field to simplify their labels:
+        },
+        {
+          type: "doc",
+          id: "my-section/page-a",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-b",
+        },
+      ],
+      expected: [
+        `The following pages in the same sidebar section have labels that repeat the string suffix "Docs Page". Use the sidebar_label frontmatter field to simplify their labels:
 - my-section/page-d
 - my-section/page-e
 - my-section/page-f
 `,
-          `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels:
+        `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels:
 - my-section/page-c
 - my-section/page-a
 - my-section/page-b
 `,
-        ],
-      },
-      {
-        description: "no repetition",
-        input: [
-          {
-            type: "doc",
-            id: "my-section/page-a",
-          },
-          {
-            type: "doc",
-            id: "my-section/page-f",
-          },
-        ],
-        expected: [],
-      },
-      {
-        description: "single page",
-        input: [
-          {
-            type: "doc",
-            id: "my-section/page-a",
-          },
-        ],
-        expected: [],
-      },
-      {
-        description: "3 out of 4 pages repeat",
-        input: [
-          {
-            type: "doc",
-            id: "my-section/page-a",
-          },
-          {
-            type: "doc",
-            id: "my-section/page-b",
-          },
-          {
-            type: "doc",
-            id: "my-section/page-c",
-          },
-          {
-            type: "doc",
-            id: "my-section/page-f",
-          },
-        ],
-        expected: [
-          `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels. Consider a new docs subsection for the 3 repeating pages:
-- my-section/page-a
-- my-section/page-b
-- my-section/page-c
-`,
-        ],
-      },
-    ];
-
-    test.each(testCases)("$description", (c) => {
-      const actual = repetitiveSidebarSections(
-        c.input,
-        (id: string): docPage => {
-          return idToDocPage[id];
+      ],
+      ignorePrefixes: [],
+    },
+    {
+      description: "no repetition",
+      input: [
+        {
+          type: "doc",
+          id: "my-section/page-a",
         },
-      );
-      expect(actual).toEqual(c.expected);
-    });
+        {
+          type: "doc",
+          id: "my-section/page-f",
+        },
+      ],
+      ignorePrefixes: [],
+      expected: [],
+    },
+    {
+      description: "single page",
+      input: [
+        {
+          type: "doc",
+          id: "my-section/page-a",
+        },
+      ],
+      ignorePrefixes: [],
+      expected: [],
+    },
+    {
+      description: "3 out of 4 pages repeat",
+      input: [
+        {
+          type: "doc",
+          id: "my-section/page-a",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-b",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-c",
+        },
+        {
+          type: "doc",
+          id: "my-section/page-f",
+        },
+      ],
+      ignorePrefixes: [],
+      expected: [
+        `The following pages in the same sidebar section have labels that repeat the string prefix "Page". Use the sidebar_label frontmatter field to simplify their labels. Consider a new docs subsection for the 3 repeating pages:
+- my-section/page-a
+- my-section/page-b
+- my-section/page-c
+`,
+      ],
+    },
+  ];
+
+  test.each(testCases)("$description", (c) => {
+    const actual = repetitiveSidebarSections(
+      c.input,
+      (id: string): docPage => {
+        return idToDocPage[id];
+      },
+      c.ignorePrefixes,
+    );
+    expect(actual).toEqual(c.expected);
   });
 });
