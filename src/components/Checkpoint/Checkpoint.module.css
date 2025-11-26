@@ -1,0 +1,76 @@
+.checkpoint {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--m-2);
+  font-size: var(--fs-text-lg);
+  color: var(--color-foreground-slightly-muted);
+  padding: var(--m-3);
+  line-height: 1.6;
+  border-radius: var(--m-1);
+  border: 2px solid var(--color-tonal-neutral-0);
+  max-width: 681px;
+
+  p {
+    margin: 0;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: var(--m-1);
+  }
+
+  .heading {
+    font-size: var(--fs-header-4);
+    font-weight: var(--fw-bold);
+    line-height: 1.5;
+    color: var(--color-black);
+  }
+
+  .title {
+    display: block;
+    color: var(--color-black);
+    font-weight: var(--fw-medium);
+    margin-bottom: var(--m-0-5);
+  }
+
+  .thankYouMessage {
+    font-size: var(--fs-text-xl);
+    font-weight: var(--fw-bold);
+    color: var(--color-interactive-success-default);
+    display: flex;
+    gap: var(--m-1);
+    align-items: center;
+
+    svg {
+      path {
+        fill: var(--color-interactive-success-default);
+      }
+    }
+  }
+
+  .buttons,
+  .formButtons {
+    display: flex;
+    gap: var(--m-1);
+  }
+
+  .feedbackForm {
+    label {
+      display: block;
+      height: max-content;
+    }
+    textarea {
+      width: 100%;
+      border-radius: var(--m-0-5);
+      border: 1px solid var(--color-dark-purple);
+      padding: var(--m-1-5);
+      font-family: var(--font-lato);
+      font-size: var(--fs-text-lg);
+    }
+
+    .formButtons {
+      margin-top: var(--m-2);
+    }
+  }
+}

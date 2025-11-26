@@ -5,9 +5,8 @@ import Icon from "../Icon/Icon";
 import Button from "../Button/Button";
 import { GitHubIssueLink } from "@site/src/components/GitHubIssueLink";
 import { trackEvent } from "@site/src/utils/analytics";
-import { isValidCommentLength, containsPII } from "@site/src/utils/validations";
+import { isValidCommentLength, containsPII, MAX_COMMENT_LENGTH } from "@site/src/utils/validations";
 
-const MAX_COMMENT_LENGTH: number = 100;
 
 enum FeedbackType {
   UP = "up",
