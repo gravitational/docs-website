@@ -106,6 +106,8 @@ export { default as clickhouse } from "./svg/clickhouse.svg";
 export { default as cockroachDb } from "./svg/cockroach-db.svg";
 export { default as redis } from "./svg/redis.svg";
 export { default as mariaDb } from "./svg/maria-db.svg";
+export { default as hashicorpVault } from "./svg/hashicorp-vault.svg";
+export { default as notion } from "./svg/notion.svg";
 
 // Teleport svgs
 export { default as cluster } from "./teleport-svg/cluster.svg";
