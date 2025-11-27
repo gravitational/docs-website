@@ -42,29 +42,35 @@ export const useGuidedSteps = () => {
   const ignoreIntersection = useRef<boolean>(false);
 
   useLayoutEffect(() => {
+    const debounceDelay = 50;
+    let resizeTimeout: NodeJS.Timeout;
+
+    const debounceHighlightedStep = (stepId: string) => {
+      if (ignoreIntersection.current) return;
+
+      const now = Date.now();
+      pendingHighlight.current = stepId;
+
+      if (now - lastHighlightTime.current > debounceDelay) {
+        highlightStep(stepId, true);
+        lastHighlightTime.current = now;
+        pendingHighlight.current = undefined;
+      } else {
+        setTimeout(() => {
+          if (pendingHighlight.current === stepId) {
+            highlightStep(stepId, true);
+            lastHighlightTime.current = Date.now();
+            pendingHighlight.current = undefined;
+          }
+        }, debounceDelay);
+      }
+    };
+
     const initializeObserver = () => {
-      const debounceDelay = 50;
-
-      const debounceHighlightedStep = (stepId: string) => {
-        if (ignoreIntersection.current) return;
-
-        const now = Date.now();
-        pendingHighlight.current = stepId;
-
-        if (now - lastHighlightTime.current > debounceDelay) {
-          highlightStep(stepId, true);
-          lastHighlightTime.current = now;
-          pendingHighlight.current = undefined;
-        } else {
-          setTimeout(() => {
-            if (pendingHighlight.current === stepId) {
-              highlightStep(stepId, true);
-              lastHighlightTime.current = Date.now();
-              pendingHighlight.current = undefined;
-            }
-          }, debounceDelay);
-        }
-      };
+      // Disconnect existing observer before creating a new one
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
 
       const navHeight =
         parseInt(
@@ -102,17 +108,27 @@ export const useGuidedSteps = () => {
       });
     };
 
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      ignoreIntersection.current = true;
+      
+      resizeTimeout = setTimeout(() => {
+        initializeObserver();
+        ignoreIntersection.current = false;
+      }, 150);
+    };
+
     initializeObserver();
 
-    window.removeEventListener("resize", initializeObserver);
-    window.addEventListener("resize", initializeObserver);
+    window.addEventListener("resize", handleResize);
 
     return () => {
+      clearTimeout(resizeTimeout);
       if (observerRef.current) {
         observerRef.current.disconnect();
         observerRef.current = null;
       }
-      window.removeEventListener("resize", initializeObserver);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 

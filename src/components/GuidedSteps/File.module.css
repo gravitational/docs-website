@@ -8,7 +8,51 @@
   &.copyButtonActive {
     background-color: var(--color-code);
   }
+}
 
+.file {
+  position: absolute;
+  height: 0;
+  opacity: 0;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+
+  &.active {
+    margin-top: var(--file-tabs-height);
+    opacity: 1;
+    height: auto;
+    position: relative;
+    pointer-events: auto;
+  }
+
+  :global(pre) {
+    border-radius: 0;
+    transition: all 0.2s ease-in;
+  }
+  & > div {
+    box-shadow: unset;
+  }
+}
+
+.fileTabs {
+  position: sticky;
+  overflow-x: scroll;
+  top: 0;
+  display: flex;
+  padding: var(--m-2);
+  border-bottom: 1.5px solid var(--color-tonal-neutral-1-white);
+  background-color: #0e1435;
+  border-top-left-radius: var(--m-1);
+  border-top-right-radius: var(--m-1);
+  z-index: 1;
+  gap: var(--m-0-5);
+  margin-bottom: 0;
+  min-height: var(--file-tabs-height);
+}
+
+.files,
+.fileTabs {
   /* Custom scrollbar styling */
   &::-webkit-scrollbar {
     width: 8px;
@@ -29,46 +73,8 @@
 
   /* Firefox scrollbar styling */
   scrollbar-width: thin;
-  scrollbar-color: var(--color-tonal-neutral-2-white) var(--color-tonal-neutral-0-white);
-}
-
-.file {
-  position: absolute;
-  height: 0;
-  opacity: 0;
-  display: flex;
-  overflow: hidden;
-  flex-direction: column;
-
-  &.active {
-    opacity: 1;
-    height: auto;
-    position: relative;
-    pointer-events: auto;
-  }
-
-  :global(pre) {
-    border-radius: 0;
-    transition: all 0.2s ease-in;
-  }
-  & > div {
-    box-shadow: unset;
-  }
-}
-
-.fileTabs {
-  position: sticky;
-  top: 0;
-  display: flex;
-  padding: var(--m-2);
-  border-bottom: 1.5px solid var(--color-tonal-neutral-1-white);
-  background-color: #0e1435;
-  border-top-left-radius: var(--m-1);
-  border-top-right-radius: var(--m-1);
-  z-index: 1;
-  gap: var(--m-0-5);
-  margin-bottom: 0;
-  min-height: 65px;
+  scrollbar-color: var(--color-tonal-neutral-2-white)
+    var(--color-tonal-neutral-0-white);
 }
 
 .fileTab {
