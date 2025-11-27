@@ -4,6 +4,7 @@
   border-bottom-left-radius: var(--m-1);
   border-bottom-right-radius: var(--m-1);
   overflow-y: scroll;
+  padding-top: var(--file-tabs-height);
   padding-bottom: var(--m-4);
   &.copyButtonActive {
     background-color: var(--color-code);
@@ -19,7 +20,6 @@
   flex-direction: column;
 
   &.active {
-    margin-top: var(--file-tabs-height);
     opacity: 1;
     height: auto;
     position: relative;
