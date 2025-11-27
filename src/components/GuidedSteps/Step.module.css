@@ -29,6 +29,10 @@
     box-shadow: -5px 0px 0px -2px var(--color-dark-purple);
     background-color: var(--color-tonal-primary-0);
 
+    &::after {
+      opacity: 0 !important;
+    }
+
     &:hover {
       background-color: var(--color-tonal-primary-0);
     }
