@@ -28,8 +28,7 @@ const CodeBlock = forwardRef<
         stepRef.current?.scrollIntoView({
           behavior: "smooth",
           block: "nearest",
-          inline: "start",
-          container: "nearest",
+          inline: "nearest",
         });
       },
       deactivate: (): void => setActiveLines(false),
