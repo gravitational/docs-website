@@ -22,6 +22,12 @@ import Icon from "/src/components/Icon";
 import Tile from "/src/components/Tile";
 import TileGrid from "/src/components/TileGrid";
 import ThumbsFeedback from "/src/components/ThumbsFeedback";
+import GuidedSteps from "/src/components/GuidedSteps";
+import Step from "/src/components/GuidedSteps/Step";
+import StepSection from "/src/components/GuidedSteps/StepSection";
+import File from "/src/components/GuidedSteps/File";
+import CodeBlock from "/src/components/GuidedSteps/CodeBlock";
+import Checkpoint from "@site/src/components/Checkpoint/Checkpoint";
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
@@ -55,6 +61,12 @@ const MDXComponents: MDXComponentsObject = {
   ul: MDXUl,
   Var: (props) => <Var {...props} />, // needed to circumvent props mismatch in types
   ThumbsFeedback,
+  GuidedSteps,
+  Step,
+  File,
+  StepSection,
+  CodeBlock,
+  Checkpoint,
 };
 
 export default MDXComponents;
