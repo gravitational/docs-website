@@ -3,6 +3,10 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--m-4);
   margin-bottom: var(--ifm-leading);
+
+  h2 {
+    --ifm-h2-font-size: 2rem;
+  }
 }
 
 .instructions {
@@ -18,11 +22,9 @@
   top: calc(var(--ifm-navbar-height) + var(--m-4));
   background-color: #060918;
   max-height: calc(100dvh - var(--ifm-navbar-height) - var(--m-8));
-  overflow-y: scroll;
+  overflow-y: hidden;
   height: 100%;
-  @media (--md-scr) {
-    border-radius: var(--r-default);
-  }
+  border-radius: var(--r-md);
 
   &.copyButtonActive {
     background-color: var(--color-code);
