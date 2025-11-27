@@ -1,5 +1,12 @@
 import styles from "./ThumbsFeedback.module.css";
-import React, { FormEvent, useState, useEffect, useRef, JSX, useContext } from "react";
+import React, {
+  FormEvent,
+  useState,
+  useEffect,
+  useRef,
+  JSX,
+  useContext,
+} from "react";
 import { useLocation } from "@docusaurus/router";
 import cn from "classnames";
 import Icon from "../Icon/Icon";
@@ -337,7 +344,11 @@ const ThumbsFeedback: React.FC<{
   };
 
   return (
-    <div>
+    <div
+      className={cn(styles.thumbsFeedback, {
+        [styles.positionBottom]: pagePosition === "bottom",
+      })}
+    >
       <div
         className={cn(styles.feedback, {
           [styles.positionBottom]: pagePosition === "bottom",

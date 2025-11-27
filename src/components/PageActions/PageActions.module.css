@@ -5,15 +5,32 @@
   border-bottom: 1px solid var(--color-tonal-neutral-2);
   margin-bottom: var(--m-5);
 
-  & > * {
-    &:not(:last-child) {
-      &::after {
-        content: "";
-        position: relative;
-        transform: translateX(var(--m-2));
-        width: 1px;
-        height: 100%;
-        background-color: var(--color-tonal-neutral-1);
+  @media (--sm-scr) {
+    & > * {
+      &:not(:nth-last-child(2)) {
+        &::after {
+          content: "";
+          position: relative;
+          transform: translateX(var(--m-2));
+          width: 1px;
+          height: 100%;
+          background-color: var(--color-tonal-neutral-1);
+        }
+      }
+    }
+  }
+
+  @media (--lg-scr) {
+    & > * {
+      &:not(:last-child) {
+        &::after {
+          content: "";
+          position: relative;
+          transform: translateX(var(--m-2));
+          width: 1px;
+          height: 100%;
+          background-color: var(--color-tonal-neutral-1);
+        }
       }
     }
   }
