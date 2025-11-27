@@ -43,7 +43,7 @@ export const useGuidedSteps = () => {
 
   useLayoutEffect(() => {
     const initializeObserver = () => {
-      const debounceDelay = 10;
+      const debounceDelay = 50;
 
       const debounceHighlightedStep = (stepId: string) => {
         if (ignoreIntersection.current) return;
