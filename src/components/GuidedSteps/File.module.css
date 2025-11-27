@@ -1,10 +1,8 @@
 .files {
   position: relative;
-  height: 100%;
   border-bottom-left-radius: var(--m-1);
   border-bottom-right-radius: var(--m-1);
   overflow-y: scroll;
-  padding-top: var(--file-tabs-height);
   padding-bottom: var(--m-4);
   &.copyButtonActive {
     background-color: var(--color-code);
@@ -36,9 +34,7 @@
 }
 
 .fileTabs {
-  position: sticky;
   overflow-x: scroll;
-  top: 0;
   display: flex;
   padding: var(--m-2);
   border-bottom: 1.5px solid var(--color-tonal-neutral-1-white);
