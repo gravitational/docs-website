@@ -25,6 +25,16 @@ $ yarn dev
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
+## Running in Docker
+
+The `run-docker.sh` script requires a semver as an argument. For example, to develop locally and have your changes appear in the 19.x branch, run:
+
+```
+$ ./run-docker.sh 19.x
+```
+
+Most changes should also display live; sometimes the filesystem watcher is a little slow, sometimes it is not.
+
 ## Build
 
 ```
