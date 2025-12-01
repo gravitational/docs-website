@@ -17,6 +17,7 @@ interface Resource {
 interface ResourcesProps {
   className?: string;
   title?: string;
+  description?: string;
   variant?: "homepage" | "doc";
   desktopColumnsCount?: number;
   resources: Resource[];
@@ -110,6 +111,7 @@ const ResourceCard: React.FC<Resource> = ({
 const Resources: React.FC<ResourcesProps> = ({
   className = "",
   title = "Enroll resources",
+  description,
   variant = "homepage",
   desktopColumnsCount = 4,
   resources,
@@ -124,15 +126,23 @@ const Resources: React.FC<ResourcesProps> = ({
       })}
     >
       <div className={styles.resourcesContainer}>
-        {title && (
-          <Heading
-            className={cn(styles.resourcesTitle, {
-              [styles.docVariant]: variant === "doc",
-            })}
-          >
-            {title}
-          </Heading>
-        )}
+        <div
+          className={cn(styles.header, {
+            [styles.hasTitle]: !!title,
+            [styles.docVariant]: variant === "doc",
+          })}
+        >
+          {title && (
+            <Heading
+              className={cn(styles.resourcesTitle, {
+                [styles.docVariant]: variant === "doc",
+              })}
+            >
+              {title}
+            </Heading>
+          )}
+          {description && <p className={styles.description}>{description}</p>}
+        </div>
         <div
           className={styles.resourcesGrid}
           style={
