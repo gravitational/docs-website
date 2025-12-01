@@ -6,8 +6,10 @@ LOCAL_PORT=3000
 
 SEM_VER=$1
 if [[ "${SEM_VER}" == "" ]]; then
-    echo "Usage: \"$(basename \\"$0\\")\" <latest-docs-semver>"
-    echo "e.g. \"$(basename \\"$0\\")\" 19.x"
+    # shellcheck disable=SC2086
+    echo "Usage: \"$(basename $0)\" <latest-docs-semver>"
+    # shellcheck disable=SC2086
+    echo "e.g. \"$(basename $0)\" 19.x"
     exit 1
 fi
 if [ ! -d content/"${SEM_VER}" ]; then
@@ -31,9 +33,7 @@ fi
 
 # build docker image
 DOCKER_IMAGE=node-watchexec:22
-ARCH=$(uname -m)
-if [[ "${ARCH}" == "arm64" ]]; then ARCH="aarch64"; fi
-docker build -t "${DOCKER_IMAGE}" --build-arg "ARCH=${ARCH}" .
+docker build -t "${DOCKER_IMAGE}" .
 
 # copy template gitmodules if it doesn't exist
 if [ ! -f .gitmodules ]; then
