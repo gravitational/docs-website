@@ -45,11 +45,14 @@
   gap: var(--m-0-5);
   margin-bottom: 0;
   min-height: var(--file-tabs-height);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
 }
 
-.files,
-.fileTabs {
-  /* Custom scrollbar styling */
+.files {
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -67,7 +70,6 @@
     background-color: var(--color-tonal-neutral-3-white);
   }
 
-  /* Firefox scrollbar styling */
   scrollbar-width: thin;
   scrollbar-color: var(--color-tonal-neutral-2-white)
     var(--color-tonal-neutral-0-white);
