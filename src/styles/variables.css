@@ -140,7 +140,12 @@
   --lp-box-shadow: 0 5px 20px 0 rgba(19, 19, 19, 0.1);
   --lp-box-shadow-hover: 0 4px 12px rgba(81, 47, 201, 0.15);
   --lp-box-shadow-hover-tag: 0 2px 12px 0 rgba(19, 19, 19, 0.05);
-  --lp-box-shadow-button-hover: 0 3px 5px -1px rgba(0, 0, 0, 0.20), 0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 1px 14px 0 rgba(0, 0, 0, 0.12);
+  --lp-box-shadow-button-hover:
+    0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 5px 8px 0 rgba(0, 0, 0, 0.14),
+    0 1px 14px 0 rgba(0, 0, 0, 0.12);
+
+  /* GuidedSteps tabs section height */
+  --file-tabs-height: 65px;
 }
 
 @media (max-width: 996px) {
