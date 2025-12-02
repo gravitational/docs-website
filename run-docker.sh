@@ -41,7 +41,7 @@ if [ ! -f .gitmodules ]; then
 fi
 
 # do a git update locally (SSH keys are not available inside the container)
-./scripts/update_submodules.sh
+CI=docker ./scripts/update_submodules.sh
 
 # run docusaurus in docker
 docker run \
