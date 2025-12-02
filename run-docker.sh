@@ -35,12 +35,7 @@ fi
 DOCKER_IMAGE=node-watchexec:22
 docker build -t "${DOCKER_IMAGE}" .
 
-# copy template gitmodules if it doesn't exist
-if [ ! -f .gitmodules ]; then
-    cp .gitmodules.example .gitmodules
-fi
-
-# do a git update locally (SSH keys are not available inside the container)
+# do a content update locally
 CI=docker ./scripts/update_submodules.sh
 
 # run docusaurus in docker
