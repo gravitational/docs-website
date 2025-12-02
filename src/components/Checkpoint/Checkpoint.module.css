@@ -8,7 +8,6 @@
   line-height: 1.6;
   border-radius: var(--m-1);
   border: 2px solid var(--color-tonal-neutral-0);
-  max-width: 681px;
 
   p {
     margin: 0;

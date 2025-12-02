@@ -22,7 +22,7 @@ import Icon from "/src/components/Icon";
 import Tile from "/src/components/Tile";
 import TileGrid from "/src/components/TileGrid";
 import ThumbsFeedback from "/src/components/ThumbsFeedback";
-import Checkpoint from "@site/src/components/Checkpoint/Checkpoint";
+import Checkpoint from "/src/components/Checkpoint";
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
