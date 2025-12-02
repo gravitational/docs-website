@@ -119,6 +119,7 @@
 
         &.active {
           border-color: var(--color-dark-purple);
+          color: var(--color-dark-purple);
           svg path {
             fill: var(--color-dark-purple);
           }
@@ -127,13 +128,22 @@
     }
 
     &.positionBottom {
+      margin-top: var(--m-4);
       display: flex;
       gap: var(--m-2);
+
+      @media (--md-scr) {
+        margin-top: var(--m-8);
+      }
 
       .feedbackLabel {
         font-size: var(--fs-text-xl);
         font-weight: var(--fw-bold);
         color: var(--color-black);
+
+        &.active {
+          color: var(--color-dark-purple);
+        }
       }
 
       .thumbs {
@@ -146,9 +156,23 @@
         align-items: center;
         justify-content: center;
         gap: var(--m-1);
+        height: auto;
 
         &:not(.active) {
           background-color: var(--color-tonal-neutral-0);
+        }
+        &:hover {
+          background-color: var(--color-tonal-neutral-1);
+        }
+
+        &.active {
+          &:hover {
+            background-color: var(--color-interactive-primary-hover);
+            color: var(--color-white);
+            svg path {
+              fill: var(--color-white);
+            }
+          }
         }
       }
     }

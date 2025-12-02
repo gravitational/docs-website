@@ -59,7 +59,7 @@ export default function DocItemContent({ children }: Props): ReactNode {
         </header>
       )}
       <MDXContent>{children}</MDXContent>
-      <ThumbsFeedback feedbackLabel="Was this page helpful?" pagePosition="bottom" />
+      {syntheticTitle && !hideTitleSection && <ThumbsFeedback feedbackLabel="Was this page helpful?" pagePosition="bottom" />}
       </ThumbsFeedbackContext.Provider>
     </div>
   );
