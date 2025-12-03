@@ -31,15 +31,15 @@ const Checkpoint: React.FC<CheckpointProps> = ({
   const [comment, setComment] = useState<string>("");
   const [submitted, setSubmitted] = useState<boolean>(false);
 
-  const getIcon = (feedback: FeedbackType | null) => {
-    switch (feedback) {
-      case FeedbackType.UP:
-        return "checkCircle";
-      case FeedbackType.DOWN:
-        return "warningCircle";
-      default:
-        return "flag2";
-    }
+  const handleOpinionGiven = (feedback: FeedbackType) => {
+    setOpinionGiven(feedback);
+
+    trackEvent({
+      event_name: `docs_checkpoint_feedback_${feedback}`,
+      custom_parameters: {
+        checkpoint_title: title,
+      },
+    });
   };
 
   const submitCheckpointFeedback = (e: React.FormEvent) => {
@@ -53,7 +53,7 @@ const Checkpoint: React.FC<CheckpointProps> = ({
 
     if (!containsPII(trimmedComment)) {
       trackEvent({
-        event_name: `docs_checkpoint_feedback_${opinionGiven}`,
+        event_name: `docs_checkpoint_feedback_comment_${opinionGiven}`,
         custom_parameters: {
           checkpoint_title: title,
           comment_text: trimmedComment,
@@ -65,11 +65,10 @@ const Checkpoint: React.FC<CheckpointProps> = ({
   return (
     <div className={styles.checkpoint}>
       <div className={styles.header}>
-        <Icon name={getIcon(opinionGiven)} size="md" />
-        <p className={styles.heading}>Checkpoint</p>
+        <Icon name="flag2" size="md" />
+        <p className={styles.heading}>Checkpoint: {title}</p>
       </div>
       <div>
-        <p className={styles.title}>{title}</p>
         {description && <p className={styles.description}>{description}</p>}
       </div>
       <>
@@ -140,7 +139,15 @@ const Checkpoint: React.FC<CheckpointProps> = ({
                 >
                   Submit
                 </Button>
-                <Button as="button" variant="secondary">
+                <Button
+                  as="button"
+                  variant="secondary"
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    setOpinionGiven(null);
+                    setComment("");
+                  }}
+                >
                   Cancel
                 </Button>
               </div>
@@ -153,14 +160,14 @@ const Checkpoint: React.FC<CheckpointProps> = ({
             <Button
               as="button"
               variant="success"
-              onClick={() => setOpinionGiven(FeedbackType.UP)}
+              onClick={() => handleOpinionGiven(FeedbackType.UP)}
             >
               Yes, it is working
             </Button>
             <Button
               as="button"
               variant="failure"
-              onClick={() => setOpinionGiven(FeedbackType.DOWN)}
+              onClick={() => handleOpinionGiven(FeedbackType.DOWN)}
             >
               No, it didn't work
             </Button>

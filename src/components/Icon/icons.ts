@@ -66,7 +66,6 @@ export { default as wand } from "./svg/magic-wand.svg";
 export { default as wand2 } from "./svg/magic-wand2.svg";
 export { default as users } from "./svg/users.svg";
 export { default as warning } from "./svg/warning.svg";
-export { default as warningCircle } from "./svg/warning-circle.svg";
 export { default as window } from "./svg/window.svg";
 export { default as windows } from "./svg/windows.svg";
 export { default as wrench } from "./svg/wrench.svg";
