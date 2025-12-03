@@ -4,16 +4,17 @@ import Icon from "../Icon";
 import styles from "./Checkpoint.module.css";
 import Button from "../Button";
 import Link from "../Link";
-import { trackEvent } from "@site/src/utils/analytics";
+import { trackEvent } from "/src/utils/analytics";
 import {
   containsPII,
   isValidCommentLength,
   MAX_COMMENT_LENGTH,
-} from "@site/src/utils/validations";
+} from "/src/utils/validations";
 
 interface CheckpointProps {
   title: string;
   description?: string;
+  emitEvent?: (name: string, params: any) => {};
   children?: React.ReactNode;
 }
 
@@ -25,6 +26,7 @@ enum FeedbackType {
 const Checkpoint: React.FC<CheckpointProps> = ({
   title,
   description,
+  emitEvent,
   children,
 }) => {
   const [opinionGiven, setOpinionGiven] = useState<FeedbackType | null>(null);
@@ -39,6 +41,7 @@ const Checkpoint: React.FC<CheckpointProps> = ({
       custom_parameters: {
         checkpoint_title: title,
       },
+      emitEvent: emitEvent,
     });
   };
 
@@ -58,6 +61,7 @@ const Checkpoint: React.FC<CheckpointProps> = ({
           checkpoint_title: title,
           comment_text: trimmedComment,
         },
+        emitEvent: emitEvent,
       });
     }
   };
@@ -91,6 +95,19 @@ const Checkpoint: React.FC<CheckpointProps> = ({
                     <p>Here are some troubleshooting tips:</p>
                     <ul>
                       <li>Ensure your internet connection is stable.</li>
+                      <li>
+                        Make sure that the feature is supported in your active
+                        Teleport edition by checking the{" "}
+                        <Link href="https://goteleport.com/feature-matrix/">
+                          Teleport feature matrix
+                        </Link>
+                        .
+                      </li>
+                      <li>
+                        Visit our{" "}
+                        <Link href="https://goteleport.com/faq/">FAQ page</Link>{" "}
+                        for common issues and their answers.
+                      </li>
                     </ul>
                   </>
                 )}
