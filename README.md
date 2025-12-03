@@ -33,6 +33,10 @@ The `run-docker.sh` script requires a semver as an argument. For example, to dev
 $ ./run-docker.sh 19.x
 ```
 
+For the example above, you can view your changes at http://127.0.0.1:3000/ver/19.x/
+
+If you already have a service using local port 3000, modify the LOCAL_PORT value in the `run-docker.sh` script to an unused port.
+
 Most changes should also display live; sometimes the filesystem watcher is a little slow, sometimes it is not.
 
 ## Build
