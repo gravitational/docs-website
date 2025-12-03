@@ -167,7 +167,11 @@ export const CancelFeedback: Story = {
 
 export const CustomTroubleshootingContent: Story = {
   render: () => (
-    <Checkpoint title="Custom Troubleshooting" emitEvent={collectEvents()}>
+    <Checkpoint
+      title="Custom Troubleshooting"
+      description="This is a Checkpoint with custom troubleshooting tips."
+      emitEvent={collectEvents()}
+    >
       <div>
         <p>Custom troubleshooting steps:</p>
         <ul>
