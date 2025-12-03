@@ -2,7 +2,15 @@
 
 set -e
 
-if [[ "$OSTYPE" != "darwin"* ]]; then
+# check if running in Docker and set variable
+RUNNING_IN_DOCKER=false
+DOCKER_HOST_STANZA=""
+if [ -f /.dockerenv ]; then
+    RUNNING_IN_DOCKER=true
+    DOCKER_HOST_STANZA=" --host 0.0.0.0"
+fi
+
+if [[ "$OSTYPE" != "darwin"* ]] && [[ "$RUNNING_IN_DOCKER" == "false" ]]; then
     echo "This script only supports macOS."
     exit 1
 fi
@@ -18,7 +26,9 @@ homebrew_installed() {
     brew list "$1" >/dev/null 2>&1
 }
 
-install_dependencies() {    
+install_dependencies() {
+    # don't enforce dependencies if running in Docker
+    [[ "$RUNNING_IN_DOCKER" == "true" ]] && return
     if ! command_exists brew; then
         echo "Error: Homebrew is required. Please install."
         exit 1
@@ -62,9 +72,12 @@ sync_content() {
 
 reload() {
     echo "Reloading Docusaurus..."
-    yarn clear && yarn docusaurus start
+    # if running in docker, bind to all interfaces to allow port forwarding to work
+    # shellcheck disable=SC2086
+    yarn clear && yarn docusaurus start $DOCKER_HOST_STANZA
 }
 
+# shellcheck disable=SC2329
 cleanup() {
     echo -e "\n🧹 Cleaning up..."
     jobs -p | xargs -r kill 2>/dev/null || true
