@@ -23,7 +23,7 @@
     color: var(--color-black);
   }
 
-  .heading,
+  .header,
   .description {
     margin-bottom: var(--m-2);
   }
