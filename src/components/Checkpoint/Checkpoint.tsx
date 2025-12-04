@@ -93,7 +93,7 @@ const Checkpoint: React.FC<CheckpointProps> = ({
               <div>
                 <p className={styles.title}>Thanks for letting us know!</p>
                 {children ? (
-                  children
+                  <div className={styles.content}>{children}</div>
                 ) : (
                   <>
                     <p>Here are some troubleshooting tips:</p>
@@ -115,7 +115,7 @@ const Checkpoint: React.FC<CheckpointProps> = ({
                     </ul>
                   </>
                 )}
-                <p>
+                <p className={styles.content}>
                   You can reach out to our{" "}
                   <Link href="https://goteleport.com/community-slack/">
                     Slack community
@@ -128,53 +128,55 @@ const Checkpoint: React.FC<CheckpointProps> = ({
                 </p>
               </div>
             )}
-            <form
-              className={styles.feedbackForm}
-              onSubmit={submitCheckpointFeedback}
-            >
-              <label>
-                <span className={styles.title}>
-                  {opinionGiven === FeedbackType.UP
-                    ? "That's great! What can we do to improve?"
-                    : "What can we do to improve?"}
-                </span>
-                <textarea
-                  className={cn(styles.textarea, {
-                    [styles.invalid]: comment?.length > MAX_COMMENT_LENGTH,
-                  })}
-                  placeholder="Could you share more about your experience?"
-                  rows={4}
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                />
-              </label>
-              <div className={styles.formButtons}>
-                <Button
-                  as="button"
-                  type="submit"
-                  className={cn(styles.submitButton, {
-                    [styles.disabled]: !isValidCommentLength(
-                      comment,
-                      MAX_COMMENT_LENGTH
-                    ),
-                  })}
-                  disabled={comment?.length > MAX_COMMENT_LENGTH}
-                >
-                  Submit
-                </Button>
-                <Button
-                  as="button"
-                  variant="neutral"
-                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    e.preventDefault();
-                    setOpinionGiven(null);
-                    setComment("");
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
+            {opinionGiven && !submitted && (
+              <form
+                className={styles.feedbackForm}
+                onSubmit={submitCheckpointFeedback}
+              >
+                <label>
+                  <span className={styles.title}>
+                    {opinionGiven === FeedbackType.UP
+                      ? "That's great! What can we do to improve?"
+                      : "What can we do to improve?"}
+                  </span>
+                  <textarea
+                    className={cn(styles.textarea, {
+                      [styles.invalid]: comment?.length > MAX_COMMENT_LENGTH,
+                    })}
+                    placeholder="Could you share more about your experience?"
+                    rows={4}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                  />
+                </label>
+                <div className={styles.formButtons}>
+                  <Button
+                    as="button"
+                    type="submit"
+                    className={cn(styles.submitButton, {
+                      [styles.disabled]: !isValidCommentLength(
+                        comment,
+                        MAX_COMMENT_LENGTH
+                      ),
+                    })}
+                    disabled={comment?.length > MAX_COMMENT_LENGTH}
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    as="button"
+                    variant="neutral"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.preventDefault();
+                      setOpinionGiven(null);
+                      setComment("");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
 

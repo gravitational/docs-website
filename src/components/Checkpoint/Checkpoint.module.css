@@ -23,7 +23,8 @@
     color: var(--color-black);
   }
 
-  .heading, .description {
+  .heading,
+  .description {
     margin-bottom: var(--m-2);
   }
 
@@ -66,7 +67,9 @@
 
   .formContainer {
     grid-template-rows: 0fr;
-    transition: grid-template-rows 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    transition:
+      grid-template-rows 0.2s ease-in-out,
+      opacity 0.2s ease-in-out;
     opacity: 0;
     display: grid;
     visibility: hidden;
@@ -80,6 +83,10 @@
 
   .formContainerInner {
     overflow: hidden;
+
+    .content {
+      margin-bottom: var(--m-2);
+    }
   }
 
   .feedbackForm {
@@ -97,6 +104,10 @@
 
       &.invalid {
         border-color: var(--color-interactive-danger-default);
+      }
+
+      &.hidden {
+        display: none;
       }
     }
 
