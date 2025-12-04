@@ -25,9 +25,9 @@
   }
 
   &&:disabled {
-    background-color: var(--color-lightest-gray);
-    border-color: var(--lightest-gray);
-    color: var(--color-dark-gray);
+    background-color: var(--color-tonal-neutral-0);
+    border-color: transparent;
+    color: var(--color-foreground-disabled);
     cursor: default;
     pointer-events: none;
   }
@@ -55,6 +55,17 @@
       background-color: var(--color-white);
       border-color: var(--color-light-purple);
       color: var(--color-light-purple);
+    }
+  }
+
+  &.variant-neutral {
+    background-color: var(--color-tonal-neutral-0);
+    border-color: transparent;
+    color: var(--color-foreground-slightly-muted);
+
+    &:focus,
+    &:hover {
+      background-color: var(--color-tonal-neutral-1);
     }
   }
 

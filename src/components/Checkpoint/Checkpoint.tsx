@@ -83,8 +83,12 @@ const Checkpoint: React.FC<CheckpointProps> = ({
           </div>
         )}
 
-        {!submitted && opinionGiven && (
-          <>
+        <div
+          className={cn(styles.formContainer, {
+            [styles.visible]: opinionGiven && !submitted,
+          })}
+        >
+          <div className={styles.formContainerInner}>
             {opinionGiven === FeedbackType.DOWN && (
               <div>
                 <p className={styles.title}>Thanks for letting us know!</p>
@@ -135,7 +139,9 @@ const Checkpoint: React.FC<CheckpointProps> = ({
                     : "What can we do to improve?"}
                 </span>
                 <textarea
-                  className={styles.textarea}
+                  className={cn(styles.textarea, {
+                    [styles.invalid]: comment?.length > MAX_COMMENT_LENGTH,
+                  })}
                   placeholder="Could you share more about your experience?"
                   rows={4}
                   value={comment}
@@ -152,13 +158,13 @@ const Checkpoint: React.FC<CheckpointProps> = ({
                       MAX_COMMENT_LENGTH
                     ),
                   })}
-                  disabled={!isValidCommentLength(comment, MAX_COMMENT_LENGTH)}
+                  disabled={comment?.length > MAX_COMMENT_LENGTH}
                 >
                   Submit
                 </Button>
                 <Button
                   as="button"
-                  variant="secondary"
+                  variant="neutral"
                   onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.preventDefault();
                     setOpinionGiven(null);
@@ -169,8 +175,8 @@ const Checkpoint: React.FC<CheckpointProps> = ({
                 </Button>
               </div>
             </form>
-          </>
-        )}
+          </div>
+        </div>
 
         {!submitted && !opinionGiven && (
           <div className={styles.buttons}>
