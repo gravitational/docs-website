@@ -76,16 +76,9 @@ const Checkpoint: React.FC<CheckpointProps> = ({
         {description && <p className={styles.description}>{description}</p>}
       </div>
       <>
-        {submitted && (
-          <div className={styles.thankYouMessage}>
-            <Icon name="checkCircle" size="md" />{" "}
-            <span>Thank you. Your feedback has been submitted.</span>
-          </div>
-        )}
-
         <div
           className={cn(styles.formContainer, {
-            [styles.visible]: opinionGiven && !submitted,
+            [styles.visible]: opinionGiven,
           })}
         >
           <div className={styles.formContainerInner}>
@@ -176,6 +169,12 @@ const Checkpoint: React.FC<CheckpointProps> = ({
                   </Button>
                 </div>
               </form>
+            )}
+            {submitted && (
+              <div className={styles.thankYouMessage}>
+                <Icon name="checkCircle" size="md" />{" "}
+                <span>Thank you. Your feedback has been submitted.</span>
+              </div>
             )}
           </div>
         </div>
