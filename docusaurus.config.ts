@@ -1,42 +1,42 @@
-import "dotenv/config";
 import type { Config } from "@docusaurus/types";
+import "dotenv/config";
 import type { VFile } from "vfile";
 
-import { useDocById } from "@docusaurus/plugin-content-docs/client";
-import { getFromSecretOrEnv } from "./utils/general";
+import { definer as hcl } from "highlightjs-terraform";
+import path from "path";
+import {
+  getRootDir,
+  getVersionFromVFile,
+  updateAssetPath,
+  updatePathsInIncludes,
+} from "./server/asset-path-helpers";
 import { loadConfig } from "./server/config-docs";
 import {
   getCurrentVersion,
   getDocusaurusConfigVersionOptions,
   getLatestVersion,
 } from "./server/config-site";
-import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
+import { extendedPostcssConfigPlugin } from "./server/postcss";
+import { getRedirects } from "./server/redirects";
+import { rehypeHLJS } from "./server/rehype-hljs";
+import remarkCodeSnippet from "./server/remark-code-snippet";
 import remarkIncludes from "./server/remark-includes";
 import remarkNoH1 from "./server/remark-no-h1";
+import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkVariables from "./server/remark-variables";
 import remarkVersionAlias from "./server/remark-version-alias";
-import remarkCodeSnippet from "./server/remark-code-snippet";
-import { fetchVideoMeta } from "./server/youtube-meta";
-import { getRedirects } from "./server/redirects";
-import {
-  updateAssetPath,
-  getVersionFromVFile,
-  getRootDir,
-  updatePathsInIncludes,
-} from "./server/asset-path-helpers";
 import {
   orderSidebarItems,
   removeRedundantItems,
 } from "./server/sidebar-order";
-import { extendedPostcssConfigPlugin } from "./server/postcss";
-import { rehypeHLJS } from "./server/rehype-hljs";
-import { definer as hcl } from "highlightjs-terraform";
-import path from "path";
-import fs from "fs";
-
-import sidebar from "./sidebars.json"
+import { fetchVideoMeta } from "./server/youtube-meta";
+import { getFromSecretOrEnv } from "./utils/general";
 
 const latestVersion = getLatestVersion();
+
+const sidebar = require(
+  `./versioned_sidebars/version-${latestVersion}-sidebars.json`
+);
 
 const config: Config = {
   future: {
@@ -77,64 +77,39 @@ const config: Config = {
         autoCollapseCategories: true,
       },
     },
-    navbar: Object.keys(sidebar).length > 1 ? {
-      items: [
-        {
-          label: "Get Started",
-          type: "docSidebar",
-          sidebarId: "start",
-          href: "/get-started/",
-        },
-        {
-          label: "Zero Trust Access",
-          type: "docSidebar",
-          sidebarId: "zta",
-          href: "/zero-trust-access/",
-        },
-        {
-          label: "Machine & Workload Identity",
-          type: "docSidebar",
-          sidebarId: "mwi",
-          href: "/machine-workload-identity/",
-        },
-        {
-          label: "Identity Governance",
-          type: "docSidebar",
-          sidebarId: "idg",
-          href: "/identity-governance/",
-        },
-        {
-          label: "Identity Security",
-          type: "docSidebar",
-          sidebarId: "ids",
-          href: "/identity-security/",
-        },
-        {
-          label: "References",
-          type: "docSidebar",
-          sidebarId: "ref",
-          href: "/reference/",
-        },
-        {
-          label: "Help & Support",
-          type: "dropdown",
-          items: [
-            {
-              label: "FAQ",
-              href: "/faq/",
-            },
-            {
-              label: "Changelog",
-              href: "/changelog/",
-            },
-            {
-              label: "Upcoming Releases",
-              href: "/upcoming-releases/",
-            },
-          ],
-        },
-      ],
-    } : undefined,
+    navbar: {
+      items: Object.entries(sidebar)
+        .map(([sidebarId, sidebarItems]) => {
+          return {
+            label: sidebarItems[0]?.label || sidebarId,
+            type: "docSidebar",
+            sidebarId: sidebarId,
+            href:
+              "/" +
+              (sidebarItems[0].id || sidebarItems[0].link.id)?.split("/")[1],
+          };
+        })
+        .concat([
+          {
+            label: "Help & Support",
+            type: "dropdown",
+            items: [
+              {
+                label: "FAQ",
+                href: "/faq/",
+              },
+              {
+                label: "Changelog",
+                href: "/changelog/",
+              },
+              {
+                label: "Upcoming Releases",
+                href: "/upcoming-releases/",
+              },
+            ],
+          },
+        ]),
+    },
     image: "/og-image.png",
     colorMode: {
       defaultMode: "light",

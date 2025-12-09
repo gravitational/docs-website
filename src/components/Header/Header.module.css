@@ -68,7 +68,7 @@
 .logo {
   width: 212px !important;
 
-  @media (--nav) {
+  @media (--lg-scr) {
     width: 240px !important;
   }
 }
@@ -185,7 +185,7 @@
     height: var(--m-2);
   }
 
-  @media (min-width: 997px) {
+  @media (--nav) {
     display: none !important;
   }
 }

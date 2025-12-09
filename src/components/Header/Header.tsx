@@ -1,23 +1,22 @@
-import { clsx } from "clsx";
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { BannerData, EventBanner } from "../EventBanner";
 
-import type { HeaderNavigation } from "../../../server/strapi-types";
-import Icon from "../Icon";
 import DocsLogo from "@site/static/logo.svg";
-import Button from "../Button";
+import type { HeaderNavigation } from "../../../server/strapi-types";
 import HeadlessButton from "../HeadlessButton";
+import Icon from "../Icon";
 
-import HeaderCTA from "./HeaderCTA";
 import styles from "./Header.module.css";
+import HeaderCTA from "./HeaderCTA";
 
-import eventData from "../../../data/events.json";
-import data from "../../../data/navbar.json";
-import { InlineSearch } from "../Pages/Homepage/DocsHeader/InlineSearch";
+import Link from "@docusaurus/Link";
 import { useNavbarMobileSidebar } from "@docusaurus/theme-common/internal";
 import { translate } from "@docusaurus/Translate";
 import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
+import eventData from "../../../data/events.json";
+import data from "../../../data/navbar.json";
+import { InlineSearch } from "../Pages/Homepage/DocsHeader/InlineSearch";
 
 const Header = () => {
   const { toggle, shown } = useNavbarMobileSidebar();
@@ -31,6 +30,7 @@ const Header = () => {
   const { setIsOpen } = useInkeepSearch({
     enableAIChat: true,
   });
+  const version = "17.x"; /* useDocsVersion(); */
 
   const { menuItems, rightSide } = data as unknown as HeaderNavigation;
   const mobileBtn = rightSide?.mobileButton;
@@ -42,8 +42,8 @@ const Header = () => {
         document.documentElement.style.setProperty(
           "--ifm-navbar-height",
           headerRef.current
-            ? `${headerRef.current.getBoundingClientRect().height}px`
-            : "122px"
+            ? `${headerRef.current.getBoundingClientRect().height + document.getElementById("docs-navigation")?.getBoundingClientRect().height}px`
+            : "147px"
         );
       }
     };
@@ -89,9 +89,12 @@ const Header = () => {
               size="lg"
             />
           </HeadlessButton>
-          <a href="/" className={styles["logo-link"]}>
+          <Link
+            to="/" /* {getVersionedUrl(version, "/")} */
+            className={styles["logo-link"]}
+          >
             <DocsLogo className={styles.logo} />
-          </a>
+          </Link>
         </div>
         <div className={styles.centerSection}>
           <InlineSearch

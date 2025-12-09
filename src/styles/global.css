@@ -111,9 +111,11 @@ button {
   }
 }
 
-@media (max-width: 996px) {
-  .navbar__item {
-    display: block;
+.navbar__item {
+  display: block;
+
+  @media (--nav) {
+    display: inline-block;
   }
 }
 

@@ -117,7 +117,7 @@
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-font-family-base: var(--font-base);
 
-  --ifm-navbar-height: 122px;
+  --ifm-navbar-height: 96px;
 
   --ifm-navbar-sidebar-width: 100vw;
 
@@ -149,8 +149,8 @@
   --lp-box-shadow-button-hover: 0 3px 5px -1px rgba(0, 0, 0, 0.20), 0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 1px 14px 0 rgba(0, 0, 0, 0.12);
 }
 
-@media (max-width: 996px) {
+@media (--nav) {
   :root {
-    --ifm-navbar-height: 96px;
+    --ifm-navbar-height: 147px;
   }
 }

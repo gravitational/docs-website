@@ -2,12 +2,15 @@
   display: none;
   top: var(--ifm-navbar-height);
   background-color: var(--color-white);
-  z-index: 2;
+  z-index: 200;
   max-width: 100vw;
+  height: var(--docs-top-nav-height);
+  margin-bottom: -38px;
   width: 100%;
+  transform: translateY(-100%);
   border-bottom: 1px solid var(--color-tonal-neutral-0);
-  @media (--md-scr) {
-    max-height: var(--docs-top-nav-height);
+
+  @media (--nav) {
     display: flex;
     position: sticky;
     -ms-overflow-style: none; /* IE and Edge */
@@ -198,7 +201,7 @@
       display: flex;
       align-items: center;
       position: relative;
-      padding: var(--m-1) var(--m-2) !important;
+      padding: var(--m-1) var(--m-1-5) !important;
       margin-left: 64px;
       color: var(--color-black);
       font-size: 13px;
@@ -246,6 +249,10 @@
         &::after {
           display: block;
         }
+      }
+
+      @media (min-width: 1040px) {
+        padding: var(--m-1) var(--m-2) !important;
       }
     }
   }
