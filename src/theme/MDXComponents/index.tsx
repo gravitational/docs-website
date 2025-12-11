@@ -22,6 +22,7 @@ import Icon from "/src/components/Icon";
 import Tile from "/src/components/Tile";
 import TileGrid from "/src/components/TileGrid";
 import ThumbsFeedback from "/src/components/ThumbsFeedback";
+import Checkpoint from "/src/components/Checkpoint";
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
@@ -55,6 +56,7 @@ const MDXComponents: MDXComponentsObject = {
   ul: MDXUl,
   Var: (props) => <Var {...props} />, // needed to circumvent props mismatch in types
   ThumbsFeedback,
+  Checkpoint,
 };
 
 export default MDXComponents;
