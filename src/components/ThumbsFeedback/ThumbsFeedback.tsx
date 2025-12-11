@@ -24,10 +24,7 @@ const MAX_PATHS_IN_STORAGE = 4;
 
 const checkForExpiredFeedback = (
   itemStr: string,
-  currentPath: string,
-  storageKey:
-    | "feedback_given_paths"
-    | "feedback_thumbs_clicked_paths" = "feedback_given_paths"
+  currentPath: string
 ): StoredFeedback[] => {
   let feedbackGivenPaths: StoredFeedback[] = [];
   try {
@@ -49,7 +46,10 @@ const checkForExpiredFeedback = (
       feedbackGivenPaths = feedbackGivenPaths.filter(
         (pathItem) => pathItem.path !== currentPath
       );
-      localStorage.setItem(storageKey, JSON.stringify(feedbackGivenPaths));
+      localStorage.setItem(
+        "feedback_given_paths",
+        JSON.stringify(feedbackGivenPaths)
+      );
     }
   } catch (e) {
     localStorage.removeItem("feedback_given_paths");
@@ -142,10 +142,9 @@ const FeedbackForm: React.FC<{
 
     if (!containsPII(trimmedComment)) {
       const currentPath = location.pathname;
-      const itemStr = localStorage.getItem("feedback_given_paths");
 
       let feedbackGivenPaths: StoredFeedback[] = checkForExpiredFeedback(
-        itemStr,
+        localStorage.getItem("feedback_given_paths"),
         currentPath
       );
 
@@ -153,14 +152,28 @@ const FeedbackForm: React.FC<{
         (pathItem) => pathItem.path === currentPath
       );
 
-      if (foundCurrentPath && isSubmitted) {
+      if (foundCurrentPath?.commented && isSubmitted) {
         return;
       } else if (foundCurrentPath) {
-        // Remove existing entry for current path to update with new comment
-        feedbackGivenPaths = feedbackGivenPaths.filter(
-          (pathItem) => pathItem.path !== currentPath
+        // Update the existing entry to set commented to true
+        feedbackGivenPaths = feedbackGivenPaths.map((pathItem) => {
+          if (pathItem.path === currentPath) {
+            return {
+              ...pathItem,
+              commented: true,
+            };
+          }
+          return pathItem;
+        });
+        localStorage.setItem(
+          "feedback_given_paths",
+          JSON.stringify(feedbackGivenPaths)
         );
+        setIsSubmitted(true);
+        return;
       }
+
+      // no existing entry, proceed to track event and store new entry
 
       trackEvent({
         event_name: `docs_feedback_comment_thumbs_${feedback}`,
@@ -170,11 +183,15 @@ const FeedbackForm: React.FC<{
       });
 
       const now = new Date();
-      // Set expiry to 3 months from now
-      const expiry = now.setMonth(now.getMonth() + 3);
+      // Set expiry to 1 day from now
+      now.setDate(now.getDate() + 1);
+      const expiry = now.getTime();
+
       const itemToStore = {
         path: currentPath,
         expiry: expiry,
+        signal: feedback,
+        commented: true,
       };
 
       const newFeedbackGivenPaths = [...feedbackGivenPaths, itemToStore];
@@ -257,29 +274,18 @@ const ThumbsFeedback: React.FC<{
     setComment("");
 
     const currentPath = location.pathname;
-    const commentItemStr = localStorage.getItem("feedback_given_paths");
-    const clickedPathsItemStr = localStorage.getItem(
-      "feedback_thumbs_clicked_paths"
-    );
     const feedbackGivenPaths = checkForExpiredFeedback(
-      commentItemStr,
+      localStorage.getItem("feedback_given_paths"),
       currentPath
     );
-    const clickedPaths = checkForExpiredFeedback(
-      clickedPathsItemStr,
-      currentPath,
-      "feedback_thumbs_clicked_paths"
-    );
 
-    const foundCurrentFeedbackPath = feedbackGivenPaths.find(
+    const foundCurrentFeedbackPathClick = feedbackGivenPaths.find(
       (pathItem) => pathItem.path === currentPath
     );
 
-    const foundCurrentFeedbackPathClick = clickedPaths.find(
-      (pathItem) => pathItem.path === currentPath
-    );
+    const feedbackCommented = foundCurrentFeedbackPathClick?.commented;
 
-    if (foundCurrentFeedbackPath) {
+    if (feedbackCommented) {
       setIsSubmitted(true);
     }
 
@@ -292,12 +298,8 @@ const ThumbsFeedback: React.FC<{
     feedbackValue: FeedbackType
   ): Promise<void> => {
     const currentPath = location.pathname;
-    const itemStr = localStorage.getItem("feedback_thumbs_clicked_paths");
-    let clickedPaths = checkForExpiredFeedback(
-      itemStr,
-      currentPath,
-      "feedback_thumbs_clicked_paths"
-    );
+    const itemStr = localStorage.getItem("feedback_given_paths");
+    let clickedPaths = checkForExpiredFeedback(itemStr, currentPath);
 
     const foundCurrentPath = clickedPaths.find(
       (pathItem) => pathItem.path === currentPath
@@ -322,8 +324,10 @@ const ThumbsFeedback: React.FC<{
     });
 
     const now = new Date();
-    // Set expiry to 3 months from now
-    const expiry = now.setMonth(now.getMonth() + 3);
+    // Set expiry to 1 day from now
+    now.setDate(now.getDate() + 1);
+    const expiry = now.getTime();
+
     const itemToStore = {
       path: currentPath,
       expiry: expiry,
@@ -340,7 +344,7 @@ const ThumbsFeedback: React.FC<{
     }
 
     localStorage.setItem(
-      "feedback_thumbs_clicked_paths",
+      "feedback_given_paths",
       JSON.stringify(newFeedbackThumbsClickedPaths)
     );
   };
