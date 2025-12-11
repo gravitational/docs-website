@@ -1,23 +1,25 @@
-import styles from "./ThumbsFeedback.module.css";
+import { useLocation } from "@docusaurus/router";
+import { trackEvent } from "@site/src/utils/analytics";
+import {
+  containsPII,
+  isValidCommentLength,
+  MAX_COMMENT_LENGTH,
+} from "@site/src/utils/validations";
+import cn from "classnames";
 import React, {
   FormEvent,
-  useState,
-  useEffect,
-  useRef,
   JSX,
   useContext,
+  useEffect,
+  useRef,
+  useState,
 } from "react";
-import { useLocation } from "@docusaurus/router";
-import cn from "classnames";
-import Icon from "../Icon/Icon";
 import Button from "../Button/Button";
-import { GitHubIssueLink } from "@site/src/components/GitHubIssueLink";
-import { trackEvent } from "@site/src/utils/analytics";
-import { isValidCommentLength, containsPII } from "@site/src/utils/validations";
-import { FeedbackType, StoredFeedback } from "./types";
+import Icon from "../Icon/Icon";
 import ThumbsFeedbackContext from "./context";
+import styles from "./ThumbsFeedback.module.css";
+import { FeedbackType, StoredFeedback } from "./types";
 
-const MAX_COMMENT_LENGTH: number = 100;
 const MAX_PATHS_IN_STORAGE = 4;
 
 const checkForExpiredFeedback = (
