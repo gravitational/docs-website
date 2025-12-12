@@ -1,0 +1,140 @@
+.panel {
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+@media (--nav) {
+  .panel {
+    padding: 16px 32px;
+    flex-direction: row;
+  }
+}
+
+.panelLeft {
+  padding: 0 16px;
+}
+
+@media (--nav) {
+  .panelLeft {
+    padding: 0 64px 0 24px;
+  }
+}
+
+.panelRight {
+  display: none;
+  padding: 0 24px 16px 24px;
+  border-left: 0.5px solid #bbb;
+}
+
+@media (--nav) {
+  .panelRight {
+    display: initial;
+  }
+}
+
+.panelContents {
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (--nav) {
+  .panelContents {
+    padding: 16px 0 0 60px;
+    flex-direction: row;
+  }
+}
+
+.panelContents > *:not(:first-child) {
+  border-top: 0.5px solid #bbb;
+  padding-top: 16px;
+  margin-top: 16px;
+}
+
+@media (--nav) {
+  .panelContents > *:not(:first-child) {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+  }
+}
+
+.col {
+  list-style: none;
+  padding: 0;
+  padding-right: 32px;
+  margin: 0;
+}
+
+.li {
+  padding-bottom: 4px;
+}
+
+.li a {
+  color: inherit;
+  text-decoration: none;
+  padding: 6px 0;
+}
+
+.li a:hover,
+.li a:focus,
+.li a:active {
+  color: #512fc9;
+}
+
+.li span {
+  padding: 6px 0;
+}
+
+.featuredImage {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+  flex-direction: column;
+  overflow: hidden;
+  border: 0.5px solid #bbb;
+  width: 189px;
+  padding-bottom: 12px;
+}
+
+.imageBox {
+  height: 105px;
+  box-shadow: 0 5.6px 11.2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.panelTitleTexts {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  line-height: 28px;
+}
+
+@media (--nav) {
+  .panelTitleTexts {
+    flex-direction: row;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 450px) {
+  .panelTitleTexts {
+    white-space: pre-line;
+  }
+}
+
+.arrow {
+  margin-left: 6px;
+}
+
+.subItemsList {
+  list-style: none;
+  padding: 0 32px 0 24px;
+  margin: 6px 0 0 18px;
+  border-left: 1px solid #a6a2ff;
+}
