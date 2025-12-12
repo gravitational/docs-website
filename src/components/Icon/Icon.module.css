@@ -15,6 +15,10 @@
     --size: 16px;
   }
 
+  &.sm-md {
+    --size: 20px;
+  }
+
   &.md {
     --size: 24px;
   }

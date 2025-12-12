@@ -1,4 +1,7 @@
 import Link from "@docusaurus/Link";
+import ExclusivityContext from "@site/src/components/ExclusivityBanner/context";
+import Icon from "@site/src/components/Icon";
+import { useContext } from "react";
 import styles from "./LandingHero.module.css";
 
 interface GetStartedLink {
@@ -27,38 +30,50 @@ const LandingHero: React.FC<LandingHeroProps> = ({
   links = [],
   children,
 }) => {
+  const { exclusiveFeature } = useContext(ExclusivityContext);
   const getEmbedYouTubeUrl = (videoId: string) => {
     return `https://www.youtube.com/embed/${videoId}`;
   };
   return (
     <section className={styles.landingHero}>
       <div className={styles.container}>
-        <div className={styles.main}>
-          <div className={styles.content}>
-            <h1 className={styles.title}>{title}</h1>
-            <div className={styles.description}>{children}</div>
-          </div>
-          <div className={styles.media}>
-            {image && !youtubeVideoId && (
-              <img
-                className={styles.image}
-                src={image}
-                alt={title}
-                width={400}
-                height={225}
-              />
-            )}
-            {youtubeVideoId && (
-              <iframe
-                className={styles.video}
-                width={400}
-                height={225}
-                src={getEmbedYouTubeUrl(youtubeVideoId)}
-                title={title}
-                frameBorder="0"
-                allowFullScreen
-              ></iframe>
-            )}
+        <div className={styles.mainWrapper}>
+          {exclusiveFeature && (
+            <div className={styles.exclusivityBanner}>
+              <Icon size="sm-md" name="rocketLaunch" />
+              {exclusiveFeature} is available only for Enterprise customers.
+              <a href="https://goteleport.com/signup/">
+                Start your free trial.
+              </a>
+            </div>
+          )}
+          <div className={styles.main}>
+            <div className={styles.content}>
+              <h1 className={styles.title}>{title}</h1>
+              <div className={styles.description}>{children}</div>
+            </div>
+            <div className={styles.media}>
+              {image && !youtubeVideoId && (
+                <img
+                  className={styles.image}
+                  src={image}
+                  alt={title}
+                  width={400}
+                  height={225}
+                />
+              )}
+              {youtubeVideoId && (
+                <iframe
+                  className={styles.video}
+                  width={400}
+                  height={225}
+                  src={getEmbedYouTubeUrl(youtubeVideoId)}
+                  title={title}
+                  frameBorder="0"
+                  allowFullScreen
+                ></iframe>
+              )}
+            </div>
           </div>
         </div>
         {linksTitle && links.length > 0 && (
