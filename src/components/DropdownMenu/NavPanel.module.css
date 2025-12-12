@@ -118,6 +118,14 @@ a {
   }
 }
 
+.featuredItemTitle {
+  display: flex;
+  align-items: center;
+  padding-bottom: 16px;
+  height: 48px;
+  box-sizing: content-box;
+}
+
 .featuredItemLink {
   display: flex;
   align-items: center;

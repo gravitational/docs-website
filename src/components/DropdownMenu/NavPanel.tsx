@@ -86,7 +86,7 @@ const NavPanel = ({ panel }: { panel?: NavigationItem["panel"] }) => {
       </div>
       {panelFeaturedItem && (
         <div className={styles.panelRight}>
-          <div>
+          <div className={styles.featuredItemTitle}>
             <span style={{ margin: "15.5px 0" }}>
               {panelFeaturedItem.title}
             </span>
