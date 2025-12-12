@@ -1,6 +1,7 @@
 import { NavigationItem } from "server/strapi-types";
 import Link from "../Link";
 import styles from "./NavPanel.module.css";
+import Icon from "../Icon";
 
 const NavPanel = ({ panel }: { panel?: NavigationItem["panel"] }) => {
   if (!panel) {
@@ -15,6 +16,7 @@ const NavPanel = ({ panel }: { panel?: NavigationItem["panel"] }) => {
         {panelTitle && (
           <div
             style={{
+              display: "flex",
               alignItems: "center",
               gap: "12px",
               paddingBottom: "16px",
@@ -110,21 +112,19 @@ const NavPanel = ({ panel }: { panel?: NavigationItem["panel"] }) => {
                 <span style={{ lineHeight: "1.4" }}>
                   {panelFeaturedItem?.item.text}
                 </span>
-                {/* {panelFeaturedItem.item?.cta?.href && (
-                  <LinkButton
-                    variant="link"
-                    href={panelFeaturedItem.item.cta?.href}
-                    id={panelFeaturedItem.item.cta.elementId}
-                    btnTrack={panelFeaturedItem.item.cta.sendButtonClick}
+                {panelFeaturedItem.item?.cta?.href && (
+                  <a
+                    href={panelFeaturedItem.item.cta.href}
+                    className={styles.featuredItemLink}
                   >
-                    {panelFeaturedItem.item.cta?.title}{" "}
+                    {panelFeaturedItem.item.cta?.title}
                     <Icon
                       name="arrowRight2"
-                      size="sm"
+                      size="xxs"
                       className={styles.arrow}
                     />
-                  </LinkButton>
-                )} */}
+                  </a>
+                )}
               </div>
             </div>
           )}
