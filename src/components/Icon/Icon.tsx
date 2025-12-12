@@ -1,12 +1,12 @@
 import { clsx } from "clsx";
 
-import type { IconName } from "./types";
-import * as icons from "./icons";
 import styles from "./Icon.module.css";
+import * as icons from "./icons";
+import type { IconName } from "./types";
 
 export interface IconProps {
   name: IconName;
-  size?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl";
+  size?: "xxs" | "xs" | "sm" | "sm-md" | "md" | "lg" | "xl";
   className?: string;
   inline?: boolean;
 }

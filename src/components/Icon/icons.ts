@@ -111,6 +111,7 @@ export { default as window } from "./svg/window.svg";
 export { default as windows } from "./svg/windows.svg";
 export { default as wrench } from "./svg/wrench.svg";
 export { default as youtube } from "./svg/youtube.svg";
+export { default as rocketLaunch } from "./svg/rocket-launch.svg";
 
 // Teleport svgs
 export { default as agent } from "./teleport-svg/agent.svg";

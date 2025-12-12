@@ -1,0 +1,72 @@
+.exclusivityWrapper {
+  padding-bottom: 56px;
+  .exclusivityBanner,
+  .exclusivityBadge {
+    position: absolute;
+    display: none;
+
+    &.visible {
+      display: flex;
+      display: flex;
+      align-items: center;
+    }
+  }
+  .exclusivityBanner {
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-tonal-primary-0);
+    padding: var(--m-1) var(--m-5);
+    color: var(--color-dark-purple);
+    font-size: var(--fs-text-md);
+    justify-content: space-between;
+
+    .content {
+      display: flex;
+      align-items: center;
+      gap: var(--m-1);
+      line-height: 1.57143;
+
+      a {
+        font-weight: var(--fw-bold);
+        text-decoration: underline;
+      }
+    }
+
+    .hideButton {
+      padding: 10px var(--m-3) !important;
+      font-weight: var(--fw-black);
+      border-radius: 4px;
+      background-color: transparent;
+      border-color: transparent;
+      color: var(--color-dark-purple);
+
+      &:hover {
+        background-color: var(--color-tonal-primary-0);
+      }
+    }
+  }
+}
+
+.exclusivityBadge {
+  top: var(--m-1);
+  right: 0;
+  color: white;
+  gap: var(--m-1);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="217" height="40" viewBox="0 0 217 40" fill="none"><path d="M216.736 0L216.736 40L4.00604 40C0.853224 40 -1.06026 36.5224 0.627165 33.8592L8.52165 21.3994C9.37958 20.0454 9.3463 18.3099 8.43712 16.9898L1.0536 6.26878C-0.774017 3.61504 1.12575 -9.42464e-06 4.34793 -9.28379e-06L216.736 0Z" fill="%23512FC9"/></svg>');
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 10px var(--m-4) 10px 34px;
+  font-size: var(--fs-text-md);
+  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.2))
+    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.14))
+    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.12));
+
+  svg {
+    filter: brightness(0) invert(1);
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

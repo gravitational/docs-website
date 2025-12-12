@@ -5,6 +5,7 @@ interface TemplateConfig {
   removeTOCSidebar?: boolean;
   fullWidth?: boolean;
   showDescription?: boolean;
+  isLandingPage?: boolean;
 }
 
 const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
@@ -16,6 +17,7 @@ const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
     removeTOCSidebar: true,
     hideTitleSection: true,
     fullWidth: true,
+    isLandingPage: true,
   },
   "doc-page": {
     removeTOCSidebar: true,
@@ -34,5 +36,6 @@ export function useDocTemplate(): TemplateConfig {
     removeTOCSidebar: config.removeTOCSidebar ?? false,
     fullWidth: config.fullWidth ?? false,
     showDescription: config.showDescription ?? false,
+    isLandingPage: config.isLandingPage ?? false,
   };
 }
