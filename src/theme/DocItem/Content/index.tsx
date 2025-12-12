@@ -44,22 +44,36 @@ export default function DocItemContent({ children }: Props): ReactNode {
   const { frontMatter } = useDoc();
   const location = useLocation();
   const [feedback, setFeedback] = useState<FeedbackType | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-    const { videoBanner } = frontMatter as DocFrontMatter;
+  const { videoBanner } = frontMatter as DocFrontMatter;
 
   return (
     <div className={clsx(ThemeClassNames.docs.docMarkdown, "markdown")}>
-      <ThumbsFeedbackContext.Provider value={{ feedback, setFeedback }}>
-      {syntheticTitle && (
-        <header className={hideTitleSection ? "hide-title-section" : undefined}>
-          <Heading as="h1" className="docItemTitle">{syntheticTitle}</Heading>
-          {frontMatter.description && showDescription && <p className="docItemDescription">{frontMatter.description}</p>}
-          <PageActions pathname={location.pathname} />
-          {videoBanner && <VideoBar {...videoBanner} />}
-        </header>
-      )}
-      <MDXContent>{children}</MDXContent>
-      {syntheticTitle && !hideTitleSection && <ThumbsFeedback feedbackLabel="Was this page helpful?" pagePosition="bottom" />}
+      <ThumbsFeedbackContext.Provider
+        value={{ feedback, isSubmitted, setFeedback, setIsSubmitted }}
+      >
+        {syntheticTitle && (
+          <header
+            className={hideTitleSection ? "hide-title-section" : undefined}
+          >
+            <Heading as="h1" className="docItemTitle">
+              {syntheticTitle}
+            </Heading>
+            {frontMatter.description && showDescription && (
+              <p className="docItemDescription">{frontMatter.description}</p>
+            )}
+            <PageActions pathname={location.pathname} />
+            {videoBanner && <VideoBar {...videoBanner} />}
+          </header>
+        )}
+        <MDXContent>{children}</MDXContent>
+        {syntheticTitle && !hideTitleSection && (
+          <ThumbsFeedback
+            feedbackLabel="Was this page helpful?"
+            pagePosition="bottom"
+          />
+        )}
       </ThumbsFeedbackContext.Provider>
     </div>
   );

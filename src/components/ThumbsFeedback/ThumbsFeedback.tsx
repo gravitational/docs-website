@@ -258,12 +258,11 @@ const ThumbsFeedback: React.FC<{
   feedbackLabel = "Is this page helpful?",
   pagePosition = "top",
 }): JSX.Element => {
-  const { feedback, setFeedback } = useContext(ThumbsFeedbackContext);
+  const { feedback, isSubmitted, setFeedback, setIsSubmitted } = useContext(ThumbsFeedbackContext);
   const [comment, setComment] = useState<string>("");
   const [formActive, setFormActive] = useState<"positive" | "negative" | false>(
     false
   );
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const location = useLocation();
 
   // Reset feedback form state when navigating to a different page
