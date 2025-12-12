@@ -2,7 +2,7 @@ import { NavigationItem } from "server/strapi-types";
 import Link from "../Link";
 import styles from "./NavPanel.module.css";
 
-export const NavPanel = ({ panel }: { panel?: NavigationItem["panel"] }) => {
+const NavPanel = ({ panel }: { panel?: NavigationItem["panel"] }) => {
   if (!panel) {
     return null;
   }
@@ -133,3 +133,5 @@ export const NavPanel = ({ panel }: { panel?: NavigationItem["panel"] }) => {
     </div>
   );
 };
+
+export default NavPanel;

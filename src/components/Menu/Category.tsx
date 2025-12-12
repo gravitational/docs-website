@@ -10,10 +10,10 @@ import {
   DropdownSection,
   DropdownMenuItem,
   DropdownSubMenu,
+  NavPanel,
 } from "../DropdownMenu";
 
 import styles from "./Category.module.css";
-import { NavPanel } from "../DropdownMenu/NavPanel";
 
 interface MenuCategoryComponentProps extends NavigationItem {
   id: number;
