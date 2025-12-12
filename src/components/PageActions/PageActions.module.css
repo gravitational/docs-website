@@ -4,43 +4,76 @@
   padding: var(--m-2) 0;
   border-bottom: 1px solid var(--color-tonal-neutral-2);
   margin-bottom: var(--m-5);
+
+  @media (--sm-scr) {
+    & > * {
+      &:not(:nth-last-child(2)) {
+        &::after {
+          content: "";
+          position: relative;
+          transform: translateX(var(--m-2));
+          width: 1px;
+          height: 100%;
+          background-color: var(--color-tonal-neutral-1);
+        }
+      }
+    }
+  }
+
+  @media (--lg-scr) {
+    & > * {
+      &:not(:last-child) {
+        &::after {
+          content: "";
+          position: relative;
+          transform: translateX(var(--m-2));
+          width: 1px;
+          height: 100%;
+          background-color: var(--color-tonal-neutral-1);
+        }
+      }
+    }
+  }
 }
 
 .askAIButton {
   background-color: unset;
   border: unset;
   position: relative;
-
-  &::after {
-    content: "";
-    position: relative;
-    transform: translateX(var(--m-2));
-    width: 1px;
-    height: 100%;
-    background-color: var(--color-tonal-neutral-1);
-  }
 }
 
 .githubLink,
-.askAIButton {
+.askAIButton,
+.feedback {
   color: var(--color-foreground-slightly-muted);
   display: flex;
   align-items: center;
-  font-size: var(--fs-text-lg);
+  font-size: var(--fs-text-md);
   letter-spacing: 0.024px;
   line-height: 1.625;
   margin: 0;
   padding: 0;
   font-weight: var(--fw-medium);
 
-  @media (--md-scr) {
-    line-height: 1.75;
-  }
-
-  svg {
+  & > svg {
+    width: 20px;
+    height: 20px;
     margin-right: var(--m-1);
   }
 
+  @media (--xs-scr) {
+    font-size: var(--fs-text-lg);
+    width: auto;
+    height: auto;
+  }
+
+  @media (--md-scr) {
+    line-height: 1.75;
+  }
+}
+
+.githubLink,
+.askAIButton {
   &:hover {
     color: var(--color-black);
     text-decoration: underline;
