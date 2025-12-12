@@ -8,6 +8,7 @@ export { default as amazonRedshift } from "./svg/amazon-redshift.svg";
 export { default as appWindow } from "./svg/app-window.svg";
 export { default as apple } from "./svg/apple.svg";
 export { default as arrowRight } from "./svg/arrow-right.svg";
+export { default as arrowRight2 } from "./svg/arrow-right-2.svg";
 export { default as arrow } from "./svg/arrow.svg";
 export { default as ec2 } from "./svg/aws-ec2.svg";
 export { default as ecs } from "./svg/aws-ecs.svg";
