@@ -97,6 +97,7 @@ const FeedbackForm: React.FC<{
         !modalRef.current.contains(event.target as Node)
       ) {
         setFormActive(false);
+        setComment("");
       }
     };
 
@@ -241,7 +242,14 @@ const FeedbackForm: React.FC<{
             >
               Submit
             </Button>
-            <Button as="button" onClick={() => setFormActive(false)}>
+            <Button
+              as="button"
+              type="button"
+              onClick={() => {
+                setFormActive(false);
+                setComment("");
+              }}
+            >
               Cancel
             </Button>
           </div>
@@ -258,7 +266,9 @@ const ThumbsFeedback: React.FC<{
   feedbackLabel = "Is this page helpful?",
   pagePosition = "top",
 }): JSX.Element => {
-  const { feedback, isSubmitted, setFeedback, setIsSubmitted } = useContext(ThumbsFeedbackContext);
+  const { feedback, isSubmitted, setFeedback, setIsSubmitted } = useContext(
+    ThumbsFeedbackContext
+  );
   const [comment, setComment] = useState<string>("");
   const [formActive, setFormActive] = useState<"positive" | "negative" | false>(
     false
