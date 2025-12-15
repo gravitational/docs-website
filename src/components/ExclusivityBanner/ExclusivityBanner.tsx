@@ -10,7 +10,6 @@ const STORAGE_KEY = "exclusivity_banner_dismissed";
 const ExclusivityBanner: React.FC = () => {
   const { exclusiveFeature } = useContext(ExclusivityContext);
   const [dismissed, setDismissed] = useState<boolean>(() => {
-
     // Initialize from localStorage
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -36,8 +35,12 @@ const ExclusivityBanner: React.FC = () => {
         >
           <div className={styles.content}>
             <Icon size="sm-md" name="rocketLaunch" />
-            {exclusiveFeature} is available only for Enterprise customers.
-            <a href="https://goteleport.com/signup/">Start your free trial.</a>
+            <p>
+              {exclusiveFeature} is available only for Enterprise customers.{" "}
+              <a href="https://goteleport.com/signup/">
+                Start your free trial.
+              </a>
+            </p>
           </div>
           <Button
             as="button"

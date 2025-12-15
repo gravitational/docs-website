@@ -16,16 +16,28 @@
     left: 0;
     width: 100%;
     background-color: var(--color-tonal-primary-0);
-    padding: var(--m-1) var(--m-5);
+    padding: var(--m-1) var(--m-2);
     color: var(--color-dark-purple);
     font-size: var(--fs-text-md);
     justify-content: space-between;
+
+    @media (--md-scr) {
+      padding: var(--m-1) var(--m-5);
+    }
 
     .content {
       display: flex;
       align-items: center;
       gap: var(--m-1);
       line-height: 1.57143;
+
+      svg {
+        min-width: 20px;
+      }
+
+      p {
+        margin: 0;
+      }
 
       a {
         font-weight: var(--fw-bold);
@@ -34,7 +46,7 @@
     }
 
     .hideButton {
-      padding: 10px var(--m-3) !important;
+      padding: 10px var(--m-1) !important;
       font-weight: var(--fw-black);
       border-radius: 4px;
       background-color: transparent;
@@ -43,6 +55,10 @@
 
       &:hover {
         background-color: var(--color-tonal-primary-0);
+      }
+
+      @media (--md-scr) {
+       padding: 10px var(--m-3) !important;
       }
     }
   }
@@ -63,6 +79,7 @@
     drop-shadow(0 1px 3px rgba(0, 0, 0, 0.12));
 
   svg {
+    min-width: 20px;
     filter: brightness(0) invert(1);
   }
 
