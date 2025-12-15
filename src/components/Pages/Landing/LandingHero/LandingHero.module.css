@@ -36,7 +36,7 @@
 
 .exclusivityBanner {
   width: 100%;
-  padding: 9px var(--m-4);
+  padding: 9px var(--m-2);
   background-color: var(--color-tonal-primary-1);
   color: var(--color-dark-purple);
   border-radius: 12px 12px 0 0;
@@ -45,6 +45,24 @@
   gap: var(--m-1);
   font-size: var(--fs-text-md);
   line-height: 1.57143;
+
+  @media (--md-scr) {
+    padding: 9px var(--m-4);
+  }
+
+  svg {
+    min-width: 20px;
+  }
+
+  .exclusivityTitle {
+    display: flex;
+    align-items: center;
+    gap: var(--m-1);
+  }
+
+  p {
+    margin: 0;
+  }
 
   a {
     font-weight: var(--fw-bold);
@@ -55,7 +73,7 @@
 .content {
   .icon {
     display: flex;
-    background-color: var(--color-tonal-primary-0);
+    background-color: var(--color-tonal-primary-1);
     padding: 15.75px 15px 13.5px 15px;
     width: max-content;
     border-radius: 12px;

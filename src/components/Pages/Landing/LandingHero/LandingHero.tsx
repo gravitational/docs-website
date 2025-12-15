@@ -41,10 +41,10 @@ const LandingHero: React.FC<LandingHeroProps> = ({
           {exclusiveFeature && (
             <div className={styles.exclusivityBanner}>
               <Icon size="sm-md" name="rocketLaunch" />
-              {exclusiveFeature} is available only for Enterprise customers.
+              <p>{exclusiveFeature} is available only for Enterprise customers.{" "}
               <a href="https://goteleport.com/signup/">
                 Start your free trial.
-              </a>
+              </a></p>
             </div>
           )}
           <div className={styles.main}>
