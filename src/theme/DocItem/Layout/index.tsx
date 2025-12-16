@@ -55,16 +55,9 @@ function useDocTOC(removeTOCSidebar: boolean) {
 function usePageExclusivityBanner() {
   const { frontMatter } = useDoc();
 
-  const enterpriseTags = {
-    "identity-security": "Identity Security",
-    "identity-governance": "Identity Governance",
-  };
+  const exclusiveFeature = (frontMatter as any).enterprise;
 
-  const exclusiveTag = Object.keys(enterpriseTags).find((enterpriseTag) =>
-    frontMatter.tags?.some((tag) => tag === enterpriseTag)
-  );
-
-  return { exclusiveFeature: enterpriseTags[exclusiveTag] };
+  return { exclusiveFeature };
 }
 
 export default function DocItemLayout({ children }: Props): JSX.Element {
