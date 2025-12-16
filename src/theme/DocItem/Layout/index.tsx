@@ -57,6 +57,7 @@ function usePageExclusivityBanner() {
 
   const enterpriseTags = {
     "identity-security": "Identity Security",
+    "identity-governance": "Identity Governance",
   };
 
   const exclusiveTag = Object.keys(enterpriseTags).find((enterpriseTag) =>
