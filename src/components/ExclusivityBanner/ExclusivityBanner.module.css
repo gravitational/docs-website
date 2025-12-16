@@ -4,25 +4,41 @@
   .exclusivityBadge {
     position: absolute;
     display: none;
+    z-index: 10;
 
     &.visible {
       display: flex;
-      display: flex;
-      align-items: center;
+    }
+
+    @media (--md-scr) {
+      position: fixed;
     }
   }
   .exclusivityBanner {
-    top: 0;
+    position: fixed;
+    top: var(--ifm-navbar-height);
     left: 0;
     width: 100%;
-    background-color: var(--color-tonal-primary-0);
-    padding: var(--m-1) var(--m-2);
-    color: var(--color-dark-purple);
-    font-size: var(--fs-text-md);
-    justify-content: space-between;
+    background-color: var(--color-white);
 
     @media (--md-scr) {
-      padding: var(--m-1) var(--m-5);
+      left: var(--doc-sidebar-width);
+      width: calc(100% - var(--doc-sidebar-width));
+    }
+
+    .inner {
+      width: 100%;
+      background-color: var(--color-tonal-primary-0);
+      display: flex;
+      align-items: center;
+      padding: var(--m-1) var(--m-2);
+      color: var(--color-dark-purple);
+      font-size: var(--fs-text-md);
+      justify-content: space-between;
+
+      @media (--md-scr) {
+        padding: var(--m-1) var(--m-5);
+      }
     }
 
     .content {
@@ -58,7 +74,7 @@
       }
 
       @media (--md-scr) {
-       padding: 10px var(--m-3) !important;
+        padding: 10px var(--m-3) !important;
       }
     }
   }
@@ -67,6 +83,8 @@
 .exclusivityBadge {
   top: var(--m-1);
   right: 0;
+  left: unset;
+  width: max-content;
   color: white;
   gap: var(--m-1);
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="217" height="40" viewBox="0 0 217 40" fill="none"><path d="M216.736 0L216.736 40L4.00604 40C0.853224 40 -1.06026 36.5224 0.627165 33.8592L8.52165 21.3994C9.37958 20.0454 9.3463 18.3099 8.43712 16.9898L1.0536 6.26878C-0.774017 3.61504 1.12575 -9.42464e-06 4.34793 -9.28379e-06L216.736 0Z" fill="%23512FC9"/></svg>');
@@ -81,6 +99,10 @@
   svg {
     min-width: 20px;
     filter: brightness(0) invert(1);
+  }
+
+  @media (--md-scr) {
+    top: calc(var(--ifm-navbar-height) + var(--m-1));
   }
 
   &:hover {

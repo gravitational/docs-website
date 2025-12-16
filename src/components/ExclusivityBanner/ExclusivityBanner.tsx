@@ -33,22 +33,24 @@ const ExclusivityBanner: React.FC = () => {
             [styles.visible]: !dismissed,
           })}
         >
-          <div className={styles.content}>
-            <Icon size="sm-md" name="rocketLaunch" />
-            <p>
-              {exclusiveFeature} is available only for Enterprise customers.{" "}
-              <a href="https://goteleport.com/signup/">
-                Start your free trial.
-              </a>
-            </p>
+          <div className={styles.inner}>
+            <div className={styles.content}>
+              <Icon size="sm-md" name="rocketLaunch" />
+              <p>
+                {exclusiveFeature} is available only for Enterprise customers.{" "}
+                <a href="https://goteleport.com/signup/">
+                  Start your free trial.
+                </a>
+              </p>
+            </div>
+            <Button
+              as="button"
+              onClick={() => setDismissed(true)}
+              className={styles.hideButton}
+            >
+              Hide
+            </Button>
           </div>
-          <Button
-            as="button"
-            onClick={() => setDismissed(true)}
-            className={styles.hideButton}
-          >
-            Hide
-          </Button>
         </div>
         <div
           role="button"
