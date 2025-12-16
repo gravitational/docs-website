@@ -5155,9 +5155,9 @@ ajv@^8.0.0, ajv@^8.16.0, ajv@^8.9.0:
     require-from-string "^2.0.2"
 
 altcha-lib@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/altcha-lib/-/altcha-lib-1.2.0.tgz#a8b874ace261751473686adc5cc210be7449ba0d"
-  integrity sha512-S5WF8QLNRaM1hvK24XPhOLfu9is2EBCvH7+nv50sM5CaIdUCqQCd0WV/qm/ZZFGTdSoKLuDp+IapZxBLvC+SNg==
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/altcha-lib/-/altcha-lib-1.4.1.tgz#1398f9f46d9e6941d1ddb1739f129f73cc708ce7"
+  integrity sha512-MAXP9tkQOA2SE9Gwoe3LAcZbcDpp3XzYc5GDVej/y3eMNaFG/eVnRY1/7SGFW0RPsViEjPf+hi5eANjuZrH1xA==
 
 ansi-align@^3.0.1:
   version "3.0.1"
