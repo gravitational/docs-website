@@ -1,8 +1,8 @@
 import { clsx } from "clsx";
 
-import styles from "./Icon.module.css";
-import * as icons from "./icons";
 import type { IconName } from "./types";
+import * as icons from "./icons";
+import styles from "./Icon.module.css";
 
 export interface IconProps {
   name: IconName;
