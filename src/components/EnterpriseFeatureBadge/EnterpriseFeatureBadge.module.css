@@ -23,7 +23,6 @@
   .modal {
     position: fixed;
     z-index: 1;
-    transform: translate(0, 100%);
     background-color: var(--color-background-depth-2);
     border-radius: var(--m-1);
     padding: var(--m-3);
@@ -38,6 +37,10 @@
       0 8px 10px 1px rgba(0, 0, 0, 0.14),
       0 3px 14px 2px rgba(0, 0, 0, 0.12);
     display: none;
+
+    &:hover {
+      cursor: default;
+    }
 
     p {
       margin-bottom: var(--m-1);

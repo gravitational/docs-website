@@ -13,15 +13,37 @@ const EnterpriseFeatureBadge: React.FC<{ message: string }> = ({
   message = "This is only available in Teleport Enterprise. Don't have an account?",
 }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [isPinned, setIsPinned] = useState<boolean>(false);
   const [translateX, setTranslateX] = useState<number>(0);
   const modalRef = useRef<HTMLDivElement>(null);
   const translateXRef = useRef(translateX);
   const badgeRef = useRef<HTMLDivElement>(null);
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const showModal = () => {
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
+    }
+    setModalVisible(true);
+  };
+
+  const hideModal = () => {
+    if (isPinned) return;
+    hideTimeoutRef.current = setTimeout(() => {
+      setModalVisible(false);
+    }, 100);
+  };
+
+  const handleBadgeClick = () => {
+    setIsPinned(true);
+    setModalVisible(true);
+  };
 
   useEffect(() => {
     if (!modalVisible || !modalRef.current) {
       setTranslateX(0);
-      modalRef.current.style.transform = `translate(0, 100%)`;
+      modalRef.current.style.transform = `translate(-16px, 100%)`;
       return;
     }
 
@@ -49,6 +71,7 @@ const EnterpriseFeatureBadge: React.FC<{ message: string }> = ({
         !modalRef.current.contains(event.target as Node) &&
         !badgeRef.current.contains(event.target as Node)
       ) {
+        setIsPinned(false);
         setModalVisible(false);
       }
     };
@@ -67,7 +90,9 @@ const EnterpriseFeatureBadge: React.FC<{ message: string }> = ({
       className={styles.enterpriseFeatureBadge}
       role="button"
       ref={badgeRef}
-      onClick={() => setModalVisible(!modalVisible)}
+      onClick={handleBadgeClick}
+      onMouseEnter={showModal}
+      onMouseLeave={hideModal}
     >
       <Icon size="xs" name="rocketLaunch" />
       Enterprise feature
