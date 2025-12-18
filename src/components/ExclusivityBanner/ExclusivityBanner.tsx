@@ -37,7 +37,7 @@ const ExclusivityBanner: React.FC = () => {
             <div className={styles.content}>
               <Icon size="sm-md" name="rocketLaunch" />
               <p>
-                {exclusiveFeature} is available only for Enterprise customers.{" "}
+                {exclusiveFeature} is available only with Teleport Enterprise.{" "}
                 <a href="https://goteleport.com/signup/">
                   Start your free trial.
                 </a>
