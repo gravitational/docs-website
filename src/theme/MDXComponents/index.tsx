@@ -27,6 +27,7 @@ import Step from "/src/components/GuidedSteps/Step";
 import StepSection from "/src/components/GuidedSteps/StepSection";
 import File from "/src/components/GuidedSteps/File";
 import CodeBlock from "/src/components/GuidedSteps/CodeBlock";
+import Checkpoint from "/src/components/Checkpoint";
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
@@ -65,6 +66,7 @@ const MDXComponents: MDXComponentsObject = {
   File,
   StepSection,
   CodeBlock,
+  Checkpoint,
 };
 
 export default MDXComponents;

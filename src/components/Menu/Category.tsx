@@ -10,10 +10,10 @@ import {
   DropdownSection,
   DropdownMenuItem,
   DropdownSubMenu,
+  NavPanel,
 } from "../DropdownMenu";
 
 import styles from "./Category.module.css";
-
 
 interface MenuCategoryComponentProps extends NavigationItem {
   id: number;
@@ -31,6 +31,7 @@ const MenuCategory = ({
   type,
   dropdownType,
   navSections,
+  panel,
   link,
   onToggleOpened,
   onHover,
@@ -58,7 +59,7 @@ const MenuCategory = ({
     }
   });
 
-  const children = type !== "link" ? navSections : null;
+  const children = type !== "link" ? navSections || panel?.columns : null;
 
   const toggleOpened = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -69,13 +70,13 @@ const MenuCategory = ({
         onClick && onClick();
       }
     },
-    [opened, children, id, onToggleOpened, onClick],
+    [opened, children, id, onToggleOpened, onClick]
   );
   const open = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
       onHover(id);
     },
-    [id, onHover],
+    [id, onHover]
   );
 
   const containsSubCategories = !!navSections;
@@ -85,7 +86,7 @@ const MenuCategory = ({
       <div
         className={clsx(
           styles.wrapper,
-          containsSubCategories && styles.withSubMenus,
+          containsSubCategories && styles.withSubMenus
         )}
         ref={ref}
         onMouseLeave={() => toggleOpened(null)}
@@ -128,6 +129,8 @@ const MenuCategory = ({
             <DropdownMenu>
               {dropdownType === "submenus" && !!navSections ? (
                 <DropdownSubMenu items={navSections} />
+              ) : dropdownType === "simple" ? (
+                <NavPanel panel={panel} />
               ) : (
                 navSections.map(({ submenuSections }, index) => (
                   <div
@@ -152,8 +155,8 @@ const MenuCategory = ({
                           styles.dropdownSection,
                           sectionProps?.sectionItems?.find(
                             ({ itemType }) =>
-                              itemType === "normal" && styles.normal,
-                          ),
+                              itemType === "normal" && styles.normal
+                          )
                         )}
                       >
                         {sectionProps?.sectionItems?.map(
@@ -165,7 +168,7 @@ const MenuCategory = ({
                               {...sectionItemProps}
                               itemAmount={navSections.length}
                             />
-                          ),
+                          )
                         )}
                       </DropdownSection>
                     ))}

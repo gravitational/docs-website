@@ -11,3 +11,6 @@ export const containsPII = (text: string): boolean => {
   const phoneRegex = /\d{3}[-.]?\d{3}[-.]?\d{4}/;
   return emailRegex.test(text) || phoneRegex.test(text);
 };
+
+
+export const MAX_COMMENT_LENGTH: number = 100;
