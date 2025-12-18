@@ -6,9 +6,8 @@
     },
     {
       "name": "18.x",
-      "branch": "aatuvai/enterprise-page-frontmatter",
-      "isDefault": true,
-      "repo_path": "aatuvai/teleport"
+      "branch": "branch/v18",
+      "isDefault": true
     },
     {
       "name": "19.x",
