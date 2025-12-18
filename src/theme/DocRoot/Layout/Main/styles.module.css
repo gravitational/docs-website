@@ -1,3 +1,7 @@
+:global(main) {
+  position: relative;
+}
+
 :global(main.template-full-width) {
   width: 100%;
   max-width: 100%;
