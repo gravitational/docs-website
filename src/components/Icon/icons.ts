@@ -1,3 +1,4 @@
+export { default as amazonDocumentDb } from "./svg/amazon-document-db.svg";
 export { default as amazonDynamoDb } from "./svg/amazon-dynamo-db.svg";
 export { default as amazonElastiCache } from "./svg/amazon-elastiCache.svg";
 export { default as amazonKeyspaces } from "./svg/amazon-keyspaces.svg";
