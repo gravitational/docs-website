@@ -10,28 +10,43 @@ export const FileTabs: React.FC = () => {
   const {
     files,
     fileRefs,
+    fileTabRefs,
     activeFileName,
     fileNameHasType,
     setActiveFileName,
+    setFileTabRef,
   } = useContext(GuidedStepsContext);
 
   return (
     <ul className={styles.fileTabs}>
-      {files.map(({ name, icon }) => (
-        <li
-          key={name}
-          className={cn(styles.fileTab, {
-            [styles.active]: name === activeFileName,
-          })}
-          role="button"
-          onClick={() => {
-            setActiveFileName(name);
-          }}
-        >
-          {icon && <Icon name={icon} className={styles.fileTabIcon} />}
-          <span>{name}</span>
-        </li>
-      ))}
+      {files.map(({ name, icon }) => {
+        const isActive = name === activeFileName;
+        if (isActive && fileTabRefs.current.has(name)) {
+          setTimeout(() => {
+            fileTabRefs.current.get(name)?.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
+              inline: "center",
+            });
+          }, 0);
+        }
+        return (
+          <li
+            key={name}
+            ref={(el) => setFileTabRef(name, el)}
+            className={cn(styles.fileTab, {
+              [styles.active]: isActive,
+            })}
+            role="button"
+            onClick={() => {
+              setActiveFileName(name);
+            }}
+          >
+            {icon && <Icon name={icon} className={styles.fileTabIcon} />}
+            <span>{name}</span>
+          </li>
+        );
+      })}
       {fileNameHasType && (
         <button
           className={styles.downloadButton}

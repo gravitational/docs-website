@@ -19,6 +19,7 @@ interface GuidedStepsContextValue {
   codeBlockRefs: RefObject<Map<string, CodeBlockHandle>>;
   stepRefs: RefObject<HTMLElement[]>;
   fileRefs: RefObject<Map<string, HTMLDivElement | null>>;
+  fileTabRefs: RefObject<Map<string, HTMLLIElement | null>>;
   showCopyButton: boolean;
   fileNameHasType: boolean;
   setShowCopyButton: (show: boolean) => void;
@@ -26,6 +27,7 @@ interface GuidedStepsContextValue {
   setActiveFileName: (name: string | null) => void;
   setCodeBlockRef: (stepId: string, ref: any) => void;
   setFileRef: (fileName: string, ref: HTMLDivElement | null) => void;
+  setFileTabRef: (fileName: string, ref: HTMLLIElement | null) => void;
 }
 
 const GuidedStepsContext = createContext<GuidedStepsContextValue>(null);
@@ -44,6 +46,7 @@ const GuidedStepsProvider: React.FC<{ children: ReactElement }> = ({
   const codeBlockRefs = useRef<Map<string, CodeBlockHandle>>(new Map());
   const stepRefs = useRef<HTMLElement[]>([]);
   const fileRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
+  const fileTabRefs = useRef<Map<string, HTMLLIElement | null>>(new Map());
 
   const setCodeBlockRef = useCallback((stepId: string, ref: any) => {
     codeBlockRefs.current.set(stepId, ref);
@@ -52,6 +55,13 @@ const GuidedStepsProvider: React.FC<{ children: ReactElement }> = ({
   const setFileRef = useCallback(
     (fileName: string, ref: HTMLDivElement | null) => {
       fileRefs.current.set(fileName, ref);
+    },
+    []
+  );
+
+  const setFileTabRef = useCallback(
+    (fileName: string, ref: HTMLLIElement | null) => {
+      fileTabRefs.current.set(fileName, ref);
     },
     []
   );
@@ -79,6 +89,7 @@ const GuidedStepsProvider: React.FC<{ children: ReactElement }> = ({
       codeBlockRefs,
       stepRefs,
       fileRefs,
+      fileTabRefs,
       showCopyButton,
       fileNameHasType,
       setFileNameHasType,
@@ -87,6 +98,7 @@ const GuidedStepsProvider: React.FC<{ children: ReactElement }> = ({
       setActiveFileName,
       setCodeBlockRef,
       setFileRef,
+      setFileTabRef,
     }),
     [
       steps,

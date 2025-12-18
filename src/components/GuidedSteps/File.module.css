@@ -1,9 +1,11 @@
 .files {
   position: relative;
+  width: 100%;
   border-bottom-left-radius: var(--m-1);
   border-bottom-right-radius: var(--m-1);
-  overflow-y: scroll;
   padding-bottom: var(--m-4);
+  max-height: calc(100% - var(--file-tabs-height));
+  overflow-y: scroll;
   &.copyButtonActive {
     background-color: var(--color-code);
   }
@@ -34,7 +36,9 @@
 }
 
 .fileTabs {
-  overflow-x: scroll;
+  position: sticky;
+  width: 100%;
+  top: 0;
   display: flex;
   padding: var(--m-2);
   border-bottom: 1.5px solid var(--color-tonal-neutral-1-white);
@@ -42,6 +46,7 @@
   border-top-left-radius: var(--m-1);
   border-top-right-radius: var(--m-1);
   z-index: 1;
+  overflow-x: scroll;
   gap: var(--m-0-5);
   margin-bottom: 0;
   min-height: var(--file-tabs-height);
@@ -149,7 +154,6 @@
 .codeBlock {
   position: relative;
   pointer-events: none;
-  scroll-margin-top: 72px;
   :global(pre) {
     padding: 0 0 0 var(--m-2);
     opacity: 0.52;

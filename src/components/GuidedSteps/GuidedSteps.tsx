@@ -47,8 +47,10 @@ const GuidedStepsComponent: React.FC<GuidedStepsProps> = (props) => {
         onMouseEnter={() => setShowCopyButton(true)}
         onMouseLeave={() => setShowCopyButton(false)}
       >
-        <FileTabs />
-        <File />
+        <div className={styles.codeContainer}>
+          <FileTabs />
+          <File />
+        </div>
         {showCopyButton && (
           <button className={styles.copyButton} onClick={handleCopyCode}>
             <Icon name={copiedIndicator ? "check2" : "copy2"} size="sm" />

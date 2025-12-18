@@ -22,12 +22,19 @@
   top: calc(var(--ifm-navbar-height) + var(--m-4));
   background-color: #060918;
   max-height: calc(100dvh - var(--ifm-navbar-height) - var(--m-8));
-  overflow-y: hidden;
+  overflow-y: clip;
+  overflow-x: scroll;
   height: 100%;
   border-radius: var(--r-md);
-
   &.copyButtonActive {
     background-color: var(--color-code);
+  }
+
+  .codeContainer {
+    position: relative;
+    display: grid;
+    height: 100%;
+    grid-template-rows: 56px minmax(0, 1fr);
   }
 }
 

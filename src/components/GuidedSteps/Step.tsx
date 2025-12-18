@@ -25,6 +25,7 @@ const Step: React.FC<StepProps> = ({ id, index, children }) => {
   const activateStep = useCallback(() => {
     setActiveStepId?.(id);
     const stepRef = stepRefs.current[index];
+    stepRef.scrollIntoView({ block: "start" });
     const stepRefRect = stepRef?.getBoundingClientRect();
     const navbarHeight =
       parseInt(
