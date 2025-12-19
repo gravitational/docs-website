@@ -25,11 +25,13 @@ import Tile from "/src/components/Tile";
 import TileGrid from "/src/components/TileGrid";
 import { Var } from "/src/components/Variables";
 import EnterpriseFeatureCallout from "/src/components/EnterpriseFeatureCallout";
+import { ChangelogLink } from "/src/components/ChangelogLink";
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
   Details: MDXDetails,
   DocCardList: DocCardList,
+  ChangelogLink,
   Head,
   Icon,
   TabItem,
