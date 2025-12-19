@@ -19,11 +19,28 @@
     line-height: 1.333;
   }
 
+  svg {
+    min-width: var(--m-3);
+  }
+
+  .textContent {
+    display: flex;
+    flex-direction: column;
+  }
+
   p {
     margin: 0;
   }
 
   a {
     text-decoration: underline;
+  }
+
+  .content {
+    display: inline;
+
+    p {
+      display: inline;
+    }
   }
 }

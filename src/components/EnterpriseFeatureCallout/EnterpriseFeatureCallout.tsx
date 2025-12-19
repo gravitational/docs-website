@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Icon from "../Icon";
 import styles from "./EnterpriseFeatureCallout.module.css";
+import Link from "@docusaurus/Link";
 
 const EnterpriseFeatureCallout: React.FC<{
   children?: ReactNode;
@@ -9,9 +10,12 @@ const EnterpriseFeatureCallout: React.FC<{
   return (
     <div className={styles.enterpriseFeatureCallout}>
       <Icon size="md" name="rocketLaunch" />
-      <div className={styles.content}>
+      <div className={styles.textContent}>
         <strong className={styles.title}>{title}</strong>
-        {children && <>{children}</>}
+        <div className={styles.content}>
+          {children && <>{children}</>}{" "}
+          <Link href="https://goteleport.com/signup/">Start a free trial</Link>.
+        </div>
       </div>
     </div>
   );
