@@ -1,28 +1,30 @@
-import OriginalMDXComponents from "@theme-original/MDXComponents";
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-import DocCardList from "@theme/DocCardList";
-import Admonition from "@theme/Admonition";
-import React, { type ComponentProps } from "react";
 import Head from "@docusaurus/Head";
-import { default as Code, CodeLine } from "@theme/MDXComponents/Code";
+import OriginalMDXComponents from "@theme-original/MDXComponents";
+import Admonition from "@theme/Admonition";
+import DocCardList from "@theme/DocCardList";
+import type { MDXComponentsObject } from "@theme/MDXComponents";
 import MDXA from "@theme/MDXComponents/A";
-import MDXPre from "@theme/MDXComponents/Pre";
+import { default as Code, CodeLine } from "@theme/MDXComponents/Code";
 import MDXDetails from "@theme/MDXComponents/Details";
 import MDXHeading from "@theme/MDXComponents/Heading";
-import MDXUl from "@theme/MDXComponents/Ul";
-import MDXLi from "@theme/MDXComponents/Li";
 import MDXImg from "@theme/MDXComponents/Img";
+import MDXLi from "@theme/MDXComponents/Li";
+import MDXPre from "@theme/MDXComponents/Pre";
+import MDXUl from "@theme/MDXComponents/Ul";
 import Mermaid from "@theme/Mermaid";
-import Command, { CommandLine, CommandComment } from "/src/components/Command";
-import Snippet from "/src/components/Snippet";
-import { Var } from "/src/components/Variables";
-import type { MDXComponentsObject } from "@theme/MDXComponents";
+import TabItem from "@theme/TabItem";
+import Tabs from "@theme/Tabs";
+import { type ComponentProps } from "react";
+import Checkpoint from "/src/components/Checkpoint";
+import Command, { CommandComment, CommandLine } from "/src/components/Command";
+import EnterpriseFeatureBadge from "/src/components/EnterpriseFeatureBadge";
 import Icon from "/src/components/Icon";
+import Snippet from "/src/components/Snippet";
+import ThumbsFeedback from "/src/components/ThumbsFeedback";
 import Tile from "/src/components/Tile";
 import TileGrid from "/src/components/TileGrid";
-import ThumbsFeedback from "/src/components/ThumbsFeedback";
-import Checkpoint from "/src/components/Checkpoint";
+import { Var } from "/src/components/Variables";
+import EnterpriseFeatureCallout from "/src/components/EnterpriseFeatureCallout";
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
@@ -57,6 +59,8 @@ const MDXComponents: MDXComponentsObject = {
   Var: (props) => <Var {...props} />, // needed to circumvent props mismatch in types
   ThumbsFeedback,
   Checkpoint,
+  EnterpriseFeatureBadge,
+  EnterpriseFeatureCallout,
 };
 
 export default MDXComponents;
