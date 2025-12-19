@@ -9,7 +9,7 @@
   overflow: hidden;
   font-weight: 600;
   white-space: nowrap;
-  text-decoration: none;
+  text-decoration: none !important;
   cursor: pointer;
   transition:
     background var(--t-interaction),
@@ -23,11 +23,11 @@
     transition-duration: 0s;
     opacity: 0.56;
   }
-  
+
   &&:disabled {
-    background-color: var(--color-lightest-gray);
-    border-color: var(--lightest-gray);
-    color: var(--color-dark-gray);
+    background-color: var(--color-tonal-neutral-0);
+    border-color: transparent;
+    color: var(--color-foreground-disabled);
     cursor: default;
     pointer-events: none;
   }
@@ -36,12 +36,19 @@
     background-color: var(--color-dark-purple);
     border-color: var(--color-dark-purple);
     color: var(--color-white);
+  }
 
+  &.variant-primary,
+  &.variant-secondary {
     &:focus,
     &:hover {
-      background-color: var(--color-light-purple);
-      border-color: var(--color-light-purple);
+      background-color: var(--color-interactive-primary-hover);
+      border-color: var(--color-interactive-primary-hover);
       color: var(--color-white);
+      box-shadow:
+        0 3px 5px -1px rgba(0, 0, 0, 0.2),
+        0 5px 8px 0 rgba(0, 0, 0, 0.14),
+        0 1px 14px 0 rgba(0, 0, 0, 0.12);
     }
   }
 
@@ -49,12 +56,16 @@
     background-color: var(--color-white);
     border-color: var(--color-dark-purple);
     color: var(--color-dark-purple);
+  }
+
+  &.variant-neutral {
+    background-color: var(--color-tonal-neutral-0);
+    border-color: transparent;
+    color: var(--color-foreground-slightly-muted);
 
     &:focus,
     &:hover {
-      background-color: var(--color-white);
-      border-color: var(--color-light-purple);
-      color: var(--color-light-purple);
+      background-color: var(--color-tonal-neutral-1);
     }
   }
 
@@ -70,6 +81,38 @@
     }
   }
 
+  &.variant-success {
+    color: var(--color-interactive-success-default);
+    border-color: var(--color-interactive-success-default);
+    background-color: transparent;
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: var(--color-interactive-success-hover);
+      box-shadow:
+        0 3px 5px -1px rgba(0, 0, 0, 0.2),
+        0 5px 8px 0 rgba(0, 0, 0, 0.14),
+        0 1px 14px 0 rgba(0, 0, 0, 0.12);
+      color: var(--color-white);
+    }
+  }
+
+  &.variant-failure {
+    color: var(--color-interactive-danger-default);
+    border-color: var(--color-interactive-danger-default);
+    background-color: transparent;
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: var(--color-interactive-danger-hover);
+      box-shadow:
+        0 3px 5px -1px rgba(0, 0, 0, 0.2),
+        0 5px 8px 0 rgba(0, 0, 0, 0.14),
+        0 1px 14px 0 rgba(0, 0, 0, 0.12);
+      color: var(--color-white);
+    }
+  }
+
   &.shape-sm {
     height: 24px;
     padding: 0 var(--m-1);
@@ -80,7 +123,7 @@
 
   &.shape-md {
     height: 32px;
-    padding: 0 var(--m-3);
+    padding: 0 var(--m-4);
     font-size: var(--fs-text-md);
     border-width: 1px;
   }

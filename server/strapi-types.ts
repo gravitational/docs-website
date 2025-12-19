@@ -31,12 +31,45 @@ export type NavigationItem = {
   title: string;
   type: string | "dropdown" | "link";
   link?: string;
-  dropdownType?: string | "aio" | "submenus";
+  dropdownType?: string | "aio" | "submenus" | "simple";
   navSections: {
     submenuTitle?: string | null;
     submenuTitleLink?: string;
     submenuSections: NavSection[];
   }[];
+  panel?: {
+    panelTitle?: {
+      title?: string;
+      subtitle?: string;
+      icon?: {
+        url: string;
+        alternativeText?: string;
+      };
+    };
+    panelFeaturedItem?: {
+      title?: string;
+      item?: {
+        cta?: StrapiBtn;
+        text?: string;
+        image?: {
+          url: string;
+          alternativeText?: string;
+        };
+      };
+    };
+    columns?: {
+      items?: {
+        link?: {
+          title: string;
+          link?: string;
+        };
+        subItems?: {
+          title: string;
+          link?: string;
+        }[];
+      }[];
+    }[];
+  };
 };
 export type BannerButtons = {
   title: string;

@@ -12,10 +12,10 @@ import DocItemContent from "@theme/DocItem/Content";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import Unlisted from "@theme/ContentVisibility/Unlisted";
 import type { Props } from "@theme/DocItem/Layout";
-import ThumbsFeedback from "@site/src/components/ThumbsFeedback";
 import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 import { PositionProvider } from "/src/components/PositionProvider";
-
+import ExclusivityBanner from "@site/src/components/ExclusivityBanner";
+import ExclusivityContext from "@site/src/components/ExclusivityBanner/context";
 import styles from "./styles.module.css";
 
 interface ExtendedFrontMatter {
@@ -50,9 +50,19 @@ function useDocTOC(removeTOCSidebar: boolean) {
   };
 }
 
+function usePageExclusivityBanner() {
+  const { frontMatter } = useDoc();
+
+  const exclusiveFeature = (frontMatter as any).enterprise;
+
+  return { exclusiveFeature };
+}
+
 export default function DocItemLayout({ children }: Props): JSX.Element {
-  const { hideTitleSection, removeTOCSidebar, fullWidth, alternateHeader } = useDocTemplate();
+  const { hideTitleSection, removeTOCSidebar, fullWidth, isLandingPage } =
+    useDocTemplate();
   const docTOC = useDocTOC(removeTOCSidebar);
+  const { exclusiveFeature } = usePageExclusivityBanner();
   const {
     metadata: { unlisted },
   } = useDoc();
@@ -75,45 +85,45 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   }, [fullWidth]);
 
   return (
-    <div className="row">
-      <div
-        className={clsx(
-          "col",
-          !docTOC.hidden && !docTOC.removed && styles.docItemCol,
-          fullWidth && styles.largeColumnPadding
-        )}
-      >
-        {unlisted && <Unlisted />}
-        <DocVersionBanner />
-        <div className={styles.docItemContainer}>
-          <article className={alternateHeader ? styles.alternateBreadcrumbs : undefined}>
-            {!hideTitleSection && <DocBreadcrumbs />}
-            {!fullWidth && (
-              <div className={styles.sidebar}>
-                <DocVersionBadge />
-              </div>
-            )}
-            {docTOC.mobile}
-            <DocItemContent>
-              <PositionProvider>{children}</PositionProvider>
-            </DocItemContent>
-            <DocItemFooter />
-          </article>
-          {!fullWidth && <DocItemPaginator />}
+    <ExclusivityContext.Provider value={{ exclusiveFeature }}>
+      {exclusiveFeature && !isLandingPage && <ExclusivityBanner />}
+      <div className="row">
+        <div
+          className={clsx(
+            "col",
+            !docTOC.hidden && !docTOC.removed && styles.docItemCol,
+            fullWidth && styles.largeColumnPadding
+          )}
+        >
+          {unlisted && <Unlisted />}
+          <DocVersionBanner />
+          <div className={styles.docItemContainer}>
+            <article className={styles.alternateBreadcrumbs}>
+              {!hideTitleSection && <DocBreadcrumbs />}
+              {!fullWidth && (
+                <div className={styles.sidebar}>
+                  <DocVersionBadge />
+                </div>
+              )}
+              {docTOC.mobile}
+              <DocItemContent>
+                <PositionProvider>{children}</PositionProvider>
+              </DocItemContent>
+              <DocItemFooter />
+            </article>
+            {!fullWidth && <DocItemPaginator />}
+          </div>
         </div>
-      </div>
-      {!docTOC.removed && (
-        <div className="col col--3">
-          <div className={styles.stickySidebar}>
-            <div className={styles.tocWithFeedback}>
-              <div className={styles.tocWrapper}>{docTOC.desktop}</div>
-              <div className={styles.feedbackWrapper}>
-                <ThumbsFeedback />
+        {!docTOC.removed && (
+          <div className="col col--3">
+            <div className={styles.stickySidebar}>
+              <div className={styles.tocWithFeedback}>
+                <div className={styles.tocWrapper}>{docTOC.desktop}</div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </ExclusivityContext.Provider>
   );
 }

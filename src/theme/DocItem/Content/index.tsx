@@ -1,15 +1,17 @@
-import React, { type ReactNode } from "react";
-import clsx from "clsx";
-import { ThemeClassNames } from "@docusaurus/theme-common";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
+import { useLocation } from "@docusaurus/router";
+import { ThemeClassNames } from "@docusaurus/theme-common";
+import PageActions from "@site/src/components/PageActions";
+import ThumbsFeedback from "@site/src/components/ThumbsFeedback";
+import ThumbsFeedbackContext from "@site/src/components/ThumbsFeedback/context";
+import { FeedbackType } from "@site/src/components/ThumbsFeedback/types";
+import VideoBar, { VideoBarProps } from "@site/src/components/VideoBar";
+import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
+import type { Props } from "@theme/DocItem/Content";
 import Heading from "@theme/Heading";
 import MDXContent from "@theme/MDXContent";
-import type { Props } from "@theme/DocItem/Content";
-import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
-import { useLocation } from "@docusaurus/router";
-import PageActions from "@site/src/components/PageActions";
-import { GitHubIssueLink } from "@site/src/components/GitHubIssueLink";
-import VideoBar, { VideoBarProps } from "@site/src/components/VideoBar";
+import clsx from "clsx";
+import { useState, type ReactNode } from "react";
 
 interface DocFrontMatter {
   videoBanner: VideoBarProps;
@@ -34,27 +36,45 @@ function useSyntheticTitle(): string | null {
   }
   return metadata.title;
 }
-
+  
 
 export default function DocItemContent({ children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
-  const { hideTitleSection, alternateHeader } = useDocTemplate();
+  const { hideTitleSection, showDescription } = useDocTemplate();
   const { frontMatter } = useDoc();
   const location = useLocation();
+  const [feedback, setFeedback] = useState<FeedbackType | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-    const { videoBanner } = frontMatter as DocFrontMatter;
+  const { videoBanner } = frontMatter as DocFrontMatter;
 
   return (
     <div className={clsx(ThemeClassNames.docs.docMarkdown, "markdown")}>
-      {syntheticTitle && (
-        <header className={hideTitleSection ? "hide-title-section" : undefined}>
-          <Heading as="h1" className={alternateHeader ? "docItemTitle" : undefined}>{syntheticTitle}</Heading>
-          {alternateHeader && frontMatter.description && <p className="docItemDescription">{frontMatter.description}</p>}
-          {alternateHeader ? <PageActions pathname={location.pathname} /> : <GitHubIssueLink pathname={location.pathname} />}
-          {videoBanner && <VideoBar {...videoBanner} />}
-        </header>
-      )}
-      <MDXContent>{children}</MDXContent>
+      <ThumbsFeedbackContext.Provider
+        value={{ feedback, isSubmitted, setFeedback, setIsSubmitted }}
+      >
+        {syntheticTitle && (
+          <header
+            className={hideTitleSection ? "hide-title-section" : undefined}
+          >
+            <Heading as="h1" className="docItemTitle">
+              {syntheticTitle}
+            </Heading>
+            {frontMatter.description && showDescription && (
+              <p className="docItemDescription">{frontMatter.description}</p>
+            )}
+            <PageActions pathname={location.pathname} />
+            {videoBanner && <VideoBar {...videoBanner} />}
+          </header>
+        )}
+        <MDXContent>{children}</MDXContent>
+        {syntheticTitle && !hideTitleSection && (
+          <ThumbsFeedback
+            feedbackLabel="Was this page helpful?"
+            pagePosition="bottom"
+          />
+        )}
+      </ThumbsFeedbackContext.Provider>
     </div>
   );
 }

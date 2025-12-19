@@ -20,7 +20,7 @@
 
 .stickySidebar {
   position: sticky;
-  top: calc(var(--ifm-navbar-height) + 1rem);
+  top: calc(var(--ifm-navbar-height) + 2rem);
   height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
   display: flex;
   flex-direction: column;
@@ -51,10 +51,13 @@
   :global(nav.theme-doc-breadcrumbs) {
     max-width: var(--lp-section-max-width);
     margin: 0 auto 0.875rem auto !important;
+    overflow: hidden;
 
     :global(.breadcrumbs) {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
+      min-width: fit-content;
     }
 
     :global(.breadcrumbs__item) {
@@ -69,7 +72,11 @@
       font-weight: var(--fw-bold);
       color: var(--color-foreground-slightly-muted);
       padding: 0;
-      font-size: var(--fs-text-md);
+      font-size: var(--fs-text-sm);
+
+      @media (--xs-scr) {
+        font-size: var(--fs-text-md);
+      }
 
       @media (--md-scr) {
         font-size: var(--fs-text-lg);

@@ -85,7 +85,7 @@ const Header = () => {
             )}
           >
             <Icon
-              name={isNavigationVisible ? "closeLarger" : "hamburger"}
+              name={isNavigationVisible ? "closeLarger" : "hamburger2"}
               size="lg"
             />
           </HeadlessButton>
