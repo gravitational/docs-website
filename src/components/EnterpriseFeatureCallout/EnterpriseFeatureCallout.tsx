@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import Icon from "../Icon";
 import styles from "./EnterpriseFeatureCallout.module.css";
-import Link from "@docusaurus/Link";
 
 const EnterpriseFeatureCallout: React.FC<{
   children?: ReactNode;
@@ -14,7 +13,7 @@ const EnterpriseFeatureCallout: React.FC<{
         <strong className={styles.title}>{title}</strong>
         <div className={styles.content}>
           {children && <>{children}</>}{" "}
-          <Link href="https://goteleport.com/signup/">Start a free trial</Link>.
+          <a href="https://goteleport.com/signup/">Start a free trial</a>.
         </div>
       </div>
     </div>
