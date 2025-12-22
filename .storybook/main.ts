@@ -1,10 +1,19 @@
 import type { StorybookConfig } from "@storybook/react-webpack5";
+import path from "path";
 
 const config: StorybookConfig = {
   framework: "@storybook/react-webpack5",
   stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: ["@storybook/addon-essentials"],
   webpackFinal: async (config) => {
+    // Mock @docusaurus/router for Storybook
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@docusaurus/router": path.resolve(__dirname, "./mocks/docusaurus-router.ts"),
+      "@site": path.resolve(__dirname, ".."),
+    };
+
     config.module?.rules?.push({
       test: /\.css$/,
       use: {

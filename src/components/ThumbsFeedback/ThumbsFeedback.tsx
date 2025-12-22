@@ -69,6 +69,7 @@ const FeedbackForm: React.FC<{
     React.SetStateAction<"positive" | "negative" | false>
   >;
   setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+  emitEvent?: (name: string, params: any) => {};
 }> = ({
   formActive,
   pagePosition,
@@ -78,10 +79,12 @@ const FeedbackForm: React.FC<{
   setComment,
   setFormActive,
   setIsSubmitted,
+  emitEvent,
 }) => {
   const [translateX, setTranslateX] = useState<number>(0);
   const modalRef = useRef<HTMLDivElement>(null);
   const translateXRef = useRef(translateX);
+  const location = useLocation();
 
   useEffect(() => {
     translateXRef.current = translateX;
@@ -170,37 +173,19 @@ const FeedbackForm: React.FC<{
           "feedback_given_paths",
           JSON.stringify(feedbackGivenPaths)
         );
+
+        trackEvent({
+          event_name: `docs_feedback_comment_thumbs_${feedback}`,
+          custom_parameters: {
+            comment_text: trimmedComment,
+          },
+          emitEvent,
+        });
+
         setIsSubmitted(true);
         return;
       }
 
-      // no existing entry, proceed to track event and store new entry
-
-      trackEvent({
-        event_name: `docs_feedback_comment_thumbs_${feedback}`,
-        custom_parameters: {
-          comment_text: trimmedComment,
-        },
-      });
-
-      const now = new Date();
-      // Set expiry to 1 day from now
-      now.setDate(now.getDate() + 1);
-      const expiry = now.getTime();
-
-      const itemToStore = {
-        path: currentPath,
-        expiry: expiry,
-        signal: feedback,
-        commented: true,
-      };
-
-      const newFeedbackGivenPaths = [...feedbackGivenPaths, itemToStore];
-
-      localStorage.setItem(
-        "feedback_given_paths",
-        JSON.stringify(newFeedbackGivenPaths)
-      );
     }
 
     setIsSubmitted(true);
@@ -262,9 +247,11 @@ const FeedbackForm: React.FC<{
 const ThumbsFeedback: React.FC<{
   feedbackLabel?: string;
   pagePosition?: "top" | "bottom";
+  emitEvent?: (name: string, params: any) => {};
 }> = ({
   feedbackLabel = "Is this page helpful?",
   pagePosition = "top",
+  emitEvent,
 }): JSX.Element => {
   const { feedback, isSubmitted, setFeedback, setIsSubmitted } = useContext(
     ThumbsFeedbackContext
@@ -330,6 +317,7 @@ const ThumbsFeedback: React.FC<{
 
     trackEvent({
       event_name: `docs_feedback_thumbs_${feedbackValue}`,
+      emitEvent,
     });
 
     const now = new Date();
@@ -407,6 +395,7 @@ const ThumbsFeedback: React.FC<{
               setComment={setComment}
               setFormActive={setFormActive}
               setIsSubmitted={setIsSubmitted}
+              emitEvent={emitEvent}
             />
           )}
         </div>
@@ -421,6 +410,7 @@ const ThumbsFeedback: React.FC<{
           setComment={setComment}
           setFormActive={setFormActive}
           setIsSubmitted={setIsSubmitted}
+          emitEvent={emitEvent}
         />
       )}
     </div>
