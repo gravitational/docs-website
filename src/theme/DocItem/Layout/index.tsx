@@ -51,12 +51,18 @@ function useDocTOC(removeTOCSidebar: boolean) {
   };
 }
 
-function usePageExclusivityBanner() {
+function usePageExclusivityBanner(): string | boolean {
   const { frontMatter } = useDoc();
+  const { enterprise } = (frontMatter as any);
+  if (!enterprise) {
+    return { exclusiveFeature: false };
+  }
+  let capability = "This capability";
+  if (typeof enterprise === "string") {
+    capability = enterprise;
+  }
 
-  const exclusiveFeature = (frontMatter as any).enterprise;
-
-  return { exclusiveFeature };
+  return { exclusiveFeature: capability };
 }
 
 export default function DocItemLayout({ children }: Props): JSX.Element {
@@ -93,7 +99,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
           className={clsx(
             "col",
             !docTOC.hidden && !docTOC.removed && styles.docItemCol,
-            fullWidth && styles.largeColumnPadding
+            fullWidth && styles.largeColumnPadding,
           )}
         >
           {unlisted && <Unlisted />}

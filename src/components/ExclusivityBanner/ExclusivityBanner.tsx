@@ -25,47 +25,48 @@ const ExclusivityBanner: React.FC = () => {
     }
   }, [dismissed]);
 
-  if (exclusiveFeature) {
-    return (
-      <div className={styles.exclusivityWrapper}>
-        <div
-          className={cn(styles.exclusivityBanner, {
-            [styles.visible]: !dismissed,
-          })}
-        >
-          <div className={styles.inner}>
-            <div className={styles.content}>
-              <Icon size="sm-md" name="rocketLaunch" />
-              <p>
-                {exclusiveFeature} is available only with Teleport Enterprise.{" "}
-                <a href="https://goteleport.com/signup/">
-                  Start your free trial.
-                </a>
-              </p>
-            </div>
-            <Button
-              as="button"
-              onClick={() => setDismissed(true)}
-              className={styles.hideButton}
-            >
-              Hide
-            </Button>
+  if (!exclusiveFeature) {
+    return null;
+  }
+
+  return (
+    <div className={styles.exclusivityWrapper}>
+      <div
+        className={cn(styles.exclusivityBanner, {
+          [styles.visible]: !dismissed,
+        })}
+      >
+        <div className={styles.inner}>
+          <div className={styles.content}>
+            <Icon size="sm-md" name="rocketLaunch" />
+            <p>
+              {exclusiveFeature} is available only with Teleport Enterprise.{" "}
+              <a href="https://goteleport.com/signup/">
+                Start your free trial.
+              </a>
+            </p>
           </div>
-        </div>
-        <div
-          role="button"
-          onClick={() => setDismissed(false)}
-          className={cn(styles.exclusivityBadge, {
-            [styles.visible]: dismissed,
-          })}
-        >
-          <Icon size="sm-md" name="rocketLaunch" />
-          Start your free trial
+          <Button
+            as="button"
+            onClick={() => setDismissed(true)}
+            className={styles.hideButton}
+          >
+            Hide
+          </Button>
         </div>
       </div>
-    );
-  }
-  return null;
+      <div
+        role="button"
+        onClick={() => setDismissed(false)}
+        className={cn(styles.exclusivityBadge, {
+          [styles.visible]: dismissed,
+        })}
+      >
+        <Icon size="sm-md" name="rocketLaunch" />
+        Start your free trial
+      </div>
+    </div>
+  );
 };
 
 export default ExclusivityBanner;
