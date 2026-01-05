@@ -12,6 +12,7 @@ interface Resource {
   href?: string;
   variant?: "homepage" | "doc";
   tags?: Tag[];
+  editionTag?: string;
 }
 
 interface ResourcesProps {
@@ -31,10 +32,12 @@ const ResourceCard: React.FC<Resource> = ({
   iconComponent,
   variant,
   tags,
+  editionTag,
 }) => {
   const IconComponent = iconComponent;
   const cardContent = (
     <>
+      {editionTag && <div className={styles.communityTag}>{editionTag}</div>}
       <IconComponent
         className={cn(styles.iconSvg, {
           [styles.docVariant]: variant === "doc",
@@ -160,6 +163,7 @@ const Resources: React.FC<ResourcesProps> = ({
               variant={variant}
               iconComponent={resource.iconComponent}
               tags={resource.tags}
+              editionTag={resource.editionTag}
             />
           ))}
         </div>

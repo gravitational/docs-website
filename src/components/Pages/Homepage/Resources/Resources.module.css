@@ -117,12 +117,28 @@
 
 .resourceItem {
   padding: var(--m-3);
+  position: relative;
   border-radius: 12px;
   border: 1.5px solid var(--color-tonal-neutral-0);
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   display: flex;
   flex-direction: column;
+
+  svg {
+    color: initial;
+  }
+}
+
+.communityTag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: var(--m-0-5) var(--m-1-5);
+  color: var(--color-black);
+  background-color: var(--color-tonal-neutral-0);
+  font-size: var(--fs-text-sm);
+  border-radius: 0 12px 0 8px;
 }
 
 a.resourceItem {
