@@ -37,7 +37,7 @@ const ResourceCard: React.FC<Resource> = ({
   const IconComponent = iconComponent;
   const cardContent = (
     <>
-      {editionTag && <div className={styles.communityTag}>{editionTag}</div>}
+      {editionTag && <div className={styles.editionTag}>{editionTag}</div>}
       <IconComponent
         className={cn(styles.iconSvg, {
           [styles.docVariant]: variant === "doc",
