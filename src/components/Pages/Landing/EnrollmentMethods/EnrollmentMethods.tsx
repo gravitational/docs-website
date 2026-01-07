@@ -86,7 +86,8 @@ export const Method: React.FC<EnrollmentMethod> = ({
       </div>
       <div>
         <div
-          className={cn(styles.methodDescription, {
+          className={cn(styles.methodContent, {
+            [styles.rowsVariant]: variant === "rows" && !innerMethod,
             [styles.innerMethodRowsVariant]: innerMethod && variant === "rows",
           })}
         >

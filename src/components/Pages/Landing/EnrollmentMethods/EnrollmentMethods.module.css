@@ -62,14 +62,13 @@
     border-radius: var(--m-2);
     padding: var(--m-3);
     border: 1.5px solid var(--color-tonal-neutral-0);
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: var(--m-1);
-    grid-template-columns: minmax(0, 1fr);
     margin-top: var(--m-2) !important;
 
     @media (--md-scr) {
       gap: var(--m-3);
-      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 }
@@ -164,7 +163,7 @@
   }
 }
 
-.methodDescription {
+.methodContent {
   font-size: var(--fs-text-lg);
   color: var(--color-foreground-slightly-muted);
   line-height: 1.625;
@@ -191,6 +190,15 @@
 
     &:hover {
       color: var(--color-dark-purple);
+    }
+  }
+
+  &.rowsVariant {
+    display: grid;
+    column-gap: var(--m-2);
+
+    @media (--md-scr) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
