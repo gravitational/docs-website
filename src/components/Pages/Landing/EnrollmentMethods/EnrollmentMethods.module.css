@@ -18,10 +18,17 @@
   @media (--md-scr) {
     font-size: var(--lp-header-2);
   }
+
+  &.rowsVariant {
+    font-size: var(--fs-header-4);
+
+    @media (--md-scr) {
+      font-size: var(--fs-header-3);
+    }
+  }
 }
 
 .methodsList {
-  list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
@@ -32,13 +39,52 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--m-3);
   }
+
+  &.rowsVariant {
+    display: flex;
+    flex-direction: column;
+    gap: var(--m-4);
+  }
 }
 
 .method {
   padding: var(--m-3);
-  border-radius: 12px;
+  border-radius: var(--m-1-5);
   border: 1.5px solid var(--color-tonal-neutral-0);
   margin-top: 0 !important;
+
+  &.rowsVariant {
+    border: none;
+    padding: 0;
+  }
+
+  &.innerMethodRowsVariant {
+    border-radius: var(--m-2);
+    padding: var(--m-3);
+    border: 1.5px solid var(--color-tonal-neutral-0);
+    display: grid;
+    gap: var(--m-1);
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: var(--m-2) !important;
+
+    @media (--md-scr) {
+      gap: var(--m-3);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+.methodHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--m-1);
+
+  &.rowsVariant {
+    @media (--md-scr) {
+      gap: var(--m-2);
+      flex-direction: row;
+    }
+  }
 }
 
 .methodTitle {
@@ -80,12 +126,42 @@
       }
     }
   }
+
+  &.innerMethodRowsVariant {
+    font-size: var(--fs-text-xl);
+    font-weight: var(--fw-bold);
+    display: flex;
+    margin: 0;
+
+    @media (--md-scr) {
+      font-size: var(--fs-header-4);
+      margin: 0 0 var(--m-1) 0;
+    }
+
+    a {
+      text-decoration: none;
+      font-weight: var(--fw-bold);
+      color: var(--color-dark-purple);
+    }
+  }
+}
+
+.methodSubtitle {
+  font-size: var(--fs-text-lg);
+  color: var(--color-foreground-slightly-muted);
+  margin-bottom: var(--m-2);
 }
 
 .methodIcon {
   width: var(--m-6);
   height: var(--m-6);
   aspect-ratio: 1 / 1;
+
+  &.rowsVariant {
+    width: var(--m-5);
+    height: var(--m-5);
+    margin-right: 0;
+  }
 }
 
 .methodDescription {
@@ -103,7 +179,9 @@
   p,
   ul,
   ol {
-    margin-bottom: var(--m-2);
+    &:not(:last-child) {
+      margin-bottom: var(--m-2);
+    }
   }
 
   a {
@@ -113,6 +191,17 @@
 
     &:hover {
       color: var(--color-dark-purple);
+    }
+  }
+
+  &.innerMethodRowsVariant {
+    p {
+      margin-bottom: 0;
+    }
+
+    b,
+    strong {
+      margin-bottom: var(--m-1);
     }
   }
 }
