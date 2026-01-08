@@ -3,6 +3,7 @@ import ExclusivityContext from "@site/src/components/ExclusivityBanner/context";
 import Icon from "@site/src/components/Icon";
 import { useContext } from "react";
 import styles from "./LandingHero.module.css";
+import { trackEvent } from "@site/src/utils/analytics";
 
 interface GetStartedLink {
   title: string;
@@ -18,6 +19,7 @@ interface LandingHeroProps {
   linksTitle?: string;
   linksColumnCount?: number;
   links?: GetStartedLink[];
+  emitEvent?: (name: string, params: any) => {};
   children?: React.ReactNode;
 }
 
@@ -28,6 +30,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
   linksTitle,
   linksColumnCount = 2,
   links = [],
+  emitEvent,
   children,
 }) => {
   const { exclusiveFeature } = useContext(ExclusivityContext);
@@ -43,7 +46,16 @@ const LandingHero: React.FC<LandingHeroProps> = ({
               <Icon size="sm-md" name="rocketLaunch" />
               <p>
                 {exclusiveFeature} is available only with Teleport Enterprise.{" "}
-                <a href="https://goteleport.com/signup/">
+                <a
+                  href="https://goteleport.com/signup/"
+                  target="_blank"
+                  onClick={() =>
+                    trackEvent({
+                      event_name: "docs_enterprise_link",
+                      emitEvent,
+                    })
+                  }
+                >
                   Start your free trial.
                 </a>
               </p>
