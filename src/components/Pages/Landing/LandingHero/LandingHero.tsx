@@ -48,7 +48,6 @@ const LandingHero: React.FC<LandingHeroProps> = ({
                 {exclusiveFeature} is available only with Teleport Enterprise.{" "}
                 <a
                   href="https://goteleport.com/signup/"
-                  target="_blank"
                   onClick={() =>
                     trackEvent({
                       event_name: "docs_enterprise_link",

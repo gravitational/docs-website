@@ -113,7 +113,6 @@ const EnterpriseFeatureBadge: React.FC<
           <Button
             as="link"
             href="https://goteleport.com/signup/"
-            target="_blank"
             className={styles.upsellLink}
             onClick={() =>
               trackEvent({

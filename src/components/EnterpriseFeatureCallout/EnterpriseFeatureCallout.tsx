@@ -17,7 +17,6 @@ const EnterpriseFeatureCallout: React.FC<{
           {children && <>{children}</>}{" "}
           <a
             href="https://goteleport.com/signup/"
-            target="_blank"
             onClick={() =>
               trackEvent({ event_name: "docs_enterprise_link", emitEvent })
             }
