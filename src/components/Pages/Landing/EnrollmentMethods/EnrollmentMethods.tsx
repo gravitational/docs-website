@@ -74,6 +74,7 @@ export const Method: React.FC<EnrollmentMethod> = ({
               // @ts-ignore
               <Link to={href} className={styles.methodLink}>
                 {title}
+                <span />
               </Link>
             ) : (
               title
