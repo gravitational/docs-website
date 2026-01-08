@@ -6,11 +6,12 @@ const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: ["@storybook/addon-essentials"],
   webpackFinal: async (config) => {
-    // Mock @docusaurus/router for Storybook
+    // Mock @docusaurus/router and @docusaurus/Link for Storybook
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
       "@docusaurus/router": path.resolve(__dirname, "./mocks/docusaurus-router.ts"),
+      "@docusaurus/Link": path.resolve(__dirname, "./mocks/docusaurus-link.tsx"),
       "@site": path.resolve(__dirname, ".."),
     };
 

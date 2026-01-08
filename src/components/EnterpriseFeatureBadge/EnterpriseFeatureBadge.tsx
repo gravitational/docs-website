@@ -3,14 +3,19 @@ import Icon from "../Icon";
 import styles from "./EnterpriseFeatureBadge.module.css";
 import cn from "classnames";
 import Button from "../Button";
+import { trackEvent } from "@site/src/utils/analytics";
 
 interface EnterpriseFeatureBadgeProps {
   children: ReactNode;
   message?: string;
+  emitEvent?: (name: string, params: any) => {};
 }
 
-const EnterpriseFeatureBadge: React.FC<{ message: string }> = ({
+const EnterpriseFeatureBadge: React.FC<
+  Pick<EnterpriseFeatureBadgeProps, "message" | "emitEvent">
+> = ({
   message = "This is only available in Teleport Enterprise. Don't have an account?",
+  emitEvent,
 }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [isPinned, setIsPinned] = useState<boolean>(false);
@@ -109,6 +114,12 @@ const EnterpriseFeatureBadge: React.FC<{ message: string }> = ({
             as="link"
             href="https://goteleport.com/signup/"
             className={styles.upsellLink}
+            onClick={() =>
+              trackEvent({
+                event_name: "docs_enterprise_link",
+                emitEvent,
+              })
+            }
           >
             Start free trial
           </Button>
@@ -128,6 +139,7 @@ const EnterpriseFeatureBadge: React.FC<{ message: string }> = ({
 
 const EnterpriseFeatureBadgeWrapper: React.FC<EnterpriseFeatureBadgeProps> = ({
   message,
+  emitEvent,
   children,
 }) => {
   const childArray = Array.isArray(children) ? children : [children];
@@ -142,7 +154,7 @@ const EnterpriseFeatureBadgeWrapper: React.FC<EnterpriseFeatureBadgeProps> = ({
     typeof child === "object" &&
     child !== null &&
     "type" in child &&
-    /^h[1-6]$/.test(child.type.name)
+    (/^h[1-6]$/.test(child.type.name) || /^h[1-6]$/.test(child.type))
   ) {
     const headingProps = child.props || {};
     const headingChildren = headingProps.children;
@@ -154,7 +166,7 @@ const EnterpriseFeatureBadgeWrapper: React.FC<EnterpriseFeatureBadgeProps> = ({
         children: (
           <>
             {headingChildren}
-            <EnterpriseFeatureBadge message={message} />
+            <EnterpriseFeatureBadge message={message} emitEvent={emitEvent} />
           </>
         ),
       },
