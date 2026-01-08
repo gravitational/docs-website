@@ -94,7 +94,6 @@ const EnterpriseFeatureBadge: React.FC<
     <div
       className={styles.enterpriseFeatureBadge}
       role="button"
-      aria-label="Enterprise feature badge"
       ref={badgeRef}
       onClick={handleBadgeClick}
       onMouseEnter={showModal}
