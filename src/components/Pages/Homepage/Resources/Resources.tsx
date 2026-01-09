@@ -4,6 +4,7 @@ import styles from "./Resources.module.css";
 import Link from "@docusaurus/Link";
 import { Tag } from "../../Landing/UseCasesList/UseCasesList";
 import Icon from "@site/src/components/Icon";
+import ArrowRightSvg from "@site/src/components/Icon/teleport-svg/arrow-circle-right.svg";
 
 interface Resource {
   title: string;
@@ -12,6 +13,12 @@ interface Resource {
   href?: string;
   variant?: "homepage" | "doc";
   tags?: Tag[];
+  editionTag?: string;
+}
+
+interface AdditionalLinks {
+  title: string;
+  links: Array<{ title: string; href: string }>;
 }
 
 interface ResourcesProps {
@@ -22,6 +29,7 @@ interface ResourcesProps {
   desktopColumnsCount?: number;
   resources: Resource[];
   narrowBottomPadding?: boolean;
+  additionalLinks?: AdditionalLinks;
 }
 
 const ResourceCard: React.FC<Resource> = ({
@@ -31,10 +39,12 @@ const ResourceCard: React.FC<Resource> = ({
   iconComponent,
   variant,
   tags,
+  editionTag,
 }) => {
   const IconComponent = iconComponent;
   const cardContent = (
     <>
+      {editionTag && <div className={styles.editionTag}>{editionTag}</div>}
       <IconComponent
         className={cn(styles.iconSvg, {
           [styles.docVariant]: variant === "doc",
@@ -116,6 +126,7 @@ const Resources: React.FC<ResourcesProps> = ({
   desktopColumnsCount = 4,
   resources,
   narrowBottomPadding = false,
+  additionalLinks,
 }) => {
   const Heading = variant === "doc" ? "h3" : "h2";
   return (
@@ -160,9 +171,28 @@ const Resources: React.FC<ResourcesProps> = ({
               variant={variant}
               iconComponent={resource.iconComponent}
               tags={resource.tags}
+              editionTag={resource.editionTag}
             />
           ))}
         </div>
+        {additionalLinks && (
+          <div className={styles.additionalLinks}>
+            {additionalLinks.title && (
+              <p className={styles.additionalLinksTitle}>
+                {additionalLinks.title}
+              </p>
+            )}
+            <ul className={styles.additionalLinksList}>
+              {additionalLinks?.links?.map((link, i) => (
+                <li key={i}>
+                  <Link to={link.href}>
+                    <ArrowRightSvg /> {link.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </section>
   );
