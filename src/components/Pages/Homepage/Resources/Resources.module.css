@@ -145,7 +145,7 @@
     );
   }
 
-  @media (--md-scr) {
+  @media (--lg-scr) {
     grid-template-columns: repeat(
       min(3, var(--desktop-column-count)),
       minmax(0, 1fr)
