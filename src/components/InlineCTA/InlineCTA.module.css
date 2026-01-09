@@ -1,0 +1,10 @@
+.inlineCTA {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--m-1);
+  font-weight: var(--fw-bold);
+  text-decoration: underline;
+  color: var(--color-dark-purple);
+  margin-left: var(--m-1);
+  vertical-align: middle;
+}

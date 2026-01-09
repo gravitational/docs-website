@@ -6,7 +6,8 @@
     },
     {
       "name": "18.x",
-      "branch": "branch/v18",
+      "branch": "aatuvai/sso-pages-teleport-sso-integrations",
+      "repo_path": "aatuvai/teleport",
       "isDefault": true
     },
     {
