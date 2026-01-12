@@ -70,7 +70,7 @@
 
       .additionalLinksList {
         flex-direction: row;
-        gap: 54px;
+        gap: var(--m-3);
 
         & > li {
           &:last-child {
