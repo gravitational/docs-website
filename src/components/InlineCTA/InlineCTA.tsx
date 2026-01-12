@@ -12,9 +12,10 @@ const InlineCTA: React.FC<InlineCTAProps> = ({
   children,
   ...rest
 }) => {
+  const InlineSVG = images[imageName];
   return (
     <Link className={styles.inlineCTA} {...rest}>
-      <img src={images[imageName]} alt="" width={140} height={40} />
+      <InlineSVG />
       {children}
     </Link>
   );
