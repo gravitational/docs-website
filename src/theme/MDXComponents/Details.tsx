@@ -1,26 +1,15 @@
-import React, {
-  type ComponentProps,
-  type ReactElement,
-  type ReactNode,
-} from "react";
-import Details from "@theme/Details";
-import type { Props } from "@theme/MDXComponents/Details";
+import React, { type ReactNode } from "react";
+import Details from "@theme-original/MDXComponents/Details";
+import type DetailsType from "@theme/MDXComponents/Details";
+import type { WrapperProps } from "@docusaurus/types";
 import styles from "./Details.module.css";
 
-export default function MDXDetails(props: Props): ReactNode {
-  const items = React.Children.toArray(props.children);
-  // Split summary item from the rest to pass it as a separate prop to the
-  // Details theme component
+type Props = WrapperProps<typeof DetailsType>;
 
-  const summary = items.find(
-    (item): item is ReactElement<ComponentProps<"summary">> =>
-      React.isValidElement(item) && item.type === "summary"
-  );
-  const children = <>{items.filter((item) => item !== summary)}</>;
-
+export default function DetailsWrapper(props: Props): ReactNode {
   return (
-    <Details {...props} summary={summary} className={styles.details}>
-      {children}
-    </Details>
+    <>
+      <Details {...props} className={styles.details} />
+    </>
   );
 }
