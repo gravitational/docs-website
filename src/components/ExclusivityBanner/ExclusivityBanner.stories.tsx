@@ -19,6 +19,15 @@ export const WithoutExclusivity: Story = {
       <ExclusivityBanner emitEvent={collectEvents()} />
     </ExclusivityContext.Provider>
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step("Verify exclusivity banner is not shown", async () => {
+      expect(
+        canvas.queryByText(/is available only with Teleport Enterprise/)
+      ).not.toBeInTheDocument();
+    });
+  },
 };
 
 export const WithExclusivity: Story = {
