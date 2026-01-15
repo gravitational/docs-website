@@ -190,3 +190,89 @@
 .featureItem:hover .featureDescription {
   color: var(--color-text);
 }
+
+.highlightedProduct {
+  background-color: var(--color-background-depth-2);
+  padding: var(--m-3);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--m-3);
+  border-radius: var(--m-2);
+  border: 1px solid var(--color-tonal-neutral-0);
+  margin-bottom: var(--m-4);
+
+  @media (--lg-scr) {
+    grid-template-columns: minmax(0, 52%) minmax(0, 48%);
+    align-items: center;
+    padding: var(--m-4);
+    gap: var(--m-2);
+  }
+
+  .highlightedProductTag {
+    display: flex;
+    font-weight: var(--fw-bold) !important;
+    font-size: var(--fs-text-sm);
+    border-width: 1px;
+    border-style: solid;
+    text-transform: uppercase;
+    align-items: center;
+    gap: var(--m-1);
+    justify-content: center;
+    padding: var(--m-1) var(--m-1-5);
+    border-radius: var(--m-1);
+    width: fit-content;
+    line-height: 1;
+    margin-bottom: var(--m-2);
+
+    svg {
+      path {
+        fill: var(--highlighted-tag-color);
+      }
+    }
+  }
+
+  .highlightedProductTitle {
+    font-size: var(--fs-header-3);
+    font-weight: var(--fw-bold);
+    margin: 0 0 var(--m-1) 0;
+    line-height: 1.5;
+  }
+
+  .highlightedProductDescription {
+    font-size: var(--fs-text-xl);
+    color: var(--color-foreground-slightly-muted);
+    margin-bottom: var(--m-2);
+    line-height: 1.66667;
+  }
+
+  .highlightedProductLink {
+    font-size: var(--fs-header-4);
+    color: var(--color-dark-purple);
+    text-decoration: underline;
+    width: max-content;
+    font-weight: var(--fw-bold);
+    margin-bottom: 0;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    &::after {
+      content: "";
+      position: absolute;
+      background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2218%22%20height%3D%2216%22%20viewBox%3D%220%200%2018%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M11.0303%201.19233C10.7374%200.899433%2010.2626%200.899433%209.96967%201.19233C9.67678%201.48522%209.67678%201.96009%209.96967%202.25299L15.4393%207.72266H0.75C0.335786%207.72266%200%208.05844%200%208.47266C0%208.88687%200.335786%209.22266%200.75%209.22266H15.4393L9.96967%2014.6923C9.67678%2014.9852%209.67678%2015.4601%209.96967%2015.753C10.2626%2016.0459%2010.7374%2016.0459%2011.0303%2015.753L17.7803%209.00299C17.9268%208.85654%2018%208.6646%2018%208.47266C18%208.37096%2017.9798%208.274%2017.9431%208.18557C17.9065%208.09711%2017.8522%208.01423%2017.7803%207.94233L11.0303%201.19233Z%22%20fill%3D%22%23512FC9%22%2F%3E%3C%2Fsvg%3E");
+      width: 18px;
+      height: 15px;
+      right: -29px;
+      top: 50%;
+      opacity: 1;
+      transform: translateY(-50%);
+      transition: opacity 0.15s ease-in-out;
+    }
+  }
+
+  .highlightedProductImage {
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
