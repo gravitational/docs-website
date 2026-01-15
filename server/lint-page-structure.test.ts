@@ -17,7 +17,7 @@ const getReasons = (value: string) => {
   );
 };
 
-describe("server/lint-page-structure", () => {
+describe("linting heading usage", () => {
   describe('linting "How it works" H2s in how-to guides', () => {
     interface testCase {
       description: string;
@@ -388,6 +388,128 @@ This is another intro paragraph.
 Here's some conceptual information.
 `,
         expected: [],
+      },
+    ];
+
+    test.each(testCases)("$description", (tc) => {
+      expect(getReasons(tc.input)).toEqual(tc.expected);
+    });
+  });
+
+  describe("linting the absence of a section intro paragraph", () => {
+    interface testCase {
+      description: string;
+      input: string;
+      expected: Array<string>;
+    }
+
+    const testCases: Array<testCase> = [
+      {
+        description: `missing section intro paragraph`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
+
+This is an intro.
+
+## Section
+
+### Subsection
+
+Here's some text.
+`,
+        expected: [
+          `This guide is missing a paragraph to introduce the section "Subsection". Explain the section with an introduction or consider removing this heading and promoting its content. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
+        ],
+      },
+      {
+        description: `expected section intro paragraph`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
+
+This is an intro.
+
+## Section
+
+Here is a section intro.
+
+### Subsection
+
+Here's some text.
+`,
+        expected: [],
+      },
+{
+        description: `at multiple levels`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+---
+
+This is an intro.
+
+## Section
+
+### Subsection
+
+Here's some text.
+
+### Another subsection
+
+#### An H4 Section
+
+Here's more text.
+`,
+        expected: [
+          `This guide is missing a paragraph to introduce the section "Subsection". Explain the section with an introduction or consider removing this heading and promoting its content. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
+          `This guide is missing a paragraph to introduce the section "An H4 Section". Explain the section with an introduction or consider removing this heading and promoting its content. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`
+        ],
+      },
+    ];
+
+    test.each(testCases)("$description", (tc) => {
+      expect(getReasons(tc.input)).toEqual(tc.expected);
+    });
+  });
+
+  describe("linting the absence of a section intro paragraph as a child of a jsx component", () => {
+    interface testCase {
+      description: string;
+      input: string;
+      expected: Array<string>;
+    }
+
+    const testCases: Array<testCase> = [
+      {
+        description: `missing section intro paragraph in jsx component`,
+        input: `---
+title: Docs Page
+description: Provides instructions about a feature.
+template: landing-page
+---
+import Hero from '@site/src/components/Hero';
+
+<Hero
+  title="Docs Page"
+>
+
+This is an intro.
+
+## Section
+
+### Subsection
+
+Some text.
+
+</Hero>
+
+`,
+        expected: [
+          `This guide is missing a paragraph to introduce the section "Section". Explain the section with an introduction or consider removing this heading and promoting its content. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
+        ],
       },
     ];
 
