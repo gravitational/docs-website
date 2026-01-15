@@ -26,12 +26,21 @@ interface EnrollmentMethod {
   children?: React.ReactNode;
   variant?: "default" | "rows";
   innerMethod?: boolean;
+  progressStatus?: "Not started" | "Started" | "In-progress" | "Completed";
+  linkColor?: "black" | "purple";
+  fontSize?: "lg" | "xl";
 }
 
 interface EnrollmentMethodsProps {
   title?: string;
+  description?: string;
   children?: React.ReactNode;
   variant?: "default" | "rows";
+  desktopColumnsCount?: 2;
+  additionalNote?: any;
+  additionalNoteIcon?: IconName;
+  linkColor?: "black" | "purple";
+  fontSize?: "lg" | "xl";
 }
 
 export const Method: React.FC<EnrollmentMethod> = ({
@@ -43,7 +52,36 @@ export const Method: React.FC<EnrollmentMethod> = ({
   icon: IconComponent,
   variant,
   innerMethod = false,
+  progressStatus,
+  linkColor,
+  fontSize,
 }) => {
+  const getBackgroundColor = (status: string) => {
+    switch (status) {
+      case "Not started":
+        return "#0000001a";
+      case "Started":
+        return "#0073ba1a";
+      case "In-progress":
+        return "#ffab001a";
+      default:
+        return "#007d6b1a";
+    }
+  };
+
+  const getColor = (status: string) => {
+    switch (status) {
+      case "Not started":
+        return "#0000005c";
+      case "Started":
+        return "#0073ba";
+      case "In-progress":
+        return "#ffaa00";
+      default:
+        return "#007d6a";
+    }
+  };
+
   return (
     <div
       className={cn(styles.method, {
@@ -56,6 +94,26 @@ export const Method: React.FC<EnrollmentMethod> = ({
           [styles.rowsVariant]: variant === "rows",
         })}
       >
+        {progressStatus && (
+          <div
+            className={styles.progressStatus}
+            style={{
+              color: getColor(progressStatus),
+              backgroundColor: getBackgroundColor(progressStatus),
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="8"
+              height="8"
+              viewBox="0 0 8 8"
+              fill="none"
+            >
+              <circle cx="4" cy="4" r="4" fill={getColor(progressStatus)} />
+            </svg>
+            {progressStatus}
+          </div>
+        )}
         {IconComponent && (
           <IconComponent
             className={cn(styles.methodIcon, {
@@ -72,7 +130,13 @@ export const Method: React.FC<EnrollmentMethod> = ({
           >
             {href ? (
               // @ts-ignore
-              <Link to={href} className={styles.methodLink}>
+              <Link
+                to={href}
+                className={styles.methodLink}
+                style={{
+                  color: linkColor === "purple" ? "#512fc9" : "#000000",
+                }}
+              >
                 {title}
                 <span />
               </Link>
@@ -90,6 +154,7 @@ export const Method: React.FC<EnrollmentMethod> = ({
           className={cn(styles.methodContent, {
             [styles.rowsVariant]: variant === "rows" && !innerMethod,
             [styles.innerMethodRowsVariant]: innerMethod && variant === "rows",
+            [styles.xlFontSize]: fontSize === "xl",
           })}
         >
           {React.Children.map(children, (child) => {
@@ -97,6 +162,7 @@ export const Method: React.FC<EnrollmentMethod> = ({
               return React.cloneElement(child as React.ReactElement<any>, {
                 innerMethod: true,
                 variant,
+                fontSize,
               });
             }
             return child;
@@ -152,35 +218,58 @@ export const Method: React.FC<EnrollmentMethod> = ({
 
 const EnrollmentMethods: React.FC<EnrollmentMethodsProps> = ({
   title,
+  description,
   children,
   variant = "default",
+  desktopColumnsCount = 2,
+  additionalNote,
+  additionalNoteIcon,
+  linkColor = "black",
+  fontSize = "lg",
 }) => {
   return (
     <section className={styles.enrollmentMethods}>
       <div className={styles.container}>
         {title && (
-          <h2
-            className={cn(styles.title, {
-              [styles.rowsVariant]: variant === "rows",
-            })}
-          >
-            {title}
-          </h2>
+          <div className={styles.header}>
+            <h2
+              className={cn(styles.title, {
+                [styles.rowsVariant]: variant === "rows",
+                [styles.withDescription]: description,
+              })}
+            >
+              {title}
+            </h2>
+            {description && <p className={styles.description}>{description}</p>}
+          </div>
         )}
         <div
           className={cn(styles.methodsList, {
             [styles.rowsVariant]: variant === "rows",
           })}
+          style={
+            {
+              "--desktop-column-count": desktopColumnsCount,
+            } as React.CSSProperties
+          }
         >
           {React.Children.map(children, (child) => {
             if (React.isValidElement(child) && child.type === Method) {
               return React.cloneElement(child as React.ReactElement<any>, {
                 variant,
+                linkColor,
+                fontSize,
               });
             }
             return child;
           })}
         </div>
+        {additionalNote && (
+          <div className={styles.additionalNote}>
+            <Icon name={additionalNoteIcon} size="md" />
+            <div dangerouslySetInnerHTML={{ __html: additionalNote }} />
+          </div>
+        )}
       </div>
     </section>
   );

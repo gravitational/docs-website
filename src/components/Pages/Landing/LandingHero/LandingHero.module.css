@@ -98,6 +98,12 @@
     }
   }
 
+  .subTitle {
+    font-size: var(--fs-text-xl);
+    margin-bottom: var(--m-2);
+    color: var(--color-foreground-slightly-muted);
+  }
+
   .description {
     line-height: 1.6667;
     color: var(--color-foreground-slightly-muted);
@@ -164,8 +170,6 @@
     }
 
     @media (--md-scr) {
-      font-size: var(--fs-text-xl);
-
       * {
         &:last-child {
           margin-bottom: 0;
@@ -228,13 +232,15 @@
     text-decoration: none;
     transition: all 0.2s ease-in-out;
 
-    &:hover {
-      cursor: pointer;
-      background: var(--color-white);
-      box-shadow: var(--lp-box-shadow-hover);
-      border-color: transparent;
-      .linkTitle {
-        color: var(--color-dark-purple);
+    &:not(.withoutHref) {
+      &:hover {
+        cursor: pointer;
+        background: var(--color-white);
+        box-shadow: var(--lp-box-shadow-hover);
+        border-color: transparent;
+        .linkTitle {
+          color: var(--color-dark-purple);
+        }
       }
     }
 
