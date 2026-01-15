@@ -20,12 +20,20 @@
     align-items: center;
     gap: 6px;
 
+    svg {
+      min-width: 20px;
+    }
+
     * {
       margin-bottom: unset;
-      font-size: var(--fs-text-xl);
+      font-size: var(--fs-text-lg);
     }
     a {
       text-decoration: underline;
+    }
+
+    @media (--md-scr) {
+      font-size: var(--fs-text-xl);
     }
   }
 }
@@ -245,19 +253,22 @@
   }
 
   &.xlFontSize {
-    font-size: var(--fs-text-xl);
-
-    b,
-    strong {
+    @media (--md-scr) {
       font-size: var(--fs-text-xl);
+      b,
+      strong {
+        font-size: var(--fs-text-xl);
+      }
     }
   }
 
   p,
   ul,
   ol {
-    &:not(:last-child) {
-      margin-bottom: var(--m-2);
+    margin-bottom: var(--m-2);
+
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 
