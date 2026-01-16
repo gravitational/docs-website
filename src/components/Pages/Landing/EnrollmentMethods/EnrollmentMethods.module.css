@@ -166,7 +166,7 @@
 
     &:hover {
       color: var(--color-dark-purple);
-
+      text-decoration: underline;
       span {
         &::after {
           opacity: 1;
@@ -222,6 +222,7 @@
   gap: var(--m-1);
   border-radius: var(--m-1);
   width: fit-content;
+  margin-bottom: var(--m-1);
 }
 
 .methodIcon {
@@ -276,6 +277,16 @@
     background-color: var(--color-tonal-neutral-0);
     height: 2px;
     margin: var(--m-2) 0;
+
+    & ~ p a {
+      text-decoration: none;
+      display: block;
+      font-size: var(--fs-text-lg);
+
+      &:not(:last-of-type) {
+        margin-bottom: var(--m-1);
+      }
+    }
   }
 
   a {
