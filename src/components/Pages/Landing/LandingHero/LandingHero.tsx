@@ -1,4 +1,5 @@
 import Link from "@docusaurus/Link";
+import cn from "classnames";
 import ExclusivityContext from "@site/src/components/ExclusivityBanner/context";
 import Icon from "@site/src/components/Icon";
 import { useContext } from "react";
@@ -8,12 +9,13 @@ import { trackEvent } from "@site/src/utils/analytics";
 interface GetStartedLink {
   title: string;
   description: string;
-  href: string;
+  href?: string;
   icon: any;
 }
 
 interface LandingHeroProps {
   title: string;
+  subTitle?: string;
   image?: any;
   youtubeVideoId?: string;
   linksTitle?: string;
@@ -25,6 +27,7 @@ interface LandingHeroProps {
 
 const LandingHero: React.FC<LandingHeroProps> = ({
   title,
+  subTitle,
   image,
   youtubeVideoId,
   linksTitle,
@@ -64,6 +67,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
           <div className={styles.main}>
             <div className={styles.content}>
               <h1 className={styles.title}>{title}</h1>
+              {subTitle && <p className={styles.subTitle}>{subTitle}</p>}
               <div className={styles.description}>{children}</div>
             </div>
             <div className={styles.media}>
@@ -102,15 +106,25 @@ const LandingHero: React.FC<LandingHeroProps> = ({
               } as React.CSSProperties
             }
           >
-            {links.map((link, i) => (
-              <Link to={link.href} key={i} className={styles.link}>
-                <div className={styles.linkContent}>
-                  <h3 className={styles.linkTitle}>{link.title}</h3>
-                  <p className={styles.linkDescription}>{link.description}</p>
-                  <link.icon className={styles.linkIcon} />
+            {links.map((link, i) =>
+              link.href ? (
+                <Link to={link.href} key={i} className={styles.link}>
+                  <div className={styles.linkContent}>
+                    <h3 className={styles.linkTitle}>{link.title}</h3>
+                    <p className={styles.linkDescription}>{link.description}</p>
+                    <link.icon className={styles.linkIcon} />
+                  </div>
+                </Link>
+              ) : (
+                <div key={i} className={cn(styles.link, styles.withoutHref)}>
+                  <div className={styles.linkContent}>
+                    <h3 className={styles.linkTitle}>{link.title}</h3>
+                    <p className={styles.linkDescription}>{link.description}</p>
+                    <link.icon className={styles.linkIcon} />
+                  </div>
                 </div>
-              </Link>
-            ))}
+              )
+            )}
           </div>
         )}
       </div>

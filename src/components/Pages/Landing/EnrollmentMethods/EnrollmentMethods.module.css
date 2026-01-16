@@ -9,12 +9,42 @@
 .container {
   max-width: var(--lp-section-max-width);
   margin: 0 auto;
+
+  .additionalNote {
+    margin-top: var(--m-3);
+    padding: var(--m-2) var(--m-4);
+    background-color: var(--color-background-depth-2);
+    color: var(--color-dark-purple);
+    border-radius: var(--m-1-5);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    svg {
+      min-width: 20px;
+    }
+
+    * {
+      margin-bottom: unset;
+      font-size: var(--fs-text-lg);
+    }
+    a {
+      text-decoration: underline;
+    }
+
+    @media (--md-scr) {
+      font-size: var(--fs-text-xl);
+    }
+  }
+}
+
+.header {
+  margin-bottom: var(--m-3);
 }
 
 .title {
-  margin-bottom: var(--m-3);
   font-size: 26px;
-
+  margin-bottom: 0;
   @media (--md-scr) {
     font-size: var(--lp-header-2);
   }
@@ -26,9 +56,19 @@
       font-size: var(--fs-header-3);
     }
   }
+
+  &.withDescription {
+    margin-bottom: var(--m-0-5);
+  }
+}
+
+.description {
+  font-size: var(--fs-text-xl);
+  color: var(--color-foreground-slightly-muted);
 }
 
 .methodsList {
+  --desktop-column-count: 2;
   padding: 0;
   margin: 0;
   display: grid;
@@ -36,7 +76,7 @@
   gap: var(--m-2);
 
   @media (--lg-scr) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--desktop-column-count), 1fr);
     gap: var(--m-3);
   }
 
@@ -126,7 +166,7 @@
 
     &:hover {
       color: var(--color-dark-purple);
-
+      text-decoration: underline;
       span {
         &::after {
           opacity: 1;
@@ -172,6 +212,19 @@
   margin-bottom: var(--m-2);
 }
 
+.progressStatus {
+  font-size: var(--fs-text-sm);
+  font-weight: var(--fw-bold);
+  line-height: 1.5;
+  padding: var(--m-0-5) var(--m-1-5);
+  display: flex;
+  align-items: center;
+  gap: var(--m-1);
+  border-radius: var(--m-1);
+  width: fit-content;
+  margin-bottom: var(--m-1);
+}
+
 .methodIcon {
   max-width: var(--m-6);
   max-height: var(--m-6);
@@ -200,11 +253,39 @@
     color: var(--color-black);
   }
 
+  &.xlFontSize {
+    @media (--md-scr) {
+      font-size: var(--fs-text-xl);
+      b,
+      strong {
+        font-size: var(--fs-text-xl);
+      }
+    }
+  }
+
   p,
   ul,
   ol {
-    &:not(:last-child) {
-      margin-bottom: var(--m-2);
+    margin-bottom: var(--m-2);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  hr {
+    background-color: var(--color-tonal-neutral-0);
+    height: 2px;
+    margin: var(--m-2) 0;
+
+    & ~ p a {
+      text-decoration: none;
+      display: block;
+      font-size: var(--fs-text-lg);
+
+      &:not(:last-of-type) {
+        margin-bottom: var(--m-1);
+      }
     }
   }
 
