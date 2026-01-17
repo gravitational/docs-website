@@ -6,7 +6,8 @@
     },
     {
       "name": "18.x",
-      "branch": "branch/v18",
+      "branch": "aatuvai/docs-top-nav",
+      "repo_path": "aatuvai/teleport",
       "isDefault": true
     },
     {
