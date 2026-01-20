@@ -6,7 +6,8 @@
     },
     {
       "name": "18.x",
-      "branch": "branch/v18",
+      "branch": "aatuvai/iac",
+      "repo_path": "aatuvai/teleport",
       "isDefault": true
     },
     {
