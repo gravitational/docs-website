@@ -33,6 +33,7 @@ interface ResourcesProps {
   desktopColumnsCount?: number;
   resources: Resource[];
   narrowBottomPadding?: boolean;
+  titleSize?: "h2" | "h3";
   descriptionsFontSize?: "lg" | "xl";
   iconsSize?: "small" | "large";
   additionalLinks?: AdditionalLinks;
@@ -155,8 +156,9 @@ const Resources: React.FC<ResourcesProps> = ({
   desktopColumnsCount = 4,
   resources,
   narrowBottomPadding = false,
+  titleSize,
   descriptionsFontSize = "lg",
-  iconsSize = "medium",
+  iconsSize = "large",
   additionalLinks,
 }) => {
   const Heading = variant === "doc" ? "h3" : "h2";
@@ -178,6 +180,7 @@ const Resources: React.FC<ResourcesProps> = ({
             <Heading
               className={cn(styles.resourcesTitle, {
                 [styles.docVariant]: variant === "doc",
+                [styles[titleSize]]: titleSize,
                 [styles.hasSecondaryTitle]: !!secondaryTitle,
               })}
             >

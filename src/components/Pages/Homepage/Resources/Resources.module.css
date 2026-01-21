@@ -112,7 +112,8 @@
     font-size: 1.5rem;
   }
 
-  &.docVariant {
+  &.docVariant,
+  &.h3 {
     font-size: var(--fs-header-4);
 
     @media (--md-scr) {
@@ -121,6 +122,13 @@
 
     @media (--lg-scr) {
       font-size: var(--fs-header-3);
+    }
+  }
+
+  &.h2 {
+    font-size: var(--fs-header-1);
+    @media (max-width: 576px) {
+      font-size: 1.5rem;
     }
   }
 
