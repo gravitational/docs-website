@@ -86,13 +86,14 @@
     display: flex;
     justify-content: flex-start;
     grid-column: span 5 / span 5;
-    max-width: 532px;
-    width: 100%;
+    width: max-content;
     margin: 0 auto;
     gap: var(--m-2);
   }
 
   @media (--lg-scr) {
+    width: 100%;
+    max-width: 532px;
     grid-column: span 6 / span 6;
   }
 }
@@ -153,6 +154,7 @@
       opacity: 1;
       padding: 11px 28px 11px 52px;
       font-size: var(--fs-text-lg);
+      height: 38px;
     }
 
     :global(svg) {
@@ -160,6 +162,8 @@
       left: 0;
       transform: translateX(var(--m-3));
       fill-opacity: 0.36;
+      width: 20px;
+      height: 20px;
     }
 
     &:hover {
@@ -173,6 +177,7 @@
 
     :global(input) {
       height: 46px;
+      min-width: 307px;
     }
   }
 }
