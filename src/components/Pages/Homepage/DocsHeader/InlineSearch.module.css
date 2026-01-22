@@ -114,8 +114,12 @@
     background-color: var(--color-tonal-neutral-1);
   }
 
-  @media (--nav) {
+  @media (--md-scr) {
     display: flex;
+  }
+
+  @media (--nav) {
+    padding: 0.75rem;
   }
 
   @media (--lg-scr) {
