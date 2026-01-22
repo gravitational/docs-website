@@ -1,0 +1,24 @@
+.tag {
+  & > li > div > a,
+  & > li > a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--m-1);
+
+    &::after {
+      content: var(--tag-content);
+      display: flex;
+      padding: var(--m-0-5) var(--m-1-5);
+      align-items: center;
+      gap: 8px;
+      line-height: 1.5;
+      font-size: var(--fs-text-sm);
+      color: var(--color-white);
+      border-radius: 37px;
+      background: linear-gradient(90deg, #03806e 0%, #00a28b 100%);
+      transform: none !important;
+    }
+  }
+}

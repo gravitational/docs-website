@@ -99,7 +99,7 @@
   &.hasTags {
     padding: var(--m-3);
   }
-  
+
   &.rowLayout {
     @media (--lg-scr) {
       display: grid;
@@ -164,7 +164,7 @@ a.item:hover {
   margin-top: var(--m-2);
   transition: all 0.3s ease-out;
 
-  @media (--md-scr) {
+  &.rowLayout {
     margin-top: 0;
   }
 }
