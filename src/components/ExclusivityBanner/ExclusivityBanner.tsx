@@ -4,10 +4,13 @@ import Button from "../Button";
 import Icon from "../Icon";
 import styles from "./ExclusivityBanner.module.css";
 import ExclusivityContext from "./context";
+import { trackEvent } from "@site/src/utils/analytics";
 
 const STORAGE_KEY = "exclusivity_banner_dismissed";
 
-const ExclusivityBanner: React.FC = () => {
+const ExclusivityBanner: React.FC<{
+  emitEvent?: (name: string, params: any) => {};
+}> = ({ emitEvent }) => {
   const { exclusiveFeature } = useContext(ExclusivityContext);
   const [dismissed, setDismissed] = useState<boolean>(() => {
     // Initialize from localStorage
@@ -38,7 +41,16 @@ const ExclusivityBanner: React.FC = () => {
               <Icon size="sm-md" name="rocketLaunch" />
               <p>
                 {exclusiveFeature} is available only with Teleport Enterprise.{" "}
-                <a href="https://goteleport.com/signup/">
+                <a
+                  href="https://goteleport.com/signup/"
+                  target="_blank"
+                  onClick={() =>
+                    trackEvent({
+                      event_name: "docs_enterprise_link",
+                      emitEvent,
+                    })
+                  }
+                >
                   Start your free trial.
                 </a>
               </p>

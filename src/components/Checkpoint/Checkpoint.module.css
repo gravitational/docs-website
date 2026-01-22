@@ -6,10 +6,6 @@
   border-radius: var(--m-1);
   border: 2px solid var(--color-tonal-neutral-0);
 
-  p {
-    margin: 0;
-  }
-
   .header {
     display: flex;
     align-items: center;
@@ -21,6 +17,7 @@
     font-weight: var(--fw-bold);
     line-height: 1.5;
     color: var(--color-black);
+    margin-bottom: 0;
   }
 
   .header,

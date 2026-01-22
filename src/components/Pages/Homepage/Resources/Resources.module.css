@@ -22,6 +22,64 @@
 
 .resourcesContainer {
   width: 100%;
+
+  .additionalLinks {
+    margin-top: var(--m-2);
+    padding: var(--m-2) var(--m-4);
+    background-color: var(--color-background-depth-2);
+    border-radius: var(--m-1-5);
+    display: flex;
+    flex-direction: column;
+
+    .additionalLinksTitle {
+      margin-right: var(--m-3);
+      margin-bottom: 0;
+      font-weight: var(--fw-bold);
+    }
+
+    .additionalLinksList {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0;
+      padding-left: 0;
+
+      & > li {
+        padding: 6px 0;
+        margin: 0;
+        &:last-child {
+          padding-bottom: 0;
+        }
+
+        & > a {
+          display: flex;
+          align-items: center;
+          color: var(--color-dark-purple);
+          font-weight: 500;
+
+          svg {
+            margin-right: 6px;
+          }
+        }
+      }
+    }
+
+    @media (--md-scr) {
+      flex-direction: row;
+      align-items: center;
+
+      .additionalLinksList {
+        flex-direction: row;
+        gap: var(--m-3);
+
+        & > li {
+          &:last-child {
+            padding-bottom: 6px;
+          }
+        }
+      }
+    }
+  }
 }
 
 .header {
@@ -87,7 +145,7 @@
     );
   }
 
-  @media (--md-scr) {
+  @media (--lg-scr) {
     grid-template-columns: repeat(
       min(3, var(--desktop-column-count)),
       minmax(0, 1fr)
@@ -117,19 +175,35 @@
 
 .resourceItem {
   padding: var(--m-3);
+  position: relative;
   border-radius: 12px;
   border: 1.5px solid var(--color-tonal-neutral-0);
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   display: flex;
   flex-direction: column;
+
+  svg {
+    color: initial;
+  }
+}
+
+.editionTag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: var(--m-0-5) var(--m-1-5);
+  color: var(--color-black);
+  background-color: var(--color-tonal-neutral-0);
+  font-size: var(--fs-text-sm);
+  border-radius: 0 12px 0 8px;
 }
 
 a.resourceItem {
   &:hover {
     background: var(--color-white);
     cursor: pointer;
-    box-shadow: var(--lp-box-shadow-hover);
+    box-shadow: var(--lp-box-shadow);
     text-decoration: none;
     .resourceTitle {
       color: var(--color-dark-purple);
