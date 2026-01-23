@@ -1,109 +1,95 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { clsx } from "clsx";
+import { useState, useCallback, useEffect } from "react";
+import { useWindowSize } from "@docusaurus/theme-common";
 
 import { BannerData, EventBanner } from "../EventBanner";
 
-import DocsLogo from "@site/static/logo.svg";
 import type { HeaderNavigation } from "../../../server/strapi-types";
-import HeadlessButton from "../HeadlessButton";
+import blockBodyScroll from "../../utils/block-body-scroll";
 import Icon from "../Icon";
+import Menu from "../Menu";
+import Button from "../Button";
+import HeadlessButton from "../HeadlessButton";
 
-import styles from "./Header.module.css";
 import HeaderCTA from "./HeaderCTA";
+import styles from "./Header.module.css";
 
-import Link from "@docusaurus/Link";
-import { useNavbarMobileSidebar } from "@docusaurus/theme-common/internal";
-import { translate } from "@docusaurus/Translate";
-import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
 import eventData from "../../../data/events.json";
 import data from "../../../data/navbar.json";
-import { InlineSearch } from "../Pages/Homepage/DocsHeader/InlineSearch";
 
 const Header = () => {
-  const { toggle, shown } = useNavbarMobileSidebar();
-  const headerRef = useRef<HTMLDivElement>(null);
   const [isNavigationVisible, setIsNavigationVisible] =
     useState<boolean>(false);
-  const toggleNavigation = useCallback(() => {
+  const toggleNavigaton = useCallback(() => {
     setIsNavigationVisible((value) => !value);
-    toggle();
+    blockBodyScroll(isNavigationVisible);
   }, [isNavigationVisible]);
-  const { setIsOpen } = useInkeepSearch({
-    enableAIChat: true,
-  });
-  const version = "17.x"; /* useDocsVersion(); */
+
+  const windowSize = useWindowSize();
 
   const { menuItems, rightSide } = data as unknown as HeaderNavigation;
   const mobileBtn = rightSide?.mobileButton;
-  const event = eventData ? (eventData as unknown as BannerData) : null;
+  const logo = data.logo;
+  const event = eventData ? eventData as unknown as BannerData : null;
 
   useEffect(() => {
-    const handleResize = () => {
-      if (event) {
+    if (event) {
+      if (windowSize === "desktop") {
+        // Dirty hack to fix the header height for the event banner
         document.documentElement.style.setProperty(
           "--ifm-navbar-height",
-          headerRef.current
-            ? `${headerRef.current.getBoundingClientRect().height + document.getElementById("docs-navigation")?.getBoundingClientRect().height}px`
-            : "147px"
+          "117px",
+        );
+      } else if (windowSize === "mobile") {
+        document.documentElement.style.setProperty(
+          "--ifm-navbar-height",
+          "96px",
         );
       }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    if (!shown) {
-      setIsNavigationVisible(false);
     }
-  }, [shown]);
+  }, [event, windowSize]);
 
   return (
-    <div className={styles.header} ref={headerRef}>
+    <div className={styles.header}>
       {event && <EventBanner initialEvent={event} />}
       <header className={`${styles.wrapper} ${event ? styles.margin : " "}`}>
-        <div className={styles.leftSection}>
-          <HeadlessButton
-            onClick={toggleNavigation}
-            className={styles.hamburger}
-            data-testid="hamburger"
-            aria-label={translate(
-              isNavigationVisible
-                ? {
-                    id: "theme.docs.sidebar.closeSidebarButtonAriaLabel",
-                    message: "Close navigation bar",
-                    description:
-                      "The ARIA label for close button of mobile sidebar",
-                  }
-                : {
-                    id: "theme.docs.sidebar.toggleSidebarButtonAriaLabel",
-                    message: "Toggle navigation bar",
-                    description:
-                      "The ARIA label for hamburger menu button of mobile navigation",
-                  }
-            )}
-          >
-            <Icon
-              name={isNavigationVisible ? "closeLarger" : "hamburger2"}
-              size="lg"
-            />
-          </HeadlessButton>
-          <Link
-            to="/" /* {getVersionedUrl(version, "/")} */
-            className={styles["logo-link"]}
-          >
-            <DocsLogo className={styles.logo} />
-          </Link>
-        </div>
-        <div className={styles.centerSection}>
-          <InlineSearch
-            className={styles.inlineSearch}
-            mobilePlaceholder="Search"
-            displayAskAiButton
+        <a href="/" className={styles["logo-link"]}>
+          <img
+            src={logo.url || ""}
+            alt="Teleport logo"
+            width={121}
+            height={24}
           />
-        </div>
-        <div className={styles.rightSection}>
+        </a>
+        {mobileBtn && (
+          <Button
+            as="link"
+            href={mobileBtn?.href || ""}
+            id={mobileBtn?.elementId || ""}
+            variant="secondary"
+            className={styles.mobileCTA}
+          >
+            {mobileBtn?.title}
+          </Button>
+        )}
+        <HeadlessButton
+          onClick={toggleNavigaton}
+          className={styles.hamburger}
+          data-testid="hamburger"
+          aria-details="Toggle Main navigation"
+        >
+          <Icon
+            name={isNavigationVisible ? "closeLarger" : "hamburger"}
+            size="lg"
+          />
+        </HeadlessButton>
+        <div
+          className={clsx(styles.content, {
+            [styles.visible]: isNavigationVisible,
+          })}
+          style={{ top: event ? "96px" : "48px" }}
+        >
+          <Menu navbarData={menuItems} />
           {rightSide && <HeaderCTA rightSide={rightSide} />}
         </div>
       </header>

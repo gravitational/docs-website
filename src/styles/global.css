@@ -27,99 +27,25 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--m-1-5) var(--m-2) 0 var(--m-2);
+  padding: var(--ifm-menu-link-padding-vertical)
+    var(--ifm-menu-link-padding-horizontal)
+    var(--ifm-menu-link-padding-vertical) 0;
 }
 
 .navbar-sidebar__versions {
   display: flex;
   align-items: center;
-  margin-left: auto;
-  padding: 0;
-
-  .dropdown__menu {
-    transform: translateX(-60%) !important;
-  }
+  padding: var(--ifm-menu-link-padding-vertical)
+    var(--ifm-menu-link-padding-horizontal);
 }
 
 .navbar-sidebar__search {
   padding: 0.5rem;
 }
 
-.navbar-sidebar .menu__list-item-collapsible {
-  background-color: transparent !important;
-}
-
-.navbar-sidebar .theme-doc-sidebar-item-category .menu__list {
-  padding-left: var(--m-3);
-
-  .menu__list-item {
-    margin: 0;
-    border-left: 1px solid var(--color-tonal-neutral-1);
-  }
-}
-
-.navbar-sidebar__search,
-.navbar-sidebar__item.menu {
-  padding: var(--m-1-5) var(--m-2);
-}
-
-.navbar-sidebar .menu__caret {
-  &::before {
-    content: "";
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M10.625 3.125C10.625 2.77982 10.3452 2.5 10 2.5C9.65482 2.5 9.375 2.77982 9.375 3.125V9.375H3.125C2.77982 9.375 2.5 9.65482 2.5 10C2.5 10.3452 2.77982 10.625 3.125 10.625H9.375V16.875C9.375 17.2202 9.65482 17.5 10 17.5C10.3452 17.5 10.625 17.2202 10.625 16.875V10.625H16.875C17.2202 10.625 17.5 10.3452 17.5 10C17.5 9.65482 17.2202 9.375 16.875 9.375H10.625V3.125Z' fill='black' fill-opacity='0.72'/%3E%3C/svg%3E");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    transform: none;
-  }
-  &[aria-expanded="true"] {
-    background-color: transparent;
-    &::before {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M2.5 10C2.5 9.65482 2.77982 9.375 3.125 9.375H16.875C17.2202 9.375 17.5 9.65482 17.5 10C17.5 10.3452 17.2202 10.625 16.875 10.625H3.125C2.77982 10.625 2.5 10.3452 2.5 10Z' fill='black' fill-opacity='0.72'/%3E%3C/svg%3E");
-    }
-  }
-}
-
-.navbar-sidebar .menu__link--sublist-caret {
-  padding-right: var(--ifm-menu-link-padding-horizontal) !important;
-  &::after {
-    content: "";
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M10.625 3.125C10.625 2.77982 10.3452 2.5 10 2.5C9.65482 2.5 9.375 2.77982 9.375 3.125V9.375H3.125C2.77982 9.375 2.5 9.65482 2.5 10C2.5 10.3452 2.77982 10.625 3.125 10.625H9.375V16.875C9.375 17.2202 9.65482 17.5 10 17.5C10.3452 17.5 10.625 17.2202 10.625 16.875V10.625H16.875C17.2202 10.625 17.5 10.3452 17.5 10C17.5 9.65482 17.2202 9.375 16.875 9.375H10.625V3.125Z' fill='black' fill-opacity='0.72'/%3E%3C/svg%3E");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    transform: none;
-  }
-
-  &[aria-expanded="true"] {
-    background-color: transparent;
-    &::after {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M2.5 10C2.5 9.65482 2.77982 9.375 3.125 9.375H16.875C17.2202 9.375 17.5 9.65482 17.5 10C17.5 10.3452 17.2202 10.625 16.875 10.625H3.125C2.77982 10.625 2.5 10.3452 2.5 10Z' fill='black' fill-opacity='0.72'/%3E%3C/svg%3E");
-    }
-  }
-}
-
-.navbar-sidebar .menu__link {
-  padding: 10px var(--m-2);
-  background-color: transparent;
-  color: var(--color-foreground-slightly-muted);
-  &[aria-current="page"] {
-    color: var(--color-dark-purple);
-    font-weight: var(--fw-bold);
-  }
-}
-
-.navbar__item {
-  display: block;
-
-  @media (--nav) {
-    display: inline-block;
+@media (max-width: 996px) {
+  .navbar__item {
+    display: block;
   }
 }
 

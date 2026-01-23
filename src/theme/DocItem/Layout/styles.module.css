@@ -8,7 +8,7 @@
   justify-content: space-between;
 }
 
-@media (--nav) {
+@media (min-width: 997px) {
   .docItemCol {
     max-width: 75% !important;
   }
@@ -25,11 +25,6 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  display: none;
-
-  @media (--md-scr) {
-    display: flex;
-  }
 }
 
 .tocWithFeedback {
