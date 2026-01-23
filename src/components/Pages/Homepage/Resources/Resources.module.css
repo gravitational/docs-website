@@ -309,6 +309,12 @@ a.resourceItem {
       line-height: 1.66667;
     }
   }
+
+  &.smallFontSize {
+    @media (--lg-scr) {
+      font-size: var(--fs-text-lg);
+    }
+  }
 }
 
 .tags {
