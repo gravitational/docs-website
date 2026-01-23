@@ -59,7 +59,6 @@ export { default as flag2 } from "./svg/flag2.svg";
 export { default as gSuite } from "./svg/g-suite.svg";
 export { default as gamepad } from "./svg/gamepad.svg";
 export { default as github } from "./svg/github.svg";
-export { default as hamburger2 } from "./svg/list-more-lines.svg";
 export { default as githubActions } from "./svg/githubActions.svg";
 export { default as gitlab } from "./svg/gitlab.svg";
 export { default as googleCloud } from "./svg/googleCloud.svg";

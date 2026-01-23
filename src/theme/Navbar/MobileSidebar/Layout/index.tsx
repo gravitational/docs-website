@@ -6,6 +6,7 @@ import { useNavbarMobileSidebar } from "@docusaurus/theme-common/internal";
 import { translate } from "@docusaurus/Translate";
 import IconClose from "@theme/Icon/Close";
 import Version from "@theme-original/NavbarItem/DocsVersionDropdownNavbarItem";
+import Search from "../../../../components/Search";
 
 export default function NavbarMobileSidebarLayout({
   primaryMenu,
@@ -19,6 +20,21 @@ export default function NavbarMobileSidebarLayout({
         <div className="navbar-sidebar__versions">
           Version: <Version dropdownItemsBefore={[]} dropdownItemsAfter={[]} />
         </div>
+        <button
+          type="button"
+          aria-label={translate({
+            id: "theme.docs.sidebar.closeSidebarButtonAriaLabel",
+            message: "Close navigation bar",
+            description: "The ARIA label for close button of mobile sidebar",
+          })}
+          className="clean-btn navbar-sidebar__close"
+          onClick={() => mobileSidebar.toggle()}
+        >
+          <IconClose color="var(--ifm-color-emphasis-600)" />
+        </button>
+      </div>
+      <div className="navbar-sidebar__search">
+        <Search />
       </div>
       <div
         className={clsx("navbar-sidebar__items", {

@@ -1,5 +1,3 @@
-import { PropVersionMetadata } from "@docusaurus/plugin-content-docs";
-
 /**
  * Handles command content to avoid newlines between dynamic
  * documentation variables while copying a command.
@@ -60,34 +58,4 @@ export const getFromSecretOrEnv = (name: string): string => {
     ? JSON.parse(process.env.secrets)
     : process.env;
   return configVars[name];
-};
-
-/**
- * This function generates a versioned URL for a given href and version metadata.
- * @param href - The original URL.
- * @param version - The version metadata.
- * @returns The versioned URL.
- */
-export const getVersionedUrl = (
-  version: PropVersionMetadata,
-  href?: string
-): string => {
-  const { isLast, label } = version;
-  const isProduction = typeof process !== "undefined" && process.env.AWS_APP_ID;
-  const basePath = isProduction ? "/docs" : "";
-
-  if (!href) return href;
-
-  // Ensure href starts with a forward slash
-  const normalizedHref = href.startsWith("/") ? href : `/${href}`;
-
-  if (isLast) {
-    return `${basePath}${normalizedHref}`;
-  }
-
-  // Extract version number from label (e.g. "9.x current" -> "9.x")
-  const versionNumber = label.split(" ")[0];
-
-  // Build versioned URL
-  return `${basePath}/ver/${versionNumber}${normalizedHref}`;
 };
