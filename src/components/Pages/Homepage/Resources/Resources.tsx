@@ -157,7 +157,7 @@ const Resources: React.FC<ResourcesProps> = ({
   resources,
   narrowBottomPadding = false,
   titleSize,
-  descriptionsFontSize = "lg",
+  descriptionsFontSize,
   iconsSize = "large",
   additionalLinks,
 }) => {
