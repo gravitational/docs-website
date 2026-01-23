@@ -14,6 +14,9 @@ interface Resource {
   variant?: "homepage" | "doc";
   tags?: Tag[];
   editionTag?: string;
+  links?: Array<{ title: string; href: string }>;
+  descriptionsFontSize?: "lg" | "xl";
+  iconsSize?: "small" | "large";
 }
 
 interface AdditionalLinks {
@@ -24,11 +27,15 @@ interface AdditionalLinks {
 interface ResourcesProps {
   className?: string;
   title?: string;
+  secondaryTitle?: string;
   description?: string;
   variant?: "homepage" | "doc";
   desktopColumnsCount?: number;
   resources: Resource[];
   narrowBottomPadding?: boolean;
+  titleSize?: "h2" | "h3";
+  descriptionsFontSize?: "lg" | "xl";
+  iconsSize?: "small" | "large";
   additionalLinks?: AdditionalLinks;
 }
 
@@ -40,6 +47,9 @@ const ResourceCard: React.FC<Resource> = ({
   variant,
   tags,
   editionTag,
+  links,
+  descriptionsFontSize,
+  iconsSize,
 }) => {
   const IconComponent = iconComponent;
   const cardContent = (
@@ -48,6 +58,7 @@ const ResourceCard: React.FC<Resource> = ({
       <IconComponent
         className={cn(styles.iconSvg, {
           [styles.docVariant]: variant === "doc",
+          [styles[iconsSize]]: iconsSize,
         })}
       />
       <h4
@@ -55,16 +66,32 @@ const ResourceCard: React.FC<Resource> = ({
           [styles.smallSize]: variant === "doc" && !description,
         })}
       >
-        {tags?.length > 0 ? <Link to={href}>{title}</Link> : title}
+        {tags?.length > 0 || links?.length > 0 ? (
+          <Link to={href}>{title}</Link>
+        ) : (
+          title
+        )}
       </h4>
       {description && (
-        <p
+        <div
           className={cn(styles.resourceDescription, {
             [styles.docVariant]: variant === "doc",
+            [styles.smallFontSize]: descriptionsFontSize === "lg",
           })}
-        >
-          {description}
-        </p>
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
+      )}
+      {links?.length > 0 && (
+        <ul className={styles.resourceLinks}>
+          {links.map((link, linkIndex) => (
+            <li key={linkIndex}>
+              <Link to={link.href} className={styles.resourceLink}>
+                <span />
+                {link.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
       )}
       {tags?.length > 0 && (
         <ul className={styles.tags}>
@@ -108,7 +135,9 @@ const ResourceCard: React.FC<Resource> = ({
       )}
     </>
   );
-  return href && (!tags || tags.length === 0) ? (
+  return href &&
+    (!tags || tags.length === 0) &&
+    (!links || links.length === 0) ? (
     // @ts-ignore
     <Link to={href} className={styles.resourceItem}>
       {cardContent}
@@ -121,11 +150,15 @@ const ResourceCard: React.FC<Resource> = ({
 const Resources: React.FC<ResourcesProps> = ({
   className = "",
   title = "Enroll resources",
+  secondaryTitle,
   description,
   variant = "homepage",
   desktopColumnsCount = 4,
   resources,
   narrowBottomPadding = false,
+  titleSize,
+  descriptionsFontSize,
+  iconsSize = "large",
   additionalLinks,
 }) => {
   const Heading = variant === "doc" ? "h3" : "h2";
@@ -147,10 +180,15 @@ const Resources: React.FC<ResourcesProps> = ({
             <Heading
               className={cn(styles.resourcesTitle, {
                 [styles.docVariant]: variant === "doc",
+                [styles[titleSize]]: titleSize,
+                [styles.hasSecondaryTitle]: !!secondaryTitle,
               })}
             >
               {title}
             </Heading>
+          )}
+          {secondaryTitle && (
+            <h3 className={styles.secondaryTitle}>{secondaryTitle}</h3>
           )}
           {description && <p className={styles.description}>{description}</p>}
         </div>
@@ -172,6 +210,9 @@ const Resources: React.FC<ResourcesProps> = ({
               iconComponent={resource.iconComponent}
               tags={resource.tags}
               editionTag={resource.editionTag}
+              links={resource.links}
+              descriptionsFontSize={descriptionsFontSize}
+              iconsSize={iconsSize}
             />
           ))}
         </div>
