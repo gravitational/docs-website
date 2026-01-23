@@ -35,7 +35,19 @@ import { getFromSecretOrEnv } from "./utils/general";
 const latestVersion = getLatestVersion();
 
 const sidebar = require(
-  `./versioned_sidebars/version-${latestVersion}-sidebars.json`
+  `./versioned_sidebars/version-${latestVersion}-sidebars.json`,
+);
+
+const sidebarItems = Object.entries(sidebar).map(
+  ([sidebarId, sidebarItems]) => {
+    return {
+      label: sidebarItems[0]?.label || sidebarId,
+      type: "docSidebar",
+      sidebarId: sidebarId,
+      href:
+        "/" + (sidebarItems[0].id || sidebarItems[0].link.id)?.split("/")[1],
+    };
+  },
 );
 
 const config: Config = {
@@ -78,37 +90,29 @@ const config: Config = {
       },
     },
     navbar: {
-      items: Object.entries(sidebar)
-        .map(([sidebarId, sidebarItems]) => {
-          return {
-            label: sidebarItems[0]?.label || sidebarId,
-            type: "docSidebar",
-            sidebarId: sidebarId,
-            href:
-              "/" +
-              (sidebarItems[0].id || sidebarItems[0].link.id)?.split("/")[1],
-          };
-        })
-        .concat([
-          {
-            label: "Help & Support",
-            type: "dropdown",
-            items: [
+      items:
+        sidebarItems.length > 1
+          ? sidebarItems.concat([
               {
-                label: "FAQ",
-                href: "/faq/",
+                label: "Help & Support",
+                type: "dropdown",
+                items: [
+                  {
+                    label: "FAQ",
+                    href: "/faq/",
+                  },
+                  {
+                    label: "Changelog",
+                    href: "/changelog/",
+                  },
+                  {
+                    label: "Upcoming Releases",
+                    href: "/upcoming-releases/",
+                  },
+                ],
               },
-              {
-                label: "Changelog",
-                href: "/changelog/",
-              },
-              {
-                label: "Upcoming Releases",
-                href: "/upcoming-releases/",
-              },
-            ],
-          },
-        ]),
+            ])
+          : [],
     },
     image: "/og-image.png",
     colorMode: {
@@ -271,7 +275,7 @@ const config: Config = {
 
           return orderSidebarItems(
             removeRedundantItems(items, item.dirName),
-            getDocPageByID
+            getDocPageByID,
           );
         },
         // Host docs on the root page, later it will be exposed on goteleport.com/docs
@@ -338,7 +342,7 @@ const config: Config = {
           const alias: string = path.resolve(
             __dirname,
             "./content",
-            currentVersion
+            currentVersion,
           );
 
           return {
