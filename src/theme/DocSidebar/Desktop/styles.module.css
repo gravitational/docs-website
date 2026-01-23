@@ -42,16 +42,21 @@
       margin-top: var(--m-0-5);
 
       &:not(:global(.menu__list-item--collapsed)) {
-        :global(.menu__link) {
-          &::after {
-            transform: rotate(180deg);
-          }
-          & ~ :global(.menu__caret) {
-            &::before {
+        & > :global(.menu__list-item-collapsible) {
+          & > :global(.menu__link) {
+            &::after {
               transform: rotate(180deg);
+            }
+            & ~ :global(.menu__caret) {
+              &::before {
+                transform: rotate(180deg);
+              }
             }
           }
         }
+      }
+      & > :global(.menu__list) {
+        padding-left: var(--m-2);
       }
     }
 
