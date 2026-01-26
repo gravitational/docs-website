@@ -34,9 +34,16 @@ import { getFromSecretOrEnv } from "./utils/general";
 
 const latestVersion = getLatestVersion();
 
-const sidebar = require(
-  `./versioned_sidebars/version-${latestVersion}-sidebars.json`,
-);
+let sidebar;
+
+// special case for doc-tests linter
+if (latestVersion === "current") {
+  sidebar = require("./sidebars.json");
+} else {
+  sidebar = require(
+    `./versioned_sidebars/version-${latestVersion}-sidebars.json`,
+  );
+}
 
 const sidebarItems = Object.entries(sidebar).map(
   ([sidebarId, sidebarItems]) => {
