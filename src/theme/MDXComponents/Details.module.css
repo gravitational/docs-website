@@ -3,7 +3,6 @@
   box-shadow: unset;
   border-radius: var(--m-1);
   padding: 0;
-  font-size: var(--fs-text-xl);
   margin-bottom: var(--m-2);
   border: none;
   border-left: 3px solid var(--interactive-accent-link-default);
