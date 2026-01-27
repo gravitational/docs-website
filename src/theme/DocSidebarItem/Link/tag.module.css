@@ -5,9 +5,11 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: var(--m-1);
+    flex-direction: row-reverse;
+    gap: 6px;
+    padding-right: 0;
 
-    &::after {
+    &::before {
       content: var(--tag-content);
       display: flex;
       padding: var(--m-0-5) var(--m-1-5);
