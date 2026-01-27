@@ -95,3 +95,27 @@ button {
     line-height: 1.66667;
   }
 }
+
+.tabs {
+  border-radius: 60px;
+  background: var(--color-tonal-neutral-0);
+  width: fit-content;
+  padding: var(--m-1);
+
+  .tabs__item {
+    padding: var(--m-1) var(--m-3);
+    border-radius: 36px;
+    font-size: var(--fs-text-md);
+    font-weight: var(--fw-regular);
+    line-height: 1.42857;
+    display: flex;
+    align-items: center;
+    border-bottom: unset;
+    transition: all 0.2s ease-in-out;
+
+    &.tabs__item--active {
+      background: var(--color-dark-purple);
+      color: var(--color-white);
+    }
+  }
+}
