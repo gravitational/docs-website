@@ -15,6 +15,8 @@ import {
   getCurrentVersion,
   getDocusaurusConfigVersionOptions,
   getLatestVersion,
+  getSidebarPath,
+  loadConfig as loadSiteConfig,
 } from "./server/config-site";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { getRedirects } from "./server/redirects";
@@ -34,16 +36,8 @@ import { getFromSecretOrEnv } from "./utils/general";
 
 const latestVersion = getLatestVersion();
 
-let sidebar;
-
-// special case for doc-tests linter
-if (latestVersion === "current") {
-  sidebar = require("./sidebars.json");
-} else {
-  sidebar = require(
-    `./versioned_sidebars/version-${latestVersion}-sidebars.json`,
-  );
-}
+const siteConfig = loadSiteConfig();
+const sidebar = require(getSidebarPath(siteConfig));
 
 const sidebarItems = Object.entries(sidebar).map(
   ([sidebarId, sidebarItems]) => {
