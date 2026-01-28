@@ -17,7 +17,8 @@ interface stepNumber {
   position: Position;
 }
 
-interface h2WithIndex {
+interface headingWithIndex {
+  level: number;
   node: Text;
   rootIndex: number; // Index of this child within the root node
 }
@@ -33,17 +34,16 @@ const messageSuffix = `Disable this warning by adding {/* lint ignore page-struc
 export const remarkLintPageStructure = lintRule(
   "remark-lint:page-structure",
   (root: Node, vfile) => {
-    const h2s: Array<h2WithIndex> = [];
+    const allHeadings: Array<headingWithIndex> = [];
     const paras: Array<paragraphWithIndex> = [];
 
     // Collect paragraphs and headings from first-level children of root.
     (root as Parent).children.forEach((node, idx) => {
       const hed = node as Heading;
-      if (hed.type == "heading" && hed.depth == 2) {
-        // A Heading as parsed by remark-mdx only has a single child, the
-        // heading text.
-        h2s.push({
+      if (hed.type == "heading") {
+        allHeadings.push({
           node: hed.children[0] as Text,
+          level: hed.depth,
           rootIndex: idx,
         });
       }
@@ -61,9 +61,10 @@ export const remarkLintPageStructure = lintRule(
       if (jsx.type === "mdxJsxFlowElement" && jsx.children) {
         (jsx as Parent).children.forEach((child, childIdx) => {
           const hed = child as Heading;
-          if (hed.type == "heading" && hed.depth == 2) {
-            h2s.push({
+          if (hed.type == "heading") {
+            allHeadings.push({
               node: hed.children[0] as Text,
+              level: hed.depth,
               rootIndex: idx + (childIdx + 1) / 1000, // Make sure the index is between idx and idx+1
             });
           }
@@ -79,33 +80,40 @@ export const remarkLintPageStructure = lintRule(
       }
     });
 
+    const firstH2 = allHeadings.findIndex((h) => h.level == 2);
+
     // See if there is a paragraph that comes before the first H2 in root's
     // children. We compare indices instead of line numbers because
     // remark-includes preserves the line numbers of any partials it includes.
     if (
-      h2s.length > 0 &&
+      firstH2 !== -1 &&
       !paras.some((para) => {
-        return para.rootIndex < h2s[0].rootIndex;
+        return para.rootIndex < allHeadings[firstH2].rootIndex;
       })
     ) {
       vfile.message(
         "This guide is missing at least one introductory paragraph before the first H2. Use introductory paragraphs to explain the purpose and scope of this guide. " +
           messageSuffix,
-        h2s[0].node.position,
+        allHeadings[firstH2].node.position,
       );
     }
 
-    const hasStep = h2s.some((h) => h.node.value.match(/^Step [0-9]/) !== null);
-    if (hasStep && h2s[0].node.value !== "How it works") {
+    const hasStep = allHeadings.some((h) => {
+      return h.level == 2 && h.node.value.match(/^Step [0-9]/) !== null;
+    });
+    if (hasStep && allHeadings[firstH2].node.value !== "How it works") {
       vfile.message(
         "In a how-to guide, the first H2-level section must be called `## How it works`. Use this section to include 1-3 paragraphs that describe the high-level architecture of the setup shown in the guide. " +
           messageSuffix,
-        h2s[0].node.position,
+        allHeadings[firstH2].node.position,
       );
     }
 
     const stepNumbers: Array<stepNumber> = [];
-    h2s.forEach((heading) => {
+    allHeadings.forEach((heading) => {
+      if (heading.level !== 2) {
+        return;
+      }
       const parts = heading.node.value.match(stepNumberPattern);
       if (parts !== null) {
         stepNumbers.push({
