@@ -148,8 +148,7 @@ export const getDocusaurusVersions = (): string[] => {
   return versions.filter((version) => version !== currentVersion);
 };
 
-/* Returns the sidebar path based on the number of supported versions */
-
+/* getSidebarPath returns the sidebar path based on the number of supported versions */
 export const getSidebarPath = (config: Config): string => {
   const supportedVersions = config.versions.filter(
     ({ deprecated }) => !deprecated,
