@@ -98,6 +98,21 @@ export const remarkLintPageStructure = lintRule(
       );
     }
 
+    const indexToHeading = new Map();
+    allHeadings.forEach((h) => {
+      indexToHeading.set(h.rootIndex, true);
+    });
+
+    allHeadings.forEach((h) => {
+      if (indexToHeading.has(h.rootIndex + 1)) {
+        vfile.message(
+          `This guide is missing content to introduce the section "${h.node.value}". Explain the section with an introduction or consider removing this heading and reducing the levels of the subheadings. ` +
+            messageSuffix,
+          h.node.position,
+        );
+      }
+    });
+
     const hasStep = allHeadings.some((h) => {
       return h.level == 2 && h.node.value.match(/^Step [0-9]/) !== null;
     });

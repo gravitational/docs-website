@@ -420,7 +420,7 @@ This is an intro.
 Here's some text.
 `,
         expected: [
-          `This guide is missing a paragraph to introduce the section "Subsection". Explain the section with an introduction or consider removing this heading and promoting its content. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
+          `This guide is missing content to introduce the section "Subsection". Explain the section with an introduction or consider removing this heading and reducing the levels of the subheadings. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
         ],
       },
       {
@@ -464,8 +464,8 @@ Here's some text.
 Here's more text.
 `,
         expected: [
-          `This guide is missing a paragraph to introduce the section "Subsection". Explain the section with an introduction or consider removing this heading and promoting its content. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
-          `This guide is missing a paragraph to introduce the section "An H4 Section". Explain the section with an introduction or consider removing this heading and promoting its content. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`
+          `This guide is missing content to introduce the section "Section". Explain the section with an introduction or consider removing this heading and reducing the levels of the subheadings. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
+          `This guide is missing content to introduce the section "Another subsection". Explain the section with an introduction or consider removing this heading and reducing the levels of the subheadings. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`
         ],
       },
     ];
@@ -508,7 +508,7 @@ Some text.
 
 `,
         expected: [
-          `This guide is missing a paragraph to introduce the section "Section". Explain the section with an introduction or consider removing this heading and promoting its content. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
+          `This guide is missing content to introduce the section "Section". Explain the section with an introduction or consider removing this heading and reducing the levels of the subheadings. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
         ],
       },
     ];
