@@ -1,21 +1,13 @@
 .wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-  flex-shrink: 0;
-  margin-top: 24px;
-  margin-left: 32px;
-  margin-right: 32px;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  padding-left: 24px;
-  padding-right: 40px;
-  @media (--nav) {
-    flex-direction: row;
+  display: none;
+  @media (--md-scr) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    max-width: 100%;
+    box-sizing: border-box;
     margin-top: 0;
-    margin-left: auto;
     width: auto;
     padding-left: 0;
     padding-right: 0;
@@ -24,37 +16,39 @@
 
 .ctaWrapper {
   display: flex;
-  width: 100%;
   gap: 16px;
 }
 .cta {
-  flex-shrink: 0;
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: 600;
-  height: 48px !important;
-  width: 50%;
-  border-radius: 6px;
-  box-shadow:
-    0px 3px 1px -2px rgba(81, 47, 201, 0.2),
-    0px 2px 2px 0px rgba(81, 47, 201, 0.14),
-    0px 1px 5px 0px rgba(81, 47, 201, 0.12);
+  display: block;
+  font-size: var(--fs-text-md);
+  line-height: 1.5;
+  font-weight: var(--fw-regular);
+  width: auto;
+  height: auto !important;
+  border-radius: var(--m-0-5);
+  padding: var(--m-1) var(--m-2) !important;
+  text-decoration: none !important;
+
+  &:hover {
+    background-color: #4126a1 !important; /* TODO: replace with var(--color-interactive-primary-hover) after changes are merged */
+    border-color: #4126a1 !important;
+    color: var(--color-white) !important;
+  }
+
   @media (--nav) {
-    width: 150px;
+    padding: var(--m-1-5) var(--m-4) !important;
   }
 }
 .actionButtonFlex {
-  display: flex;
+  display: none;
   flex-direction: row;
   width: 100%;
   gap: 16px;
   padding: 16px;
   margin-top: 16px;
   border-top: 1px solid #f0f2f4;
-  @media (--nav) {
-    display: none;
-  }
 }
+
 .styledLink {
   white-space: nowrap;
   display: flex;

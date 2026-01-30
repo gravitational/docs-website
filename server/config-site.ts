@@ -147,3 +147,23 @@ export const getDocusaurusVersions = (): string[] => {
 
   return versions.filter((version) => version !== currentVersion);
 };
+
+/* getSidebarPath returns the sidebar path based on the number of supported versions */
+export const getSidebarPath = (config: Config): string => {
+  const supportedVersions = config.versions.filter(
+    ({ deprecated }) => !deprecated,
+  );
+
+  // If there's only one supported version, use the current sidebar
+  if (supportedVersions.length === 1) {
+    return "./sidebars.json";
+  }
+
+  // Otherwise, use the versioned sidebar for the latest version
+  const latestVersion = (
+    supportedVersions.find(({ isDefault }) => isDefault === true) ||
+    supportedVersions[supportedVersions.length - 1]
+  ).name;
+
+  return `./versioned_sidebars/version-${latestVersion}-sidebars.json`;
+};
