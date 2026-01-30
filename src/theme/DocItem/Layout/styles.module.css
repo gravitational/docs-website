@@ -97,3 +97,7 @@
     padding: var(--m-4) var(--m-5);
   }
 }
+
+.annotations {
+  position: relative;
+}
