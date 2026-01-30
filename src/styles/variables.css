@@ -122,17 +122,11 @@
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-font-family-base: var(--font-base);
 
-  --ifm-navbar-height: 96px;
-
-  --ifm-navbar-sidebar-width: 100vw;
-
-  --docs-top-nav-height: 38px;
+  --ifm-navbar-height: 80px;
 
   --ifm-navbar-padding-vertical: 0;
   --ifm-navbar-padding-horizontal: 0;
   --ifm-navbar-shadow: none;
-
-  --ifm-menu-link-sublist-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0.529259 0.646447C0.724521 0.451184 1.0411 0.451184 1.23637 0.646447L5.88281 5.29289L10.5293 0.646447C10.7245 0.451184 11.0411 0.451184 11.2364 0.646447C11.4316 0.841709 11.4316 1.15829 11.2364 1.35355L6.23637 6.35355C6.0411 6.54882 5.72452 6.54882 5.52926 6.35355L0.529259 1.35355C0.333997 1.15829 0.333997 0.841709 0.529259 0.646447Z' fill='black' fill-opacity='0.72'/%3E%3C/svg%3E");
 
   /* landing page font sizes */
   --lp-header-1: 40px;
@@ -156,8 +150,8 @@
     0 1px 14px 0 rgba(0, 0, 0, 0.12);
 }
 
-@media (--nav) {
+@media (max-width: 996px) {
   :root {
-    --ifm-navbar-height: 147px;
+    --ifm-navbar-height: 48px;
   }
 }

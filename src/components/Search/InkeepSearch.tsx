@@ -1,6 +1,6 @@
 import React from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
-import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
+import { useInkeepSearch } from '@site/src/hooks/useInkeepSearch';
 import styles from "./InkeepSearch.module.css";
 import InkeepSearchIconSvg from "./inkeepIcon.svg";
 
@@ -10,7 +10,7 @@ export function InkeepSearch() {
     setMessage,
     isOpen,
     setIsOpen,
-    Modal,
+    ModalSearchAndChat,
     inkeepModalProps,
     handleChange,
   } = useInkeepSearch({
@@ -33,7 +33,9 @@ export function InkeepSearch() {
       </div>
       <BrowserOnly fallback={<div />}>
         {() => {
-          return Modal && <Modal {...inkeepModalProps} />;
+          return (
+            ModalSearchAndChat && <ModalSearchAndChat {...inkeepModalProps} />
+          );
         }}
       </BrowserOnly>
     </div>
