@@ -1,0 +1,70 @@
+.annotationMarker {
+  background-color: var(--color-interactive-tonal-alert-0);
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--color-interactive-tonal-alert-2);
+    cursor: pointer;
+
+    li {
+      background-color: var(--color-interactive-tonal-alert-2);
+    }
+  }
+
+  p {
+    display: inline;
+  }
+
+  li {
+    background-color: var(--color-interactive-tonal-alert-0);
+    width: fit-content;
+    transition: background-color 0.2s ease-in-out;
+  }
+}
+
+.annotationMarkerHovered {
+  background-color: var(--color-interactive-tonal-alert-2);
+  cursor: pointer;
+}
+
+.annotationText {
+  position: absolute;
+  padding: var(--m-1) var(--m-2);
+  background-color: var(--color-interactive-tonal-alert-0);
+  border-left: 3px solid var(--color-interactive-tonal-alert-2);
+  background-color: var(--color-background-depth-2);
+  color: var(--color-foreground-slightly-muted);
+  border-radius: var(--m-1);
+  box-shadow: var(--lp-box-shadow);
+  max-width: 300px;
+  line-height: 1.5;
+  transition:
+    box-shadow 0.2s ease-in-out,
+    background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--color-interactive-tonal-alert-1);
+    box-shadow: var(--lp-box-shadow-hover);
+    color: black;
+    cursor: pointer;
+  }
+}
+
+.annotationTextMobile {
+  position: fixed;
+  top: 100%;
+  left: var(--m-2);
+  border-radius: var(--m-0-5);
+  z-index: 1000;
+  max-width: calc(100vw - var(--m-4));
+  color: var(--color-foreground-slightly-muted);
+  border: none;
+  width: 100vw;
+  padding: var(--m-2);
+  background-color: var(--color-background-depth-2);
+}
+
+.annotationTextHovered {
+  box-shadow: var(--lp-box-shadow-hover);
+  background-color: var(--color-interactive-tonal-alert-2);
+}

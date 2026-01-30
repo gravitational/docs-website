@@ -93,7 +93,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
           className={clsx(
             "col",
             !docTOC.hidden && !docTOC.removed && styles.docItemCol,
-            fullWidth && styles.largeColumnPadding
+            fullWidth && styles.largeColumnPadding,
           )}
         >
           {unlisted && <Unlisted />}
@@ -114,7 +114,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
             <DocItemPaginator />
           </div>
         </div>
-        {!docTOC.removed && (
+        {!docTOC.removed ? (
           <div className="col col--3">
             <div className={styles.stickySidebar}>
               <div className={styles.tocWithFeedback}>
@@ -122,6 +122,11 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
               </div>
             </div>
           </div>
+        ) : (
+          <div
+            id="annotations"
+            className={clsx(styles.annotations, "col", "col--3")}
+          />
         )}
       </div>
     </ExclusivityContext.Provider>
