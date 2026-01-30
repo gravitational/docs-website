@@ -60,7 +60,7 @@
   color: var(--color-foreground-slightly-muted);
   border: none;
   width: 100vw;
-  padding: var(--m-2);
+  padding: var(--m-1-5);
   background-color: var(--color-background-depth-2);
 }
 
