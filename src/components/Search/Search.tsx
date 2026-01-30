@@ -1,15 +1,12 @@
 import React from "react";
 
 import styles from "./Search.module.css";
-import { InlineSearch } from "@site/src/components/Pages/Homepage/DocsHeader/InlineSearch";
+import { InkeepSearch } from "./InkeepSearch";
 
 export default function Search() {
   return (
-    <div className={styles.searchBar}>
-      <InlineSearch
-        className={styles.inlineSearch}
-        mobilePlaceholder="Search"
-      />
+    <div className={styles["wrapper-autocomplete"]}>
+      <InkeepSearch />
     </div>
   );
 }

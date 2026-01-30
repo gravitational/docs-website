@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback, useEffect } from "react";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { useState, useRef, useCallback, useEffect } from 'react';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import type {
   InkeepAIChatSettings,
   InkeepSearchSettings,
@@ -19,17 +19,17 @@ interface UseInkeepSearchOptions {
 }
 
 export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
-  const {
-    version,
-    enableKeyboardShortcut = false,
-    keyboardShortcut = "k",
+  const { 
+    version, 
+    enableKeyboardShortcut = false, 
+    keyboardShortcut = 'k',
     enableAIChat = false,
     autoOpenOnInput = false,
   } = options;
-
-  const [message, setMessage] = useState("");
+  
+  const [message, setMessage] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const [Modal, setModal] = useState(null);
+  const [ModalSearchAndChat, setModalSearchAndChat] = useState(null);
 
   const { siteConfig } = useDocusaurusContext();
 
@@ -40,8 +40,8 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
   // Load the modal component dynamically
   useEffect(() => {
     (async () => {
-      const { InkeepModalSearchAndChat } = await import("@inkeep/cxkit-react");
-      setModal(() => InkeepModalSearchAndChat);
+      const { InkeepModalSearchAndChat } = await import('@inkeep/cxkit-react');
+      setModalSearchAndChat(() => InkeepModalSearchAndChat);
     })();
   }, []);
 
@@ -56,16 +56,16 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [enableKeyboardShortcut, keyboardShortcut]);
 
   const inkeepBaseSettings: InkeepBaseSettings = {
-    apiKey: inkeepConfig.apiKey || "",
-    organizationDisplayName: "Teleport",
-    primaryBrandColor: "#512FC9",
-    aiApiBaseUrl: "https://goteleport.com/inkeep-proxy",
-    analyticsApiBaseUrl: "https://goteleport.com/inkeep-proxy/analytics",
+    apiKey: inkeepConfig.apiKey || '',
+    organizationDisplayName: 'Teleport',
+    primaryBrandColor: '#512FC9',
+    aiApiBaseUrl: 'https://goteleport.com/inkeep-proxy',
+    analyticsApiBaseUrl: 'https://goteleport.com/inkeep-proxy/analytics',
     privacyPreferences: {
       optOutAllAnalytics: false,
     },
@@ -92,22 +92,22 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
       };
     },
     colorMode: {
-      forcedColorMode: "light",
+      forcedColorMode: 'light',
     },
     theme: {
       zIndex: {
-        overlay: "2100",
-        modal: "2200",
-        popover: "2300",
-        skipLink: "2400",
-        toast: "2500",
-        tooltip: "2600",
+        overlay: '2100',
+        modal: '2200',
+        popover: '2300',
+        skipLink: '2400',
+        toast: '2500',
+        tooltip: '2600',
       },
     },
   };
 
   const inkeepSearchSettings: InkeepSearchSettings = {
-    placeholder: "Search Docs",
+    placeholder: 'Search Docs',
     tabs: [
       ['Docs', { isAlwaysVisible: true }],
       ['GitHub', { isAlwaysVisible: true }],
@@ -115,13 +115,13 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
       ['More', { isAlwaysVisible: false }],
     ],
     shouldOpenLinksInNewTab: true,
-    view: "dual-pane",
+    view: 'dual-pane',
   };
 
   const inkeepAIChatSettings: InkeepAIChatSettings | undefined = enableAIChat
     ? {
-        aiAssistantName: "Teleport",
-        aiAssistantAvatar: "https://goteleport.com/static/pam-standing.svg",
+        aiAssistantName: 'Teleport',
+        aiAssistantAvatar: 'https://goteleport.com/static/pam-standing.svg',
       }
     : undefined;
 
@@ -164,33 +164,21 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     },
     searchSettings: dynamicSearchSettings,
     modalSettings: modalSettings,
-    ...(enableAIChat &&
-      inkeepAIChatSettings && {
-        aiChatSettings: {
-          ...inkeepAIChatSettings,
-          chatFunctionsRef: chatCallableFunctionsRef,
-          onInputMessageChange: handleChange,
-        },
-      }),
-  };
-
-  const handleSetIsOpen = async (open: boolean, chatOnly?: boolean) => {
-    if (chatOnly) {
-      const { InkeepModalChat } = await import("@inkeep/cxkit-react");
-      setModal(() => InkeepModalChat);
-    } else {
-      const { InkeepModalSearchAndChat } = await import("@inkeep/cxkit-react");
-      setModal(() => InkeepModalSearchAndChat);
-    }
-    setIsOpen(open);
+    ...(enableAIChat && inkeepAIChatSettings && {
+      aiChatSettings: {
+        ...inkeepAIChatSettings,
+        chatFunctionsRef: chatCallableFunctionsRef,
+        onInputMessageChange: handleChange,
+      },
+    }),
   };
 
   return {
     message,
     setMessage,
     isOpen,
-    setIsOpen: handleSetIsOpen,
-    Modal,
+    setIsOpen,
+    ModalSearchAndChat,
     inkeepModalProps,
     handleChange,
   };

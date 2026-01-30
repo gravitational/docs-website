@@ -6,6 +6,7 @@ import CollapseButton from "@theme/DocSidebar/Desktop/CollapseButton";
 import Content from "@theme/DocSidebar/Desktop/Content";
 import type { Props } from "@theme/DocSidebar/Desktop";
 
+import Search from "../../../components/Search";
 import Version from "@theme-original/NavbarItem/DocsVersionDropdownNavbarItem";
 
 import styles from "./styles.module.css";
@@ -23,13 +24,14 @@ function DocSidebarDesktop({ path, sidebar, onCollapse, isHidden }: Props) {
       className={clsx(
         styles.sidebar,
         hideOnScroll && styles.sidebarWithHideableNavbar,
-        isHidden && styles.sidebarHidden
+        isHidden && styles.sidebarHidden,
       )}
     >
       <div className={styles.controlsWrapper}>
         <div className={styles.versions}>
           Version: <Version dropdownItemsBefore={[]} dropdownItemsAfter={[]} />
         </div>
+        <Search />
       </div>
 
       {hideOnScroll && <Logo tabIndex={-1} className={styles.sidebarLogo} />}
