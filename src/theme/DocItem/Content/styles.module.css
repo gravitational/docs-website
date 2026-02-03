@@ -5,7 +5,6 @@
 .rfdBadge {
   display: inline-block;
   vertical-align: middle;
-  background-color: var(--color-interactive-tonal-primary-0);
   color: var(--color-dark-purple);
   font-weight: var(--fw-bold);
   line-height: 1.375;
