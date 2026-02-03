@@ -119,6 +119,7 @@ export { default as youtube } from "./svg/youtube.svg";
 export { default as rocketLaunch } from "./svg/rocket-launch.svg";
 export { default as chat } from "./svg/chat-circle.svg";
 export { default as lightbulb } from "./svg/lightbulb.svg";
+export { default as info } from "./svg/info.svg";
 
 // Teleport svgs
 export { default as agent } from "./teleport-svg/agent.svg";

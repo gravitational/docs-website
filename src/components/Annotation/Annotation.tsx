@@ -12,10 +12,11 @@ import cn from "classnames";
 import { set } from "date-fns";
 
 // Annotations are meant for RFD documents only
-const Annotation: React.FC<{ text: string; children: React.ReactNode }> = ({
-  text,
-  children,
-}) => {
+const Annotation: React.FC<{
+  title?: string;
+  text: string;
+  children: React.ReactNode;
+}> = ({ title, text, children }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [annotationContainer, setAnnotationContainer] =
@@ -28,12 +29,12 @@ const Annotation: React.FC<{ text: string; children: React.ReactNode }> = ({
   const windowSize = useWindowSize();
   const isMobile = windowSize === "mobile";
 
+  const isHighlighted = isHovered || isActive;
+
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsActive((prev) => !prev);
   };
-
-  const isHighlighted = isHovered || isActive;
 
   useEffect(() => {
     setAnnotationContainer(document.getElementById("annotations"));
@@ -66,11 +67,13 @@ const Annotation: React.FC<{ text: string; children: React.ReactNode }> = ({
 
       const markRect = markRef.current.getBoundingClientRect();
       const textRect = textRef.current?.getBoundingClientRect();
-      let offset = markRect.top - textRect.height - 8; // 8px gap above the marker
+      let offset =
+        markRef.current.offsetTop - annotationContainer.offsetTop - 8;
+      if (isMobile) offset = markRect.top - textRect.height - 8;
       const headerHeight = parseInt(
         document.documentElement.style.getPropertyValue("--ifm-navbar-height"),
       );
-      // Adjust offset if it would go off-screen
+      // Adjust offset if it would go off-screen on mobile
       if (isMobile && offset + textRect.height > window.innerHeight) {
         offset = window.innerHeight - textRect.height - 16;
       }
@@ -84,10 +87,14 @@ const Annotation: React.FC<{ text: string; children: React.ReactNode }> = ({
 
     handleSetInitialVerticalOffset();
 
+    window.addEventListener("resize", handleSetInitialVerticalOffset);
+
     if (isMobile)
       window.addEventListener("scroll", handleSetInitialVerticalOffset);
-    return () =>
+    return () => {
+      window.removeEventListener("resize", handleSetInitialVerticalOffset);
       window.removeEventListener("scroll", handleSetInitialVerticalOffset);
+    };
   }, [annotationContainer, isMobile]);
 
   // Listen for position changes in other annotations
@@ -130,9 +137,8 @@ const Annotation: React.FC<{ text: string; children: React.ReactNode }> = ({
 
   const verticalOffsetValue = useMemo(() => {
     if (!markRef.current || !annotationContainer) return;
-    const markRect = markRef.current.getBoundingClientRect();
-    const containerRect = annotationContainer.getBoundingClientRect();
-    let desiredOffset = markRect.top - containerRect.top;
+    let desiredOffset =
+      markRef.current.offsetTop - annotationContainer.offsetTop - 58; // 58px to account for annotation text height
 
     // Only check for overlaps if textRef is available (after initial render)
     if (textRef.current) {
@@ -141,11 +147,14 @@ const Annotation: React.FC<{ text: string; children: React.ReactNode }> = ({
         .previousElementSibling as HTMLDivElement;
 
       if (precedingAnnotation) {
-        const precedingRect = precedingAnnotation.getBoundingClientRect();
-        const precedingBottom = precedingRect.bottom - containerRect.top;
+        const precedingBottom =
+          precedingAnnotation.offsetTop + precedingAnnotation.offsetHeight;
 
         // If our position would overlap, move below the preceding annotation
-        if (precedingBottom >= desiredOffset) {
+        if (
+          desiredOffset - precedingBottom < 400 ||
+          precedingBottom >= desiredOffset
+        ) {
           desiredOffset = precedingBottom + 8;
         }
       }
@@ -158,11 +167,10 @@ const Annotation: React.FC<{ text: string; children: React.ReactNode }> = ({
     <>
       <mark
         ref={markRef}
-        className={cn(
-          styles.annotationMarker,
-          isHighlighted && styles.annotationMarkerHovered,
-          isMobile && styles.annotationMarkerMobile,
-        )}
+        className={cn(styles.annotationMarker, {
+          [styles.annotationMarkerHovered]: isHighlighted,
+          [styles.annotationMarkerMobile]: isMobile,
+        })}
         onMouseEnter={() => !isMobile && setIsHovered(true)}
         onMouseLeave={() => !isMobile && setIsHovered(false)}
         onClick={handleClick}
@@ -173,6 +181,7 @@ const Annotation: React.FC<{ text: string; children: React.ReactNode }> = ({
             ref={textRef}
             style={{
               top: `${initialVerticalOffset}px`,
+              opacity: isActive ? 1 : 0,
               visibility: isActive ? "visible" : "hidden",
             }}
             className={cn(styles.annotationText, styles.annotationTextMobile)}
@@ -182,6 +191,7 @@ const Annotation: React.FC<{ text: string; children: React.ReactNode }> = ({
               setIsActive(false);
             }}
           >
+            {title && <div className={styles.annotationTitle}>{title}</div>}
             {text}
           </div>
         )}
@@ -191,15 +201,15 @@ const Annotation: React.FC<{ text: string; children: React.ReactNode }> = ({
         createPortal(
           <div
             ref={textRef}
-            className={cn(
-              styles.annotationText,
-              isHighlighted && styles.annotationTextHovered,
-            )}
+            className={cn(styles.annotationText, {
+              [styles.annotationTextHovered]: isHighlighted,
+            })}
             style={{ top: `${verticalOffsetValue}px` }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={handleClick}
           >
+            {title && <div className={styles.annotationTitle}>{title}</div>}
             {text}
           </div>,
           annotationContainer,
