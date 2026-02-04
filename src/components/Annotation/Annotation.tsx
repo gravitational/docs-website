@@ -1,5 +1,6 @@
 import React, {
   useEffect,
+  useId,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -9,7 +10,6 @@ import { createPortal } from "react-dom";
 import styles from "./Annotation.module.css";
 import { useWindowSize } from "@docusaurus/theme-common";
 import cn from "classnames";
-import { set } from "date-fns";
 
 // Annotations are meant for RFD documents only
 const Annotation: React.FC<{
@@ -17,23 +17,34 @@ const Annotation: React.FC<{
   text: string;
   children: React.ReactNode;
 }> = ({ title, text, children }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isActive, setIsActive] = useState(false);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
   const [annotationContainer, setAnnotationContainer] =
     useState<HTMLElement | null>(null);
-  const [initialVerticalOffset, setInitialVerticalOffset] = useState(null);
-  const [updateTrigger, setUpdateTrigger] = useState(0);
+  const [initialVerticalOffset, setInitialVerticalOffset] = useState<
+    number | null
+  >(null);
+  const [updateTrigger, setUpdateTrigger] = useState<number>(0);
   const markRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const isUpdatingRef = useRef(false);
   const windowSize = useWindowSize();
   const isMobile = windowSize === "mobile";
+  const annotationId = useId();
+
+  const annotationGap = 8; // Gap between annotation marker and text
 
   const isHighlighted = isHovered || isActive;
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsActive((prev) => !prev);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setIsActive((prev) => !prev);
+    }
   };
 
   useEffect(() => {
@@ -43,10 +54,10 @@ const Annotation: React.FC<{
   useEffect(() => {
     if (!isActive) return;
 
+    // Close annotation if the user clicks outside of it
     const handleDocumentClick = (event: MouseEvent) => {
       const target = event.target as Node;
 
-      // Check if click is outside both marker and text
       if (
         markRef.current &&
         !markRef.current.contains(target) &&
@@ -61,6 +72,8 @@ const Annotation: React.FC<{
     return () => document.removeEventListener("click", handleDocumentClick);
   }, [isActive]);
 
+  // Set initial vertical offset of annotations
+  // Also adjust the position of annotations dynamically on mobile screens
   useLayoutEffect(() => {
     const handleSetInitialVerticalOffset = () => {
       if (!markRef.current || !annotationContainer) return;
@@ -68,16 +81,22 @@ const Annotation: React.FC<{
       const markRect = markRef.current.getBoundingClientRect();
       const textRect = textRef.current?.getBoundingClientRect();
       let offset =
-        markRef.current.offsetTop - annotationContainer.offsetTop - 8;
-      if (isMobile) offset = markRect.top - textRect.height - 8;
+        markRef.current.offsetTop -
+        annotationContainer.offsetTop -
+        annotationGap;
+
+      // on mobile, position relative to viewport instead of container
+      if (isMobile) offset = markRect.top - textRect.height - annotationGap;
+
       const headerHeight = parseInt(
         document.documentElement.style.getPropertyValue("--ifm-navbar-height"),
       );
-      // Adjust offset if it would go off-screen on mobile
+      // pin to the bottom if it would go off-screen on mobile
       if (isMobile && offset + textRect.height > window.innerHeight) {
         offset = window.innerHeight - textRect.height - 16;
       }
 
+      // pin to the top if it would go under the header on mobile
       if (isMobile && offset < headerHeight) {
         offset = headerHeight + 16;
       }
@@ -97,14 +116,11 @@ const Annotation: React.FC<{
     };
   }, [annotationContainer, isMobile]);
 
-  // Listen for position changes in other annotations
+  // Listen for position and size changes in other annotations
   useLayoutEffect(() => {
     if (!annotationContainer) return;
 
-    const observer = new MutationObserver((mutations) => {
-      // Skip if we're currently updating to prevent cascading loops
-      if (isUpdatingRef.current) return;
-
+    const mutationObserver = new MutationObserver((mutations) => {
       // Check if any mutation affected annotation positions
       const hasPositionChange = mutations.some((mutation) => {
         if (
@@ -126,21 +142,45 @@ const Annotation: React.FC<{
       }
     });
 
-    observer.observe(annotationContainer, {
+    // Watch for size changes in annotation elements (expand/collapse) in order to reposition others
+    const resizeObserver = new ResizeObserver((entries) => {
+      const hasRelevantResize = entries.some((entry) => {
+        const target = entry.target as HTMLElement;
+        return (
+          target !== textRef.current &&
+          target.classList.contains(styles.annotationText)
+        );
+      });
+
+      if (hasRelevantResize) {
+        setUpdateTrigger((prev) => prev + 1);
+      }
+    });
+
+    mutationObserver.observe(annotationContainer, {
       attributes: true,
       attributeFilter: ["style"],
       subtree: true,
     });
 
-    return () => observer.disconnect();
+    const annotationElements = annotationContainer.querySelectorAll(
+      `.${styles.annotationText}`,
+    );
+    annotationElements.forEach((el) => resizeObserver.observe(el));
+
+    return () => {
+      mutationObserver.disconnect();
+      resizeObserver.disconnect();
+    };
   }, [annotationContainer]);
 
   const verticalOffsetValue = useMemo(() => {
     if (!markRef.current || !annotationContainer) return;
-    let desiredOffset =
-      markRef.current.offsetTop - annotationContainer.offsetTop - 58; // 58px to account for annotation text height
 
-    // Only check for overlaps if textRef is available (after initial render)
+    // Initial desired offset is in line with the mark element
+    let desiredOffset =
+      markRef.current.offsetTop - annotationContainer.offsetTop - annotationGap;
+
     if (textRef.current) {
       // find the preceding annotation element
       const precedingAnnotation = textRef.current
@@ -150,12 +190,14 @@ const Annotation: React.FC<{
         const precedingBottom =
           precedingAnnotation.offsetTop + precedingAnnotation.offsetHeight;
 
-        // If our position would overlap, move below the preceding annotation
+        // If the gap between the preceding annotation and the desired offset is less than 200px,
+        // position this annotation 8px below the preceding one (group annotations that are close to each other).
+        // Also, if the positions of annotations would overlap, move below the preceding annotation
         if (
-          desiredOffset - precedingBottom < 400 ||
+          desiredOffset - precedingBottom < 200 ||
           precedingBottom >= desiredOffset
         ) {
-          desiredOffset = precedingBottom + 8;
+          desiredOffset = precedingBottom + annotationGap;
         }
       }
     }
@@ -171,14 +213,21 @@ const Annotation: React.FC<{
           [styles.annotationMarkerHovered]: isHighlighted,
           [styles.annotationMarkerMobile]: isMobile,
         })}
+        role="button"
+        tabIndex={0}
+        aria-describedby={annotationId}
+        aria-expanded={isActive}
         onMouseEnter={() => !isMobile && setIsHovered(true)}
         onMouseLeave={() => !isMobile && setIsHovered(false)}
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
       >
         {children}
         {isMobile && (
           <div
             ref={textRef}
+            id={annotationId}
+            role="tooltip"
             style={{
               top: `${initialVerticalOffset}px`,
               opacity: isActive ? 1 : 0,
@@ -192,7 +241,7 @@ const Annotation: React.FC<{
             }}
           >
             {title && <div className={styles.annotationTitle}>{title}</div>}
-            {text}
+            <div className={styles.annotationTextContent}>{text}</div>
           </div>
         )}
       </mark>
@@ -201,6 +250,8 @@ const Annotation: React.FC<{
         createPortal(
           <div
             ref={textRef}
+            id={annotationId}
+            role="tooltip"
             className={cn(styles.annotationText, {
               [styles.annotationTextHovered]: isHighlighted,
             })}
@@ -210,7 +261,7 @@ const Annotation: React.FC<{
             onClick={handleClick}
           >
             {title && <div className={styles.annotationTitle}>{title}</div>}
-            {text}
+            <div className={styles.annotationTextContent}>{text}</div>
           </div>,
           annotationContainer,
         )}
