@@ -177,9 +177,12 @@ const Annotation: React.FC<{
   const verticalOffsetValue = useMemo(() => {
     if (!markRef.current || !annotationContainer) return;
 
+    const annotationHeight = textRef.current?.getBoundingClientRect().height;
     // Initial desired offset is in line with the mark element
     let desiredOffset =
-      markRef.current.offsetTop - annotationContainer.offsetTop - annotationGap;
+      markRef.current.offsetTop -
+      annotationContainer.offsetTop -
+      annotationHeight * 0.25;
 
     if (textRef.current) {
       // find the preceding annotation element
