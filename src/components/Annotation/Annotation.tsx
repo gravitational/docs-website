@@ -47,6 +47,14 @@ const Annotation: React.FC<{
     }
   };
 
+  const handleFocus = () => {
+    setIsActive(true);
+  };
+
+  const handleBlur = () => {
+    setIsActive(false);
+  };
+
   useEffect(() => {
     setAnnotationContainer(document.getElementById("annotations"));
   }, []);
@@ -224,6 +232,8 @@ const Annotation: React.FC<{
         onMouseLeave={() => !isMobile && setIsHovered(false)}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       >
         {children}
         {isMobile && (
