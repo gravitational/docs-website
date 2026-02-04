@@ -19,6 +19,18 @@ button {
   font-family: var(--font-base);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  code {
+    font-size: 0.85em !important;
+    vertical-align: bottom;
+  }
+}
+
 .navbar-sidebar {
   padding-top: var(--ifm-navbar-height);
 }
