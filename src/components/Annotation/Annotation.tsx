@@ -18,6 +18,7 @@ const Annotation: React.FC<{
   children: React.ReactNode;
 }> = ({ title, text, children }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
   const [isActive, setIsActive] = useState<boolean>(false);
   const [annotationContainer, setAnnotationContainer] =
     useState<HTMLElement | null>(null);
@@ -37,7 +38,7 @@ const Annotation: React.FC<{
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsActive((prev) => !prev);
+    setIsClicked((prev) => !prev);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -73,6 +74,7 @@ const Annotation: React.FC<{
         !textRef.current.contains(target)
       ) {
         setIsActive(false);
+        setIsClicked(false);
       }
     };
 
@@ -227,7 +229,7 @@ const Annotation: React.FC<{
         role="button"
         tabIndex={0}
         aria-describedby={annotationId}
-        aria-expanded={isActive}
+        aria-expanded={isActive || isClicked}
         onMouseEnter={() => !isMobile && setIsHovered(true)}
         onMouseLeave={() => !isMobile && setIsHovered(false)}
         onClick={handleClick}
@@ -243,14 +245,15 @@ const Annotation: React.FC<{
             role="tooltip"
             style={{
               top: `${initialVerticalOffset}px`,
-              opacity: isActive ? 1 : 0,
-              visibility: isActive ? "visible" : "hidden",
+              opacity: isActive || isClicked ? 1 : 0,
+              visibility: isActive || isClicked ? "visible" : "hidden",
             }}
             className={cn(styles.annotationText, styles.annotationTextMobile)}
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
               setIsActive(false);
+              setIsClicked(false);
             }}
           >
             {title && <div className={styles.annotationTitle}>{title}</div>}
