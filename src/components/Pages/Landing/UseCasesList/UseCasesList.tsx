@@ -27,6 +27,7 @@ interface UseCasesListProps {
   }>;
   narrowBottomPadding?: boolean;
   itemLayout?: "column" | "row";
+  descriptionsFontSize?: "lg" | "xl";
 }
 
 const Tags: React.FC<{ tags?: Tag[]; itemLayout?: "column" | "row" }> = ({
@@ -114,6 +115,7 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
   variant = "landing",
   narrowBottomPadding = false,
   itemLayout = "column",
+  descriptionsFontSize,
 }) => {
   const Heading = variant === "doc" ? "h3" : "h2";
 
@@ -156,6 +158,7 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                     <p
                       className={cn(styles.description, {
                         [styles.docVariant]: variant === "doc",
+                        [styles.smallFontSize]: descriptionsFontSize === "lg",
                       })}
                     >
                       {caseItem.description}
@@ -181,6 +184,7 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                         className={cn(styles.description, {
                           [styles.hasTags]: caseItem.tags?.length > 0,
                           [styles.docVariant]: variant === "doc",
+                          [styles.smallFontSize]: descriptionsFontSize === "lg",
                         })}
                       >
                         {caseItem.description}

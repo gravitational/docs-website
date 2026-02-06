@@ -140,6 +140,11 @@
         font-size: var(--fs-text-xl);
       }
     }
+    &.smallFontSize {
+      @media (--lg-scr) {
+        font-size: var(--fs-text-lg);
+      }
+    }
   }
 }
 
