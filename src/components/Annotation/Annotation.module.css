@@ -49,7 +49,7 @@
   line-height: 1.625;
   width: calc(100% - var(--m-4));
   transition:
-    transform 0.1s ease-in-out,
+    transform 0.2s ease-in-out,
     border 0.2s ease-in-out,
     box-shadow 0.2s ease-in-out,
     background-color 0.2s ease-in-out;
@@ -62,7 +62,10 @@
 
   .annotationTextContent {
     color: var(--color-foreground-muted);
-    transition: color 0.2s ease-in-out;
+    transition:
+      0.2s color 0.225s ease-in-out,
+      0.2s max-height 0.225s ease,
+      0.2s -webkit-line-clamp 0.225s ease;
     @media (--md-scr) {
       overflow: hidden;
       display: -webkit-box;
@@ -70,6 +73,7 @@
       -webkit-line-clamp: 2;
       line-clamp: 2;
       -webkit-box-orient: vertical;
+      max-height: 3.25em;
     }
   }
 
@@ -87,6 +91,7 @@
       -webkit-line-clamp: unset;
       line-clamp: unset;
       display: block;
+      max-height: 1000px;
     }
   }
 }

@@ -41,13 +41,6 @@ const Annotation: React.FC<{
     setIsClicked((prev) => !prev);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      setIsActive((prev) => !prev);
-    }
-  };
-
   const handleFocus = () => {
     setIsActive(true);
   };
@@ -190,9 +183,7 @@ const Annotation: React.FC<{
     const annotationHeight = textRef.current?.getBoundingClientRect().height;
     // Initial desired offset is in line with the mark element
     let desiredOffset =
-      markRef.current.offsetTop -
-      annotationContainer.offsetTop -
-      annotationHeight * 0.25;
+      markRef.current.offsetTop - annotationContainer.offsetTop - 32;
 
     if (textRef.current) {
       // find the preceding annotation element
@@ -233,7 +224,6 @@ const Annotation: React.FC<{
         onMouseEnter={() => !isMobile && setIsHovered(true)}
         onMouseLeave={() => !isMobile && setIsHovered(false)}
         onClick={handleClick}
-        onKeyDown={handleKeyDown}
         onFocus={handleFocus}
         onBlur={handleBlur}
       >
