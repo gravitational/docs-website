@@ -158,6 +158,7 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                     <p
                       className={cn(styles.description, {
                         [styles.docVariant]: variant === "doc",
+                        [styles.smallFontSize]: descriptionsFontSize === "lg",
                       })}
                     >
                       {caseItem.description}
