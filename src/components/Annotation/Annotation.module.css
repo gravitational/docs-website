@@ -1,3 +1,29 @@
+@keyframes slideAndExpand {
+  0% {
+    transform: translateX(0);
+    border-left-width: 1px;
+    border-left-color: var(--color-tonal-neutral-0);
+    background-color: var(--color-background-depth-2);
+    box-shadow: none;
+  }
+  100% {
+    transform: translateX(-16px);
+    border-left-width: 4px;
+    border-left-color: var(--color-interactive-alert-default);
+    background-color: var(--color-white);
+    box-shadow: var(--lp-box-shadow);
+  }
+}
+
+@keyframes expandContent {
+  0% {
+    max-height: 3.25em;
+  }
+  100% {
+    max-height: 1000px;
+  }
+}
+
 .annotationMarker {
   background-color: transparent !important;
   transition: background-color 0.2s ease-in-out;
@@ -48,11 +74,6 @@
   border-radius: var(--m-1);
   line-height: 1.625;
   width: calc(100% - var(--m-4));
-  transition:
-    transform 0.2s ease-in-out,
-    border 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out,
-    background-color 0.2s ease-in-out;
 
   .annotationTitle {
     font-weight: var(--fw-bold);
@@ -62,10 +83,7 @@
 
   .annotationTextContent {
     color: var(--color-foreground-muted);
-    transition:
-      0.2s color 0.225s ease-in-out,
-      0.2s max-height 0.225s ease,
-      0.2s -webkit-line-clamp 0.225s ease;
+    transition: color 0.2s ease-in-out;
     @media (--md-scr) {
       overflow: hidden;
       display: -webkit-box;
@@ -80,18 +98,15 @@
   &:hover,
   &.annotationTextHovered {
     border-color: transparent;
-    border-left: 4px solid var(--color-interactive-alert-default);
-    box-shadow: var(--lp-box-shadow);
     cursor: pointer;
-    background-color: var(--color-white);
-    transform: translateX(-16px);
+    animation: slideAndExpand 0.15s ease forwards;
 
     .annotationTextContent {
       color: var(--color-foreground-slightly-muted);
       -webkit-line-clamp: unset;
       line-clamp: unset;
-      display: block;
-      max-height: 1000px;
+      animation: expandContent 0.6s ease-in-out forwards;
+      animation-delay: 0.25s;
     }
   }
 }
