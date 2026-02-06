@@ -1,6 +1,8 @@
+import Link from "@docusaurus/Link";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { useLocation } from "@docusaurus/router";
 import { ThemeClassNames } from "@docusaurus/theme-common";
+import Icon from "@site/src/components/Icon/Icon";
 import PageActions from "@site/src/components/PageActions";
 import ThumbsFeedback from "@site/src/components/ThumbsFeedback";
 import ThumbsFeedbackContext from "@site/src/components/ThumbsFeedback/context";
@@ -12,9 +14,11 @@ import Heading from "@theme/Heading";
 import MDXContent from "@theme/MDXContent";
 import clsx from "clsx";
 import { useState, type ReactNode } from "react";
+import styles from "./styles.module.css"
 
 interface DocFrontMatter {
   videoBanner: VideoBarProps;
+  rfdUrl?: string;
 }
 
 /**
@@ -40,13 +44,13 @@ function useSyntheticTitle(): string | null {
 
 export default function DocItemContent({ children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
-  const { hideTitleSection, showDescription } = useDocTemplate();
+  const { hideTitleSection, showDescription, isRFDPage } = useDocTemplate();
   const { frontMatter } = useDoc();
   const location = useLocation();
   const [feedback, setFeedback] = useState<FeedbackType | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const { videoBanner } = frontMatter as DocFrontMatter;
+  const { videoBanner, rfdUrl } = frontMatter as DocFrontMatter;
 
   return (
     <div className={clsx(ThemeClassNames.docs.docMarkdown, "markdown")}>
@@ -59,6 +63,7 @@ export default function DocItemContent({ children }: Props): ReactNode {
           >
             <Heading as="h1" className="docItemTitle">
               {syntheticTitle}
+              {isRFDPage && < span className={styles.rfdBadge}>RFD Driven</span>}
             </Heading>
             {frontMatter.description && showDescription && (
               <p className="docItemDescription">{frontMatter.description}</p>
@@ -67,7 +72,30 @@ export default function DocItemContent({ children }: Props): ReactNode {
             {videoBanner && <VideoBar {...videoBanner} />}
           </header>
         )}
-        <MDXContent>{children}</MDXContent>
+        <div className="row">
+          {isRFDPage && (
+            <div className={clsx(styles.rfdBanner)}>
+              <div className={styles.content}>
+                <div className={styles.iconWrapper}>
+                  <Icon name="info" size="md"/>
+                </div> 
+                  This page is RFD-driven. See the RFD for full context and rationale.
+              </div>
+              <Link href={rfdUrl}>
+                <span>View RFD</span>
+              </Link>
+            </div>
+          )}
+          <div className="col">
+            <MDXContent>{children}</MDXContent>
+          </div>
+          {isRFDPage && (
+            <div
+              id="annotations"
+              className={clsx(styles.annotations, "col", "col--4")}
+            />
+          )}
+        </div>
         {syntheticTitle && !hideTitleSection && (
           <ThumbsFeedback
             feedbackLabel="Was this page helpful?"

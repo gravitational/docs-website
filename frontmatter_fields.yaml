@@ -33,3 +33,4 @@ allowedFields:
   - videoBanner
   - videoBannerDescription
   - enterprise
+  - rfdUrl
