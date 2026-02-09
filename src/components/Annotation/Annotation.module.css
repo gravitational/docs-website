@@ -106,7 +106,7 @@
       -webkit-line-clamp: unset;
       line-clamp: unset;
       animation: expandContent 0.6s ease-in-out forwards;
-      animation-delay: 0.25s;
+      animation-delay: 0.075s;
     }
   }
 }
