@@ -60,8 +60,13 @@ function usePageExclusivityBanner() {
 }
 
 export default function DocItemLayout({ children }: Props): JSX.Element {
-  const { hideTitleSection, removeTOCSidebar, fullWidth, isLandingPage } =
-    useDocTemplate();
+  const {
+    hideTitleSection,
+    removeTOCSidebar,
+    fullWidth,
+    isLandingPage,
+    isRFDPage,
+  } = useDocTemplate();
   const docTOC = useDocTOC(removeTOCSidebar);
   const { exclusiveFeature } = usePageExclusivityBanner();
   const {
@@ -93,7 +98,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
           className={clsx(
             "col",
             !docTOC.hidden && !docTOC.removed && styles.docItemCol,
-            fullWidth && styles.largeColumnPadding
+            fullWidth && styles.largeColumnPadding,
           )}
         >
           {unlisted && <Unlisted />}
@@ -114,7 +119,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
             <DocItemPaginator />
           </div>
         </div>
-        {!docTOC.removed && (
+        {!docTOC.removed && !isRFDPage && (
           <div className="col col--3">
             <div className={styles.stickySidebar}>
               <div className={styles.tocWithFeedback}>
