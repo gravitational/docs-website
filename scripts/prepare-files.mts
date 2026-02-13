@@ -1,4 +1,5 @@
-import { copyFileSync, rmSync, existsSync, mkdirSync } from "fs";
+import { importDirectorySync } from '@iconify/tools';
+import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync } from "fs";
 import { join, resolve, dirname } from "path";
 import { glob } from "glob";
 import {
@@ -7,7 +8,6 @@ import {
   getVersionNames,
   getDocusaurusVersions,
 } from "../server/config-site";
-import { writeFileSync } from "fs";
 
 const DOCS_PAGES_ROOT = "versioned_docs";
 const SIDEBAR_FILENAME = "sidebars.json";
@@ -87,3 +87,21 @@ versionsToOverride.forEach((version) => {
 
   copyFileSync(defaultUpcomingReleases, destination);
 });
+
+// Allow the Docusaurus MermaidJS plugin to import custom icons from a local
+// directory. It writes a JSON file to the data directory, which is not checked
+// into source control.
+//
+// It is up to a Docusaurus client module to load the icons. Loading the icon
+// JSON relies on server-side code, so we cannot do this in a Docusaurus client
+// module.
+const iconPath  = resolve(__dirname, join("../data", "teleport-icons.json"));
+
+// Following the example at:
+// https://iconify.design/docs/libraries/tools/import/directory.html
+const iconSet = importDirectorySync(join("src", "mermaid-icons"),
+    {
+	prefix: "teleport",
+    },
+);
+writeFileSync(iconPath, JSON.stringify(iconSet.export()));

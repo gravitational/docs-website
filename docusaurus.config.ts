@@ -64,6 +64,7 @@ const config: Config = {
     },
   },
   clientModules: [
+    require.resolve("./src/scripts/mermaid_icons.js"),
     "./src/styles/variables.css",
     "./src/styles/fonts-lato.css",
     "./src/styles/fonts-ubuntu.css",
@@ -147,6 +148,7 @@ const config: Config = {
   trailingSlash: true,
 
   markdown: {
+    mermaid: true,
     parseFrontMatter: async (params) => {
       const result = await params.defaultParseFrontMatter(params);
 
@@ -167,7 +169,7 @@ const config: Config = {
       onBrokenMarkdownLinks: "throw",
     },
   },
-
+  themes: ["@docusaurus/theme-mermaid"],
   onBrokenLinks: "throw",
   i18n: {
     defaultLocale: "en",
@@ -238,7 +240,7 @@ const config: Config = {
 
           return orderSidebarItems(
             removeRedundantItems(items, item.dirName),
-            getDocPageByID
+            getDocPageByID,
           );
         },
         // Host docs on the root page, later it will be exposed on goteleport.com/docs
@@ -305,7 +307,7 @@ const config: Config = {
           const alias: string = path.resolve(
             __dirname,
             "./content",
-            currentVersion
+            currentVersion,
           );
 
           return {
