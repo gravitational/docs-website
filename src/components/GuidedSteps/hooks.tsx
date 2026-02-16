@@ -20,11 +20,11 @@ export const useGuidedStepsData = (props: GuidedStepsProps) => {
     // Ensure that each step has a corresponding code block.
     steps.forEach((step) => {
       const matchingCodeBlock = codeBlocks.find(
-        (codeBlock) => codeBlock.stepId === step.id
+        (codeBlock) => codeBlock.stepId === step.id,
       );
       if (!matchingCodeBlock) {
         throw new Error(
-          `GuidedSteps: No code block found for step with id "${step.id}". Please ensure that each step has a corresponding code block with a matching stepId.`
+          `GuidedSteps: No code block found for step with id "${step.id}". Please ensure that each step has a corresponding code block with a matching stepId.`,
         );
       }
     });
@@ -74,7 +74,9 @@ export const useGuidedSteps = () => {
 
       const navHeight =
         parseInt(
-          document.documentElement.style.getPropertyValue("--ifm-navbar-height")
+          document.documentElement.style.getPropertyValue(
+            "--ifm-navbar-height",
+          ),
         ) || 117;
 
       const rootBottomMargin =
@@ -88,13 +90,14 @@ export const useGuidedSteps = () => {
       observerRef.current = new IntersectionObserver((entries) => {
         if (ignoreIntersection.current) return;
 
-        const visibleEntries = entries.filter(
-          (entry) => entry.isIntersecting && entry.intersectionRatio > 0.3
-        );
+        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
 
         if (visibleEntries.length > 0) {
+          // Compare by visible pixel area instead of just intersection ratio to better handle cases where steps have different heights
           const mostVisibleEntry = visibleEntries.reduce((max, entry) =>
-            entry.intersectionRatio > max.intersectionRatio ? entry : max
+            entry.intersectionRect.height > max.intersectionRect.height
+              ? entry
+              : max,
           );
 
           debounceHighlightedStep(mostVisibleEntry.target.id);
@@ -111,7 +114,7 @@ export const useGuidedSteps = () => {
     const handleResize = () => {
       clearTimeout(resizeTimeout);
       ignoreIntersection.current = true;
-      
+
       resizeTimeout = setTimeout(() => {
         initializeObserver();
         ignoreIntersection.current = false;
@@ -148,6 +151,6 @@ export const useGuidedSteps = () => {
         }, 1000);
       }
     },
-    [activeStepId]
+    [activeStepId],
   );
 };

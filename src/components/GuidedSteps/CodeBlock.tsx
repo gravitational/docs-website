@@ -25,15 +25,31 @@ const CodeBlock = forwardRef<
       activate: (): void => {
         if (activeFileName !== fileName) setActiveFileName(fileName);
         setActiveLines(true);
-        stepRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "nearest",
-        });
+
+        // Scroll within the nearest scrollable ancestor only if the code block is not fully visible
+        const el = stepRef.current;
+        if (el) {
+          const container = el.closest<HTMLElement>(`.${styles.files}`);
+          if (container) {
+            const elTop = el.offsetTop;
+            const elBottom = elTop + el.offsetHeight;
+            const containerTop = container.scrollTop;
+            const containerBottom = containerTop + container.clientHeight;
+
+            if (elTop < containerTop) {
+              container.scrollTo({ top: elTop, behavior: "smooth" });
+            } else if (elBottom > containerBottom) {
+              container.scrollTo({
+                top: elBottom - container.clientHeight,
+                behavior: "smooth",
+              });
+            }
+          }
+        }
       },
       deactivate: (): void => setActiveLines(false),
       innerText: stepRef.current?.innerText || "",
-    })
+    }),
   );
 
   return (

@@ -4,11 +4,31 @@
   border-bottom-left-radius: var(--m-1);
   border-bottom-right-radius: var(--m-1);
   padding-bottom: var(--m-4);
-  max-height: calc(100% - var(--file-tabs-height));
   overflow-y: scroll;
   &.copyButtonActive {
     background-color: var(--color-code);
   }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--color-tonal-neutral-0-white);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-tonal-neutral-2-white);
+    border: 2px solid var(--color-tonal-neutral-0-white);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-tonal-neutral-3-white);
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-tonal-neutral-2-white)
+    var(--color-tonal-neutral-0-white);
 }
 
 .file {
@@ -55,29 +75,6 @@
     display: none;
   }
   scrollbar-width: none;
-}
-
-.files {
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: var(--color-tonal-neutral-0-white);
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--color-tonal-neutral-2-white);
-    border: 2px solid var(--color-tonal-neutral-0-white);
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-tonal-neutral-3-white);
-  }
-
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-tonal-neutral-2-white)
-    var(--color-tonal-neutral-0-white);
 }
 
 .fileTab {

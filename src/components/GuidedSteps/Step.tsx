@@ -30,8 +30,8 @@ const Step: React.FC<StepProps> = ({ id, index, children }) => {
     const navbarHeight =
       parseInt(
         getComputedStyle(document.documentElement).getPropertyValue(
-          "--ifm-navbar-height"
-        )
+          "--ifm-navbar-height",
+        ),
       ) || 0;
     if (
       stepRefRect &&
@@ -48,7 +48,9 @@ const Step: React.FC<StepProps> = ({ id, index, children }) => {
       className={cn(styles.step, { [styles.active]: activeStepId === id })}
       role="button"
       tabIndex={0}
-      ref={(el) => (stepRefs.current[index] = el)}
+      ref={(el) => {
+        stepRefs.current[index] = el;
+      }}
       onClick={activateStep}
       id={id}
     >

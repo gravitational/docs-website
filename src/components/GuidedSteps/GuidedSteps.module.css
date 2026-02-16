@@ -1,8 +1,12 @@
 .guidedSteps {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--m-4);
+  gap: var(--m-2);
   margin-bottom: var(--ifm-leading);
+
+  @media (--md-scr) {
+    gap: var(--m-4);
+  }
 
   h2 {
     --ifm-h2-font-size: 2rem;
@@ -12,9 +16,13 @@
 .instructions {
   position: relative;
   height: max-content;
-  padding-bottom: 150%;
+  padding-bottom: 300%;
   display: grid;
   gap: var(--m-1);
+
+  @media (--md-scr) {
+    padding-bottom: 150%;
+  }
 }
 
 .codePanel {
