@@ -1,3 +1,4 @@
+export { default as amazonDocumentDb } from "./svg/amazon-document-db.svg";
 export { default as amazonDynamoDb } from "./svg/amazon-dynamo-db.svg";
 export { default as amazonElastiCache } from "./svg/amazon-elastiCache.svg";
 export { default as amazonKeyspaces } from "./svg/amazon-keyspaces.svg";
@@ -10,6 +11,9 @@ export { default as apple } from "./svg/apple.svg";
 export { default as arrowRight } from "./svg/arrow-right.svg";
 export { default as arrowRight2 } from "./svg/arrow-right-2.svg";
 export { default as arrow } from "./svg/arrow.svg";
+export { default as azureRedis } from "./svg/azure-redis.svg";
+export { default as azurePostgreSql } from "./svg/azure-postgresql-server.svg";
+export { default as azureSqlServer } from "./svg/azure-sql-server.svg";
 export { default as ec2 } from "./svg/aws-ec2.svg";
 export { default as ecs } from "./svg/aws-ecs.svg";
 export { default as aws } from "./svg/aws.svg";
@@ -118,6 +122,9 @@ export { default as terminal } from "./svg/terminal.svg";
 export { default as copy2 } from "./svg/copy2.svg";
 export { default as download2 } from "./svg/download2.svg";
 export { default as check2 } from "./svg/check2.svg";
+export { default as rocketLaunch } from "./svg/rocket-launch.svg";
+export { default as chat } from "./svg/chat-circle.svg";
+export { default as lightbulb } from "./svg/lightbulb.svg";
 
 // Teleport svgs
 export { default as agent } from "./teleport-svg/agent.svg";

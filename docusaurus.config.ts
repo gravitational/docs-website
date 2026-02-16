@@ -163,10 +163,12 @@ const config: Config = {
 
       return result;
     },
+    hooks: {
+      onBrokenMarkdownLinks: "throw",
+    },
   },
 
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "throw",
   i18n: {
     defaultLocale: "en",
     locales: ["en"],

@@ -1,0 +1,111 @@
+.exclusivityWrapper {
+  padding-bottom: 56px;
+  .exclusivityBanner,
+  .exclusivityBadge {
+    position: absolute;
+    display: none;
+    z-index: 10;
+
+    &.visible {
+      display: flex;
+    }
+
+    @media (--md-scr) {
+      position: fixed;
+    }
+  }
+  .exclusivityBanner {
+    position: fixed;
+    top: var(--ifm-navbar-height);
+    left: 0;
+    width: 100%;
+    background-color: var(--color-white);
+
+    @media (--md-scr) {
+      left: var(--doc-sidebar-width);
+      width: calc(100% - var(--doc-sidebar-width));
+    }
+
+    .inner {
+      width: 100%;
+      background-color: var(--color-tonal-primary-0);
+      display: flex;
+      align-items: center;
+      padding: var(--m-1) var(--m-2);
+      color: var(--color-dark-purple);
+      font-size: var(--fs-text-md);
+      justify-content: space-between;
+
+      @media (--md-scr) {
+        padding: var(--m-1) var(--m-5);
+      }
+    }
+
+    .content {
+      display: flex;
+      align-items: center;
+      gap: var(--m-1);
+      line-height: 1.57143;
+
+      svg {
+        min-width: 20px;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      a {
+        font-weight: var(--fw-bold);
+        text-decoration: underline;
+      }
+    }
+
+    .hideButton {
+      padding: 10px var(--m-1) !important;
+      font-weight: var(--fw-black);
+      border-radius: 4px;
+      background-color: transparent;
+      border-color: transparent;
+      color: var(--color-dark-purple);
+
+      &:hover {
+        background-color: var(--color-tonal-primary-0);
+      }
+
+      @media (--md-scr) {
+        padding: 10px var(--m-3) !important;
+      }
+    }
+  }
+}
+
+.exclusivityBadge {
+  top: var(--m-1);
+  right: 0;
+  left: unset;
+  width: max-content;
+  color: white;
+  gap: var(--m-1);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="217" height="40" viewBox="0 0 217 40" fill="none"><path d="M216.736 0L216.736 40L4.00604 40C0.853224 40 -1.06026 36.5224 0.627165 33.8592L8.52165 21.3994C9.37958 20.0454 9.3463 18.3099 8.43712 16.9898L1.0536 6.26878C-0.774017 3.61504 1.12575 -9.42464e-06 4.34793 -9.28379e-06L216.736 0Z" fill="%23512FC9"/></svg>');
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding: 10px var(--m-4) 10px 34px;
+  font-size: var(--fs-text-md);
+  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.2))
+    drop-shadow(0 1px 1px rgba(0, 0, 0, 0.14))
+    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.12));
+
+  svg {
+    min-width: 20px;
+    filter: brightness(0) invert(1);
+  }
+
+  @media (--md-scr) {
+    top: calc(var(--ifm-navbar-height) + var(--m-1));
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

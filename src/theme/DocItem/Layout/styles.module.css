@@ -20,7 +20,7 @@
 
 .stickySidebar {
   position: sticky;
-  top: calc(var(--ifm-navbar-height) + 1rem);
+  top: calc(var(--ifm-navbar-height) + 2rem);
   height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
   display: flex;
   flex-direction: column;

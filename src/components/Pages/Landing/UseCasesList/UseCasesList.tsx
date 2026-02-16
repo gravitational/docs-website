@@ -29,7 +29,10 @@ interface UseCasesListProps {
   itemLayout?: "column" | "row";
 }
 
-const Tags: React.FC<{ tags?: Tag[] }> = ({ tags = [] }) => {
+const Tags: React.FC<{ tags?: Tag[]; itemLayout?: "column" | "row" }> = ({
+  tags = [],
+  itemLayout = "column",
+}) => {
   const [showHiddenTags, setShowHiddenTags] = useState(false);
   const hiddenTags = tags.filter((tag) => tag.hidden);
 
@@ -72,7 +75,11 @@ const Tags: React.FC<{ tags?: Tag[] }> = ({ tags = [] }) => {
   };
 
   return (
-    <ul className={styles.tags}>
+    <ul
+      className={cn(styles.tags, {
+        [styles.rowLayout]: itemLayout === "row",
+      })}
+    >
       {tags
         .filter((tag) => !tag.hidden)
         .map((tag, tagIndex) => renderTag(tag, tagIndex))}
@@ -80,7 +87,7 @@ const Tags: React.FC<{ tags?: Tag[] }> = ({ tags = [] }) => {
       {hiddenTags.length > 0 && (
         <>
           {hiddenTags.map((tag, tagIndex) =>
-            renderTag(tag, tagIndex + tags.length)
+            renderTag(tag, tagIndex + tags.length),
           )}
           <li className={styles.expandTagsItem}>
             <button
@@ -179,7 +186,9 @@ const UseCasesList: React.FC<UseCasesListProps> = ({
                         {caseItem.description}
                       </p>
                     </div>
-                    {caseItem.tags?.length > 0 && <Tags tags={caseItem.tags} />}
+                    {caseItem.tags?.length > 0 && (
+                      <Tags tags={caseItem.tags} itemLayout={itemLayout} />
+                    )}
                   </div>
                 )}
               </li>
