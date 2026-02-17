@@ -23,11 +23,18 @@ export const FileTabs: React.FC = () => {
         const isActive = name === activeFileName;
         if (isActive && fileTabRefs.current.has(name)) {
           setTimeout(() => {
-            fileTabRefs.current.get(name)?.scrollIntoView({
-              behavior: "smooth",
-              block: "nearest",
-              inline: "center",
-            });
+            const tab = fileTabRefs.current.get(name);
+            const parent = tab?.parentElement;
+            if (tab && parent && parent.scrollWidth > parent.clientWidth) {
+              tab.scrollIntoView({
+                behavior: "smooth",
+                container: "nearest",
+                block: "nearest",
+                inline: "center",
+              } as ScrollIntoViewOptions & {
+                container?: "nearest" | "all";
+              });
+            }
           }, 0);
         }
         return (
