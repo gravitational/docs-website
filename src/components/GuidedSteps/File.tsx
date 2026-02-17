@@ -1,3 +1,15 @@
+/**
+ * File components for displaying code files with tabs.
+ * 
+ * This module provides:
+ * - FileTabs: Tab navigation for switching between multiple code files
+ * - File: Container for displaying code blocks from the active file
+ * 
+ * Files in the GuidedSteps system can contain multiple CodeBlocks, each linked
+ * to a specific Step. Users can switch between files using tabs, and download
+ * files that have extensions.
+ */
+
 import { useContext } from "react";
 import cn from "classnames";
 import { GuidedStepsContext } from "./context";
@@ -6,6 +18,16 @@ import { extractCodeBlocksFromFile } from "./utils";
 import CodeBlock from "./CodeBlock";
 import Icon from "../Icon";
 
+/**
+ * FileTabs - Tab navigation component for switching between code files.
+ * 
+ * Features:
+ * - Displays all available files as clickable tabs
+ * - Shows file icons
+ * - Highlights the active file tab
+ * - Auto-scrolls active tab into view for horizontal overflow
+ * - Provides download button for files with extensions
+ */
 export const FileTabs: React.FC = () => {
   const {
     files,
@@ -21,6 +43,7 @@ export const FileTabs: React.FC = () => {
     <ul className={styles.fileTabs}>
       {files.map(({ name, icon }) => {
         const isActive = name === activeFileName;
+        // Auto-scroll active tab into view if it's outside the visible area
         if (isActive && fileTabRefs.current.has(name)) {
           setTimeout(() => {
             const tab = fileTabRefs.current.get(name);
@@ -54,6 +77,7 @@ export const FileTabs: React.FC = () => {
           </li>
         );
       })}
+      {/* Download button for files with extensions (e.g., config.yaml) */}
       {fileNameHasType && (
         <button
           className={styles.downloadButton}
@@ -88,6 +112,15 @@ export const FileTabs: React.FC = () => {
       )}
     </ul>
   );
+/**
+ * File - Container component for displaying code blocks from files.
+ * 
+ * This component:
+ * - Renders all File components (with only the active one visible)
+ * - Extracts and renders CodeBlock children from each file
+ * - Registers file refs for copying/downloading content
+ * - Passes along state about copy button visibility
+ */
 };
 
 const FileComponent: React.FC = () => {
