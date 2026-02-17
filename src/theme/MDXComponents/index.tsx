@@ -23,6 +23,11 @@ import Snippet from "/src/components/Snippet";
 import ThumbsFeedback from "/src/components/ThumbsFeedback";
 import Tile from "/src/components/Tile";
 import TileGrid from "/src/components/TileGrid";
+import GuidedSteps from "/src/components/GuidedSteps";
+import Step from "/src/components/GuidedSteps/Step";
+import StepSection from "/src/components/GuidedSteps/StepSection";
+import File from "/src/components/GuidedSteps/File";
+import CodeBlock from "/src/components/GuidedSteps/CodeBlock";
 import { Var } from "/src/components/Variables";
 import EnterpriseFeatureCallout from "/src/components/EnterpriseFeatureCallout";
 import { ChangelogLink } from "/src/components/ChangelogLink";
@@ -62,6 +67,11 @@ const MDXComponents: MDXComponentsObject = {
   ul: MDXUl,
   Var: (props) => <Var {...props} />, // needed to circumvent props mismatch in types
   ThumbsFeedback,
+  GuidedSteps,
+  Step,
+  File,
+  StepSection,
+  CodeBlock,
   Checkpoint,
   EnterpriseFeatureBadge,
   EnterpriseFeatureCallout,
