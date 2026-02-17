@@ -102,7 +102,7 @@
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-mdxjs": "^3.0.0",
     "postcss": "^8.5.6",
-    "postcss-loader": "^8.2.0",
+    "postcss-loader": "^8.2.1",
     "prettier": "^3.8.1",
     "rehype-stringify": "^10.0.1",
     "remark-cli": "10.0.1",
