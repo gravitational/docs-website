@@ -132,10 +132,18 @@ export const useGuidedSteps = () => {
         threshold: Array.from({ length: 1000 }, (_, i) => i / 1000),
       };
 
+      // Detect if device is mobile
+      const isMobile = window.innerWidth <= 768;
+
       observerRef.current = new IntersectionObserver((entries) => {
         if (ignoreIntersection.current) return;
 
-        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
+        // On mobile, just check if intersecting; on desktop, also check intersection ratio
+        const visibleEntries = isMobile
+          ? entries.filter((entry) => entry.isIntersecting)
+          : entries.filter(
+              (entry) => entry.isIntersecting && entry.intersectionRatio > 0.3
+            );
 
         if (visibleEntries.length > 0) {
           // Compare by visible pixel area instead of just intersection ratio
