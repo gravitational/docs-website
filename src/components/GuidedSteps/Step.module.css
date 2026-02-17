@@ -7,6 +7,7 @@
   border-radius: var(--m-1);
   border: 2px solid var(--color-tonal-neutral-0);
   scroll-margin-top: calc(var(--ifm-navbar-height) + var(--m-1));
+  transition: all 0.2s ease-in-out;
 
   @media (--md-scr) {
     padding: var(--m-1-5) var(--m-7) var(--m-1-5) var(--m-2);
