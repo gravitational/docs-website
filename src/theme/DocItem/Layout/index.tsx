@@ -11,7 +11,6 @@ import DocItemTOCDesktop from "@theme/DocItem/TOC/Desktop";
 import DocItemContent from "@theme/DocItem/Content";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import Unlisted from "@theme/ContentVisibility/Unlisted";
-import NavbarMobileSidebarToggle from "@theme/Navbar/MobileSidebar/Toggle";
 import type { Props } from "@theme/DocItem/Layout";
 import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 import { PositionProvider } from "/src/components/PositionProvider";
@@ -101,17 +100,18 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
           <div className={styles.docItemContainer}>
             <article className={styles.alternateBreadcrumbs}>
               {!hideTitleSection && <DocBreadcrumbs />}
-              <div className={styles.sidebar}>
-                <DocVersionBadge />
-                <NavbarMobileSidebarToggle />
-              </div>
+              {!fullWidth && (
+                <div className={styles.sidebar}>
+                  <DocVersionBadge />
+                </div>
+              )}
               {docTOC.mobile}
               <DocItemContent>
                 <PositionProvider>{children}</PositionProvider>
               </DocItemContent>
               <DocItemFooter />
             </article>
-            <DocItemPaginator />
+            {!fullWidth && <DocItemPaginator />}
           </div>
         </div>
         {!docTOC.removed && (
