@@ -1,40 +1,55 @@
-import "dotenv/config";
 import type { Config } from "@docusaurus/types";
+import "dotenv/config";
 import type { VFile } from "vfile";
 
-import { useDocById } from "@docusaurus/plugin-content-docs/client";
-import { getFromSecretOrEnv } from "./utils/general";
+import { definer as hcl } from "highlightjs-terraform";
+import path from "path";
+import {
+  getRootDir,
+  getVersionFromVFile,
+  updateAssetPath,
+  updatePathsInIncludes,
+} from "./server/asset-path-helpers";
 import { loadConfig } from "./server/config-docs";
 import {
   getCurrentVersion,
   getDocusaurusConfigVersionOptions,
   getLatestVersion,
+  getSidebarPath,
+  loadConfig as loadSiteConfig,
 } from "./server/config-site";
-import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
+import { extendedPostcssConfigPlugin } from "./server/postcss";
+import { getRedirects } from "./server/redirects";
+import { rehypeHLJS } from "./server/rehype-hljs";
+import remarkCodeSnippet from "./server/remark-code-snippet";
 import remarkIncludes from "./server/remark-includes";
 import remarkNoH1 from "./server/remark-no-h1";
+import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkVariables from "./server/remark-variables";
 import remarkVersionAlias from "./server/remark-version-alias";
-import remarkCodeSnippet from "./server/remark-code-snippet";
-import { fetchVideoMeta } from "./server/youtube-meta";
-import { getRedirects } from "./server/redirects";
-import {
-  updateAssetPath,
-  getVersionFromVFile,
-  getRootDir,
-  updatePathsInIncludes,
-} from "./server/asset-path-helpers";
 import {
   orderSidebarItems,
   removeRedundantItems,
 } from "./server/sidebar-order";
-import { extendedPostcssConfigPlugin } from "./server/postcss";
-import { rehypeHLJS } from "./server/rehype-hljs";
-import { definer as hcl } from "highlightjs-terraform";
-import path from "path";
-import fs from "fs";
+import { fetchVideoMeta } from "./server/youtube-meta";
+import { getFromSecretOrEnv } from "./utils/general";
 
 const latestVersion = getLatestVersion();
+
+const siteConfig = loadSiteConfig();
+const sidebar = require(getSidebarPath(siteConfig));
+
+const sidebarItems = Object.entries(sidebar).map(
+  ([sidebarId, sidebarItems]) => {
+    return {
+      label: sidebarItems[0]?.label || sidebarId,
+      type: "docSidebar",
+      sidebarId: sidebarId,
+      href:
+        "/" + (sidebarItems[0].id || sidebarItems[0].link.id)?.split("/")[1],
+    };
+  },
+);
 
 const config: Config = {
   future: {
@@ -75,6 +90,31 @@ const config: Config = {
       sidebar: {
         autoCollapseCategories: true,
       },
+    },
+    navbar: {
+      items:
+        sidebarItems.length > 1
+          ? sidebarItems.concat([
+              {
+                label: "Help & Support",
+                type: "dropdown",
+                items: [
+                  {
+                    label: "FAQ",
+                    href: "/faq/",
+                  },
+                  {
+                    label: "Changelog",
+                    href: "/changelog/",
+                  },
+                  {
+                    label: "Upcoming Releases",
+                    href: "/upcoming-releases/",
+                  },
+                ],
+              },
+            ])
+          : [],
     },
     image: "/og-image.png",
     colorMode: {
