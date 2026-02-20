@@ -106,3 +106,14 @@ h6 {
     line-height: 1.66667;
   }
 }
+
+/* MermaidJS diagrams*/
+
+svg g.architecture-edges {
+  path {
+    stroke: var(--color-light-gray) !important;
+  }
+  polygon {
+    fill: var(--color-light-gray) !important;
+  }
+}
