@@ -108,6 +108,9 @@ h6 {
 }
 
 /* MermaidJS diagrams*/
+svg g.architecture-service text tspan{
+    font-weight: 900;
+}
 
 svg g.architecture-edges {
   path {
