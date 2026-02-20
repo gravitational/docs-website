@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
-import { useInkeepSearch } from '@site/src/hooks/useInkeepSearch';
+import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
 import styles from "./InkeepSearch.module.css";
 import InkeepSearchIconSvg from "./inkeepIcon.svg";
 import { useLocation } from "@docusaurus/router";
@@ -11,7 +11,7 @@ export function InkeepSearch() {
   const searchQueryFromParams = searchParams.get('q');
   const {
     setIsOpen,
-    ModalSearchAndChat,
+    Modal,
     inkeepModalProps,
   } = useInkeepSearch({
     enableAIChat: true,
@@ -38,9 +38,7 @@ export function InkeepSearch() {
       </div>
       <BrowserOnly fallback={<div />}>
         {() => {
-          return (
-            ModalSearchAndChat && <ModalSearchAndChat {...inkeepModalProps} />
-          );
+          return Modal && <Modal {...inkeepModalProps} />;
         }}
       </BrowserOnly>
     </div>
