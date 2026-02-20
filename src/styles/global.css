@@ -106,3 +106,18 @@ h6 {
     line-height: 1.66667;
   }
 }
+
+/* MermaidJS diagrams*/
+svg g.architecture-service text tspan,
+svg g.architecture-groups text tspan {
+  font-weight: 900;
+}
+
+svg g.architecture-edges {
+  path {
+    stroke: var(--color-light-gray) !important;
+  }
+  polygon {
+    fill: var(--color-light-gray) !important;
+  }
+}
