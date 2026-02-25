@@ -1,11 +1,8 @@
-:global(:root) {
-  interpolate-size: allow-keywords;
-}
-
 .details {
   --docusaurus-details-decoration-color: var(--ifm-alert-border-color);
   --docusaurus-details-transition: transform var(--ifm-transition-fast) ease;
   --docusaurus-details-summary-arrow-size: 0.38rem;
+  interpolate-size: allow-keywords;
   margin: 0 0 var(--ifm-spacing-vertical);
   border: 1px solid var(--ifm-alert-border-color);
   overflow: hidden;
@@ -44,6 +41,8 @@
       width: 100%;
       transform: translateY(calc(var(--ifm-alert-padding-horizontal) + 1px));
       height: 1px;
+      opacity: 0;
+      transition: opacity 0.1s 0.38s;
       background-color: var(--docusaurus-details-decoration-color);
     }
   }
@@ -63,6 +62,10 @@
     :global(summary) {
       &::before {
         transform: rotate(90deg);
+      }
+      &::after {
+        opacity: 1;
+        transition: opacity 0s;
       }
     }
 
