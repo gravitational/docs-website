@@ -8,7 +8,7 @@
   overflow: hidden;
   padding-bottom: 0;
 
-  :global(summary) {
+  > :global(summary) {
     position: relative;
     padding-left: 1rem;
     list-style: none;
@@ -34,7 +34,7 @@
   }
 
   &[open] {
-    :global(summary) {
+    > :global(summary) {
       &::before {
         transform: rotate(90deg);
       }
@@ -52,7 +52,7 @@
   transform: translateY(calc(var(--ifm-alert-padding-horizontal) + 1px));
   height: 1px;
   opacity: 0;
-  transition: opacity 0.1s 0.38s;
+  transition: opacity 0.1s var(--details-transition-delay, 0.38s);
   background-color: var(--docusaurus-details-decoration-color);
   transition-behavior: allow-discrete;
 }
@@ -67,9 +67,9 @@
   padding-top: 1rem;
   margin-top: 0;
   transition:
-    block-size 0.4s ease-in-out,
-    content-visibility 0.4s ease-in-out,
-    margin-top 0.1s 0.38s;
+    block-size var(--details-transition-duration, 0.4s) ease-in-out,
+    content-visibility var(--details-transition-duration, 0.4s) ease-in-out,
+    margin-top 0.1s var(--details-transition-delay, 0.38s);
   transition-behavior: allow-discrete !important;
 }
 
@@ -78,7 +78,7 @@
   block-size: auto;
   padding: 1rem 0;
   transition:
-    block-size 0.4s ease-in-out,
-    content-visibility 0.4s ease-in-out,
+    block-size var(--details-transition-duration, 0.4s) ease-in-out,
+    content-visibility var(--details-transition-duration, 0.4s) ease-in-out,
     margin-top 0s;
 }
