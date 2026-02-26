@@ -66,19 +66,23 @@
   block-size: 0;
   padding-top: 1rem;
   margin-top: 0;
-  transition:
-    block-size var(--details-transition-duration, 0.4s) ease-in-out,
-    content-visibility var(--details-transition-duration, 0.4s) ease-in-out,
-    margin-top 0.1s var(--details-transition-delay, 0.38s);
-  transition-behavior: allow-discrete !important;
+  @supports (interpolate-size: allow-keywords) {
+    transition:
+      block-size var(--details-transition-duration, 0.4s) ease-in-out,
+      content-visibility var(--details-transition-duration, 0.4s) ease-in-out,
+      margin-top 0.1s var(--details-transition-delay, 0.38s);
+    transition-behavior: allow-discrete !important;
+  }
 }
 
 .details[open]::details-content {
   margin-top: 1rem;
   block-size: auto;
   padding: 1rem 0;
-  transition:
-    block-size var(--details-transition-duration, 0.4s) ease-in-out,
-    content-visibility var(--details-transition-duration, 0.4s) ease-in-out,
-    margin-top 0s;
+  @supports (interpolate-size: allow-keywords) {
+    transition:
+      block-size var(--details-transition-duration, 0.4s) ease-in-out,
+      content-visibility var(--details-transition-duration, 0.4s) ease-in-out,
+      margin-top 0s;
+  }
 }
