@@ -168,6 +168,7 @@ const config: Config = {
     hooks: {
       onBrokenMarkdownLinks: "throw",
     },
+    emoji: false,
   },
   themes: ["@docusaurus/theme-mermaid"],
   onBrokenLinks: "throw",
