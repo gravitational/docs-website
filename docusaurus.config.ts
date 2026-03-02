@@ -168,7 +168,7 @@ const config: Config = {
     hooks: {
       onBrokenMarkdownLinks: "throw",
     },
-    emoji: false,
+    emoji: false, // disabled because code snippets could be unintentionally replaced with emojis (https://github.com/gravitational/docs-website/issues/554).
   },
   themes: ["@docusaurus/theme-mermaid"],
   onBrokenLinks: "throw",
