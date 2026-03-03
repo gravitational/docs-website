@@ -27,7 +27,6 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     autoOpenOnInput = false,
   } = options;
   
-  const [message, setMessage] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [ModalSearchAndChat, setModalSearchAndChat] = useState(null);
 
@@ -132,7 +131,6 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     (str: string) => {
       chatCallableFunctionsRef.current?.updateInputMessage(str);
       searchCallableFunctionsRef.current?.updateQuery(str);
-      setMessage(str);
       if (autoOpenOnInput && str) {
         setIsOpen(true);
       }
@@ -174,9 +172,6 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
   };
 
   return {
-    message,
-    setMessage,
-    isOpen,
     setIsOpen,
     ModalSearchAndChat,
     inkeepModalProps,
