@@ -27,7 +27,6 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     autoOpenOnInput = false,
   } = options;
   
-  const [message, setMessage] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [ModalSearchAndChat, setModalSearchAndChat] = useState(null);
 
