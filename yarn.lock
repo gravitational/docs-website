@@ -1887,10 +1887,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/utilities/-/utilities-3.0.0.tgz#8c07044bd66f08c51f63fe5575a63f1b9a8bec8a"
   integrity sha512-etDqA/4jYvOGBM6yfKCOsEXfH96BKztZdgGmGqKi2xHnDe0ILIBraRspwgYatJH9JsCZ5HCGoCst8w18EKOAdg==
 
-"@cyberalien/svg-utils@^1.1.1":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@cyberalien/svg-utils/-/svg-utils-1.1.4.tgz#4e6fdf4cd985faa074f64aead350a014a1c07845"
-  integrity sha512-LlBw+9nsQPMO1QNJMuJSgXGWK1/r4D0PohTK0Uq1ehyGE420Qxq4+LVYkA9W0xkrNOCVYvRegbSy5By4f30W7w==
+"@cyberalien/svg-utils@^1.2.0":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@cyberalien/svg-utils/-/svg-utils-1.2.1.tgz#9b44a91d910a169f13c7734e4fac38e11a5a11b1"
+  integrity sha512-4Yulz3LkLsvE6802u6zRzg5jIZqjumWQYydW1gBYDT1wbQBobJ0MoGpBrwkfLpEqIgWetggen15PSj/ichplvw==
   dependencies:
     "@iconify/types" "^2.0.0"
 
@@ -2738,10 +2738,10 @@
   dependencies:
     "@hapi/hoek" "^11.0.2"
 
-"@iconify-json/carbon@^1.2.18":
-  version "1.2.18"
-  resolved "https://registry.yarnpkg.com/@iconify-json/carbon/-/carbon-1.2.18.tgz#e3efa415fac9fc4f60ac96a37ed8712670b7496c"
-  integrity sha512-Grb13E6r/RqTEV4Sqd/BQR2FUt57U2WLuticJ5H8JbTdHLop1LmdePu3EJJA3Xi8DcWRbD6OnC133hKfOwlgtg==
+"@iconify-json/carbon@^1.2.19":
+  version "1.2.19"
+  resolved "https://registry.yarnpkg.com/@iconify-json/carbon/-/carbon-1.2.19.tgz#eddb7a58025d1ba5ab166245362e1b6a18d34584"
+  integrity sha512-l89XjtEeSA5fxlxPTNSU9AA+rxaz/Dn0X/ux0/3awR+tAayY8iJqWQu3AKxhchfx3LB/fX1Nv3ZppZzrBAt7aA==
   dependencies:
     "@iconify/types" "*"
 
@@ -2752,16 +2752,16 @@
   dependencies:
     "@iconify/types" "*"
 
-"@iconify/tools@^5.0.3":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@iconify/tools/-/tools-5.0.3.tgz#0b1b778fb7d26173e0829e47287e85bc76234aa4"
-  integrity sha512-W5nbH5fNv20TvU49Al19Foos/ViAnmppbCNV9ieGl6/dRMDRzxeFol6peXX/NAgaOytQwZZxTTJRq/Kxd4eWsA==
+"@iconify/tools@^5.0.4":
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@iconify/tools/-/tools-5.0.4.tgz#10221af4116aa346464b2f7c65abe74856b0d5df"
+  integrity sha512-cXCAxFNQq23mlu+rCcX4clUolc1W4CuQPJ/QyFipbgxBKdsdbzvvdcOz1d6m9C82zPq5Zhdxwq1X75RrqxSvHQ==
   dependencies:
-    "@cyberalien/svg-utils" "^1.1.1"
+    "@cyberalien/svg-utils" "^1.2.0"
     "@iconify/types" "^2.0.0"
     "@iconify/utils" "^3.1.0"
     fflate "^0.8.2"
-    modern-tar "^0.7.3"
+    modern-tar "^0.7.5"
     pathe "^2.0.3"
     svgo "^4.0.0"
 
@@ -12710,10 +12710,10 @@ mlly@^1.7.4, mlly@^1.8.0:
     pkg-types "^1.3.1"
     ufo "^1.6.1"
 
-modern-tar@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/modern-tar/-/modern-tar-0.7.3.tgz#6c302e229040f37fd359e37d1930fdd6ff9fc57c"
-  integrity sha512-4W79zekKGyYU4JXVmB78DOscMFaJth2gGhgfTl2alWE4rNe3nf4N2pqenQ0rEtIewrnD79M687Ouba3YGTLOvg==
+modern-tar@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/modern-tar/-/modern-tar-0.7.5.tgz#d932328f83a9fe97ebf72365188cef7e90ba6e78"
+  integrity sha512-YTefgdpKKFgoTDbEUqXqgUJct2OG6/4hs4XWLsxcHkDLj/x/V8WmKIRppPnXP5feQ7d1vuYWSp3qKkxfwaFaxA==
 
 mri@^1.1.0:
   version "1.2.0"
