@@ -36,6 +36,19 @@ import fs from "fs";
 
 const latestVersion = getLatestVersion();
 
+function clayTrackingPlugin() {
+  return {
+    name: 'clay-tracking',
+    injectHtmlTags() {
+      return {
+        postBodyTags: [
+          '<script src="https://static.claydar.com/init.v1.js?id=cQAbHkxXzz"></script>',
+        ],
+      };
+    },
+  };
+}
+
 const config: Config = {
   future: {
     v4: {
@@ -322,6 +335,7 @@ const config: Config = {
       };
     },
     extendedPostcssConfigPlugin,
+    clayTrackingPlugin,
     process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
   ].filter(Boolean),
 };
