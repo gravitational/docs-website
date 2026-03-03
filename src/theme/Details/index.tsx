@@ -7,7 +7,10 @@ import styles from "./styles.module.css";
 
 const InfimaClasses = "alert alert--info";
 
-// https://github.com/facebook/docusaurus/blob/d5509e329d090ca3ab1da94d41834ddd51f11937/packages/docusaurus-theme-common/src/components/Collapsible/index.tsx#L74-L82
+/*
+  Calculates a duration for the transition based on the content height. Adapted from Docusaurus's Collapsible component:
+  https://github.com/facebook/docusaurus/blob/d5509e329d090ca3ab1da94d41834ddd51f11937/packages/docusaurus-theme-common/src/components/Collapsible/index.tsx#L74-L82
+*/
 function getAutoHeightDuration(height: number) {
   if (prefersReducedMotion()) {
     return 1;
