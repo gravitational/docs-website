@@ -16,15 +16,17 @@ interface UseInkeepSearchOptions {
   keyboardShortcut?: string; // 'f' for ⌘+F, 'k' for ⌘+K
   enableAIChat?: boolean;
   autoOpenOnInput?: boolean; // Auto-open modal when typing
+  defaultQuery?: string;
 }
 
 export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
-  const { 
-    version, 
-    enableKeyboardShortcut = false, 
+  const {
+    version,
+    enableKeyboardShortcut = false,
     keyboardShortcut = 'k',
     enableAIChat = false,
     autoOpenOnInput = false,
+    defaultQuery,
   } = options;
   
   const [isOpen, setIsOpen] = useState(false);
@@ -119,13 +121,14 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
 
   const inkeepAIChatSettings: InkeepAIChatSettings | undefined = enableAIChat
     ? {
-        aiAssistantName: 'Teleport',
-        aiAssistantAvatar: 'https://goteleport.com/static/pam-standing.svg',
-      }
+      aiAssistantName: 'Teleport',
+      aiAssistantAvatar: 'https://goteleport.com/static/pam-standing.svg',
+    }
     : undefined;
 
   const chatCallableFunctionsRef = useRef<AIChatFunctions | null>(null);
   const searchCallableFunctionsRef = useRef<SearchFunctions | null>(null);
+  const skipNextChatEmptyRef = useRef(!!defaultQuery);
 
   const handleChange = useCallback(
     (str: string) => {
@@ -138,10 +141,26 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     [autoOpenOnInput]
   );
 
+  // Wrapper for onInputMessageChange that skips the first empty-string call.
+  // When the chat mounts, it fires onInputMessageChange('') which would overwrite
+  // the defaultQuery already set in search via searchSettings. We skip that initial
+  // call only — subsequent clears by the user go through normally.
+  const handleChatInputChange = useCallback(
+    (str: string) => {
+      if (skipNextChatEmptyRef.current && str === '') {
+        skipNextChatEmptyRef.current = false;
+        return;
+      }
+      handleChange(str);
+    },
+    [handleChange]
+  );
+
   // Create dynamic search settings based on version
   const dynamicSearchSettings = {
     ...inkeepSearchSettings,
     searchFunctionsRef: searchCallableFunctionsRef,
+    defaultQuery,
     onQueryChange: handleChange,
     // Add version-specific metadata if version is provided
     ...(version && {
@@ -166,7 +185,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
       aiChatSettings: {
         ...inkeepAIChatSettings,
         chatFunctionsRef: chatCallableFunctionsRef,
-        onInputMessageChange: handleChange,
+        onInputMessageChange: handleChatInputChange,
       },
     }),
   };
