@@ -32,13 +32,13 @@ import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
-import fs from "fs";
+import { llmsTxtPluginOptions } from "./config/llms-txt-plugin-config";
 
 const latestVersion = getLatestVersion();
 
 function clayTrackingPlugin() {
   return {
-    name: 'clay-tracking',
+    name: "clay-tracking",
     injectHtmlTags() {
       return {
         postBodyTags: [
@@ -337,6 +337,7 @@ const config: Config = {
     extendedPostcssConfigPlugin,
     clayTrackingPlugin,
     process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
+    ["@signalwire/docusaurus-plugin-llms-txt", llmsTxtPluginOptions],
   ].filter(Boolean),
 };
 

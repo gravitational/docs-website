@@ -57,7 +57,7 @@ export default function DocItemContent({ children }: Props): ReactNode {
           <header
             className={hideTitleSection ? "hide-title-section" : undefined}
           >
-            <Heading as="h1" className="docItemTitle">
+            <Heading as="h1" className="docItemTitle" id="docItemTitle">
               {syntheticTitle}
             </Heading>
             {frontMatter.description && showDescription && (
@@ -67,7 +67,14 @@ export default function DocItemContent({ children }: Props): ReactNode {
             {videoBanner && <VideoBar {...videoBanner} />}
           </header>
         )}
-        <MDXContent>{children}</MDXContent>
+        <div id="docItemContent">
+          {syntheticTitle && (
+            <h1 aria-hidden="true" tabIndex={-1} style={{position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(1px, 1px, 1px, 1px)'}}>
+              {syntheticTitle}
+            </h1>
+          )}
+          <MDXContent>{children}</MDXContent>
+        </div>
         {syntheticTitle && !hideTitleSection && (
           <ThumbsFeedback
             feedbackLabel="Was this page helpful?"
