@@ -8,13 +8,14 @@ import {
   copyPageContentAsMarkdown,
   normalizeMarkdownPathname,
 } from "@site/src/utils/markdown";
-import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "@docusaurus/Link";
+import { useMemo, useRef, useState } from "react";
+import { useWindowSize } from "@docusaurus/theme-common";
 
 const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
   const { setIsOpen, ModalSearchAndChat, inkeepModalProps } = useInkeepSearch({
     enableAIChat: true,
   });
+  const windowSize = useWindowSize();
   const [copiedMessage, setCopiedMessage] = useState<string>("Copy for LLM");
 
   const copyButtonRef = useRef<HTMLButtonElement>(null);
@@ -26,17 +27,27 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
 
   return (
     <div className={styles.pageActions}>
+      <a
+        className={styles.githubLink}
+        href={getReportIssueURL(pathname)}
+        target={"_blank"}
+      >
+        <Icon size="md" name="githubLogo" />
+        <span>Report an Issue</span>
+      </a>
       <button
         className={styles.askAIButton}
-        style={{ minWidth: `${copyButtonWidth}px` }}
+        style={
+          windowSize === "desktop" ? { minWidth: `${copyButtonWidth}px` } : {}
+        }
         ref={copyButtonRef}
         onClick={() => {
           copyPageContentAsMarkdown(pathname);
           setCopiedMessage("Copied!");
-          setTimeout(() => setCopiedMessage("Copy for LLM"), 4000);
+          setTimeout(() => setCopiedMessage("Copy for LLM"), 3000);
         }}
       >
-        <Icon size="md" name="copySimple" />
+        <Icon size="md" name="clipboard" />
         <span>{copiedMessage}</span>
       </button>
       <a
@@ -44,16 +55,8 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
         href={normalizeMarkdownPathname(pathname)}
         target="_blank"
       >
-        <Icon size="md" name="arrowSquareOut" />
-        <span>View as markdown</span>
-      </a>
-      <a
-        className={styles.githubLink}
-        href={getReportIssueURL(pathname)}
-        target={"_blank"}
-      >
-        <Icon size="md" name="clipboard" />
-        <span>Report an Issue</span>
+        <Icon size="md" name="markdown" />
+        <span>View as Markdown</span>
       </a>
       <ThumbsFeedback />
       <BrowserOnly fallback={<div />}>

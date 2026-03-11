@@ -1,4 +1,7 @@
 import type { Options as PluginOptions } from "@signalwire/docusaurus-plugin-llms-txt";
+import rehypeRemoveAnchorLinks from "./rehype-remove-heading-anchor-links";
+import rehypeRemoveBottomFeedback from "./rehype-remove-bottom-feedback";
+import rehypeRepositionH1 from "./rehype-reposition-h1";
 
 const sections = [
   {
@@ -102,28 +105,31 @@ export const llmsTxtPluginOptions: PluginOptions = {
     enableFiles: true,
     relativePaths: true,
     includeDocs: true,
-    includeVersionedDocs: false,
     includeBlog: false,
     includePages: false,
     includeGeneratedIndex: false,
+    beforeDefaultRehypePlugins: [
+      rehypeRemoveAnchorLinks,
+      rehypeRemoveBottomFeedback,
+      rehypeRepositionH1,
+    ], // Custom rehype plugins to clean up and reposition content
+    /* rehypePlugins: [rehypeRepositionH1], */ // Custom rehype plugin to move the first h1 in the content to the top of the markdown file
     remarkStringify: {
       rule: "-",
       ruleRepetition: 3,
     },
-    contentSelectors: ["[id^='docItem']"], // CSS selectors to identify the main content to be included in the markdown files
+    contentSelectors: [".theme-doc-markdown"], // CSS selectors to identify the main content to be included in the markdown files
   },
 
   // llms.txt index file options
   llmsTxt: {
     sections,
-    autoSectionDepth: 2,
     autoSectionPosition: 11,
     includeDocs: true,
-    includeVersionedDocs: false,
     includeBlog: false,
     includePages: false,
     includeGeneratedIndex: false,
-    excludeRoutes: ["/docs/tags/**", "/docs/index/"],
+    excludeRoutes: ["/docs/tags/**"],
 
     enableDescriptions: true,
     siteTitle: "Teleport documentation",

@@ -68,11 +68,6 @@ export default function DocItemContent({ children }: Props): ReactNode {
           </header>
         )}
         <div id="docItemContent">
-          {syntheticTitle && (
-            <h1 aria-hidden="true" tabIndex={-1} style={{position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(1px, 1px, 1px, 1px)'}}>
-              {syntheticTitle}
-            </h1>
-          )}
           <MDXContent>{children}</MDXContent>
         </div>
         {syntheticTitle && !hideTitleSection && (
