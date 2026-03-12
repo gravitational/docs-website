@@ -102,23 +102,13 @@ export const llmsTxtPluginOptions: PluginOptions = {
 
   // Markdown file generation options
   markdown: {
-    enableFiles: true,
-    relativePaths: true,
-    includeDocs: true,
-    includeBlog: false,
-    includePages: false,
+    relativePaths: false, // Whether to use relative paths or absolute paths in the generated markdown files
     includeGeneratedIndex: false,
     beforeDefaultRehypePlugins: [
       rehypeRemoveAnchorLinks,
       rehypeRemoveBottomFeedback,
       rehypeRepositionH1,
-    ], // Custom rehype plugins to clean up and reposition content
-    /* rehypePlugins: [rehypeRepositionH1], */ // Custom rehype plugin to move the first h1 in the content to the top of the markdown file
-    remarkStringify: {
-      rule: "-",
-      ruleRepetition: 3,
-    },
-    contentSelectors: [".theme-doc-markdown"], // CSS selectors to identify the main content to be included in the markdown files
+    ], // Custom rehype plugins to clean up and reposition content for cleaner markdown output
   },
 
   // llms.txt index file options
@@ -130,7 +120,6 @@ export const llmsTxtPluginOptions: PluginOptions = {
     includePages: false,
     includeGeneratedIndex: false,
     excludeRoutes: ["/docs/tags/**"],
-
     enableDescriptions: true,
     siteTitle: "Teleport documentation",
     siteDescription:
