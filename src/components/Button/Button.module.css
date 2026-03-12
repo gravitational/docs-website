@@ -81,6 +81,21 @@
     }
   }
 
+  &.variant-outline-rounded {
+    border-radius: var(--r-circle);
+    box-shadow: none;
+    border: 1px solid #c4a9ff;
+    background-color: var(--color-white);
+    color: var(--color-dark-purple);
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: var(--color-dark-purple);
+      color: var(--color-white);
+      border-color: var(--color-dark-purple);
+    }
+  }
+
   &.variant-success {
     color: var(--color-interactive-success-default);
     border-color: var(--color-interactive-success-default);
