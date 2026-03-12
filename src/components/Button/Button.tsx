@@ -15,7 +15,8 @@ export type ButtonVariant =
   | "success"
   | "failure"
   | "neutral"
-  | "outline-rounded";
+  | "outline-rounded"
+  | "primary-rounded";
 export type ButtonShape = "sm" | "md" | "lg" | "outline";
 
 export interface BaseProps {

@@ -34,7 +34,7 @@ const HeaderCTA = ({
               className={styles.cta}
               href={cta.href}
               key={`navCTA-${cta.href}-${i}`}
-              variant={i !== 0 ? "secondary" : "outline-rounded"}
+              variant={i !== 0 ? "primary-rounded" : "outline-rounded"}
               id={cta?.elementId || ""}
               shape="md"
             >
