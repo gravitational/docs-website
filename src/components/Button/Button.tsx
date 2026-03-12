@@ -8,11 +8,19 @@ import { clsx } from "clsx";
 
 import styles from "./Button.module.css";
 
-export type ButtonVariant = "primary" | "secondary" | "secondary-white" | "success" | "failure" | "neutral";
+export type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "secondary-white"
+  | "success"
+  | "failure"
+  | "neutral"
+  | "outline-rounded"
+  | "primary-rounded";
 export type ButtonShape = "sm" | "md" | "lg" | "outline";
 
 export interface BaseProps {
-  variant?: ButtonVariant | ButtonVariant[];  
+  variant?: ButtonVariant | ButtonVariant[];
   shape?: ButtonShape | ButtonShape[];
 }
 
