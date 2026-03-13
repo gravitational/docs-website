@@ -59,6 +59,7 @@
     "@iconify-json/logos": "^1.2.10",
     "@iconify/tools": "^5.0.5",
     "@mdx-js/react": "^3.1.1",
+    "@signalwire/docusaurus-plugin-llms-txt": "2.0.0-alpha.7",
     "classnames": "^2.3.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
