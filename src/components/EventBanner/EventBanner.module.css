@@ -6,8 +6,8 @@
   position: sticky;
   z-index: 1999;
   top: 0;
-  background-color: #009984;
-  color: white;
+  background-color: #13c5e0;
+  color: #09113a;
   height: 48px;
   gap: 16px;
   text-decoration: none;
@@ -28,8 +28,8 @@
   position: sticky;
   z-index: 1999;
   top: 0;
-  background-color: #009984;
-  color: #ffffff;
+  background-color: #13c5e0;
+  color: #09113a;
   height: 48px;
   gap: 16px;
   text-decoration: none;
@@ -115,7 +115,7 @@
   min-width: unset;
   text-transform: none;
   vertical-align: inherit;
-  color: white;
+  color: #09113a;
   @media (--nav) {
     font-size: 14px;
     line-height: 21px;
@@ -127,7 +127,7 @@
 .linkButton a {
   text-decoration: none;
   text-transform: uppercase;
-  color: white;
+  color: #09113a;
 }
 .ctaWrapper {
   display: flex;
@@ -158,9 +158,5 @@
   @media (min-width: 700px) {
     display: flex;
   }
-
-  background-color: #007a6a;
-  @media (--nav) {
-    background-color: #008a77;
-  }
+  background-color: #11b1ca;
 }
