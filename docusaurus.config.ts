@@ -32,7 +32,7 @@ import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
-import { llmsTxtPluginOptions } from "./docusaurus-plugin-config/llms-txt";
+import { llmsTxtPluginOptions } from "./server/llms";
 
 const latestVersion = getLatestVersion();
 

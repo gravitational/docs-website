@@ -2,14 +2,14 @@ import { Root, Element } from "hast";
 import { Plugin } from "unified";
 import { visitParents } from "unist-util-visit-parents";
 
-// Moves the first h1 in the content to the top of the markdown file, in order for the output to have a proper title
+// Moves the h1 heading in the content to the top of the markdown file in order for the output to have a proper title
 const rehypeRepositionH1: Plugin<[], Root, Root> = function () {
   return (tree: Root) => {
     let h1: Element | null = null;
     let headerParent: Element | Root | null = null;
     let headerElement: Element | null = null;
 
-    // Find the first h1 on the page and its containing header element
+    // Find the h1 heading on the page and its containing header element
     visitParents(tree, "element", (node, ancestors) => {
       if (h1) return;
       const element = node as Element;

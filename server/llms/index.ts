@@ -1,8 +1,10 @@
 import type { Options as PluginOptions } from "@signalwire/docusaurus-plugin-llms-txt";
 import rehypeRemoveAnchorLinks from "./rehype-remove-heading-anchor-links";
-import rehypeRemoveBottomFeedback from "./rehype-remove-bottom-feedback";
+import rehypeRemoveIrrelevantComponents from "./rehype-remove-irrelevant-components";
 import rehypeRepositionH1 from "./rehype-reposition-h1";
+import rehypeProcessCustomComponentsForMarkdown from "./rehype-process-custom-components";
 
+// Define the sections for the llms.txt index file, including their routes and descriptions
 const sections = [
   {
     id: "get-started",
@@ -102,13 +104,18 @@ export const llmsTxtPluginOptions: PluginOptions = {
 
   // Markdown file generation options
   markdown: {
-    relativePaths: false, // Whether to use relative paths or absolute paths in the generated markdown files
-    includeGeneratedIndex: false,
+    relativePaths: false, // Whether to use relative paths or absolute path URLs in the generated markdown files
     beforeDefaultRehypePlugins: [
       rehypeRemoveAnchorLinks,
-      rehypeRemoveBottomFeedback,
+      rehypeRemoveIrrelevantComponents,
       rehypeRepositionH1,
+      rehypeProcessCustomComponentsForMarkdown,
     ], // Custom rehype plugins to clean up and reposition content for cleaner markdown output
+    remarkStringify: {
+      bullet: "-",
+      rule: "-",
+      ruleRepetition: 3,
+    },
   },
 
   // llms.txt index file options
@@ -118,7 +125,6 @@ export const llmsTxtPluginOptions: PluginOptions = {
     includeDocs: true,
     includeBlog: false,
     includePages: false,
-    includeGeneratedIndex: false,
     excludeRoutes: ["/docs/tags/**"],
     enableDescriptions: true,
     siteTitle: "Teleport documentation",
