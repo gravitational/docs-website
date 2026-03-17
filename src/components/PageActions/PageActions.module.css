@@ -53,7 +53,7 @@
   color: var(--color-foreground-slightly-muted);
   display: flex;
   align-items: center;
-  font-size: var(--fs-text-md);
+  font-size: var(--fs-text-lg);
   letter-spacing: 0.024px;
   line-height: 1.625;
   margin: 0;

@@ -22,7 +22,7 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
 
   const copyButtonWidth = useMemo(
     () => copyButtonRef.current?.offsetWidth || 125,
-    [],
+    [copyButtonRef.current?.offsetWidth],
   );
 
   return (
