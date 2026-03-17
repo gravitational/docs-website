@@ -132,6 +132,10 @@
     "wait-on": "^9.0.4",
     "yaml": "^2.8.2"
   },
+  "resolutions": {
+    "vfile": "^6.0.0",
+    "vfile-message": "^4.0.0"
+  },
   "browserslist": {
     "production": [
       ">0.5%",
