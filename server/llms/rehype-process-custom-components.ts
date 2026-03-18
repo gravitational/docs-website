@@ -264,6 +264,76 @@ const rehypeProcessCustomComponentsForMarkdown: Plugin<[], Root, Root> =
           }
         }
       }
+
+      // --- card links: only headings keep the link ---
+      // prevents the same link from being repeated multiple times in custom card components with an <a> wrapper.
+      {
+        type AnchorEntry = {
+          node: Element;
+          parent: Element | Root;
+        };
+
+        function collectNodes(
+          node: Element,
+          href: Element["properties"][string],
+        ): Element[] {
+          const results: Element[] = [];
+          for (const child of node.children) {
+            if (child.type !== "element") continue;
+            const childEl = child as Element;
+            if (/^h[1-6]$/.test(childEl.tagName)) {
+              results.push({
+                type: "element",
+                tagName: "a",
+                properties: { href },
+                children: [childEl],
+              });
+            } else if (/^(p)$/.test(childEl.tagName)) {
+              results.push(childEl);
+            } else if (/^(img|svg)$/.test(childEl.tagName)) {
+              continue;
+            } else {
+              const nested = collectNodes(childEl, href);
+              if (nested.length > 0) {
+                results.push(...nested);
+              } else {
+                // Keep the
+                results.push(childEl);
+              }
+            }
+          }
+          return results;
+        }
+
+        // Look for <a> tags that wrap around content
+        const anchorEntries = new Map<Element, AnchorEntry>();
+
+        visitParents(tree, "element", (node, ancestors) => {
+          const element = node as Element;
+          if (!/^(h[1-6])$/.test(element.tagName)) return;
+
+          for (let i = ancestors.length - 1; i >= 0; i--) {
+            const ancestor = ancestors[i];
+            if (ancestor.type !== "element") continue;
+            const ancestorEl = ancestor as Element;
+            if (ancestorEl.tagName !== "a") continue;
+            if (!anchorEntries.has(ancestorEl)) {
+              const parent = ancestors[i - 1] as Element | Root;
+              anchorEntries.set(ancestorEl, { node: ancestorEl, parent });
+            }
+            break;
+          }
+        });
+
+        for (const { node, parent } of anchorEntries.values()) {
+          const href = node.properties?.href;
+          const newNodes = collectNodes(node, href);
+          const idx = parent.children.indexOf(node);
+          if (idx >= 0) {
+            parent.children.splice(idx, 1, ...newNodes);
+          }
+        }
+      }
     };
   };
 

@@ -4,7 +4,7 @@ import { visitParents } from "unist-util-visit-parents";
 
 // Remove interactive components which are not relevant for the markdown page output
 const rehypeRemoveIrrelevantComponents: Plugin<[], Root, Root> = function () {
-  const irrelevantClassPrefixes = ["thumbsFeedback", "checkpoint"]; // Add any other class prefixes for irrelevant components as needed
+  const irrelevantClassPrefixes = ["thumbsFeedback", "checkpoint", "docsHeader"]; // Add any other class prefixes for irrelevant components as needed
   return (tree: Root) => {
     const toRemove: Array<{ node: Element | import("hast").Comment; parent: Element | Root }> = [];
 

@@ -87,4 +87,36 @@ describe("server/llms/rehype-process-custom-components", () => {
       ).trim(),
     );
   });
+
+  test("Link with inner content: only headings keep the link, other elements are unwrapped", () => {
+    const result = transformer(
+      readFileSync(
+        resolve("server/fixtures/llms/anchor-mixed-content.html"),
+        "utf-8",
+      ),
+    );
+
+    expect((result.value as string).trim()).toBe(
+      readFileSync(
+        resolve("server/fixtures/llms/result/anchor-mixed-content.html"),
+        "utf-8",
+      ).trim(),
+    );
+  });
+
+  test("Link with deeply nested content: traverses into wrapper divs, headings keep the link and other elements are unwrapped", () => {
+    const result = transformer(
+      readFileSync(
+        resolve("server/fixtures/llms/anchor-mixed-content-nested.html"),
+        "utf-8",
+      ),
+    );
+
+    expect((result.value as string).trim()).toBe(
+      readFileSync(
+        resolve("server/fixtures/llms/result/anchor-mixed-content-nested.html"),
+        "utf-8",
+      ).trim(),
+    );
+  });
 });
