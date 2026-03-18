@@ -297,7 +297,7 @@ const rehypeProcessCustomComponentsForMarkdown: Plugin<[], Root, Root> =
               if (nested.length > 0) {
                 results.push(...nested);
               } else {
-                // Keep the
+                // Keep other elements as is
                 results.push(childEl);
               }
             }
