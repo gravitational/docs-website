@@ -8,6 +8,7 @@ import { visitParents } from "unist-util-visit-parents";
  * Tabs: place tab content directly after the label
  * Var: prevent duplicate text by keeping only the placeholder text
  * Code blocks: extract text content and replace with clean <pre><code> structure
+ * Card links: prevent duplicate links in the markdown output
  */
 const rehypeProcessCustomComponentsForMarkdown: Plugin<[], Root, Root> =
   function () {
