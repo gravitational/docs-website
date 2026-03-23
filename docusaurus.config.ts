@@ -29,50 +29,13 @@ import {
   removeRedundantItems,
 } from "./server/sidebar-order";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
+import { clayTrackingPlugin, googleTagGatewayPlugin } from "./server/tracking-plugins";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
 import fs from "fs";
 
 const latestVersion = getLatestVersion();
-
-function clayTrackingPlugin() {
-  return {
-    name: 'clay-tracking',
-    injectHtmlTags() {
-      return {
-        postBodyTags: [
-          '<script src="https://static.claydar.com/init.v1.js?id=cQAbHkxXzz"></script>',
-        ],
-      };
-    },
-  };
-}
-
-const GTM_CONTAINER_ID = "GTM-WMR7H6";
-
-function googleTagGatewayPlugin() {
-  return {
-    name: 'google-tag-gateway',
-    injectHtmlTags() {
-      return {
-        headTags: [
-          {
-            tagName: 'script',
-            innerHTML: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://goteleport.com/m/'+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');`,
-          },
-        ],
-        postBodyTags: [
-          `<noscript><iframe src="https://goteleport.com/m/" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>`,
-        ],
-      };
-    },
-  };
-}
 
 const config: Config = {
   future: {
@@ -228,7 +191,6 @@ const config: Config = {
         },
       },
     ],
-    googleTagGatewayPlugin,
     "@docusaurus/theme-classic",
     "@docusaurus/plugin-sitemap",
     [
@@ -356,6 +318,7 @@ const config: Config = {
     },
     extendedPostcssConfigPlugin,
     clayTrackingPlugin,
+    googleTagGatewayPlugin,
     process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
   ].filter(Boolean),
 };
