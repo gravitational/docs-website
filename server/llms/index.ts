@@ -1,8 +1,5 @@
 import type { Options as PluginOptions } from "@signalwire/docusaurus-plugin-llms-txt";
-import rehypeRemoveAnchorLinks from "./rehype-remove-heading-anchor-links";
-import rehypeRemoveIrrelevantComponents from "./rehype-remove-irrelevant-components";
-import rehypeRepositionH1 from "./rehype-reposition-h1";
-import rehypeProcessCustomComponentsForMarkdown from "./rehype-process-custom-components";
+import rehypePrepareHTML from "./rehype-prepare-html";
 
 // Define the sections for the llms.txt index file, including their routes and descriptions
 const sections = [
@@ -105,12 +102,7 @@ export const llmsTxtPluginOptions: PluginOptions = {
   // Markdown file generation options
   markdown: {
     relativePaths: false, // Whether to use relative paths or absolute path URLs in the generated markdown files
-    beforeDefaultRehypePlugins: [
-      rehypeRemoveAnchorLinks,
-      rehypeRemoveIrrelevantComponents,
-      rehypeRepositionH1,
-      rehypeProcessCustomComponentsForMarkdown,
-    ], // Custom rehype plugins to clean up and reposition content for cleaner markdown output
+    beforeDefaultRehypePlugins: [rehypePrepareHTML], // Custom rehype plugins to clean up and reposition content for cleaner markdown output
     remarkStringify: {
       bullet: "-",
       rule: "-",
