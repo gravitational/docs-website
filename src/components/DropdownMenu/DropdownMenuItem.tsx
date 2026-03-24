@@ -30,7 +30,7 @@ const DropdownMenuItem = ({
     <Link
       className={clsx(
         styles.styledLink,
-        (!description || !newSubmenuItem) && styles.center,
+        !description && styles.center,
         newSubmenuItem && styles.newSubmenuLink,
         newSubmenuItem && first && styles.firstLink,
       )}
