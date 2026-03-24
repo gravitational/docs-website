@@ -18,7 +18,7 @@ const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
   return (
     <div className={styles.subMenuWrapper}>
       <div className={styles.subMenus}>
-        {items.map(({ submenuTitle, submenuTitleLink}, index) => {
+        {items.map(({ submenuTitle, submenuTitleLink }, index) => {
           if (submenuTitle && submenuTitleLink?.length > 0) {
             return (
               <Link
@@ -56,10 +56,14 @@ const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
       </div>
       {items
         ?.filter(({ submenuTitleLink }) => !submenuTitleLink)
-        .map(({ submenuSections, submenuTitle }, i) => (
+        .map(({ submenuSections, submenuTitle, newSubmenuStyle }, i) => (
           <div
             key={`wrapper${submenuTitle}-${i}`}
-            className={cn(styles.wrapper, i === activeTab ? styles.active : "")}
+            className={cn(
+              styles.wrapper,
+              i === activeTab ? styles.active : "",
+              newSubmenuStyle && styles.newSubmenuWrapper,
+            )}
           >
             {submenuSections?.map((section, index) => {
               const middleIndex = Math.ceil(section.sectionItems.length / 2);
@@ -84,12 +88,15 @@ const DropdownSubMenu = ({ items }: DropdownMenuProps) => {
                       ({ itemType }) => itemType === "normal",
                     ) && styles.normal,
                     index === submenuSections.length - 1 && styles.last,
+                    newSubmenuStyle && styles.newSubmenuStyle,
                   )}
                 >
                   {items.map((item, j) => (
                     <div key={`submenu-items-${item[0]?.title}-${j}`}>
                       {item.map((sectionItemProps, i) => (
                         <DropdownMenuItem
+                          first={i === 0}
+                          newSubmenuItem={newSubmenuStyle}
                           title={sectionItemProps?.title || undefined}
                           key={`${sectionItemProps?.title}-item${i}`}
                           {...sectionItemProps}

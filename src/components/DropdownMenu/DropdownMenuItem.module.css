@@ -31,6 +31,29 @@
   &:focus {
     color: var(--color-dark-purple);
     background-color: none;
+    text-decoration: none;
+    button {
+        svg {
+          transform: "translateX(4px)",
+        }
+      }
+  }
+  &.newSubmenuLink {
+    @media (--nav) {
+      flex-direction: column;
+      padding-bottom: 5px;
+    }
+    align-items: flex-start;
+    padding-bottom: 24px;
+    padding-top: 5px;
+  }
+  &.firstLink {
+    padding-top: 0;
+    padding-bottom: 0;
+    @media (--nav) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      padding-bottom: 0;
+    }
   }
 }
 
@@ -70,6 +93,9 @@
   margin-left: 8px;
   @media (--nav) {
     margin-left: 16px;
+    &.newSubmenuItem {
+      margin-left: 0; 
+    }
   }
   &.imageitemText {
     margin-top: 12px;
@@ -87,9 +113,17 @@
   font-weight: 400;
   margin: 0;
   @media (--nav) {
+    white-space: pre-wrap;
     font-size: 14px;
     line-height: 20px;
     font-weight: bold;
+    &.firstNewSubmenuTitle {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    &.newSubmenuTitle {
+      font-weight: normal;
+    }
   }
 }
 .description {
@@ -100,6 +134,9 @@
   margin-top: 4px;
   color: var(--color-gray);
   display: none;
+  &.newSubmenuDescription {
+    color:rgba(0, 0, 0, 0.54);
+  }
   @media (--nav) {
     display: initial;
   }
@@ -110,6 +147,14 @@
   flex-direction: column;
   row-gap: 8px;
   min-width: 35px;
+  &.newSubmenuIcon {
+    align-items: center;
+    margin-bottom: 10px;
+    column-gap: 10px;
+    @media (--nav) {
+      flex-direction: row;
+    }
+  }
 }
 
 .dateText {
@@ -144,5 +189,33 @@
     font-size: 14px;
     line-height: 20px;
     font-weight: bold;
+  }
+}
+
+.buttonWrapper {
+  margin: "10px 0";
+}
+
+.learnButton {
+border: none;
+  pointer-events: none;
+  background-color: transparent;
+  justify-content: flex-start;
+  color: var(--color-dark-purple);;
+  letter-spacing: normal;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.75;
+  padding: 0;
+  svg {
+    transition: all 0.3s ease-in-out; 
+    margin-left: 8px;
+    margin-right: -4px;
+  }
+
+  
+  &:hover, &:focus, &:active {
+    color: var(--color-light-purple);
+      background-color: transparent;
   }
 }

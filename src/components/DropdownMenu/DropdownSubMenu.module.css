@@ -9,7 +9,11 @@
   @media (--nav) {
     flex-direction: row;
     background-color: transparent;
+    &.newSubmenuWrapper {
+      justify-content: space-between;
+    }
   }
+ 
 }
 
 .subMenus {
@@ -111,6 +115,17 @@
   &.last {
     @media (--nav) {
       border-right: none;
+    }
+  }
+  &.newSubmenuStyle {
+    border-right: none;
+    @media (--nav) {
+      border-right: none;
+      justify-content: space-between;
+      max-width: 200px;
+    }
+    @media (min-width: 1536px) {
+      max-width: unset;
     }
   }
 }

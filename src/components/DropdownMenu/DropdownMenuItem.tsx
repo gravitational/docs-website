@@ -2,6 +2,8 @@ import { clsx } from "clsx";
 
 import Link from "../Link";
 import New from "./assets/new-badge.svg";
+import NewChip from "./assets/new-chip.svg";
+import Arrow from "../Icon/svg/arrow-right-2.svg";
 
 import styles from "./DropdownMenuItem.module.css";
 import cn from "classnames";
@@ -16,20 +18,70 @@ const DropdownMenuItem = ({
   imageTitle,
   itemAmount,
   highlightBadge = false,
+  newSubmenuItem = false,
+  first,
   ...props
-}: NavSectionItem & { itemAmount?: number }) => {
+}: NavSectionItem & {
+  first: boolean;
+  itemAmount?: number;
+  newSubmenuItem?: boolean;
+}) => {
   return itemType !== "image" ? (
     <Link
-      className={clsx(styles.styledLink, !description && styles.center)}
+      className={clsx(
+        styles.styledLink,
+        (!description || !newSubmenuItem) && styles.center,
+        newSubmenuItem && styles.newSubmenuLink,
+        newSubmenuItem && first && styles.firstLink,
+      )}
       href={link}
     >
-      <div className={styles.iconWrapper}>
-        <img src={customImage.image.url || ""} width={35} height={35} alt="" />
-        {highlightBadge && <New />}
-      </div>
-      <div className={styles.item}>
-        <p className={styles.itemTitle}>{title}</p>
-        {description && <p className={styles.description}>{description}</p>}
+      {(newSubmenuItem && first) ||
+        (!newSubmenuItem && (
+          <div
+            className={clsx(
+              styles.iconWrapper,
+              newSubmenuItem && styles.newSubmenuIcon,
+            )}
+          >
+            <img
+              src={customImage.image.url || ""}
+              width={35}
+              height={35}
+              alt=""
+            />
+            {highlightBadge && (newSubmenuItem ? <NewChip /> : <New />)}
+          </div>
+        ))}
+      <div
+        className={clsx(styles.item, newSubmenuItem && styles.newSubmenuItem)}
+      >
+        <p
+          className={clsx(
+            styles.itemTitle,
+            newSubmenuItem && first && styles.firstNewSubmenuItemTitle,
+            newSubmenuItem && !first && styles.newSubmenuTitle,
+          )}
+        >
+          {title.replace(/\\n/, "\n")}
+        </p>
+        {description && (
+          <p
+            className={clsx(
+              styles.description,
+              newSubmenuItem && styles.newSubmenuDescription,
+            )}
+          >
+            {description}
+          </p>
+        )}
+        {newSubmenuItem && first && (
+            <p className={styles.buttonWrapper}>
+              <button className={styles.learnButton}>
+                Learn more <Arrow />
+              </button>
+            </p>
+          )}
       </div>
     </Link>
   ) : (
