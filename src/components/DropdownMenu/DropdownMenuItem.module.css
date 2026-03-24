@@ -140,6 +140,7 @@
   display: none;
   &.newSubmenuDescription {
     color:rgba(0, 0, 0, 0.54);
+    line-height: 20px;
   }
   @media (--nav) {
     display: initial;
