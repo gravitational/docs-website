@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
 
-const fetchUrl = "https://goteleport.com/api/data/navigation";
+const fetchUrl = "https://goteleport.dev/api/data/navigation";
 const fetchData = async () => {
   const abortController = new AbortController();
   try {
