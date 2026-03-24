@@ -36,23 +36,22 @@ const DropdownMenuItem = ({
       )}
       href={link}
     >
-      {(newSubmenuItem && first) ||
-        (!newSubmenuItem && (
-          <div
-            className={clsx(
-              styles.iconWrapper,
-              newSubmenuItem && styles.newSubmenuIcon,
-            )}
-          >
-            <img
-              src={customImage.image.url || ""}
-              width={35}
-              height={35}
-              alt=""
-            />
-            {highlightBadge && (newSubmenuItem ? <NewChip /> : <New />)}
-          </div>
-        ))}
+      {((newSubmenuItem && first) || !newSubmenuItem) && (
+        <div
+          className={clsx(
+            styles.iconWrapper,
+            newSubmenuItem && styles.newSubmenuIcon,
+          )}
+        >
+          <img
+            src={customImage.image.url || ""}
+            width={35}
+            height={35}
+            alt=""
+          />
+          {highlightBadge && (newSubmenuItem ? <NewChip /> : <New />)}
+        </div>
+      )}
       <div
         className={clsx(styles.item, newSubmenuItem && styles.newSubmenuItem)}
       >
@@ -76,12 +75,12 @@ const DropdownMenuItem = ({
           </p>
         )}
         {newSubmenuItem && first && (
-            <p className={styles.buttonWrapper}>
-              <button className={styles.learnButton}>
-                Learn more <Arrow />
-              </button>
-            </p>
-          )}
+          <p className={styles.buttonWrapper}>
+            <button className={styles.learnButton}>
+              Learn more <Arrow />
+            </button>
+          </p>
+        )}
       </div>
     </Link>
   ) : (
