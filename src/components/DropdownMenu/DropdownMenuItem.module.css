@@ -45,12 +45,12 @@
     &:focus {
       color: var(--color-dark-purple);
     }
-    align-items: flex-start;
     padding-bottom: 24px;
     padding-top: 5px;
     @media (--nav) {
         flex-direction: column;
         padding-bottom: 5px;
+        align-items: flex-start;
       }
   }
   &.firstLink {
