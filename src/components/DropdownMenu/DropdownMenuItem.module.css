@@ -39,6 +39,12 @@
       }
   }
   &.newSubmenuLink {
+    color: #0A0A0A;
+    &:hover,
+    &:active,
+    &:focus {
+      color: var(--color-dark-purple);
+    }
     align-items: flex-start;
     padding-bottom: 24px;
     padding-top: 5px;
@@ -112,15 +118,6 @@
   line-height: 18px;
   font-weight: 400;
   margin: 0;
-  &.firstNewSubmenuTitle,
-  &.newSubmenuTitle {
-    color: #0A0A0A;
-    &:hover,
-      &:active,
-      &:focus {
-        color: var(--color-dark-purple);
-    }
-  }
   @media (--nav) {
     white-space: pre-wrap;
     font-size: 14px;
