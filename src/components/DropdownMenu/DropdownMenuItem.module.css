@@ -205,7 +205,7 @@
 }
 
 .learnButton {
-border: none;
+  border: none;
   pointer-events: none;
   background-color: transparent;
   justify-content: flex-start;
