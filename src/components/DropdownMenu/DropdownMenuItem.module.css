@@ -197,7 +197,11 @@
 }
 
 .buttonWrapper {
+  display: none;
   margin: "10px 0";
+  @media (--nav) {
+    display: initial;
+  }
 }
 
 .learnButton {
