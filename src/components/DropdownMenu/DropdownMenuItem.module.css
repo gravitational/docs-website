@@ -152,11 +152,12 @@
   row-gap: 8px;
   min-width: 35px;
   &.newSubmenuIcon {
-    align-items: center;
-    margin-bottom: 10px;
+  
     column-gap: 10px;
     @media (--nav) {
       flex-direction: row;
+      align-items: center;
+      margin-bottom: 10px;
     }
   }
 }
