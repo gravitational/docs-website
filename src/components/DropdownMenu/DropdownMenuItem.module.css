@@ -115,6 +115,11 @@
   &.firstNewSubmenuTitle,
   &.newSubmenuTitle {
     color: #0A0A0A;
+    &:hover,
+      &:active,
+      &:focus {
+        color: var(--color-dark-purple);
+    }
   }
   @media (--nav) {
     white-space: pre-wrap;
