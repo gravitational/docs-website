@@ -112,6 +112,10 @@
   line-height: 18px;
   font-weight: 400;
   margin: 0;
+  &.firstNewSubmenuTitle,
+  &.newSubmenuTitle {
+    color: #0A0A0A;
+  }
   @media (--nav) {
     white-space: pre-wrap;
     font-size: 14px;
