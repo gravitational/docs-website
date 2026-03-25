@@ -3,9 +3,10 @@
   z-index: 1;
   margin-left: -40px;
   margin-right: -40px;
-  margin-top: -32px !important;
+  margin-top: -73px !important;
   margin-bottom: var(--ifm-paragraph-margin-bottom);
   @media (--lg-scr) {
+    margin-top: -48px !important;
     margin-bottom: 50px;
   }
 }
