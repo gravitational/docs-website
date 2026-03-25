@@ -6,11 +6,7 @@
   display: flex;
   align-items: stretch;
   gap: var(--m-2);
-  margin: var(--m-5) 0 !important;
-
-  @media (--md-scr) {
-    margin: var(--m-8) 0 !important;
-  }
+  margin: var(--m-3) 0 !important;
 
   .iconWrapper {
     background-color: var(--color-data-purple-secondary);
