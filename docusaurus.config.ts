@@ -43,13 +43,18 @@ const sidebar = require(getSidebarPath(siteConfig));
 
 const sidebarItems = Object.entries(sidebar).map(
   ([sidebarId, sidebarItems]) => {
-    return {
+    const sidebarItem: any = {
       label: sidebarItems[0]?.label || sidebarId,
       type: "docSidebar",
       sidebarId: sidebarId,
       href:
-        "/" + (sidebarItems[0].id || sidebarItems[0].link.id)?.split("/")[1],
+        "/" + (sidebarItems[0].id || sidebarItems[0].link.id)?.split("/")[0],
     };
+    if (sidebarItems[0]?.customProps?.tag) {
+      sidebarItem.customProps = { tag: sidebarItems[0]?.customProps?.tag };
+    }
+
+    return sidebarItem;
   },
 );
 
@@ -94,29 +99,7 @@ const config: Config = {
       },
     },
     navbar: {
-      items:
-        sidebarItems.length > 1
-          ? sidebarItems.concat([
-              {
-                label: "Help & Support",
-                type: "dropdown",
-                items: [
-                  {
-                    label: "FAQ",
-                    href: "/faq/",
-                  },
-                  {
-                    label: "Changelog",
-                    href: "/changelog/",
-                  },
-                  {
-                    label: "Upcoming Releases",
-                    href: "/upcoming-releases/",
-                  },
-                ],
-              },
-            ])
-          : [],
+      items: sidebarItems.length > 1 ? sidebarItems : [],
     },
     image: "/og-image.png",
     colorMode: {

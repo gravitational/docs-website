@@ -16,7 +16,7 @@
 
 .ctaWrapper {
   display: flex;
-  gap: 16px;
+  gap: var(--m-1);
 }
 .cta {
   display: block;
@@ -28,6 +28,7 @@
   border-radius: var(--m-0-5);
   padding: var(--m-1) var(--m-2) !important;
   text-decoration: none !important;
+  border-width: 2px !important;
 
   &:hover {
     background-color: #4126a1 !important; /* TODO: replace with var(--color-interactive-primary-hover) after changes are merged */

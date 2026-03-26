@@ -84,14 +84,13 @@
     }
 
     @media (--lg-scr) {
-      margin-left: 26px;
+      margin-left: var(--m-1);
     }
 
     &.navListRight {
-      margin-right: 12px;
+      margin-right: var(--m-1);
       @media (--lg-scr) {
         margin-left: auto;
-        margin-right: var(--m-5);
       }
     }
 

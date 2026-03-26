@@ -15,6 +15,10 @@ export default function LayoutWrapper(props: Props): ReactNode {
             href: "/get-started/",
           },
           {
+            label: "Agentic Identity Framework",
+            href: "/agentic-identity-framework/",
+          },
+          {
             label: "Zero Trust Access",
             href: "/zero-trust-access/",
           },
@@ -34,23 +38,6 @@ export default function LayoutWrapper(props: Props): ReactNode {
           {
             label: "References",
             href: "/reference/",
-          },
-          {
-            label: "Help & Support",
-            items: [
-              {
-                label: "FAQ",
-                href: "/faq/",
-              },
-              {
-                label: "Changelog",
-                href: "/changelog/",
-              },
-              {
-                label: "Upcoming Releases",
-                href: "/upcoming-releases/",
-              },
-            ],
           },
         ]}
       />
