@@ -1,5 +1,4 @@
-.tag,
-:global(a.navbar-item-tag) {
+.tag {
   & > li > div > a,
   & > li > a {
     position: relative;
