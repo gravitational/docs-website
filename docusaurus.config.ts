@@ -29,7 +29,10 @@ import {
   removeRedundantItems,
 } from "./server/sidebar-order";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
-import { clayTrackingPlugin, googleTagGatewayPlugin } from "./server/tracking-plugins";
+import {
+  clayTrackingPlugin,
+  googleTagGatewayPlugin,
+} from "./server/tracking-plugins";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
@@ -129,6 +132,15 @@ const config: Config = {
           name: "Teleport Docs",
           url: "https://goteleport.com/docs/",
         }),
+      },
+      {
+        tagName: "link",
+        attributes: {
+          rel: "preload",
+          as: "style",
+          href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap",
+          crossorigin: "anonymous",
+        },
       },
     ],
     metadata: [

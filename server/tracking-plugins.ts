@@ -6,7 +6,7 @@ export function clayTrackingPlugin() {
     injectHtmlTags() {
       return {
         postBodyTags: [
-          '<script src="https://static.claydar.com/init.v1.js?id=cQAbHkxXzz"></script>',
+          '<script src="https://static.claydar.com/init.v1.js?id=cQAbHkxXzz" defer></script>',
         ],
       };
     },

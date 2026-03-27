@@ -27,6 +27,7 @@ const NavPanel = ({ panel }: { panel?: NavigationItem["panel"] }) => {
               <img
                 src={panelTitle?.icon?.url}
                 alt={panelTitle?.icon?.alternativeText || ""}
+                loading="lazy"
                 width={48}
                 height={48}
               />
@@ -97,6 +98,7 @@ const NavPanel = ({ panel }: { panel?: NavigationItem["panel"] }) => {
                 <img
                   src={panelFeaturedItem.item.image.url}
                   alt={panelFeaturedItem.item.image.alternativeText || ""}
+                  loading="lazy"
                   width={189}
                   height={105}
                 />
