@@ -1,96 +1,11 @@
 import type { Options as PluginOptions } from "@signalwire/docusaurus-plugin-llms-txt";
+import fs from "fs";
 import rehypePrepareHTML from "./rehype-prepare-html";
-
-// Define the sections for the llms.txt index file, including their routes and descriptions
-const sections = [
-  {
-    id: "get-started",
-    name: "Get Started",
-    description:
-      "Learn how to deploy a cluster, connect infrastructure, set up access controls, and review audit logs.",
-    routes: [{ route: "/docs/get-started/**" }],
-    position: 0,
-  },
-  {
-    id: "core-concepts",
-    name: "Core Concepts",
-    description: "Learn the key components that make up Teleport.",
-    routes: [{ route: "/docs/core-concepts/**" }],
-    position: 1,
-  },
-  {
-    id: "agentic-identity-framework",
-    name: "Agentic Identity Framework",
-    description:
-      "Design and reference implementation for the secure deployment of agents on infrastructure.",
-    routes: [{ route: "/docs/agentic-identity-framework/**" }],
-    position: 2,
-  },
-  {
-    id: "installation",
-    name: "Installation",
-    description:
-      "How to install Teleport and Teleport's client tools on your platform, including binaries and instructions for Docker and Helm.",
-    routes: [{ route: "/docs/installation/**" }],
-    position: 3,
-  },
-  {
-    id: "connect-your-client",
-    name: "Teleport User Guides",
-    description:
-      "Provides instructions to help users connect to infrastructure resources with Teleport.",
-    routes: [{ route: "/docs/connect-your-client/**" }],
-    position: 4,
-  },
-  {
-    id: "zero-trust-access",
-    name: "Teleport Zero Trust Access",
-    description:
-      "Easy access to all your infrastructure, on a foundation of cryptographic identity and zero trust.",
-    routes: [{ route: "/docs/zero-trust-access/**" }],
-    position: 5,
-  },
-  {
-    id: "machine-workload-identity",
-    name: "Machine & Workload Identity",
-    description:
-      "Use Teleport to replace long-lived secrets with identity-based authentication for your machines and workloads.",
-    routes: [{ route: "/docs/machine-workload-identity/**" }],
-    position: 6,
-  },
-  {
-    id: "identity-governance",
-    name: "Identity Governance",
-    description:
-      "Manage on-demand access, privileges, and compliance for all your infrastructure.",
-    routes: [{ route: "/docs/identity-governance/**" }],
-    position: 7,
-  },
-  {
-    id: "identity-security",
-    name: "Teleport Identity Security",
-    description:
-      "Teleport Identity Security centralizes access policy across your infrastructure, consolidates disparate identity audit logs, discovers shadow access, and alerts on access anomalies.",
-    routes: [{ route: "/docs/identity-security/**" }],
-    position: 8,
-  },
-  {
-    id: "enroll-resources",
-    name: "Enroll Resources",
-    description:
-      "Teleport protects infrastructure resources such as servers, databases, and Kubernetes clusters by enforcing strong access controls and auditability.",
-    routes: [{ route: "/docs/enroll-resources/**" }],
-    position: 9,
-  },
-  {
-    id: "reference-guides",
-    name: "Teleport Reference Guides",
-    description:
-      "Provides comprehensive information on configuration fields, Teleport commands, and other ways of interacting with Teleport.",
-    routes: [{ route: "/docs/reference/**" }],
-    position: 10,
-  },
-];
+import {
+  defaultSections,
+  Section,
+  TEMP_SECTIONS_PATH,
+} from "./plugin-section-descriptions";
 
 export const llmsTxtPluginOptions: PluginOptions = {
   // Top-level runtime options
@@ -112,7 +27,18 @@ export const llmsTxtPluginOptions: PluginOptions = {
 
   // llms.txt index file options
   llmsTxt: {
-    sections,
+    get sections() {
+      // Read updated sections written by sectionDescriptionsPlugin during the allContentLoaded lifecycle method.
+      // Falls back to the static defaultSections array if the file does not exist (e.g., in non-build environments).
+      try {
+        return JSON.parse(
+          fs.readFileSync(TEMP_SECTIONS_PATH, "utf8"),
+        ) as Section[];
+      } catch (err) {
+        console.log(err.message);
+        return defaultSections;
+      }
+    },
     autoSectionPosition: 11,
     includeDocs: true,
     includeBlog: false,

@@ -33,6 +33,7 @@ import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
 import { llmsTxtPluginOptions } from "./server/llms";
+import { sectionDescriptionsPlugin } from "./server/llms/plugin-section-descriptions";
 
 const latestVersion = getLatestVersion();
 
@@ -337,6 +338,7 @@ const config: Config = {
     extendedPostcssConfigPlugin,
     clayTrackingPlugin,
     process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
+    sectionDescriptionsPlugin,
     ["@signalwire/docusaurus-plugin-llms-txt", llmsTxtPluginOptions],
   ].filter(Boolean),
 };
