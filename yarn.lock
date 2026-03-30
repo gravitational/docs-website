@@ -1887,7 +1887,7 @@
   resolved "https://registry.yarnpkg.com/@csstools/utilities/-/utilities-3.0.0.tgz#8c07044bd66f08c51f63fe5575a63f1b9a8bec8a"
   integrity sha512-etDqA/4jYvOGBM6yfKCOsEXfH96BKztZdgGmGqKi2xHnDe0ILIBraRspwgYatJH9JsCZ5HCGoCst8w18EKOAdg==
 
-"@cyberalien/svg-utils@^1.2.7":
+"@cyberalien/svg-utils@^1.2.8":
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/@cyberalien/svg-utils/-/svg-utils-1.2.8.tgz#9201d546d3d61ac70a2a494c1fdd1422a1c2fb3b"
   integrity sha512-ILHRhyyv7WamaiKjPPUqriQKySGnl/r+A6YddAmtvW6xC/f0TksPmhljo/qvqaq7FPJ/ZHvZKsBJeuKOAEGXKA==
@@ -2630,30 +2630,30 @@
   dependencies:
     "@hapi/hoek" "^11.0.2"
 
-"@iconify-json/carbon@^1.2.19":
-  version "1.2.19"
-  resolved "https://registry.yarnpkg.com/@iconify-json/carbon/-/carbon-1.2.19.tgz#eddb7a58025d1ba5ab166245362e1b6a18d34584"
-  integrity sha512-l89XjtEeSA5fxlxPTNSU9AA+rxaz/Dn0X/ux0/3awR+tAayY8iJqWQu3AKxhchfx3LB/fX1Nv3ZppZzrBAt7aA==
+"@iconify-json/carbon@^1.2.20":
+  version "1.2.20"
+  resolved "https://registry.yarnpkg.com/@iconify-json/carbon/-/carbon-1.2.20.tgz#27b77f52b8691a079f5da5850ebea66da7915a0a"
+  integrity sha512-wqyxKEbIRdzGdfCAwQqn8iSfO6jx0m1toZAAQdx1NFjxd6iFl1YY4eKI1woWt7XOxs7s7phMW530kDD867JZGw==
   dependencies:
     "@iconify/types" "*"
 
-"@iconify-json/logos@^1.2.10":
-  version "1.2.10"
-  resolved "https://registry.yarnpkg.com/@iconify-json/logos/-/logos-1.2.10.tgz#21529b8ca71185824331ce09bb97a1b7eb304502"
-  integrity sha512-qxaXKJ6fu8jzTMPQdHtNxlfx6tBQ0jXRbHZIYy5Ilh8Lx9US9FsAdzZWUR8MXV8PnWTKGDFO4ZZee9VwerCyMA==
+"@iconify-json/logos@^1.2.11":
+  version "1.2.11"
+  resolved "https://registry.yarnpkg.com/@iconify-json/logos/-/logos-1.2.11.tgz#5bd0479d0bdc2e48adb664b0fab728d4e5013f1c"
+  integrity sha512-fOo4pGEatuyuCFNL+cwquYMa2Im0oJHRHV7lt/Qqs5Ode/lPImHCQcfTtPzZj7qYMPb/h8YHN3TG54uEowrjNQ==
   dependencies:
     "@iconify/types" "*"
 
-"@iconify/tools@^5.0.6":
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/@iconify/tools/-/tools-5.0.6.tgz#399cf4ae03d8a7af3eb23383ca6137fead2a402b"
-  integrity sha512-94dmgES3W9j3Z9xcxSZh6sLBIYwVFykcIER3vV1DTTF/g3Eyr/kG3/QNm4GNhqKoXexg5tmCtVA9AAilO81e4w==
+"@iconify/tools@^5.0.11":
+  version "5.0.11"
+  resolved "https://registry.yarnpkg.com/@iconify/tools/-/tools-5.0.11.tgz#6ba5a70ceb010ed1cf193aace921a6fa4c12b460"
+  integrity sha512-zur/06/zTSflUSoPARK5FfHNZQ9UYsoloPDQHLAZHbQqWhs0/tXS+KB70uOAt94dUB1F94JOkSqIOT2R4Deixg==
   dependencies:
-    "@cyberalien/svg-utils" "^1.2.7"
+    "@cyberalien/svg-utils" "^1.2.8"
     "@iconify/types" "^2.0.0"
     "@iconify/utils" "^3.1.0"
     fflate "^0.8.2"
-    modern-tar "^0.7.5"
+    modern-tar "^0.7.6"
     pathe "^2.0.3"
     svgo "^4.0.1"
 
@@ -4255,10 +4255,10 @@
   dependencies:
     memoizerific "^1.11.3"
 
-"@storybook/addon-webpack5-compiler-swc@^4.0.2":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-webpack5-compiler-swc/-/addon-webpack5-compiler-swc-4.0.2.tgz#91f10a02cf9a917fd1ced5f3c836bf049d94b416"
-  integrity sha512-I/B4zXnpk+wLs2YA/VcCzUjF/TtB26X4zIoXw3xaPPUvk5aPc76/dhmZHLMXkICQEur5FkFQv0YGHNxWHbhnfw==
+"@storybook/addon-webpack5-compiler-swc@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-webpack5-compiler-swc/-/addon-webpack5-compiler-swc-4.0.3.tgz#b55791152b0d9aa61c664d24e250f391c36680ed"
+  integrity sha512-REJZBArIBcqzxmhQY9R1br9hjfcFYdl4FeWD/okx1eRwPZkl49aUhTYqZPrA+MWXfKJkuuNQ5vnfSoR0c9HyvA==
   dependencies:
     "@swc/core" "^1.13.5"
     swc-loader "^0.2.6"
@@ -12693,10 +12693,10 @@ mlly@^1.7.4, mlly@^1.8.0:
     pkg-types "^1.3.1"
     ufo "^1.6.1"
 
-modern-tar@^0.7.5:
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/modern-tar/-/modern-tar-0.7.5.tgz#d932328f83a9fe97ebf72365188cef7e90ba6e78"
-  integrity sha512-YTefgdpKKFgoTDbEUqXqgUJct2OG6/4hs4XWLsxcHkDLj/x/V8WmKIRppPnXP5feQ7d1vuYWSp3qKkxfwaFaxA==
+modern-tar@^0.7.6:
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/modern-tar/-/modern-tar-0.7.6.tgz#a01edcd55b976a2b191d857456e8abb7208a8199"
+  integrity sha512-sweCIVXzx1aIGTCdzcMlSZt1h8k5Tmk08VNAuRk3IU28XamGiOH5ypi11g6De2CH7PhYqSSnGy2A/EFhbWnVKg==
 
 mri@^1.1.0:
   version "1.2.0"
