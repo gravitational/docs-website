@@ -9,6 +9,7 @@ import {
   getVersionRootPath,
 } from "./.remark-build/server/docs-helpers.mjs";
 import { remarkLintPageStructure } from "./.remark-build/server/lint-page-structure.mjs";
+import { remarkLintNoHumanInteractionSteps } from "./.remark-build/server/lint-no-human-interaction-steps.mjs";
 import { loadConfig } from "./.remark-build/server/config-docs.mjs";
 import { updatePathsInIncludes } from "./.remark-build/server/asset-path-helpers.mjs";
 import * as yaml from "yaml";
@@ -83,6 +84,7 @@ const configLint = {
     ["validate-links", { repository: false }],
     [remarkLintTeleportDocsLinks],
     [remarkLintPageStructure],
+    [remarkLintNoHumanInteractionSteps],
     // Disabling the remarkLintFrontmatter check until we fix
     // gravitational/docs#80
     // [remarkLintFrontmatter, ["error"]],
