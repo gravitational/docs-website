@@ -1,12 +1,12 @@
 import styles from "./TextWithMedia.module.css";
 import cn from "classnames";
-import { getEmbedYouTubeUrl } from "@site/src/utils";
 
 interface TextWithMediaProps {
   className?: string;
   title?: string;
   image?: any;
   videoSrc?: string;
+  youtubeVideoId?: string;
   children: React.ReactNode;
 }
 
@@ -15,8 +15,12 @@ const TextWithMedia: React.FC<TextWithMediaProps> = ({
   title,
   image,
   videoSrc,
+  youtubeVideoId,
   children,
 }) => {
+  const getEmbedYouTubeUrl = (videoId: string) => {
+    return `https://www.youtube.com/embed/${videoId}`;
+  };
   return (
     <section className={cn(styles.textWithMedia, className)}>
       <div className={styles.container}>
@@ -27,7 +31,26 @@ const TextWithMedia: React.FC<TextWithMediaProps> = ({
         <div className={styles.media}>
           {image && <img src={image} alt={title} className={styles.image} />}
           {videoSrc && (
-            <video src={videoSrc} title={title} className={styles.video} autoPlay muted loop />
+            <video
+              src={videoSrc}
+              title={title}
+              className={styles.video}
+              autoPlay
+              muted
+              loop
+            />
+          )}
+          {youtubeVideoId && (
+            <iframe
+              className={styles.video}
+              style={{ pointerEvents: "auto" }}
+              width={400}
+              height={225}
+              src={getEmbedYouTubeUrl(youtubeVideoId)}
+              title={title}
+              frameBorder="0"
+              allowFullScreen
+            />
           )}
         </div>
       </div>
