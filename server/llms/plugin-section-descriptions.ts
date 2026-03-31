@@ -1,6 +1,5 @@
-import { DocMetadata, LoadedContent } from "@docusaurus/plugin-content-docs";
 import fs from "fs";
-import os from "os";
+import yaml from "js-yaml";
 import path from "path";
 
 export type Section = {
@@ -118,52 +117,30 @@ export const defaultSections: Section[] = [
   },
 ];
 
-// Path to the temporary JSON file where section with updated descriptions are written
-export const TEMP_SECTIONS_PATH = path.join(
-  os.tmpdir(),
-  "teleport-llms-sections.json",
-);
+function readFrontmatterDescription(filePath: string): string | undefined {
+  try {
+    const content = fs.readFileSync(filePath, "utf8");
+    // Match the frontmatter data
+    const match = content.match(/^---\n([\s\S]*?)\n---/);
+    if (!match) return undefined;
+    // match[1] is the captured YAML frontmatter string. Cast to a known shape to safely access named fields
+    const frontmatter = yaml.load(match[1]) as Record<string, unknown>;
+    // extract and return the description field if it exists and is a string
+    const description = frontmatter?.description;
+    return typeof description === "string" ? description : undefined;
+  } catch {
+    // fail silently and return undefined if file can't be read or parsed for any reason (e.g., file doesn't exist, no frontmatter, invalid YAML, description field missing, etc.)
+    return undefined;
+  }
+}
 
-// Reads descriptions from page frontmatter and writes them into the `sections` array for the llms-txt plugin.
-export function sectionDescriptionsPlugin() {
-  return {
-    name: "teleport-llms-section-descriptions",
-
-    // allContentLoaded is an experimental docusaurus lifecycle method that runs after all content is loaded but before the build starts.
-    // See https://github.com/facebook/docusaurus/pull/9931 for details.
-    async allContentLoaded({
-      allContent,
-    }: {
-      allContent: Record<string, Record<string, unknown>>;
-    }) {
-      // allContent["docusaurus-plugin-content-docs"] is keyed by plugin instance ID ("default").
-      const docsInstances = allContent["docusaurus-plugin-content-docs"];
-      if (!docsInstances) return;
-
-      const allDocs: DocMetadata[] = Object.values(docsInstances).flatMap(
-        (instance) => {
-          const content = instance as LoadedContent | undefined;
-          return content?.loadedVersions?.flatMap((v) => v.docs) ?? [];
-        },
-      );
-
-      for (const section of defaultSections) {
-        // Each section's id is the relative MDX page path (e.g. "docs/get-started/get-started.mdx")
-        const source = `@site/${sectionDescriptionSources[section.id]}`;
-        const doc = allDocs.find((d) => d.source === source);
-        const description = doc?.frontMatter?.description;
-
-        if (typeof description === "string" && description) {
-          section.description = description;
-        }
-      }
-
-      // Write the updated sections to the temp file so the llms-txt plugin can read them.
-      fs.writeFileSync(
-        TEMP_SECTIONS_PATH,
-        JSON.stringify(defaultSections),
-        "utf8",
-      );
-    },
-  };
+// Reads descriptions from MDX frontmatter and returns sections with updated descriptions if available.
+export function buildSections(): Section[] {
+  return defaultSections.map((section) => {
+    const source = sectionDescriptionSources[section.id];
+    if (!source) return section;
+    const filePath = path.resolve(process.cwd(), source);
+    const description = readFrontmatterDescription(filePath);
+    return description ? { ...section, description } : section;
+  });
 }

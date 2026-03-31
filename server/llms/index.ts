@@ -1,11 +1,6 @@
 import type { Options as PluginOptions } from "@signalwire/docusaurus-plugin-llms-txt";
-import fs from "fs";
 import rehypePrepareHTML from "./rehype-prepare-html";
-import {
-  defaultSections,
-  Section,
-  TEMP_SECTIONS_PATH,
-} from "./plugin-section-descriptions";
+import { buildSections } from "./plugin-section-descriptions";
 
 export const llmsTxtPluginOptions: PluginOptions = {
   // Top-level runtime options
@@ -27,18 +22,7 @@ export const llmsTxtPluginOptions: PluginOptions = {
 
   // llms.txt index file options
   llmsTxt: {
-    get sections() {
-      // Read updated sections written by sectionDescriptionsPlugin during the allContentLoaded lifecycle method.
-      // Falls back to the static defaultSections array if the file does not exist (e.g., in non-build environments).
-      try {
-        return JSON.parse(
-          fs.readFileSync(TEMP_SECTIONS_PATH, "utf8"),
-        ) as Section[];
-      } catch (err) {
-        console.log(err.message);
-        return defaultSections;
-      }
-    },
+    sections: buildSections(),
     autoSectionPosition: 11,
     includeDocs: true,
     includeBlog: false,
