@@ -5,18 +5,26 @@ import type { Node, Parent } from "unist";
 const stepHeadingPattern = /^Step [0-9]+\/[0-9]+/;
 const messageSuffix = `Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`;
 
+// Config file language tags: these formats are always write-to-file content,
+// never shell output or API responses.
+const configFileLangs = new Set(["ini", "conf", "toml", "hcl"]);
+
 // Returns true if the subtree rooted at node contains a code block that an
 // automated agent can execute without human interaction. This includes:
 //   - Shell commands (lines starting with "$ ")
 //   - SQL blocks (lang="sql"): database commands are machine-executable
 //   - Diff/patch blocks (lang="diff"): patches can be applied programmatically
-//   - Config file blocks: a code block whose first non-empty line is a file
-//     path comment (e.g. `# /etc/teleport.yaml`) represents a file to write,
-//     which is automatable
+//   - Config file language blocks (ini/conf/toml/hcl): always write-to-file
+//   - Blocks whose first non-empty line is a file path comment
+//     (e.g. `# /etc/teleport.yaml`): write-to-file, automatable
 function hasShellCommand(node: Node): boolean {
   const code = node as Code;
   if (code.type === "code") {
-    if (code.lang === "sql" || code.lang === "diff") {
+    if (
+      code.lang === "sql" ||
+      code.lang === "diff" ||
+      configFileLangs.has(code.lang)
+    ) {
       return true;
     }
     const lines = code.value.split("\n");

@@ -137,6 +137,65 @@ Edit the \`spec.roles\` field in your token resource manifest:
         expected: [],
       },
       {
+        description: "step with an ini config block",
+        input: `---
+title: My Guide
+---
+
+Introduction.
+
+## Step 1/1. Configure JWT authentication in Grafana
+
+Add an \`auth.jwt\` section in Grafana's main configuration file:
+
+\`\`\`ini
+[auth.jwt]
+enabled = true
+header_name = Authorization
+jwk_set_url = https://teleport.example.com/.well-known/jwks.json
+\`\`\`
+`,
+        expected: [],
+      },
+      {
+        description: "step with a toml config block",
+        input: `---
+title: My Guide
+---
+
+Introduction.
+
+## Step 1/1. Configure the agent
+
+Edit your agent configuration:
+
+\`\`\`toml
+[agent]
+token = "my-token"
+server = "teleport.example.com:443"
+\`\`\`
+`,
+        expected: [],
+      },
+      {
+        description: "step with an hcl config block",
+        input: `---
+title: My Guide
+---
+
+Introduction.
+
+## Step 1/1. Configure the Terraform provider
+
+\`\`\`hcl
+provider "teleport" {
+  addr = "teleport.example.com:443"
+}
+\`\`\`
+`,
+        expected: [],
+      },
+      {
         description: "step with a file-path-commented config block",
         input: `---
 title: My Guide
