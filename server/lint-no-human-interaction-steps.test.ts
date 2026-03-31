@@ -98,6 +98,74 @@ $ tctl get saml/my-connector
     });
   });
 
+  describe("steps with automatable non-shell code are not flagged", () => {
+    const testCases: Array<testCase> = [
+      {
+        description: "step with a sql code block",
+        input: `---
+title: My Guide
+---
+
+Introduction.
+
+## Step 1/1. Configure the database admin user
+
+\`\`\`sql
+CREATE USER "teleport-admin" login createrole;
+GRANT rds_iam TO "teleport-admin" WITH ADMIN OPTION;
+\`\`\`
+`,
+        expected: [],
+      },
+      {
+        description: "step with a diff code block",
+        input: `---
+title: My Guide
+---
+
+Introduction.
+
+## Step 1/1. Update the join token roles
+
+Edit the \`spec.roles\` field in your token resource manifest:
+
+\`\`\`diff
+-   roles: [Kube]
++   roles: [Kube,App]
+\`\`\`
+`,
+        expected: [],
+      },
+      {
+        description: "step with a file-path-commented config block",
+        input: `---
+title: My Guide
+---
+
+Introduction.
+
+## Step 1/1. Configure your services
+
+Configure your Teleport process with a custom \`teleport.yaml\` file:
+
+\`\`\`yaml
+# /etc/teleport.yaml
+version: v3
+teleport:
+  join_params:
+    token_name: my-token
+    method: oracle
+\`\`\`
+`,
+        expected: [],
+      },
+    ];
+
+    test.each(testCases)("$description", (tc) => {
+      expect(getReasons(tc.input)).toEqual(tc.expected);
+    });
+  });
+
   describe("steps without shell commands are flagged", () => {
     const testCases: Array<testCase> = [
       {
