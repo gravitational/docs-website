@@ -27,11 +27,11 @@ const TextWithMedia: React.FC<TextWithMediaProps> = ({
           <div className={styles.text}>{children}</div>
         </div>
         <div className={cn(styles.media, { [styles.youtube]: youtubeVideoId })}>
-          {image && <img src={image} alt={title} className={styles.image} />}
-          {videoSrc && (
+          {image && !videoSrc && !youtubeVideoId && <img src={image} alt={title} className={styles.image} />}
+          {videoSrc && !image && !youtubeVideoId && (
             <video src={videoSrc} title={title} className={styles.video} autoPlay muted loop />
           )}
-          {youtubeVideoId && (
+          {youtubeVideoId && !image && !videoSrc && (
             <iframe
               className={styles.video}
               src={getEmbedYouTubeUrl(youtubeVideoId)}
