@@ -1,6 +1,9 @@
 import type { Options as PluginOptions } from "@signalwire/docusaurus-plugin-llms-txt";
 import rehypePrepareHTML from "./rehype-prepare-html";
-import { buildSections } from "./plugin-section-descriptions";
+import { buildSections } from "./build-sections";
+
+// Generate the llms.txt top-level section definitions based on the sidebars configuration.
+const sections = buildSections();
 
 export const llmsTxtPluginOptions: PluginOptions = {
   // Top-level runtime options
@@ -22,8 +25,8 @@ export const llmsTxtPluginOptions: PluginOptions = {
 
   // llms.txt index file options
   llmsTxt: {
-    sections: buildSections(),
-    autoSectionPosition: 11,
+    sections,
+    autoSectionPosition: sections.length + 1,
     includeDocs: true,
     includeBlog: false,
     includePages: false,
