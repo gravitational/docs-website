@@ -29,25 +29,13 @@ import {
   removeRedundantItems,
 } from "./server/sidebar-order";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
+import { clayTrackingPlugin, googleTagGatewayPlugin } from "./server/tracking-plugins";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
 import { llmsTxtPluginOptions } from "./server/llms";
 
 const latestVersion = getLatestVersion();
-
-function clayTrackingPlugin() {
-  return {
-    name: "clay-tracking",
-    injectHtmlTags() {
-      return {
-        postBodyTags: [
-          '<script src="https://static.claydar.com/init.v1.js?id=cQAbHkxXzz"></script>',
-        ],
-      };
-    },
-  };
-}
 
 const config: Config = {
   future: {
@@ -203,12 +191,6 @@ const config: Config = {
         },
       },
     ],
-    [
-      "@docusaurus/plugin-google-tag-manager",
-      {
-        containerId: "GTM-WMR7H6",
-      },
-    ],
     "@docusaurus/theme-classic",
     "@docusaurus/plugin-sitemap",
     [
@@ -336,6 +318,7 @@ const config: Config = {
     },
     extendedPostcssConfigPlugin,
     clayTrackingPlugin,
+    googleTagGatewayPlugin,
     process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
     ["@signalwire/docusaurus-plugin-llms-txt", llmsTxtPluginOptions],
   ].filter(Boolean),

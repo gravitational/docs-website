@@ -33,7 +33,7 @@ export function InlineSearch({ className = "", version }: InlineSearchProps) {
   return (
     <div className={clsx(styles.wrapper, className)}>
       <Icon name="magnify" className={styles.searchIcon} inline />
-      <BrowserOnly>
+      <BrowserOnly fallback={<input className={styles.searchInput} placeholder="Search Docs or Press ⌘ + K" readOnly />}>
         {() => {
           return (
             <>

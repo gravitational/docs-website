@@ -9,11 +9,11 @@ import Icon from "../Icon";
 import styles from "./HeaderCTA.module.css";
 
 const HeaderCTA = ({
- rightSide
+  rightSide,
 }: {
   rightSide: HeaderNavigation["rightSide"];
 }) => {
-  const { searchButton, ctas, bannerButtons } = rightSide || {}
+  const { searchButton, ctas, bannerButtons } = rightSide || {};
   const ref = useRef(null);
 
   const [isSignInVisible, setIsSignInVisible] = useState<boolean>(false);
@@ -34,7 +34,7 @@ const HeaderCTA = ({
               className={styles.cta}
               href={cta.href}
               key={`navCTA-${cta.href}-${i}`}
-              variant={i !== 0 ? "secondary" : "primary"}
+              variant={i !== 0 ? "primary-rounded" : "outline-rounded"}
               id={cta?.elementId || ""}
               shape="md"
             >
@@ -45,7 +45,7 @@ const HeaderCTA = ({
       )}
       {bannerButtons && (
         <div className={styles.actionButtonFlex}>
-          {bannerButtons.map((button) =>(
+          {bannerButtons.map((button) => (
             <Link className={styles.styledLink} href={button?.link || ""}>
               <div className={styles.flex}>
                 {button?.title}
@@ -53,7 +53,6 @@ const HeaderCTA = ({
               </div>
             </Link>
           ))}
-       
         </div>
       )}
     </div>
