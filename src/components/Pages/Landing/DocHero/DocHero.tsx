@@ -1,6 +1,7 @@
 import Link from "@docusaurus/Link";
 import cn from "classnames";
 import styles from "./DocHero.module.css";
+import { getEmbedYouTubeUrl } from "@site/src/utils";
 
 interface GetStartedLink {
   title: string;
@@ -35,10 +36,6 @@ const DocHero: React.FC<DocHeroProps> = ({
   linksDesktopColumnCount = 2,
   children,
 }) => {
-  const getEmbedYouTubeUrl = (videoId: string) => {
-    return `https://www.youtube.com/embed/${videoId}`;
-  };
-
   return (
     <section className={styles.docHero}>
       <div className={styles.container}>
