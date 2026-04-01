@@ -1,5 +1,6 @@
 import Link from "@docusaurus/Link";
 import styles from "./GetStarted.module.css";
+import { getEmbedYouTubeUrl } from "@site/src/utils";
 
 interface GetStartedStep {
   title: string;
@@ -27,9 +28,6 @@ const GetStarted: React.FC<GetStartedProps> = ({
   steps = [],
   links = [],
 }) => {
-  const getEmbedYouTubeUrl = (videoId: string) => {
-    return `https://www.youtube.com/embed/${videoId}`;
-  };
   return (
     <section className={styles.getStarted}>
       <div className={styles.container}>

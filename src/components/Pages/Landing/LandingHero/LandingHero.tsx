@@ -5,6 +5,7 @@ import Icon from "@site/src/components/Icon";
 import { useContext } from "react";
 import styles from "./LandingHero.module.css";
 import { trackEvent } from "@site/src/utils/analytics";
+import { getEmbedYouTubeUrl } from "@site/src/utils";
 
 interface GetStartedLink {
   title: string;
@@ -37,9 +38,6 @@ const LandingHero: React.FC<LandingHeroProps> = ({
   children,
 }) => {
   const { exclusiveFeature } = useContext(ExclusivityContext);
-  const getEmbedYouTubeUrl = (videoId: string) => {
-    return `https://www.youtube.com/embed/${videoId}`;
-  };
   return (
     <section className={styles.landingHero}>
       <div className={styles.container}>

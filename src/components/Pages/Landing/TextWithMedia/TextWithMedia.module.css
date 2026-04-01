@@ -85,6 +85,11 @@
   aspect-ratio: 603/353;
   pointer-events: none;
 
+  &.youtube {
+    pointer-events: auto;
+    aspect-ratio: 16/9;
+  }
+
   .image, .video {
     width: 100%;
     height: 100%;
