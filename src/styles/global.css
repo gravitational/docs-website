@@ -77,7 +77,7 @@ h6 {
   color: var(--color-dark-purple);
   font-size: var(--fs-header-1);
   line-height: 1.375;
-  margin-bottom: var(--m-0-5) !important;
+  margin-bottom: 0 !important;
 
   @media (--md-scr) {
     font-size: var(--fs-title-md);

@@ -33,7 +33,7 @@ import { clayTrackingPlugin, googleTagGatewayPlugin } from "./server/tracking-pl
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
-import fs from "fs";
+import { llmsTxtPluginOptions } from "./server/llms";
 
 const latestVersion = getLatestVersion();
 
@@ -320,6 +320,7 @@ const config: Config = {
     clayTrackingPlugin,
     googleTagGatewayPlugin,
     process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
+    ["@signalwire/docusaurus-plugin-llms-txt", llmsTxtPluginOptions],
   ].filter(Boolean),
 };
 
