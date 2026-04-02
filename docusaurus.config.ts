@@ -1,6 +1,7 @@
 import type { Config } from "@docusaurus/types";
 import "dotenv/config";
 import type { VFile } from "vfile";
+import docsNavigationConfig from "./data/docs-navigation.json";
 
 import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
@@ -15,8 +16,6 @@ import {
   getCurrentVersion,
   getDocusaurusConfigVersionOptions,
   getLatestVersion,
-  getSidebarPath,
-  loadConfig as loadSiteConfig,
 } from "./server/config-site";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { getRedirects } from "./server/redirects";
@@ -38,25 +37,13 @@ import { getFromSecretOrEnv } from "./utils/general";
 
 const latestVersion = getLatestVersion();
 
-const siteConfig = loadSiteConfig();
-const sidebar = require(getSidebarPath(siteConfig));
-
-const sidebarItems = Object.entries(sidebar).map(
-  ([sidebarId, sidebarItems]) => {
-    const sidebarItem: any = {
-      label: sidebarItems[0]?.label || sidebarId,
-      type: "docSidebar",
-      sidebarId: sidebarId,
-      href:
-        "/" + (sidebarItems[0].id || sidebarItems[0].link.id)?.split("/")[0],
-    };
-    if (sidebarItems[0]?.customProps?.tag) {
-      sidebarItem.customProps = { tag: sidebarItems[0]?.customProps?.tag };
-    }
-
-    return sidebarItem;
-  },
-);
+const sidebarItems = (
+  docsNavigationConfig as Array<{ label: string; href: string } | string>
+)
+  .filter(
+    (item): item is { label: string; href: string } => typeof item !== "string",
+  )
+  .map(({ label, href }) => ({ label, href }));
 
 const config: Config = {
   future: {
@@ -99,7 +86,7 @@ const config: Config = {
       },
     },
     navbar: {
-      items: sidebarItems.length > 1 ? sidebarItems : [],
+      items: sidebarItems,
     },
     image: "/og-image.png",
     colorMode: {

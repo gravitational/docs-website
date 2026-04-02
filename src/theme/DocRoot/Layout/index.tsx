@@ -2,6 +2,8 @@ import React, { type ReactNode } from "react";
 import Layout from "@theme-original/DocRoot/Layout";
 import type { WrapperProps } from "@docusaurus/types";
 import DocsNavigation from "@site/src/components/DocsNavigation";
+import type { DocsNavigationItem } from "@site/src/components/DocsNavigation/DocsNavigation";
+import docsNavItems from "@site/data/docs-navigation.json";
 
 type Props = WrapperProps<any>;
 
@@ -9,37 +11,7 @@ export default function LayoutWrapper(props: Props): ReactNode {
   return (
     <>
       <DocsNavigation
-        items={[
-          {
-            label: "Get Started",
-            href: "/get-started/",
-          },
-          {
-            label: "Agentic Identity Framework",
-            href: "/agentic-identity-framework/",
-          },
-          {
-            label: "Zero Trust Access",
-            href: "/zero-trust-access/",
-          },
-          {
-            label: "Machine & Workload Identity",
-            href: "/machine-workload-identity/",
-          },
-          {
-            label: "Identity Governance",
-            href: "/identity-governance/",
-          },
-          {
-            label: "Identity Security",
-            href: "/identity-security/",
-          },
-          "split",
-          {
-            label: "References",
-            href: "/reference/",
-          },
-        ]}
+        items={docsNavItems as Array<DocsNavigationItem | "split">}
       />
       <Layout {...props} />
     </>
