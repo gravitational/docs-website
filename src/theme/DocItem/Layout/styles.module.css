@@ -96,9 +96,15 @@
 }
 
 .largeColumnPadding {
-  padding: var(--m-4) var(--m-2);
+  padding: 0 var(--m-2);
 
   @media (--md-scr) {
-    padding: var(--m-4) var(--m-5);
+    padding: 0 var(--m-5);
+  }
+
+  /* Fix for version banner being cut off by DocsHeader */
+  :global(.theme-doc-version-banner) {
+    position: relative;
+    z-index: 2;
   }
 }
