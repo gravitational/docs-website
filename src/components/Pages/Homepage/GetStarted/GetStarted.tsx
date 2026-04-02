@@ -1,6 +1,6 @@
 import Link from "@docusaurus/Link";
 import styles from "./GetStarted.module.css";
-import { getEmbedYouTubeUrl } from "@site/src/utils";
+import YouTubeEmbed from "@site/src/components/YouTubeEmbed";
 
 interface GetStartedStep {
   title: string;
@@ -42,13 +42,7 @@ const GetStarted: React.FC<GetStartedProps> = ({
             ))}
           </div>
           <div className={styles.video}>
-            <iframe
-              src={getEmbedYouTubeUrl(youtubeVideoId)}
-              title={title}
-              allowFullScreen
-              className={styles.videoIframe}
-              style={{ width: "100%", height: "100%", border: "none" }}
-            ></iframe>
+            <YouTubeEmbed videoId={youtubeVideoId} title={title} />
           </div>
           <div className={styles.links}>
             {links.map((link, i) => (

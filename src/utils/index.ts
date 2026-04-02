@@ -1,3 +1,3 @@
 export const getEmbedYouTubeUrl = (videoId: string) => {
-  return `https://www.youtube.com/embed/${videoId}`;
+  return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
 };

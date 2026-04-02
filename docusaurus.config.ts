@@ -142,6 +142,13 @@ const config: Config = {
           crossorigin: "anonymous",
         },
       },
+      {
+        tagName: "link",
+        attributes: {
+          rel: "preconnect",
+          href: "https://img.youtube.com",
+        },
+      },
     ],
     metadata: [
       { name: "author", content: "Teleport" },

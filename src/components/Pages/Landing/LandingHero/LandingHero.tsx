@@ -5,7 +5,7 @@ import Icon from "@site/src/components/Icon";
 import { useContext } from "react";
 import styles from "./LandingHero.module.css";
 import { trackEvent } from "@site/src/utils/analytics";
-import { getEmbedYouTubeUrl } from "@site/src/utils";
+import YouTubeEmbed from "@site/src/components/YouTubeEmbed/YouTubeEmbed";
 
 interface GetStartedLink {
   title: string;
@@ -79,15 +79,11 @@ const LandingHero: React.FC<LandingHeroProps> = ({
                 />
               )}
               {youtubeVideoId && (
-                <iframe
-                  className={styles.video}
-                  width={400}
-                  height={225}
-                  src={getEmbedYouTubeUrl(youtubeVideoId)}
+                <YouTubeEmbed
+                  videoId={youtubeVideoId}
                   title={title}
-                  frameBorder="0"
-                  allowFullScreen
-                ></iframe>
+                  className={styles.video}
+                />
               )}
             </div>
           </div>
@@ -121,7 +117,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
                     <link.icon className={styles.linkIcon} />
                   </div>
                 </div>
-              )
+              ),
             )}
           </div>
         )}
