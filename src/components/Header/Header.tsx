@@ -17,6 +17,8 @@ import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
 import eventData from "../../../data/events.json";
 import data from "../../../data/navbar.json";
 import { InlineSearch } from "../Pages/Homepage/DocsHeader/InlineSearch";
+import { useActiveDocContext } from "@docusaurus/plugin-content-docs/client";
+import { getVersionedUrl } from "@site/utils/general"
 
 const Header = () => {
   const { toggle, shown } = useNavbarMobileSidebar();
@@ -30,7 +32,7 @@ const Header = () => {
   const { setIsOpen } = useInkeepSearch({
     enableAIChat: true,
   });
-  const version = "17.x"; /* useDocsVersion(); */
+  const { activeVersion } = useActiveDocContext();
 
   const { menuItems, rightSide } = data as unknown as HeaderNavigation;
   const mobileBtn = rightSide?.mobileButton;
@@ -43,7 +45,7 @@ const Header = () => {
           "--ifm-navbar-height",
           headerRef.current
             ? `${headerRef.current.getBoundingClientRect().height + document.getElementById("docs-navigation")?.getBoundingClientRect().height}px`
-            : "147px"
+            : "147px",
         );
       }
     };
@@ -81,7 +83,7 @@ const Header = () => {
                     message: "Toggle navigation bar",
                     description:
                       "The ARIA label for hamburger menu button of mobile navigation",
-                  }
+                  },
             )}
           >
             <Icon
@@ -90,7 +92,7 @@ const Header = () => {
             />
           </HeadlessButton>
           <Link
-            to="/" /* {getVersionedUrl(version, "/")} */
+            to={activeVersion ? getVersionedUrl(activeVersion, "/") : "/"}
             className={styles["logo-link"]}
           >
             <DocsLogo className={styles.logo} />
