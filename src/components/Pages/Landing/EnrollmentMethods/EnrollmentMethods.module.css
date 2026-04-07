@@ -60,6 +60,10 @@
   &.withDescription {
     margin-bottom: var(--m-0-5);
   }
+
+  &.md {
+    font-size: var(--fs-header-3);
+  }
 }
 
 .description {

@@ -20,6 +20,8 @@ interface LandingHeroProps {
   image?: any;
   youtubeVideoId?: string;
   linksTitle?: string;
+  linksTitleSize?: "md" | "lg"; // 24px or 32px, default is md
+  linksDescription?: any;
   linksColumnCount?: number;
   links?: GetStartedLink[];
   emitEvent?: (name: string, params: any) => {};
@@ -32,6 +34,8 @@ const LandingHero: React.FC<LandingHeroProps> = ({
   image,
   youtubeVideoId,
   linksTitle,
+  linksTitleSize = "md",
+  linksDescription,
   linksColumnCount = 2,
   links = [],
   emitEvent,
@@ -93,8 +97,11 @@ const LandingHero: React.FC<LandingHeroProps> = ({
           </div>
         </div>
         {linksTitle && links.length > 0 && (
-          <h2 className={styles.linksTitle}>{linksTitle}</h2>
+          <h2 className={cn(styles.linksTitle, styles[linksTitleSize || "md"])}>
+            {linksTitle}
+          </h2>
         )}
+        {linksDescription && <>{linksDescription}</>}
         {links.length > 0 && (
           <div
             className={styles.links}
@@ -121,7 +128,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
                     <link.icon className={styles.linkIcon} />
                   </div>
                 </div>
-              )
+              ),
             )}
           </div>
         )}

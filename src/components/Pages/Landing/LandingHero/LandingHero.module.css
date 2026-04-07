@@ -206,6 +206,14 @@
     margin-top: var(--m-5);
     font-size: var(--fs-header-3);
   }
+
+  &.lg {
+    font-size: var(--fs-header-3);
+
+    @media (--md-scr) {
+      font-size: var(--fs-header-1);
+    }
+  }
 }
 
 .links {

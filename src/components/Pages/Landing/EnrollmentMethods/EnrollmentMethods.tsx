@@ -33,6 +33,8 @@ interface EnrollmentMethod {
 
 interface EnrollmentMethodsProps {
   title?: string;
+  titleType?: "h2" | "h3"; // default is h2
+  titleSize?: "md" | "lg"; // 24px or 32px, lg by default
   description?: string;
   children?: React.ReactNode;
   variant?: "default" | "rows";
@@ -218,6 +220,8 @@ export const Method: React.FC<EnrollmentMethod> = ({
 
 const EnrollmentMethods: React.FC<EnrollmentMethodsProps> = ({
   title,
+  titleType = "h2",
+  titleSize = "lg",
   description,
   children,
   variant = "default",
@@ -227,19 +231,21 @@ const EnrollmentMethods: React.FC<EnrollmentMethodsProps> = ({
   linkColor = "black",
   fontSize = "lg",
 }) => {
+  const TitleTag = titleType === "h2" || titleType === "h3" ? titleType : "h2";
   return (
     <section className={styles.enrollmentMethods}>
       <div className={styles.container}>
         {title && (
           <div className={styles.header}>
-            <h2
+            <TitleTag
               className={cn(styles.title, {
                 [styles.rowsVariant]: variant === "rows",
                 [styles.withDescription]: description,
+                [styles[titleSize]]: titleSize,
               })}
             >
               {title}
-            </h2>
+            </TitleTag>
             {description && <p className={styles.description}>{description}</p>}
           </div>
         )}
