@@ -11,6 +11,7 @@ type InlineSearchProps = {
   version?: string;
   displayAskAiButton?: boolean;
   mobilePlaceholder?: string;
+  enableKeyboardShortcut?: boolean;
 };
 
 export function InlineSearch({
@@ -18,12 +19,13 @@ export function InlineSearch({
   version,
   displayAskAiButton = false,
   mobilePlaceholder,
+  enableKeyboardShortcut = true,
 }: InlineSearchProps) {
   const window = useWindowSize({ desktopBreakpoint: 997 });
   const { message, setMessage, isOpen, setIsOpen, Modal, inkeepModalProps } =
     useInkeepSearch({
       version,
-      enableKeyboardShortcut: true,
+      enableKeyboardShortcut,
       keyboardShortcut: "k", // ⌘+K for inline search
     });
 
@@ -47,7 +49,15 @@ export function InlineSearch({
     <>
       <div className={clsx(styles.wrapper, className)}>
         <Icon name="magnify" className={styles.searchIcon} inline />
-        <BrowserOnly fallback={<input className={styles.searchInput} placeholder="Search Docs or Press ⌘ + K" readOnly />}>
+        <BrowserOnly
+          fallback={
+            <input
+              className={styles.searchInput}
+              placeholder="Search Docs or Press ⌘ + K"
+              readOnly
+            />
+          }
+        >
           {() => {
             return (
               <>
