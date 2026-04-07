@@ -202,7 +202,8 @@
 
 .buttonWrapper {
   display: none;
-  margin: "10px 0";
+  margin: "8px 0";
+  align-self: flex-end;
   @media (--nav) {
     display: block;
   }
