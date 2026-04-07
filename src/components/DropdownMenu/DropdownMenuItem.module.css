@@ -46,9 +46,10 @@
     &:focus {
       color: var(--color-dark-purple);
     }
-    padding: 8px;
+    padding: 0 8px 24px;
     @media (--nav) {
-      
+        padding-top: 8px;
+        padding-bottom: 8px;
         flex-direction: column;
         align-items: flex-start;
           &:hover,
@@ -60,7 +61,6 @@
       }
   }
   &.firstLink {
-    padding-bottom: 0px;
     @media (--nav) {
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
       padding-bottom: 0px;
