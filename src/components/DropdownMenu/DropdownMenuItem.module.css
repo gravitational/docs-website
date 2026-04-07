@@ -39,7 +39,7 @@
       }
   }
   &.newSubmenuLink {
-    transition: "color 0.3s, background 0.3s !important";
+    transition: color 0.3s, background 0.3s !important;
     color: #0A0A0A;
     &:hover,
     &:active,
@@ -48,13 +48,14 @@
     }
     padding: 8px;
     @media (--nav) {
+      
         flex-direction: column;
         align-items: flex-start;
-        background-color: #FCF9FF;
           &:hover,
           &:active,
           &:focus {
             color: #0A0A0A;
+            background-color: #FCF9FF;
           }
       }
   }
