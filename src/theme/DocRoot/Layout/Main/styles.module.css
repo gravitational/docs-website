@@ -2,17 +2,19 @@
   position: relative;
 }
 
-:global(main.template-full-width) {
+:global(main:has(.template-full-width)) {
   width: 100%;
   max-width: 100%;
 }
 
-:global(main.template-full-width) :global(.container) {
+:global(main:has(.template-full-width)) :global(.container) {
   max-width: 100%;
   width: 100%;
 }
 
-:global(main.template-full-width) :global(.container) :global(.theme-doc-markdown) {
+:global(main:has(.template-full-width))
+  :global(.container)
+  :global(.theme-doc-markdown) {
   > :global(:not(section)) {
     max-width: var(--lp-section-max-width);
     margin-left: auto;
