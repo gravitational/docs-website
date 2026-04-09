@@ -7,6 +7,12 @@
     display: block !important;
   }
 
+  &.pageHasTOC {
+    @media screen and (min-width: 997px) and (max-width: 1301px) {
+      display: none !important;
+    }
+  }
+
   .feedbackTitle {
     font-size: var(--fs-text-sm);
     line-height: var(--lh-md);

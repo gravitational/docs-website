@@ -38,7 +38,7 @@ function useSyntheticTitle(): string | null {
 }
   
 
-export default function DocItemContent({ children }: Props): ReactNode {
+export default function DocItemContent({ docTOC, children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
   const { hideTitleSection, showDescription } = useDocTemplate();
   const { frontMatter } = useDoc();
@@ -63,7 +63,7 @@ export default function DocItemContent({ children }: Props): ReactNode {
             {frontMatter.description && showDescription && (
               <p className="docItemDescription">{frontMatter.description}</p>
             )}
-            <PageActions pathname={location.pathname} />
+            <PageActions pathname={location.pathname} pageHasTOC={!docTOC.removed}/>
             {videoBanner && <VideoBar {...videoBanner} />}
           </header>
         )}

@@ -92,7 +92,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
                 <NavbarMobileSidebarToggle />
               </div>
               {docTOC.mobile}
-              <DocItemContent>
+              <DocItemContent docTOC={docTOC}>
                 <PositionProvider>{children}</PositionProvider>
               </DocItemContent>
               <DocItemFooter />
