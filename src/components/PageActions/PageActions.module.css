@@ -1,6 +1,6 @@
 .pageActions {
   display: flex;
-  gap: var(--m-3);
+  gap: var(--m-2);
   padding: var(--m-1-5) 0;
   border-bottom: 1px solid var(--color-tonal-neutral-2);
   margin-bottom: var(--m-5);
@@ -10,7 +10,7 @@
       &::after {
         content: "";
         position: relative;
-        transform: translateX(var(--m-1-5));
+        transform: translateX(var(--m-1));
         width: 1px;
         height: 100%;
         background-color: var(--color-tonal-neutral-1);
@@ -18,7 +18,19 @@
     }
   }
 
-  @media (--lg-scr) {
+  @media (--md-scr) {
+    gap: var(--m-3);
+
+    & > * {
+      &:not(:nth-last-child(2)) {
+        &::after {
+          transform: translateX(var(--m-1-5));
+        }
+      }
+    }
+  }
+
+  @media (--desktop-page-actions) {
     gap: var(--m-4);
     margin-bottom: var(--m-6);
     & > * {
@@ -53,7 +65,8 @@
   color: var(--color-foreground-slightly-muted);
   display: flex;
   align-items: center;
-  font-size: var(--fs-text-lg);
+  font-size: var(--fs-text-sm);
+  white-space: nowrap;
   letter-spacing: 0.024px;
   line-height: 1.625;
   margin: 0;
@@ -61,11 +74,11 @@
   font-weight: var(--fw-medium);
 
   & > svg {
-    width: 20px;
-    height: 20px;
-    min-width: 20px;
-    min-height: 20px;
-    margin-right: var(--m-0-5);
+    width: var(--m-2);
+    height: var(--m-2);
+    min-width: var(--m-2);
+    min-height: var(--m-2);
+    margin-right: 2px;
     & > path {
       fill: var(--color-foreground-muted);
     }
@@ -74,10 +87,24 @@
   @media (--xs-scr) {
     width: auto;
     height: auto;
+    font-size: var(--fs-text-md);
+
+    & > svg {
+      margin-right: var(--m-0-5);
+    }
   }
 
   @media (--md-scr) {
     line-height: 1.75;
+    font-size: var(--fs-text-lg);
+
+    & > svg {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      min-height: 20px;
+      margin-right: var(--m-0-5);
+    }
   }
 }
 
