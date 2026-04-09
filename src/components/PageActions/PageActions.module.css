@@ -46,6 +46,18 @@
       }
     }
   }
+
+  &.pageHasTOC {
+    @media screen and (min-width: 997px) and (max-width: 1301px) {
+      & > * {
+        &:not(:last-child) {
+          &::after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 }
 
 .askAIButton {

@@ -1,4 +1,5 @@
 import { getReportIssueURL } from "@site/src/utils/github-issue";
+import cn from "clsx";
 import styles from "./PageActions.module.css";
 import Icon from "../Icon";
 import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
@@ -11,7 +12,10 @@ import {
 import { useMemo, useRef, useState } from "react";
 import { useWindowSize } from "@docusaurus/theme-common";
 
-const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
+const PageActions: React.FC<{ pathname: string; pageHasTOC: boolean }> = ({
+  pathname,
+  pageHasTOC,
+}) => {
   const { setIsOpen, ModalSearchAndChat, inkeepModalProps } = useInkeepSearch({
     enableAIChat: true,
   });
@@ -26,7 +30,9 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
   );
 
   return (
-    <div className={styles.pageActions}>
+    <div
+      className={cn(styles.pageActions, { [styles.pageHasTOC]: pageHasTOC })}
+    >
       <a
         className={styles.githubLink}
         href={getReportIssueURL(pathname)}
@@ -58,7 +64,7 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
         <Icon size="md" name="markdown" />
         <span>View as Markdown</span>
       </a>
-      <ThumbsFeedback />
+      <ThumbsFeedback pageHasTOC={pageHasTOC} />
       <BrowserOnly fallback={<div />}>
         {() => {
           return (

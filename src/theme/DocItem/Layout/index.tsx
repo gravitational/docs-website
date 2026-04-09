@@ -95,7 +95,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
                 </div>
               )}
               {docTOC.mobile}
-              <DocItemContent>
+              <DocItemContent docTOC={docTOC}>
                 <PositionProvider>{children}</PositionProvider>
               </DocItemContent>
               <DocItemFooter />
