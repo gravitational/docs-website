@@ -11,6 +11,7 @@ import { visitParents, SKIP } from "unist-util-visit-parents";
  * Code blocks: extract text content and replace with clean <pre><code> structure
  * Card links: prevent duplicate links in the markdown output
  * Heading anchor links: remove hash-link anchors from headings
+ * Images: remove all image elements from the output
  * Irrelevant components: remove interactive UI components (thumbsFeedback, checkpoint, docsHeader)
  * H1 repositioning: move the h1 heading to the top of the document
  */
@@ -84,6 +85,12 @@ const rehypePrepareHTML: Plugin<[], Root, Root> = function () {
       ) {
         toRemove.push({ node: element, parent });
         return SKIP; // don't traverse children (e.g. avoids capturing an h1 inside a removed node)
+      }
+
+      // *** Images ***
+      if (element.tagName === "img") {
+        toRemove.push({ node: element, parent });
+        return SKIP;
       }
 
       // *** Headings ***
