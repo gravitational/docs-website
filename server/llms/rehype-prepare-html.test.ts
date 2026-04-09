@@ -146,6 +146,19 @@ describe("server/llms/rehype-prepare-html", () => {
     );
   });
 
+  test("Images: removes all img elements, preserving surrounding content", () => {
+    const result = transformer(
+      readFileSync(resolve("server/fixtures/llms/images.html"), "utf-8"),
+    );
+
+    expect((result.value as string).trim()).toBe(
+      readFileSync(
+        resolve("server/fixtures/llms/result/images.html"),
+        "utf-8",
+      ).trim(),
+    );
+  });
+
   test("Irrelevant components: removes thumbsFeedback and checkpoint components, preserving other content", () => {
     const result = transformer(
       readFileSync(
