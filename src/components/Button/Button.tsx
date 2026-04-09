@@ -7,6 +7,7 @@ import type {
 import { clsx } from "clsx";
 
 import styles from "./Button.module.css";
+import Link from "@docusaurus/Link";
 
 export type ButtonVariant =
   | "primary"
@@ -55,7 +56,7 @@ const Button = ({
   };
 
   if (as === "link") {
-    return <a {...(props as DefaultAnchorProps)} />;
+    return <Link {...(props as DefaultAnchorProps)} />;
   }
 
   return <button {...(props as DefaultButtonProps)} />;
