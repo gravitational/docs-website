@@ -63,7 +63,7 @@ export default function DocItemContent({ docTOC, children }: Props): ReactNode {
             {frontMatter.description && showDescription && (
               <p className="docItemDescription">{frontMatter.description}</p>
             )}
-            <PageActions pathname={location.pathname} pageHasTOC={!docTOC.removed}/>
+            <PageActions pathname={location.pathname} pageHasTOC={docTOC.canRender}/>
             {videoBanner && <VideoBar {...videoBanner} />}
           </header>
         )}
