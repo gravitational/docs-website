@@ -46,6 +46,7 @@ function useDocTOC(removeTOCSidebar: boolean) {
   return {
     hidden,
     removed,
+    canRender,
     mobile,
     desktop,
   };
