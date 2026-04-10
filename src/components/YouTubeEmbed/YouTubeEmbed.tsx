@@ -7,12 +7,14 @@ import Icon from "../Icon";
 type YouTubeEmbedProps = {
   videoId: string;
   title: string;
+  fetchPriority?: "high" | "low";
   className?: string;
 };
 
 const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
   videoId,
   title,
+  fetchPriority,
   className,
 }) => {
   const [videoActive, setVideoActive] = useState<boolean>(false);
@@ -24,13 +26,15 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
         title={title}
         allow="autoplay; encrypted-media"
         allowFullScreen
-        className={cn({ [className]: !!className })}
+        className={cn({ [className as string]: !!className })}
         style={{ width: "100%", height: "100%", border: "none" }}
       />
     );
   return (
     <div
-      className={cn(styles.placeholderContainer, { [className]: !!className })}
+      className={cn(styles.placeholderContainer, {
+        [className as string]: !!className,
+      })}
       onClick={() => setVideoActive(true)}
       role="button"
       tabIndex={0}
@@ -47,6 +51,7 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
             `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
         }}
         alt={title}
+        fetchPriority={fetchPriority}
         className={styles.videoPlaceholder}
       />
       <div className={styles.playButton}>

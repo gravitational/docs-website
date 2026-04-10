@@ -42,7 +42,11 @@ const GetStarted: React.FC<GetStartedProps> = ({
             ))}
           </div>
           <div className={styles.video}>
-            <YouTubeEmbed videoId={youtubeVideoId} title={title} />
+            <YouTubeEmbed
+              videoId={youtubeVideoId}
+              title={title}
+              fetchPriority="high"
+            />
           </div>
           <div className={styles.links}>
             {links.map((link, i) => (

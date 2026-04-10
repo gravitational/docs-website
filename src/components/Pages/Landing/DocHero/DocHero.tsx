@@ -75,6 +75,7 @@ const DocHero: React.FC<DocHeroProps> = ({
                 videoId={youtubeVideoId}
                 title={title}
                 className={styles.video}
+                fetchPriority="high"
               />
             )}
           </div>

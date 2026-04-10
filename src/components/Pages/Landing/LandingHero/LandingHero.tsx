@@ -83,6 +83,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
                   videoId={youtubeVideoId}
                   title={title}
                   className={styles.video}
+                  fetchPriority="high"
                 />
               )}
             </div>
