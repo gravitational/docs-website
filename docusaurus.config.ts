@@ -141,6 +141,15 @@ const config: Config = {
     {
       tagName: "link",
       attributes: {
+        rel: "preload",
+        as: "style",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap",
+        crossorigin: "anonymous",
+      },
+    },
+    {
+      tagName: "link",
+      attributes: {
         rel: "preconnect",
         href: "https://img.youtube.com",
       },
