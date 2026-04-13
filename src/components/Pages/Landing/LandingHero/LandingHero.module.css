@@ -276,7 +276,7 @@
     .linkDescription {
       font-size: 15.95px;
       margin-bottom: unset;
-      color: var(--color-black);
+      color: var(--color-foreground-slightly-muted);
       line-height: 1.625;
     }
 
