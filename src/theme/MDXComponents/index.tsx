@@ -28,6 +28,7 @@ import EnterpriseFeatureCallout from "/src/components/EnterpriseFeatureCallout";
 import { ChangelogLink } from "/src/components/ChangelogLink";
 import InlineCTA from "/src/components/InlineCTA/InlineCTA";
 import EnterpriseFeatureWidget from "@site/src/components/EnterpriseFeatureWidget/EnterpriseFeatureWidget";
+import Callout from "@site/src/components/Callout";
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
@@ -67,6 +68,7 @@ const MDXComponents: MDXComponentsObject = {
   EnterpriseFeatureCallout,
   EnterpriseFeatureWidget,
   InlineCTA,
+  Callout,
 };
 
 export default MDXComponents;

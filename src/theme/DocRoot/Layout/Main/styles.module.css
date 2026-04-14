@@ -12,10 +12,18 @@
   width: 100%;
 }
 
-:global(main.template-full-width) :global(.container) :global(.theme-doc-markdown) {
+:global(main.template-full-width)
+  :global(.container)
+  :global(.theme-doc-markdown) {
   > :global(:not(section)) {
     max-width: var(--lp-section-max-width);
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+:global(main.template-full-width) :global(.container) :global(.pagination-nav) {
+  max-width: var(--lp-section-max-width);
+  margin-left: auto;
+  margin-right: auto;
 }
