@@ -33,7 +33,6 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0);
   cursor: zoom-out;
   cursor: -moz-zoom-out;
   cursor: -webkit-zoom-out;
@@ -41,5 +40,8 @@
   & .img {
     max-width: 95vw;
     max-height: 95vh;
+    width: auto;
+    object-fit: contain;
+    background: rgb(255, 255, 255);
   }
 }
