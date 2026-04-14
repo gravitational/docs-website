@@ -122,6 +122,8 @@ svg g.architecture-edges {
   }
 }
 
-table code {
-  word-break: normal !important;
+@media (--md-scr) {
+  table code {
+    word-break: normal !important;
+  }
 }
