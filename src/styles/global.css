@@ -121,3 +121,9 @@ svg g.architecture-edges {
     fill: var(--color-light-gray) !important;
   }
 }
+
+@media (--md-scr) {
+  table code {
+    word-break: normal !important;
+  }
+}
