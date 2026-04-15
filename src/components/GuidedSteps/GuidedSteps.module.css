@@ -1,0 +1,79 @@
+.guidedSteps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--m-2);
+  margin-bottom: var(--ifm-leading);
+
+  @media (--md-scr) {
+    gap: var(--m-4);
+  }
+
+  h2 {
+    --ifm-h2-font-size: 2rem;
+  }
+}
+
+.instructions {
+  position: relative;
+  height: max-content;
+  padding-bottom: 300%;
+  display: grid;
+  gap: var(--m-1);
+
+  @media (--md-scr) {
+    padding-bottom: 150%;
+  }
+}
+
+.codePanel {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + var(--m-4));
+  background-color: #060918;
+  max-height: calc(100dvh - var(--ifm-navbar-height) - var(--m-8));
+  overflow-y: clip;
+  overflow-x: scroll;
+  height: 100%;
+  border-radius: var(--r-md);
+  &.copyButtonActive {
+    background-color: var(--color-code);
+  }
+
+  .codeContainer {
+    position: relative;
+    display: grid;
+    height: 100%;
+    grid-template-rows: 56px minmax(0, 1fr);
+  }
+}
+
+.copyButton {
+  position: absolute;
+  bottom: 53px;
+  left: 50%;
+  max-width: 136px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--m-0-5);
+  white-space: nowrap;
+  transform: translateX(-50%);
+  padding: var(--m-1) var(--m-2);
+  background-color: var(--color-white);
+  border: 1.5px solid transparent;
+  border-radius: 36px;
+  cursor: pointer;
+  font-size: var(--fs-text-lg);
+  transition:
+    box-shadow 0.1s ease-in-out,
+    border-color 0.1s ease-in-out;
+  span {
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  &:hover {
+    box-shadow: 0 0 25px 0 rgba(81, 47, 201, 0.5);
+    border-color: var(--color-interactive-primary);
+  }
+}

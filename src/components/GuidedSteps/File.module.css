@@ -1,0 +1,200 @@
+.files {
+  position: relative;
+  width: 100%;
+  border-bottom-left-radius: var(--m-1);
+  border-bottom-right-radius: var(--m-1);
+  padding-bottom: var(--m-4);
+  overflow-y: scroll;
+  &.copyButtonActive {
+    background-color: var(--color-code);
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--color-tonal-neutral-0-white);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-tonal-neutral-2-white);
+    border: 2px solid var(--color-tonal-neutral-0-white);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-tonal-neutral-3-white);
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-tonal-neutral-2-white)
+    var(--color-tonal-neutral-0-white);
+}
+
+.file {
+  position: absolute;
+  height: 0;
+  opacity: 0;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+
+  &.active {
+    opacity: 1;
+    height: auto;
+    position: relative;
+    pointer-events: auto;
+  }
+
+  :global(pre) {
+    border-radius: 0;
+    transition: all 0.2s ease-in;
+  }
+  & > div {
+    box-shadow: unset;
+  }
+}
+
+.fileTabs {
+  position: sticky;
+  width: 100%;
+  top: 0;
+  display: flex;
+  padding: var(--m-2);
+  border-bottom: 1.5px solid var(--color-tonal-neutral-1-white);
+  background-color: #0e1435;
+  border-top-left-radius: var(--m-1);
+  border-top-right-radius: var(--m-1);
+  z-index: 1;
+  overflow-x: scroll;
+  gap: var(--m-0-5);
+  margin-bottom: 0;
+  min-height: var(--file-tabs-height);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+}
+
+.fileTab {
+  display: flex;
+  align-items: center;
+  padding: var(--m-0-5) var(--m-2);
+  gap: 2px;
+  border-radius: 36px;
+  color: var(--color-white);
+  font-size: var(--fs-text-md);
+  line-height: 1.42857;
+  margin-top: 0 !important;
+  transition: all 0.2s ease-in-out;
+
+  &.active {
+    background-color: var(--color-interactive-primary);
+    color: var(--color-black);
+    svg {
+      filter: brightness(0);
+    }
+    &:hover {
+      background-color: var(--color-interactive-primary);
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--color-tonal-primary-2);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) invert(1);
+  }
+
+  span {
+    line-height: 1;
+  }
+}
+
+.downloadButton {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--m-0-5);
+  background-color: var(--color-tonal-neutral-0-white);
+  border: none;
+  color: var(--color-foreground-slightly-muted-white);
+  font-size: var(--fs-text-sm);
+  cursor: pointer;
+  font-weight: var(--fw-medium);
+  line-height: 1rem;
+  padding: var(--m-1) var(--m-2);
+  border-radius: var(--m-0-5);
+  transition: all 0.2s ease-in-out;
+
+  svg {
+    filter: brightness(0) invert(1);
+    opacity: 0.72;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  &:hover {
+    background-color: var(--color-tonal-neutral-1-white);
+    color: var(--color-white);
+
+    svg {
+      opacity: 1;
+    }
+  }
+}
+
+.codeBlock {
+  position: relative;
+  pointer-events: none;
+  :global(pre) {
+    padding: 0 0 0 var(--m-2);
+    opacity: 0.52;
+    background-color: transparent !important;
+    transition: opacity 0.2s ease-in;
+
+    code {
+      color: var(--color-data-purple-tertiary);
+      :global(.hljs-attr) {
+        color: var(--color-data-purple-tertiary);
+      }
+      :global(.hljs-string),
+      :global(.hljs-built_in) {
+        color: var(--color-data-caribbean-tertiary);
+      }
+    }
+  }
+
+  &:first-of-type {
+    & > div {
+      padding-top: var(--m-2);
+    }
+  }
+
+  &:last-of-type {
+    & > div {
+      padding-bottom: var(--m-2);
+    }
+  }
+
+  & > div {
+    background-color: transparent !important;
+    box-shadow: unset !important;
+  }
+
+  &.activeLines,
+  &.copyButtonActive {
+    :global(pre) {
+      background-color: var(--color-code) !important;
+      opacity: 1;
+    }
+
+    & > div {
+      background-color: var(--color-code) !important;
+    }
+  }
+}
