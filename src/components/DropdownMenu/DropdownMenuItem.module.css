@@ -31,6 +31,43 @@
   &:focus {
     color: var(--color-dark-purple);
     background-color: none;
+    text-decoration: none;
+    button {
+        svg {
+          transform: "translateX(4px)",
+        }
+      }
+  }
+  &.newSubmenuLink {
+    transition: color 0.3s, background 0.3s !important;
+    color: #0A0A0A;
+    &:hover,
+    &:active,
+    &:focus {
+      color: var(--color-dark-purple);
+    }
+    padding: 0 8px 24px;
+    @media (--nav) {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+          &:hover,
+          &:active,
+          &:focus {
+            color: #0A0A0A;
+            background-color: #FCF9FF;
+          }
+      }
+  }
+  &.firstLink {
+    @media (--nav) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
   }
 }
 
@@ -70,6 +107,9 @@
   margin-left: 8px;
   @media (--nav) {
     margin-left: 16px;
+    &.newSubmenuItem {
+      margin-left: 0; 
+    }
   }
   &.imageitemText {
     margin-top: 12px;
@@ -87,9 +127,18 @@
   font-weight: 400;
   margin: 0;
   @media (--nav) {
+    white-space: pre-wrap;
     font-size: 14px;
     line-height: 20px;
     font-weight: bold;
+    &.firstNewSubmenuTitle {
+      font-size: 16px;
+      line-height: 24px;
+      margin-bottom: 12px;
+    }
+    &.newSubmenuTitle {
+      font-weight: 400;
+    }
   }
 }
 .description {
@@ -100,6 +149,10 @@
   margin-top: 4px;
   color: var(--color-gray);
   display: none;
+  &.newSubmenuDescription {
+    color:rgba(0, 0, 0, 0.54);
+    line-height: 20px;
+  }
   @media (--nav) {
     display: initial;
   }
@@ -110,6 +163,15 @@
   flex-direction: column;
   row-gap: 8px;
   min-width: 35px;
+  &.newSubmenuIcon {
+  
+    column-gap: 10px;
+    @media (--nav) {
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  }
 }
 
 .dateText {
@@ -144,5 +206,38 @@
     font-size: 14px;
     line-height: 20px;
     font-weight: bold;
+  }
+}
+
+.buttonWrapper {
+  display: none;
+  margin: "8px 0";
+  align-self: flex-end;
+  @media (--nav) {
+    display: block;
+  }
+}
+
+.learnButton {
+  border: none;
+  pointer-events: none;
+  background-color: transparent;
+  justify-content: flex-start;
+  color: var(--color-dark-purple);;
+  letter-spacing: normal;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.75;
+  padding: 0;
+  svg {
+    transition: all 0.3s ease-in-out; 
+    margin-left: 8px;
+    margin-right: -4px;
+  }
+
+  
+  &:hover, &:focus, &:active {
+    color: var(--color-light-purple);
+      background-color: transparent;
   }
 }

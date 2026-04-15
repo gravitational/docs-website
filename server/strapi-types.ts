@@ -36,6 +36,7 @@ export type NavigationItem = {
     submenuTitle?: string | null;
     submenuTitleLink?: string;
     submenuSections: NavSection[];
+    newSubmenuStyle?: boolean;
   }[];
   panel?: {
     panelTitle?: {

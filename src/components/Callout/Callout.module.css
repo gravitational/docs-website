@@ -1,0 +1,15 @@
+.callout {
+  display: flex;
+  padding: var(--m-2) var(--m-4);
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: var(--m-1);
+  border-left: var(--m-0-5) solid var(--color-dark-purple);
+  background: var(--color-background-depth-2);
+  font-size: var(--fs-text-xl);
+  font-weight: var(--fw-bold);
+  font-style: italic;
+  line-height: 1.333;
+  margin: var(--m-2) 0 var(--m-3) 0;
+}

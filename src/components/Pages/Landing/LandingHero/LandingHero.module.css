@@ -206,6 +206,14 @@
     margin-top: var(--m-5);
     font-size: var(--fs-header-3);
   }
+
+  &.lg {
+    font-size: var(--fs-header-3);
+
+    @media (--md-scr) {
+      font-size: var(--fs-header-1);
+    }
+  }
 }
 
 .links {
@@ -268,7 +276,7 @@
     .linkDescription {
       font-size: 15.95px;
       margin-bottom: unset;
-      color: var(--color-black);
+      color: var(--color-foreground-slightly-muted);
       line-height: 1.625;
     }
 

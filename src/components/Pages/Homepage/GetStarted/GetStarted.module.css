@@ -11,7 +11,9 @@
 
   @media (max-width: 576px) {
     font-size: 1.5rem;
-    margin-bottom: calc(var(--ifm-heading-vertical-rhythm-bottom) * var(--ifm-leading));
+    margin-bottom: calc(
+      var(--ifm-heading-vertical-rhythm-bottom) * var(--ifm-leading)
+    );
   }
 }
 
@@ -55,7 +57,7 @@
     &:hover {
       cursor: pointer;
       background: var(--color-white);
-      box-shadow: var(--lp-box-shadow-hover);
+      box-shadow: var(--lp-box-shadow);
     }
   }
 
@@ -109,7 +111,7 @@
     &:hover {
       cursor: pointer;
       background: var(--color-white);
-      box-shadow: var(--lp-box-shadow-hover);
+      box-shadow: var(--lp-box-shadow);
       .linkTitle {
         color: var(--color-dark-purple);
       }
