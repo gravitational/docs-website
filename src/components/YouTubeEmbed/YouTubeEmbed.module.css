@@ -19,6 +19,7 @@
   img {
     object-fit: cover;
     height: inherit;
+    width: inherit;
   }
 }
 
