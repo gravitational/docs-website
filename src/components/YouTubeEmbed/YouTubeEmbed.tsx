@@ -47,14 +47,10 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
       <picture className={styles.videoPlaceholder}>
         <source
           media="(max-width: 480px)"
-          srcSet={`https://img.youtube.com/vi/${videoId}/default.jpg`}
-        />
-        <source
-          media="(max-width: 768px)"
           srcSet={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
         />
         <source
-          media="(max-width: 1024px)"
+          media="(max-width: 768px)"
           srcSet={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
         />
         <img

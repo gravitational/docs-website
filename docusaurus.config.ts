@@ -141,15 +141,6 @@ const config: Config = {
     {
       tagName: "link",
       attributes: {
-        rel: "preload",
-        as: "style",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap",
-        crossorigin: "anonymous",
-      },
-    },
-    {
-      tagName: "link",
-      attributes: {
         rel: "preconnect",
         href: "https://img.youtube.com",
       },
@@ -160,7 +151,6 @@ const config: Config = {
         rel: "preload",
         fetchpriority: "high",
         as: "image",
-        type: "svg+xml",
         href: "/docs/assets/images/docs-header-background-df72d815e0b2376722c03a2049d2a2b5.svg",
       },
     },
