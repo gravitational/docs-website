@@ -14,7 +14,12 @@
 .videoPlaceholder {
   position: absolute;
   width: 100%;
-  object-fit: cover;
+  height: 100%;
+
+  img {
+    object-fit: cover;
+    height: inherit;
+  }
 }
 
 .playButton {

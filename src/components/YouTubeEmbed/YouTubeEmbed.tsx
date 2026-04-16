@@ -6,7 +6,7 @@ import Icon from "../Icon";
 
 type YouTubeEmbedProps = {
   videoId: string;
-  title: string;
+  title?: string;
   fetchPriority?: "high" | "low";
   className?: string;
 };
@@ -44,16 +44,31 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
         }
       }}
     >
-      <img
-        src={`https://img.youtube.com/vi/${videoId}/sddefault.jpg`}
-        onError={(e) => {
-          (e.currentTarget as HTMLImageElement).src =
-            `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-        }}
-        alt={title}
-        fetchPriority={fetchPriority}
-        className={styles.videoPlaceholder}
-      />
+      <picture className={styles.videoPlaceholder}>
+        <source
+          media="(max-width: 480px)"
+          srcSet={`https://img.youtube.com/vi/${videoId}/default.jpg`}
+        />
+        <source
+          media="(max-width: 768px)"
+          srcSet={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+        />
+        <source
+          media="(max-width: 1024px)"
+          srcSet={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+        />
+        <img
+          src={`https://img.youtube.com/vi/${videoId}/sddefault.jpg`}
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src =
+              `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+          }}
+          alt={title}
+          width={720}
+          height={480}
+          fetchPriority={fetchPriority}
+        />
+      </picture>
       <div className={styles.playButton}>
         <Icon name="play2" size="lg" />
       </div>
