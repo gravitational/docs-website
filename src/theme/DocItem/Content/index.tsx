@@ -12,6 +12,7 @@ import Heading from "@theme/Heading";
 import MDXContent from "@theme/MDXContent";
 import clsx from "clsx";
 import { useState, type ReactNode } from "react";
+import { useDocTOC } from "../Layout";
 
 interface DocFrontMatter {
   videoBanner: VideoBarProps;
@@ -38,9 +39,10 @@ function useSyntheticTitle(): string | null {
 }
   
 
-export default function DocItemContent({ docTOC, children }: Props): ReactNode {
+export default function DocItemContent({ children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
-  const { hideTitleSection, showDescription } = useDocTemplate();
+  const { hideTitleSection, showDescription, removeTOCSidebar } = useDocTemplate();
+    const docTOC = useDocTOC(!!removeTOCSidebar);
   const { frontMatter } = useDoc();
   const location = useLocation();
   const [feedback, setFeedback] = useState<FeedbackType | null>(null);
