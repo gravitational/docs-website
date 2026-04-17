@@ -29,7 +29,10 @@ import {
   removeRedundantItems,
 } from "./server/sidebar-order";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
-import { clayTrackingPlugin, googleTagGatewayPlugin } from "./server/tracking-plugins";
+import {
+  clayTrackingPlugin,
+  googleTagGatewayPlugin,
+} from "./server/tracking-plugins";
 import { rehypeHLJS } from "./server/rehype-hljs";
 import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
@@ -83,59 +86,83 @@ const config: Config = {
       disableSwitch: false,
       respectPrefersColorScheme: false,
     },
-    headTags: [
-      {
-        tagName: "link",
-        attributes: {
-          rel: "apple-touch-icon",
-          href: "/apple.png",
-        },
-      },
-      {
-        tagName: "link",
-        attributes: {
-          rel: "manifest",
-          href: "/manifest.webmanifest",
-        },
-      },
-      {
-        tagName: "script",
-        attributes: {
-          type: "application/ld+json",
-        },
-        innerHTML: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Corporation",
-          name: "Teleport",
-          alternateName: "Gravitational Inc.",
-          url: "https://goteleport.com/",
-          logo: "https://goteleport.com/static/og-image.png",
-          sameAs: [
-            "https://www.youtube.com/channel/UCmtTJaeEKYxCjfNGiijOyJw",
-            "https://twitter.com/goteleport/",
-            "https://www.linkedin.com/company/go-teleport/",
-            "https://en.wikipedia.org/wiki/Teleport_(software)",
-          ],
-        }),
-      },
-      {
-        tagName: "script",
-        attributes: {
-          type: "application/ld+json",
-        },
-        innerHTML: JSON.stringify({
-          "@context": "https://schema.org/",
-          "@type": "WebSite",
-          name: "Teleport Docs",
-          url: "https://goteleport.com/docs/",
-        }),
-      },
-    ],
     metadata: [
       { name: "author", content: "Teleport" },
       { property: "og:type", content: "website" },
     ],
   },
+  headTags: [
+    {
+      tagName: "link",
+      attributes: {
+        rel: "apple-touch-icon",
+        href: "/apple.png",
+      },
+    },
+    {
+      tagName: "link",
+      attributes: {
+        rel: "manifest",
+        href: "/manifest.webmanifest",
+      },
+    },
+    {
+      tagName: "script",
+      attributes: {
+        type: "application/ld+json",
+      },
+      innerHTML: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Corporation",
+        name: "Teleport",
+        alternateName: "Gravitational Inc.",
+        url: "https://goteleport.com/",
+        logo: "https://goteleport.com/static/og-image.png",
+        sameAs: [
+          "https://www.youtube.com/channel/UCmtTJaeEKYxCjfNGiijOyJw",
+          "https://twitter.com/goteleport/",
+          "https://www.linkedin.com/company/go-teleport/",
+          "https://en.wikipedia.org/wiki/Teleport_(software)",
+        ],
+      }),
+    },
+    {
+      tagName: "script",
+      attributes: {
+        type: "application/ld+json",
+      },
+      innerHTML: JSON.stringify({
+        "@context": "https://schema.org/",
+        "@type": "WebSite",
+        name: "Teleport Docs",
+        url: "https://goteleport.com/docs/",
+      }),
+    },
+    {
+      tagName: "link",
+      attributes: {
+        rel: "preload",
+        as: "style",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap",
+      },
+    },
+    {
+      tagName: "link",
+      attributes: {
+        rel: "preconnect",
+        href: "https://img.youtube.com",
+      },
+    },
+    {
+      tagName: "link",
+      attributes: {
+        rel: "preload",
+        fetchpriority: "high",
+        as: "image",
+        href: "/docs/assets/images/docs-header-background-df72d815e0b2376722c03a2049d2a2b5.svg",
+      },
+    },
+  ],
 
   title: "Teleport",
   favicon: "/favicon.svg",

@@ -1,7 +1,7 @@
 import Link from "@docusaurus/Link";
 import cn from "classnames";
 import styles from "./DocHero.module.css";
-import { getEmbedYouTubeUrl } from "@site/src/utils";
+import YouTubeEmbed from "@site/src/components/YouTubeEmbed";
 
 interface GetStartedLink {
   title: string;
@@ -71,15 +71,12 @@ const DocHero: React.FC<DocHeroProps> = ({
               />
             )}
             {youtubeVideoId && (
-              <iframe
-                className={styles.video}
-                width={400}
-                height={225}
-                src={getEmbedYouTubeUrl(youtubeVideoId)}
+              <YouTubeEmbed
+                videoId={youtubeVideoId}
                 title={title}
-                frameBorder="0"
-                allowFullScreen
-              ></iframe>
+                className={styles.video}
+                fetchPriority="high"
+              />
             )}
           </div>
         </div>

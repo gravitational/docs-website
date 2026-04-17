@@ -68,23 +68,6 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
     metadata: { unlisted },
   } = useDoc();
 
-  // Add template-full-width class to main element when fullWidth template is used
-  React.useEffect(() => {
-    if (!fullWidth) return;
-
-    const mainElement = document.querySelector("main");
-    if (mainElement) {
-      mainElement.classList.add("template-full-width");
-    }
-
-    return () => {
-      const mainElement = document.querySelector("main");
-      if (mainElement) {
-        mainElement.classList.remove("template-full-width");
-      }
-    };
-  }, [fullWidth]);
-
   return (
     <ExclusivityContext.Provider value={{ exclusiveFeature }}>
       {exclusiveFeature && !isLandingPage && <ExclusivityBanner />}
@@ -93,9 +76,12 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
           className={clsx(
             "col",
             !docTOC.hidden && !docTOC.removed && styles.docItemCol,
-            fullWidth && styles.largeColumnPadding
+            fullWidth && styles.largeColumnPadding,
           )}
         >
+          {fullWidth && (
+            <span className="template-full-width" hidden aria-hidden="true" />
+          )}
           {unlisted && <Unlisted />}
           <DocVersionBanner />
           <div className={styles.docItemContainer}>
