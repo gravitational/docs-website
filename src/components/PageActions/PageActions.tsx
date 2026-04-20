@@ -68,7 +68,8 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
         <Icon size="md" name="markdown" />
         <span>View as Markdown</span>
       </a>
-      <ThumbsFeedback />
+      {/* docTOC.canRender is passed to ThumbsFeedback instead of calling directly in the child, because the component is rendered in different places and contexts */}
+      <ThumbsFeedback pageHasTOC={docTOC.canRender} />
       <BrowserOnly fallback={<div />}>
         {() => {
           return (
