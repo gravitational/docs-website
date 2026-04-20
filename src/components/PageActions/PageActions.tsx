@@ -11,15 +11,17 @@ import {
 } from "@site/src/utils/markdown";
 import { useMemo, useRef, useState } from "react";
 import { useWindowSize } from "@docusaurus/theme-common";
+import { useDocTOC } from "@site/src/theme/DocItem/Layout";
+import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 
-const PageActions: React.FC<{ pathname: string; pageHasTOC: boolean }> = ({
-  pathname,
-  pageHasTOC,
-}) => {
+const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
   const { setIsOpen, ModalSearchAndChat, inkeepModalProps } = useInkeepSearch({
     enableAIChat: true,
   });
+  const { removeTOCSidebar } = useDocTemplate();
   const windowSize = useWindowSize();
+  const docTOC = useDocTOC(!!removeTOCSidebar);
+
   const [copiedMessage, setCopiedMessage] = useState<string>("Copy for LLM");
 
   const copyButtonRef = useRef<HTMLButtonElement>(null);
@@ -31,7 +33,9 @@ const PageActions: React.FC<{ pathname: string; pageHasTOC: boolean }> = ({
 
   return (
     <div
-      className={cn(styles.pageActions, { [styles.pageHasTOC]: pageHasTOC })}
+      className={cn(styles.pageActions, {
+        [styles.pageHasTOC]: docTOC.canRender,
+      })}
     >
       <a
         className={styles.githubLink}
@@ -64,7 +68,7 @@ const PageActions: React.FC<{ pathname: string; pageHasTOC: boolean }> = ({
         <Icon size="md" name="markdown" />
         <span>View as Markdown</span>
       </a>
-      <ThumbsFeedback pageHasTOC={pageHasTOC} />
+      <ThumbsFeedback />
       <BrowserOnly fallback={<div />}>
         {() => {
           return (
