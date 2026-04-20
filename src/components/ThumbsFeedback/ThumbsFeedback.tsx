@@ -19,6 +19,8 @@ import Icon from "../Icon/Icon";
 import ThumbsFeedbackContext from "./context";
 import styles from "./ThumbsFeedback.module.css";
 import { FeedbackType, StoredFeedback } from "./types";
+import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
+import { useDocTOC } from "@site/src/theme/DocItem/Layout";
 
 const MAX_PATHS_IN_STORAGE = 4;
 
@@ -246,17 +248,19 @@ const FeedbackForm: React.FC<{
 const ThumbsFeedback: React.FC<{
   feedbackLabel?: string;
   pagePosition?: "top" | "bottom";
-  pageHasTOC?: boolean;
   emitEvent?: (name: string, params: any) => {};
 }> = ({
   feedbackLabel = "Is this page helpful?",
   pagePosition = "top",
-  pageHasTOC = false,
   emitEvent,
 }): JSX.Element => {
   const { feedback, isSubmitted, setFeedback, setIsSubmitted } = useContext(
     ThumbsFeedbackContext,
   );
+
+  const { removeTOCSidebar } = useDocTemplate();
+  const docTOC = useDocTOC(!!removeTOCSidebar);
+
   const [comment, setComment] = useState<string>("");
   const [formActive, setFormActive] = useState<"positive" | "negative" | false>(
     false,
@@ -351,7 +355,7 @@ const ThumbsFeedback: React.FC<{
     <div
       className={cn(styles.thumbsFeedback, {
         [styles.positionBottom]: pagePosition === "bottom",
-        [styles.pageHasTOC]: pageHasTOC,
+        [styles.pageHasTOC]: docTOC.canRender,
       })}
     >
       <div
