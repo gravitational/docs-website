@@ -375,12 +375,13 @@ export default function remarkIncludes({
                 rootDir: resolvedRootDir,
               });
 
-              const path = txt.value.match(exactIncludeRegexp)[1];
+              const includeExpr = txt.value.match(exactIncludeRegexp)[1];
+              const path = includeExpr.split(" ")[0];
 
               // Parse the partial as a Markdown AST and insert it into the
               // parent AST.
               if (resolve) {
-                if (path.split(" ")[0].match(/\.mdx?$/)) {
+                if (path.match(/\.mdx?$/)) {
                   const tree = fromMarkdown(result, {
                     extensions: [mdxjs(), gfm(), frontmatter()],
                     mdastExtensions: [
