@@ -595,6 +595,17 @@ boundary" section.
 [definition]: ../installation.mdx
 `,
       },
+      {
+        includingPage: `(!include-relative-link.mdx foo="b/a/r"!)`,
+        description: "including files with a param",
+        path: "server/fixtures/dir/samelevel.mdx",
+        expected: `Check out our [instructions](../installation.mdx).
+
+Here is an image showing a successful installation:
+
+[Successful installation](../installation.png)
+`,
+      },
     ];
 
     test.each(testCases)("$description", (testCase) => {
