@@ -121,7 +121,7 @@
   --ifm-color-primary-lighter: #359962;
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-font-family-base: var(--font-base);
-  --ifm-container-width-xl: 1444px;
+  --ifm-container-width-xl: 1460px;
 
   --ifm-navbar-height: 117px; /* Assume the event banner is present in order to prevent CLS issues with the navbar height variable adjusting during mount */
 
@@ -151,7 +151,7 @@
     0 1px 14px 0 rgba(0, 0, 0, 0.12);
 
   /* toc */
-  --toc-max-width: 300px;
+  --toc-max-width: 316px;
 }
 
 @media (max-width: 996px) {
