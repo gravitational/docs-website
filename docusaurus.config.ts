@@ -48,7 +48,7 @@ const config: Config = {
     },
     // This speeds up build by a lot and should resolve memory issues during build
     // https://docusaurus.io/blog/releases/3.6
-    experimental_faster: {
+    faster: {
       swcJsLoader: true,
       swcJsMinimizer: true,
       lightningCssMinimizer: true,
