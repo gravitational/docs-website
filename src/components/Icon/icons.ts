@@ -25,6 +25,7 @@ export { default as bolt } from "./svg/bolt.svg";
 export { default as book } from "./svg/book.svg";
 export { default as building } from "./svg/building.svg";
 export { default as calendar } from "./svg/calendar.svg";
+export { default as calendarCheck } from "./svg/calendar-check.svg";
 export { default as card } from "./svg/card.svg";
 export { default as checkCircle } from "./svg/check-circle.svg";
 export { default as checkRound } from "./svg/check-round.svg";
@@ -99,6 +100,7 @@ export { default as quickstart } from "./svg/quickstart.svg";
 export { default as redis } from "./svg/redis.svg";
 export { default as server } from "./svg/server-access.svg";
 export { default as shieldCheck } from "./svg/shield-check.svg";
+export { default as shieldCheck2 } from "./svg/shield-check2.svg";
 export { default as building2 } from "./svg/simple-building.svg";
 export { default as cloud2 } from "./svg/simple-cloud.svg";
 export { default as code3 } from "./svg/simple-code.svg";
@@ -121,6 +123,8 @@ export { default as chat } from "./svg/chat-circle.svg";
 export { default as lightbulb } from "./svg/lightbulb.svg";
 export { default as githubLogo } from "./svg/github-logo.svg";
 export { default as markdown } from "./svg/markdown.svg";
+export { default as keyhole } from "./svg/keyhole.svg";
+export { default as keyholePurple } from "./svg/keyhole-purple.svg";
 
 // Teleport svgs
 export { default as agent } from "./teleport-svg/agent.svg";
@@ -138,3 +142,4 @@ export { default as teleportCommunity } from "./teleport-svg/teleport-community-
 export { default as teleportEnterpriseCloud } from "./teleport-svg/teleport-enterprise-cloud.svg";
 export { default as teleportEnterpriseSelfHosted } from "./teleport-svg/teleport-enterprise-self-hosted.svg";
 export { default as windowsDesktops } from "./teleport-svg/windows-desktops.svg";
+export { default as certificate } from "./teleport-svg/certificate.svg";
