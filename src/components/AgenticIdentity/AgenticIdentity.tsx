@@ -5,12 +5,25 @@ import Button from "../Button";
 
 type AgenticIdentityFrameworkProps = {
   name: string;
-  activeCategoryId: string;
+  activeCategoryId: CategoryId;
   href: string;
 };
 
+type CategoryId =
+  | "digital-twins"
+  | "identity-for-long-running-agents"
+  | "identity-for-llm-apps"
+  | "mcp-access"
+  | "mcp-catalog"
+  | "llm-access"
+  | "visibility-discovery"
+  | "audit-security"
+  | "data-sharing"
+  | "workflows"
+  | "developer-experience";
+
 type Category = {
-  id: string;
+  id: CategoryId;
   name: string;
 };
 
