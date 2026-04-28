@@ -120,9 +120,9 @@ const MenuCategory = ({
             )}
           </span>
         )}
-        {children && (
+        {children && opened && (
           <div
-            className={clsx(styles.dropdown, opened && styles.opened)}
+            className={clsx(styles.dropdown, styles.opened)}
             onMouseLeave={() => toggleOpened(null)}
             data-testid={menuTestId}
           >
