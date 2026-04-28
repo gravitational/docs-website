@@ -5,6 +5,5 @@
   { "label": "Machine & Workload Identity", "href": "/machine-workload-identity/" },
   { "label": "Identity Governance", "href": "/identity-governance/" },
   { "label": "Identity Security", "href": "/identity-security/" },
-  "split",
   { "label": "References", "href": "/reference/" }
 ]
