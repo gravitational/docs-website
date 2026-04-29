@@ -1133,6 +1133,57 @@ describe("orderSidebarItems", () => {
     );
   });
 
+  test("identical sidebar position with a 'category' type sidebar item", () => {
+    const idToDocPage = {
+      "section-b/section-b": {
+        title: "Section B",
+        id: "section-b/section-b",
+        frontMatter: {
+          title: "Section B",
+          description: "Section B",
+        },
+        source: "@site/docs/section-b/section-b.mdx",
+        sourceDirName: "section-b",
+        sidebarPosition: 2,
+      },
+      "page-a": {
+        title: "Page A",
+        id: "page-a",
+        frontMatter: {
+          title: "Page A",
+          description: "Page A",
+        },
+        source: "@site/docs/page-a.mdx",
+        sourceDirName: "",
+        sidebarPosition: 2,
+      },
+    };
+
+    const input: Array<NormalizedSidebarItem> = [
+      {
+        type: "category",
+        label: "Section B",
+        link: {
+          type: "doc",
+          id: "section-b/section-b",
+        },
+        items: [],
+      },
+      {
+        type: "doc",
+        id: "page-a",
+      },
+    ];
+
+    expect(() => {
+      orderSidebarItems(input, (id: string): docPage => {
+        return idToDocPage[id];
+      });
+    }).toThrow(
+      "page with ID page-a has the same sidebar_position frontmatter value as the page with ID section-b/section-b in the same sidebar section",
+    );
+  });
+
   test("sidebar position out of bounds", () => {
     const idToDocPage = {
       "page-a": {
