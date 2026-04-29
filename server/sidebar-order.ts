@@ -99,8 +99,9 @@ export const orderSidebarItems = (
     const sideBarIndex = sidebarPosition - 1;
 
     if (newItems[sideBarIndex]) {
+      const conflictingPageId = getOrderAttributes(newItems[sideBarIndex], getter)?.id ?? "[unknown]";
       throw new Error(
-        `page with ID ${id} has the same sidebar_position frontmatter value as the page with ID ${newItems[sideBarIndex].id} in the same sidebar section`,
+        `page with ID ${id} has the same sidebar_position frontmatter value as the page with ID ${conflictingPageId} in the same sidebar section`,
       );
     }
     newItems[sideBarIndex] = newItem;
