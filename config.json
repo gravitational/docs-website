@@ -6,7 +6,8 @@
     },
     {
       "name": "18.x",
-      "branch": "branch/v18",
+      "branch": "aatuvai/2026-04-28-aif-bottom-callout",
+      "repo_path": "aatuvai/teleport",
       "isDefault": true
     },
     {
