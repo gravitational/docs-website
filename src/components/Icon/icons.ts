@@ -126,6 +126,7 @@ export { default as markdown } from "./svg/markdown.svg";
 export { default as keyhole } from "./svg/keyhole.svg";
 export { default as robot } from "./svg/robot.svg";
 export { default as hardDrives } from "./svg/hard-drives.svg";
+export { default as magnifyEllipsis } from "./svg/magnify-ellipsis.svg";
 
 // Teleport svgs
 export { default as agent } from "./teleport-svg/agent.svg";
