@@ -32,6 +32,7 @@ static/assets/*
 versions.json
 data/*
 !data/.gitkeep
+!data/docs-navigation.json
 
 # Migration node dependencies
 .build

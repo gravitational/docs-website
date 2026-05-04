@@ -1,44 +1,49 @@
-import "dotenv/config";
 import type { Config } from "@docusaurus/types";
+import "dotenv/config";
 import type { VFile } from "vfile";
+import docsNavigationConfig from "./data/docs-navigation.json";
 
-import { useDocById } from "@docusaurus/plugin-content-docs/client";
-import { getFromSecretOrEnv } from "./utils/general";
+import { definer as hcl } from "highlightjs-terraform";
+import path from "path";
+import {
+  getRootDir,
+  getVersionFromVFile,
+  updateAssetPath,
+  updatePathsInIncludes,
+} from "./server/asset-path-helpers";
 import { loadConfig } from "./server/config-docs";
 import {
   getCurrentVersion,
   getDocusaurusConfigVersionOptions,
   getLatestVersion,
 } from "./server/config-site";
-import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
+import { extendedPostcssConfigPlugin } from "./server/postcss";
+import { getRedirects } from "./server/redirects";
+import { rehypeHLJS } from "./server/rehype-hljs";
+import remarkCodeSnippet from "./server/remark-code-snippet";
 import remarkIncludes from "./server/remark-includes";
 import remarkNoH1 from "./server/remark-no-h1";
+import remarkUpdateAssetPaths from "./server/remark-update-asset-paths";
 import remarkVariables from "./server/remark-variables";
 import remarkVersionAlias from "./server/remark-version-alias";
-import remarkCodeSnippet from "./server/remark-code-snippet";
-import { fetchVideoMeta } from "./server/youtube-meta";
-import { getRedirects } from "./server/redirects";
-import {
-  updateAssetPath,
-  getVersionFromVFile,
-  getRootDir,
-  updatePathsInIncludes,
-} from "./server/asset-path-helpers";
 import {
   orderSidebarItems,
   removeRedundantItems,
 } from "./server/sidebar-order";
-import { extendedPostcssConfigPlugin } from "./server/postcss";
-import {
-  clayTrackingPlugin,
-  googleTagGatewayPlugin,
-} from "./server/tracking-plugins";
-import { rehypeHLJS } from "./server/rehype-hljs";
-import { definer as hcl } from "highlightjs-terraform";
-import path from "path";
+import { clayTrackingPlugin, googleTagGatewayPlugin } from "./server/tracking-plugins";
 import { llmsTxtPluginOptions } from "./server/llms";
+import { fetchVideoMeta } from "./server/youtube-meta";
+import { getFromSecretOrEnv } from "./utils/general";
 
 const latestVersion = getLatestVersion();
+
+const sidebarItems = (
+  docsNavigationConfig as Array<{ label: string; href: string } | string>
+)
+  .filter(
+    (item): item is { label: string; href: string } => typeof item !== "string",
+  )
+  .map(({ label, href }) => ({ label, href }));
 
 const config: Config = {
   future: {
@@ -79,6 +84,9 @@ const config: Config = {
       sidebar: {
         autoCollapseCategories: true,
       },
+    },
+    navbar: {
+      items: sidebarItems,
     },
     image: "/og-image.png",
     colorMode: {

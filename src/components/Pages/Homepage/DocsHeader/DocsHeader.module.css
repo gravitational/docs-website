@@ -3,10 +3,9 @@
   z-index: 1;
   margin-left: -40px;
   margin-right: -40px;
-  margin-top: -73px !important; /* Used to align the DocsHeader with the header which is caused by padding in Docusaurus' container and col classes */
+  margin-top: -16px !important; /* Used to align the DocsHeader with the header which is caused by padding in Docusaurus' container and col classes */
   margin-bottom: var(--ifm-paragraph-margin-bottom);
   @media (--lg-scr) {
-    margin-top: -48px !important; /* Used to align the DocsHeader with the header which is caused by padding in Docusaurus' container and col classes */
     margin-bottom: 50px;
   }
 }

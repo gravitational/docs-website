@@ -21,7 +21,7 @@
     width: 100%;
     background-color: var(--color-white);
 
-    @media (--md-scr) {
+    @media (--nav) {
       left: var(--doc-sidebar-width);
       width: calc(100% - var(--doc-sidebar-width));
     }

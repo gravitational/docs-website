@@ -1,0 +1,9 @@
+[
+  { "label": "Get Started", "href": "/get-started/" },
+  { "label": "Agentic Identity Framework", "href": "/agentic-identity-framework/" },
+  { "label": "Zero Trust Access", "href": "/zero-trust-access/" },
+  { "label": "Machine & Workload Identity", "href": "/machine-workload-identity/" },
+  { "label": "Identity Governance", "href": "/identity-governance/" },
+  { "label": "Identity Security", "href": "/identity-security/" },
+  { "label": "Reference", "href": "/reference/" }
+]

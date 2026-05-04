@@ -27,7 +27,7 @@ function DocsHeader({
           {title}
         </div>
         <div className={styles.searchBar}>
-          <InlineSearch />
+          <InlineSearch enableKeyboardShortcut={false} />
         </div>
 
         {quickActions.length > 0 && (

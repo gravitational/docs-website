@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import type {
   InkeepAIChatSettings,
   InkeepSearchSettings,
@@ -8,7 +8,7 @@ import type {
   AIChatFunctions,
   SearchFunctions,
   SourceItem,
-} from '@inkeep/cxkit-react';
+} from "@inkeep/cxkit-react";
 
 interface UseInkeepSearchOptions {
   version?: string;
@@ -23,14 +23,15 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
   const {
     version,
     enableKeyboardShortcut = false,
-    keyboardShortcut = 'k',
+    keyboardShortcut = "k",
     enableAIChat = false,
     autoOpenOnInput = false,
     defaultQuery,
   } = options;
-  
+
+  const [message, setMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [ModalSearchAndChat, setModalSearchAndChat] = useState(null);
+  const [Modal, setModal] = useState(null);
 
   const { siteConfig } = useDocusaurusContext();
 
@@ -38,11 +39,16 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     apiKey: string;
   };
 
+  // Store InkeepModalSearchAndChat in a ref so the keyboard handler can
+  // reset the modal type synchronously (no async, no double-render risk).
+  const searchModalRef = useRef<React.ComponentType | null>(null);
+
   // Load the modal component dynamically
   useEffect(() => {
     (async () => {
-      const { InkeepModalSearchAndChat } = await import('@inkeep/cxkit-react');
-      setModalSearchAndChat(() => InkeepModalSearchAndChat);
+      const { InkeepModalSearchAndChat } = await import("@inkeep/cxkit-react");
+      searchModalRef.current = InkeepModalSearchAndChat;
+      setModal(() => InkeepModalSearchAndChat);
     })();
   }, []);
 
@@ -53,77 +59,86 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key === keyboardShortcut) {
         event.preventDefault();
+        // Always reset modal to the search-and-chat component so a stale
+        // chat-only modal can't be reopened via keyboard shortcut.
+        if (searchModalRef.current) {
+          setModal(() => searchModalRef.current);
+        }
         setIsOpen(true);
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [enableKeyboardShortcut, keyboardShortcut]);
 
   const inkeepBaseSettings: InkeepBaseSettings = {
-    apiKey: inkeepConfig.apiKey || '',
-    organizationDisplayName: 'Teleport',
-    primaryBrandColor: '#512FC9',
-    aiApiBaseUrl: 'https://goteleport.com/inkeep-proxy',
-    analyticsApiBaseUrl: 'https://goteleport.com/inkeep-proxy/analytics',
+    apiKey: inkeepConfig.apiKey || "",
+    organizationDisplayName: "Teleport",
+    primaryBrandColor: "#512FC9",
+    aiApiBaseUrl: "https://goteleport.com/inkeep-proxy",
+    analyticsApiBaseUrl: "https://goteleport.com/inkeep-proxy/analytics",
     privacyPreferences: {
       optOutAllAnalytics: false,
     },
     transformSource: (source: SourceItem) => {
       const { url, tabs } = source;
-      if (url && (url.startsWith('https://www.youtube.com/') || url.includes('goteleport.com/resources/videos'))) {
+      if (
+        url &&
+        (url.startsWith("https://www.youtube.com/") ||
+          url.includes("goteleport.com/resources/videos"))
+      ) {
         return {
           ...source,
-          tabs: ['Videos', ...(source.tabs ?? [])],
-          icon: { builtIn: 'IoPlayCircleOutline' },
+          tabs: ["Videos", ...(source.tabs ?? [])],
+          icon: { builtIn: "IoPlayCircleOutline" },
         };
       }
-      if (url && url.includes('goteleport.com/docs')) {
+      if (url && url.includes("goteleport.com/docs")) {
         return {
           ...source,
-          tabs: ['Docs'],
-          icon: { builtIn: 'IoDocumentTextOutline' },
+          tabs: ["Docs"],
+          icon: { builtIn: "IoDocumentTextOutline" },
         };
       }
-      const newTabs = tabs && tabs.includes('GitHub') ? ['GitHub'] : ['More'];
+      const newTabs = tabs && tabs.includes("GitHub") ? ["GitHub"] : ["More"];
       return {
         ...source,
         tabs: newTabs,
       };
     },
     colorMode: {
-      forcedColorMode: 'light',
+      forcedColorMode: "light",
     },
     theme: {
       zIndex: {
-        overlay: '2100',
-        modal: '2200',
-        popover: '2300',
-        skipLink: '2400',
-        toast: '2500',
-        tooltip: '2600',
+        overlay: "2100",
+        modal: "2200",
+        popover: "2300",
+        skipLink: "2400",
+        toast: "2500",
+        tooltip: "2600",
       },
     },
   };
 
   const inkeepSearchSettings: InkeepSearchSettings = {
-    placeholder: 'Search Docs',
+    placeholder: "Search Docs",
     tabs: [
-      ['Docs', { isAlwaysVisible: true }],
-      ['GitHub', { isAlwaysVisible: true }],
-      ['Videos', { isAlwaysVisible: true }],
-      ['More', { isAlwaysVisible: false }],
+      ["Docs", { isAlwaysVisible: true }],
+      ["GitHub", { isAlwaysVisible: true }],
+      ["Videos", { isAlwaysVisible: true }],
+      ["More", { isAlwaysVisible: false }],
     ],
     shouldOpenLinksInNewTab: true,
-    view: 'dual-pane',
+    view: "dual-pane",
   };
 
   const inkeepAIChatSettings: InkeepAIChatSettings | undefined = enableAIChat
     ? {
-      aiAssistantName: 'Teleport',
-      aiAssistantAvatar: 'https://goteleport.com/static/pam-standing.svg',
-    }
+        aiAssistantName: "Teleport",
+        aiAssistantAvatar: "https://goteleport.com/static/pam-standing.svg",
+      }
     : undefined;
 
   const chatCallableFunctionsRef = useRef<AIChatFunctions | null>(null);
@@ -138,7 +153,7 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
         setIsOpen(true);
       }
     },
-    [autoOpenOnInput]
+    [autoOpenOnInput],
   );
 
   // Wrapper for onInputMessageChange that skips the first empty-string call.
@@ -147,13 +162,13 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
   // call only — subsequent clears by the user go through normally.
   const handleChatInputChange = useCallback(
     (str: string) => {
-      if (skipNextChatEmptyRef.current && str === '') {
+      if (skipNextChatEmptyRef.current && str === "") {
         skipNextChatEmptyRef.current = false;
         return;
       }
       handleChange(str);
     },
-    [handleChange]
+    [handleChange],
   );
 
   // Create dynamic search settings based on version
@@ -181,18 +196,33 @@ export function useInkeepSearch(options: UseInkeepSearchOptions = {}) {
     },
     searchSettings: dynamicSearchSettings,
     modalSettings: modalSettings,
-    ...(enableAIChat && inkeepAIChatSettings && {
-      aiChatSettings: {
-        ...inkeepAIChatSettings,
-        chatFunctionsRef: chatCallableFunctionsRef,
-        onInputMessageChange: handleChatInputChange,
-      },
-    }),
+    ...(enableAIChat &&
+      inkeepAIChatSettings && {
+        aiChatSettings: {
+          ...inkeepAIChatSettings,
+          chatFunctionsRef: chatCallableFunctionsRef,
+          onInputMessageChange: handleChatInputChange,
+        },
+      }),
+  };
+
+  const handleSetIsOpen = async (open: boolean, chatOnly?: boolean) => {
+    if (chatOnly) {
+      const { InkeepModalChat } = await import("@inkeep/cxkit-react");
+      setModal(() => InkeepModalChat);
+    } else {
+      const { InkeepModalSearchAndChat } = await import("@inkeep/cxkit-react");
+      setModal(() => InkeepModalSearchAndChat);
+    }
+    setIsOpen(open);
   };
 
   return {
-    setIsOpen,
-    ModalSearchAndChat,
+    message,
+    setMessage,
+    isOpen,
+    setIsOpen: handleSetIsOpen,
+    Modal,
     inkeepModalProps,
     handleChange,
   };
