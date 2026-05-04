@@ -27,7 +27,6 @@ versioned_docs/*
 versioned_sidebars/*
 !versioned_sidebars/.gitkeep
 docs/*
-!docs/.gitkeep
 sidebars.json
 static/assets/*
 versions.json

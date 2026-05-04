@@ -9,6 +9,7 @@ import {
   getDocusaurusVersions,
 } from "../server/config-site";
 
+const DOCS_CURRENT_ROOT = "docs"
 const DOCS_PAGES_ROOT = "versioned_docs";
 const SIDEBAR_FILENAME = "sidebars.json";
 const VERSION_FILENAME = "versions.json";
@@ -34,6 +35,9 @@ const writeSidebar = (version: string) => {
 const writeVersions = () =>
   writeFileSync(VERSION_FILENAME, JSON.stringify(docusaurusVersions), "utf8");
 
+if (existsSync(DOCS_CURRENT_ROOT)) {
+  rmSync(DOCS_CURRENT_ROOT, { recursive: true });
+}
 if (existsSync(DOCS_PAGES_ROOT)) {
   rmSync(DOCS_PAGES_ROOT, { recursive: true });
 }
@@ -44,7 +48,7 @@ versions.forEach((version) => {
   const isCurrentVersion = version === currentVersion;
   const source = resolve("content", version, "docs/pages");
   const destination = isCurrentVersion
-    ? resolve("docs")
+    ? resolve(DOCS_CURRENT_ROOT)
     : resolve(DOCS_PAGES_ROOT, `version-${version}`);
 
   const paths = glob
@@ -82,7 +86,7 @@ const defaultUpcomingReleases = resolve(
 versionsToOverride.forEach((version) => {
   const destination =
     version === currentVersion
-      ? resolve("docs", "upcoming-releases.mdx")
+      ? resolve(DOCS_CURRENT_ROOT, "upcoming-releases.mdx")
       : resolve(DOCS_PAGES_ROOT, `version-${version}`, "upcoming-releases.mdx");
 
   copyFileSync(defaultUpcomingReleases, destination);
