@@ -143,6 +143,49 @@
   margin-right: auto;
 }
 
+.faqResultsHeader {
+  margin-bottom: var(--m-4);
+}
+
+.faqResultsTitle {
+  margin: 0 0 var(--m-1) 0;
+  font-size: var(--fs-header-1);
+  font-weight: var(--fw-bold);
+  color: var(--color-black);
+}
+
+.faqResultsCount {
+  margin: 0;
+  font-size: var(--fs-text-xl);
+  color: var(--color-foreground-slightly-muted);
+}
+
+.faqResultsEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--m-0-5);
+  margin-top: var(--m-4);
+  color: var(--color-foreground-slightly-muted);
+
+  .faqResultsIcon {
+    background-color: var(--color-tonal-neutral-0);
+    padding: var(--m-1-5);
+    border-radius: 50%;
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--fs-text-lg);
+
+    &:first-of-type {
+      font-weight: var(--fw-bold);
+      font-size: var(--fs-header-3);
+      color: var(--color-black);
+    }
+  }
+}
+
 .faqSidebar {
   display: none;
   grid-column: span 3 / span 3;

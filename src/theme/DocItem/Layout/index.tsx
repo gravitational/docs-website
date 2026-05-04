@@ -19,11 +19,16 @@ import ExclusivityContext from "@site/src/components/ExclusivityBanner/context";
 import FAQSectionsContext, {
   type FAQSection,
 } from "@site/src/components/FAQSection/FAQSectionsContext";
-import { FAQSidebar } from "@site/src/components/FAQSection";
+import {
+  FAQSidebar,
+  FAQSearch,
+  FAQContentFilter,
+} from "@site/src/components/FAQSection";
 import styles from "./styles.module.css";
 import { DocHeader, useSyntheticTitle } from "../Content";
 import ThumbsFeedbackContext from "@site/src/components/ThumbsFeedback/context";
 import { FeedbackType } from "@site/src/components/ThumbsFeedback/types";
+import Icon from "@site/src/components/Icon";
 
 interface ExtendedFrontMatter {
   remove_table_of_contents?: boolean;
@@ -84,6 +89,11 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
 
   const faqSectionsRef = useRef<FAQSection[]>([]);
   faqSectionsRef.current = [];
+  const [faqQuery, setFaqQuery] = useState("");
+  const [hiddenSectionIds, setHiddenSectionIds] = useState<Set<string>>(
+    new Set(),
+  );
+  const [faqMatchCount, setFaqMatchCount] = useState(0);
 
   return (
     <ExclusivityContext.Provider value={{ exclusiveFeature }}>
@@ -116,35 +126,78 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
                 [styles.faqLayout]: faqSections,
               })}
             >
-              <div className={clsx({ [styles.faqContent]: faqSections })}>
-                <article
-                  className={clsx({
-                    [styles.alternateBreadcrumbs]: !faqSections,
-                  })}
-                >
-                  {!hideTitleSection && !faqSections && <DocBreadcrumbs />}
-                  <div className={styles.sidebar}>
-                    <DocVersionBadge />
-                  </div>
-                  {docTOC.mobile}
-                  <FAQSectionsContext.Provider
-                    value={{
-                      registerSection: (s) => faqSectionsRef.current.push(s),
-                    }}
+              <FAQSectionsContext.Provider
+                value={{
+                  registerSection: (s) => faqSectionsRef.current.push(s),
+                  searchQuery: faqQuery,
+                  setSearchQuery: setFaqQuery,
+                  hiddenSectionIds,
+                  setHiddenSectionIds,
+                  matchCount: faqMatchCount,
+                  setMatchCount: setFaqMatchCount,
+                }}
+              >
+                {faqSections && <FAQSearch />}
+                <div className={clsx({ [styles.faqContent]: faqSections })}>
+                  <article
+                    className={clsx({
+                      [styles.alternateBreadcrumbs]: !faqSections,
+                    })}
                   >
-                    <DocItemContent>
-                      <PositionProvider>{children}</PositionProvider>
-                    </DocItemContent>
-                  </FAQSectionsContext.Provider>
-                  <DocItemFooter />
-                </article>
-                <DocItemPaginator />
-              </div>
-              {faqSections && (
-                <div className={styles.faqSidebar}>
-                  <FAQSidebar sections={faqSectionsRef.current} />
+                    {!hideTitleSection && !faqSections && <DocBreadcrumbs />}
+                    <div className={styles.sidebar}>
+                      <DocVersionBadge />
+                    </div>
+                    {docTOC.mobile}
+                    {faqSections ? (
+                      <FAQContentFilter>
+                        <DocItemContent>
+                          {faqSections && faqQuery && (
+                            <div className={styles.faqResultsHeader}>
+                              <p className={styles.faqResultsTitle}>
+                                Search results for &ldquo;{faqQuery}&rdquo;
+                              </p>
+                              {faqMatchCount > 0 ? (
+                                <p className={styles.faqResultsCount}>
+                                  {faqMatchCount}{" "}
+                                  {faqMatchCount === 1 ? "result" : "results"}{" "}
+                                  found
+                                </p>
+                              ) : (
+                                <div className={styles.faqResultsEmpty}>
+                                  <div className={styles.faqResultsIcon}>
+                                    <Icon name="magnifyEllipsis" size="xl" />
+                                  </div>
+                                  <p>No results found</p>
+                                  <p>
+                                    Update your query, or browse a category that
+                                    might cover this topic
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          <PositionProvider>{children}</PositionProvider>
+                        </DocItemContent>
+                      </FAQContentFilter>
+                    ) : (
+                      <DocItemContent>
+                        <PositionProvider>{children}</PositionProvider>
+                      </DocItemContent>
+                    )}
+                    <DocItemFooter />
+                  </article>
+                  <DocItemPaginator />
                 </div>
-              )}
+                {faqSections && (
+                  <div className={styles.faqSidebar}>
+                    <FAQSidebar
+                      sections={faqSectionsRef.current}
+                      hiddenSectionIds={hiddenSectionIds}
+                    />
+                  </div>
+                )}
+              </FAQSectionsContext.Provider>
             </div>
           </ThumbsFeedbackContext.Provider>
         </div>

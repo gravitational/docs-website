@@ -6,6 +6,7 @@ import styles from "./FAQSidebar.module.css";
 
 interface FAQSidebarProps {
   sections: FAQSection[];
+  hiddenSectionIds: Set<string>;
 }
 
 const useActiveFAQSection = (
@@ -77,8 +78,12 @@ const useActiveFAQSection = (
   return [activeId, manuallySetActiveId];
 };
 
-const FAQSidebar: React.FC<FAQSidebarProps> = ({ sections }) => {
-  const ids = sections.map((s) => s.id);
+const FAQSidebar: React.FC<FAQSidebarProps> = ({
+  sections,
+  hiddenSectionIds,
+}) => {
+  const visibleSections = sections.filter((s) => !hiddenSectionIds.has(s.id));
+  const ids = visibleSections.map((s) => s.id);
   const [activeId, setActiveId] = useActiveFAQSection(ids);
 
   if (sections.length === 0) return null;
@@ -86,7 +91,7 @@ const FAQSidebar: React.FC<FAQSidebarProps> = ({ sections }) => {
   return (
     <nav className={styles.sidebar} aria-label="FAQ sections">
       <ul className={styles.list}>
-        {sections.map((section) => (
+        {visibleSections.map((section) => (
           <li key={section.id}>
             <a
               href={`#${section.id}`}
