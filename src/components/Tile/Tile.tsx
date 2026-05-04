@@ -1,6 +1,7 @@
 // Tile.tsx
 import React from "react";
 import styles from "./Tile.module.css";
+import Link from "@docusaurus/Link";
 
 interface TileProps {
   icon: React.ReactNode;
@@ -11,10 +12,10 @@ interface TileProps {
 export default function Tile({ icon, to, name }: TileProps) {
   return (
     <>
-      <a href={to} className={styles.tile}>
+      <Link href={to} className={styles.tile}>
         {icon}
         {name}
-      </a>
+      </Link>
     </>
   );
 }

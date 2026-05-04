@@ -24,7 +24,7 @@ const MAX_PATHS_IN_STORAGE = 4;
 
 const checkForExpiredFeedback = (
   itemStr: string,
-  currentPath: string
+  currentPath: string,
 ): StoredFeedback[] => {
   let feedbackGivenPaths: StoredFeedback[] = [];
   try {
@@ -38,17 +38,17 @@ const checkForExpiredFeedback = (
     const now = new Date();
 
     const foundCurrentPath = feedbackGivenPaths.find(
-      (pathItem) => pathItem.path === currentPath
+      (pathItem) => pathItem.path === currentPath,
     );
 
     if (foundCurrentPath && now.getTime() > foundCurrentPath.expiry) {
       // Remove expired path and update storage
       feedbackGivenPaths = feedbackGivenPaths.filter(
-        (pathItem) => pathItem.path !== currentPath
+        (pathItem) => pathItem.path !== currentPath,
       );
       localStorage.setItem(
         "feedback_given_paths",
-        JSON.stringify(feedbackGivenPaths)
+        JSON.stringify(feedbackGivenPaths),
       );
     }
   } catch (e) {
@@ -134,7 +134,7 @@ const FeedbackForm: React.FC<{
   }, [formActive]);
 
   const handleSubmit = async (
-    event: FormEvent<HTMLFormElement>
+    event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
 
@@ -149,11 +149,11 @@ const FeedbackForm: React.FC<{
 
       let feedbackGivenPaths: StoredFeedback[] = checkForExpiredFeedback(
         localStorage.getItem("feedback_given_paths"),
-        currentPath
+        currentPath,
       );
 
       const foundCurrentPath = feedbackGivenPaths.find(
-        (pathItem) => pathItem.path === currentPath
+        (pathItem) => pathItem.path === currentPath,
       );
 
       if (foundCurrentPath?.commented && isSubmitted) {
@@ -171,7 +171,7 @@ const FeedbackForm: React.FC<{
         });
         localStorage.setItem(
           "feedback_given_paths",
-          JSON.stringify(feedbackGivenPaths)
+          JSON.stringify(feedbackGivenPaths),
         );
 
         trackEvent({
@@ -185,7 +185,6 @@ const FeedbackForm: React.FC<{
         setIsSubmitted(true);
         return;
       }
-
     }
 
     setIsSubmitted(true);
@@ -247,18 +246,20 @@ const FeedbackForm: React.FC<{
 const ThumbsFeedback: React.FC<{
   feedbackLabel?: string;
   pagePosition?: "top" | "bottom";
+  pageHasTOC?: boolean;
   emitEvent?: (name: string, params: any) => {};
 }> = ({
   feedbackLabel = "Is this page helpful?",
   pagePosition = "top",
+  pageHasTOC = false,
   emitEvent,
 }): JSX.Element => {
   const { feedback, isSubmitted, setFeedback, setIsSubmitted } = useContext(
-    ThumbsFeedbackContext
+    ThumbsFeedbackContext,
   );
   const [comment, setComment] = useState<string>("");
   const [formActive, setFormActive] = useState<"positive" | "negative" | false>(
-    false
+    false,
   );
   const location = useLocation();
 
@@ -272,11 +273,11 @@ const ThumbsFeedback: React.FC<{
     const currentPath = location.pathname;
     const feedbackGivenPaths = checkForExpiredFeedback(
       localStorage.getItem("feedback_given_paths"),
-      currentPath
+      currentPath,
     );
 
     const foundCurrentFeedbackPathClick = feedbackGivenPaths.find(
-      (pathItem) => pathItem.path === currentPath
+      (pathItem) => pathItem.path === currentPath,
     );
 
     const feedbackCommented = foundCurrentFeedbackPathClick?.commented;
@@ -291,14 +292,14 @@ const ThumbsFeedback: React.FC<{
   }, [location.pathname]);
 
   const handleFeedbackClick = async (
-    feedbackValue: FeedbackType
+    feedbackValue: FeedbackType,
   ): Promise<void> => {
     const currentPath = location.pathname;
     const itemStr = localStorage.getItem("feedback_given_paths");
     let clickedPaths = checkForExpiredFeedback(itemStr, currentPath);
 
     const foundCurrentPath = clickedPaths.find(
-      (pathItem) => pathItem.path === currentPath
+      (pathItem) => pathItem.path === currentPath,
     );
 
     if (foundCurrentPath && foundCurrentPath.signal === feedbackValue) {
@@ -307,7 +308,7 @@ const ThumbsFeedback: React.FC<{
       // Remove existing entry for current path to update with new signal
       // Also reset the submission state
       clickedPaths = clickedPaths.filter(
-        (pathItem) => pathItem.path !== currentPath
+        (pathItem) => pathItem.path !== currentPath,
       );
       setIsSubmitted(false);
     }
@@ -336,13 +337,13 @@ const ThumbsFeedback: React.FC<{
     if (newFeedbackThumbsClickedPaths.length > MAX_PATHS_IN_STORAGE) {
       newFeedbackThumbsClickedPaths.splice(
         0,
-        newFeedbackThumbsClickedPaths.length - MAX_PATHS_IN_STORAGE
+        newFeedbackThumbsClickedPaths.length - MAX_PATHS_IN_STORAGE,
       );
     }
 
     localStorage.setItem(
       "feedback_given_paths",
-      JSON.stringify(newFeedbackThumbsClickedPaths)
+      JSON.stringify(newFeedbackThumbsClickedPaths),
     );
   };
 
@@ -350,6 +351,7 @@ const ThumbsFeedback: React.FC<{
     <div
       className={cn(styles.thumbsFeedback, {
         [styles.positionBottom]: pagePosition === "bottom",
+        [styles.pageHasTOC]: pageHasTOC,
       })}
     >
       <div

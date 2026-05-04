@@ -26,7 +26,7 @@ interface ExtendedFrontMatter {
 /**
  * Decide if the toc should be rendered, on mobile or desktop viewports
  */
-function useDocTOC(removeTOCSidebar: boolean) {
+export function useDocTOC(removeTOCSidebar: boolean) {
   const { frontMatter, toc } = useDoc();
   const windowSize = useWindowSize();
 
@@ -46,6 +46,7 @@ function useDocTOC(removeTOCSidebar: boolean) {
   return {
     hidden,
     removed,
+    canRender,
     mobile,
     desktop,
   };
@@ -62,7 +63,7 @@ function usePageExclusivityBanner() {
 export default function DocItemLayout({ children }: Props): JSX.Element {
   const { hideTitleSection, removeTOCSidebar, fullWidth, isLandingPage } =
     useDocTemplate();
-  const docTOC = useDocTOC(removeTOCSidebar);
+  const docTOC = useDocTOC(!!removeTOCSidebar);
   const { exclusiveFeature } = usePageExclusivityBanner();
   const {
     metadata: { unlisted },

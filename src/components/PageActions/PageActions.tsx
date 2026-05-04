@@ -1,4 +1,5 @@
 import { getReportIssueURL } from "@site/src/utils/github-issue";
+import cn from "clsx";
 import styles from "./PageActions.module.css";
 import Icon from "../Icon";
 import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
@@ -10,12 +11,17 @@ import {
 } from "@site/src/utils/markdown";
 import { useMemo, useRef, useState } from "react";
 import { useWindowSize } from "@docusaurus/theme-common";
+import { useDocTOC } from "@site/src/theme/DocItem/Layout";
+import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 
 const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
   const { setIsOpen, ModalSearchAndChat, inkeepModalProps } = useInkeepSearch({
     enableAIChat: true,
   });
+  const { removeTOCSidebar } = useDocTemplate();
   const windowSize = useWindowSize();
+  const docTOC = useDocTOC(!!removeTOCSidebar);
+
   const [copiedMessage, setCopiedMessage] = useState<string>("Copy for LLM");
 
   const copyButtonRef = useRef<HTMLButtonElement>(null);
@@ -26,7 +32,11 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
   );
 
   return (
-    <div className={styles.pageActions}>
+    <div
+      className={cn(styles.pageActions, {
+        [styles.pageHasTOC]: docTOC.canRender,
+      })}
+    >
       <a
         className={styles.githubLink}
         href={getReportIssueURL(pathname)}
@@ -58,7 +68,8 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
         <Icon size="md" name="markdown" />
         <span>View as Markdown</span>
       </a>
-      <ThumbsFeedback />
+      {/* docTOC.canRender is passed to ThumbsFeedback instead of calling directly in the child, because the component is rendered in different places and contexts */}
+      <ThumbsFeedback pageHasTOC={docTOC.canRender} />
       <BrowserOnly fallback={<div />}>
         {() => {
           return (
