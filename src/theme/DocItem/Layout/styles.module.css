@@ -108,3 +108,47 @@
     z-index: 2;
   }
 }
+
+.faqLayout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--m-3);
+  max-width: var(--lp-section-max-width);
+  margin-left: auto;
+  margin-right: auto;
+
+  .faqContent {
+    grid-column: span 12 / span 12;
+    @media (--lg-scr) {
+      grid-column: span 9 / span 9;
+    }
+  }
+
+  :global(.theme-doc-markdown) {
+    > :global(:not(section)) {
+      max-width: var(--lp-section-max-width);
+      margin-left: unset !important;
+      margin-right: auto;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.faqHeader {
+  max-width: var(--lp-section-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.faqSidebar {
+  display: none;
+  grid-column: span 3 / span 3;
+
+  @media (--lg-scr) {
+    display: block;
+    order: -1;
+  }
+}
