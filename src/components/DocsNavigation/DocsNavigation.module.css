@@ -242,7 +242,6 @@
       }
 
       @media (--md-scr) {
-        font-size: var(--fs-text-md);
         padding: var(--m-1-5) 16px;
         margin-left: unset;
         &::after {
@@ -252,6 +251,10 @@
 
       @media (min-width: 1040px) {
         padding: var(--m-1) var(--m-2) !important;
+      }
+
+      @media screen and (min-width: 1084px) {
+        font-size: var(--fs-text-md);
       }
     }
   }
