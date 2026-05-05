@@ -84,7 +84,7 @@ export default function remarkVariables({
   resolve = true,
   lint,
   variables = {} as Variables,
-}: RemarkVariablesOptions = {}): Transformer {
+}: RemarkVariablesOptions = {}): Transformer<Root> {
   return (root: Root, vfile) => {
     let resolvedVariables: Variables;
 

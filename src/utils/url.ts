@@ -9,13 +9,14 @@ export const splitPath = (fullPath: string): URLParts => {
   const [path, search] = rest.split("?");
   const query: Record<string, string> = !search
     ? {}
-    : search.split("&").reduce((result, segment) => {
-        const [key, value] = segment.split("=");
-
-        result[key] = value;
-
-        return result;
-      }, {});
+    : search.split("&").reduce(
+        (result, segment) => {
+          const [key, value] = segment.split("=");
+          result[key] = value;
+          return result;
+        },
+        {} as Record<string, string>,
+      );
 
   return { anchor, path, query };
 };

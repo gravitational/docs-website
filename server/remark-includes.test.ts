@@ -27,7 +27,7 @@ const transformer = (
   return remark()
     .use(remarkMdx as any)
     .use(remarkGFM)
-    .use(remarkIncludes, {
+    .use(remarkIncludes as any, {
       rootDir: "server/fixtures/includes/",
       ...pluginOptions,
       updatePaths: updatePathsInIncludesTests,
@@ -47,7 +47,7 @@ const transformerAsJSON = (
     .parse(file as any);
 
   const result = remark()
-    .use(remarkIncludes, {
+    .use(remarkIncludes as any, {
       rootDir: "server/fixtures/includes/",
       ...pluginOptions,
       updatePaths: updatePathsInIncludesTests,
@@ -213,7 +213,7 @@ describe("server/remark-includes", () => {
 
     cases.forEach((c) => {
       if (c.shouldThrow == true) {
-        let val: string;
+        let val: string | undefined;
         try {
           val = resolveParamValue(c.input);
           assert.unreachable(
@@ -232,7 +232,7 @@ describe("server/remark-includes", () => {
         return;
       }
 
-      let val: string;
+      let val: string | undefined;
       try {
         val = resolveParamValue(c.input);
       } catch (err) {
@@ -337,7 +337,7 @@ describe("server/remark-includes", () => {
 
     test.each(cases)("$description", (c) => {
       if (c.shouldThrow) {
-        let val: ParameterAssignments;
+        let val: ParameterAssignments | undefined;
         try {
           val = parsePartialParams(c.input);
           assert.unreachable(
@@ -359,7 +359,7 @@ describe("server/remark-includes", () => {
       if (!c.expected) {
         return;
       }
-      let val: ParameterAssignments;
+      let val: ParameterAssignments | undefined;
       try {
         val = parsePartialParams(c.input);
       } catch (err) {
@@ -450,7 +450,7 @@ This is a partial.
 
     test.each(cases)("$description", (c) => {
       if (c.shouldThrow == true) {
-        let val: ParameterAssignments;
+        let val: ParameterAssignments | undefined;
         try {
           val = parseParamDefaults(c.input);
           assert.unreachable(
@@ -472,7 +472,7 @@ This is a partial.
       if (!c.expected) {
         return;
       }
-      let val: ParameterAssignments;
+      let val: ParameterAssignments | undefined;
       try {
         val = parseParamDefaults(c.input);
       } catch (err) {
