@@ -11,7 +11,7 @@ describe("possibleMovedPages", () => {
     description: string;
     slug: string;
     versions: Array<DocsVersion>;
-    expected: Array<DocPathInfo>;
+    expected: Array<DocPathInfo> | undefined;
   }
 
   const testCases: Array<testCase> = [
@@ -152,7 +152,7 @@ describe("nearestAvailableCategoryIndex", () => {
     description: string;
     slug: string;
     versions: Array<DocsVersion>;
-    expected: DocPathInfo;
+    expected: DocPathInfo | undefined;
   }
 
   const testCases: Array<testCase> = [

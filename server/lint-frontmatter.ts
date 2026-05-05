@@ -40,7 +40,9 @@ export const remarkLintFrontmatter = lintRule(
       try {
         frontmatter = parse((node as Literal).value);
       } catch (err) {
-        vfile.message(`page has invalid YAML in frontmatter: ${err.message}`);
+        vfile.message(
+          `page has invalid YAML in frontmatter: ${(err as Error).message}`,
+        );
         return;
       }
 

@@ -416,10 +416,11 @@ const rehypePrepareHTML: Plugin<[], Root, Root> = function () {
     // *** H1 repositioning: move the h1 to the top of the document ***
     if (h1 && headerParent) {
       const nodeToRemove = headerElement ?? h1;
-      headerParent.children = headerParent.children.filter(
+      const parent = headerParent as Element;
+      parent.children = parent.children.filter(
         (child) => child !== nodeToRemove,
       );
-      headerParent.children.unshift(h1);
+      parent.children.unshift(h1);
     }
   };
 };

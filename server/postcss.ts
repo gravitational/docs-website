@@ -1,9 +1,10 @@
 import { resolve } from "path";
+import type { PostCssOptions } from "@docusaurus/types";
 
 export function extendedPostcssConfigPlugin() {
   return {
     name: "custom-postcss",
-    configurePostCss(options) {
+    configurePostCss(options: PostCssOptions) {
       // Appended pluigns, needed for the header
       options.plugins.push(
         [

@@ -11,7 +11,7 @@ const versionedDocsPattern = `versioned_docs/version-([0-9]+\\.x)/`;
 // engine uses the page's frontmatter to populate an H1. When including pages
 // that include a spearate H1, such as the changelog, we can ensure there are no
 // redundant H1s.
-export default function remarkNoH1(): Transformer {
+export default function remarkNoH1(): Transformer<Root> {
   return (root: Root, vfile: VFile) => {
     const par = root as Parent;
     let i = 0;

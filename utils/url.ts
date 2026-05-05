@@ -17,7 +17,7 @@ export const splitPath = (fullPath: string): URLParts => {
         result[key] = value;
 
         return result;
-      }, {});
+      }, {} as Record<string, string>);
 
   return { anchor, path, query };
 };
@@ -81,7 +81,7 @@ export const getExtension = (href: string): string | undefined => {
 
   if (filename.indexOf(".") !== -1) {
     // should catch double extensions like `.tag.gz` and `.gitignore`
-    return /[^.]*\.(.+)/.exec(filename)[1];
+    return /[^.]*\.(.+)/.exec(filename)![1];
   }
 };
 
