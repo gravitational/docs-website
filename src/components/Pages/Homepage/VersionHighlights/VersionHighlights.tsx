@@ -12,7 +12,7 @@ interface VersionHighlight {
   tag: string;
 }
 
-interface Link {
+export interface Link {
   title: string;
   href: string;
 }
@@ -57,13 +57,17 @@ const VersionHighlights: React.FC<VersionHighlightsProps> = ({
             <li key={index}>
               <Link to={highlight.href} className={styles.highlightItem}>
                 <div className={styles.highlightImage}>
-                <img
-                  src={index === 0 ? FIRST_WHATS_NEW_IMAGE : SECOND_WHATS_NEW_IMAGE}
-                  alt={highlight.title}
-                  className={styles.image}
-                  width={323}
-                  height={182}
-                />
+                  <img
+                    src={
+                      index === 0
+                        ? FIRST_WHATS_NEW_IMAGE
+                        : SECOND_WHATS_NEW_IMAGE
+                    }
+                    alt={highlight.title}
+                    className={styles.image}
+                    width={323}
+                    height={182}
+                  />
                 </div>
                 <div className={styles.highlightContent}>
                   <p className={styles.highlightTag}>{highlight.tag}</p>
