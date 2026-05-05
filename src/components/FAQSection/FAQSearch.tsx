@@ -32,10 +32,9 @@ const FAQSearch: React.FC = () => {
             setSearchQuery("");
             inputRef.current?.focus();
           }}
-          aria-label="Clear search"
-          type="button"
+          aria-label="Clear FAQ search"
         >
-          ×
+          <Icon name="x" size="sm" />
         </button>
       )}
     </div>
