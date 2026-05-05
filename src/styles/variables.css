@@ -122,10 +122,7 @@
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-font-family-base: var(--font-base);
 
-  /* Assume the event banner is present in order to prevent CLS issues with the
-   * navbar height variable adjusting during mount. We assume the event banner
-   * is 37px high */
-  --ifm-navbar-height: 133px;
+  --ifm-navbar-height: 63px;
 
   --ifm-navbar-sidebar-width: 100vw;
 
@@ -164,6 +161,6 @@
     /* Assume the event banner is present in order to prevent CLS issues with the
    * navbar height variable adjusting during mount. We assume the event banner
    * is 37px high */
-    --ifm-navbar-height: 184px;
+    --ifm-navbar-height: 109px;
   }
 }

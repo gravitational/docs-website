@@ -1,24 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { BannerData, EventBanner } from "../EventBanner";
-
 import DocsLogo from "@site/static/logo.svg";
-import type { HeaderNavigation } from "../../../server/strapi-types";
 import HeadlessButton from "../HeadlessButton";
 import Icon from "../Icon";
 
 import styles from "./Header.module.css";
-import HeaderCTA from "./HeaderCTA";
 
 import Link from "@docusaurus/Link";
 import { useNavbarMobileSidebar } from "@docusaurus/theme-common/internal";
 import { translate } from "@docusaurus/Translate";
 import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
-import eventData from "../../../data/events.json";
-import data from "../../../data/navbar.json";
 import { InlineSearch } from "../Pages/Homepage/DocsHeader/InlineSearch";
 import { useActiveDocContext } from "@docusaurus/plugin-content-docs/client";
-import { getVersionedUrl } from "@site/utils/general"
+import { getVersionedUrl } from "@site/utils/general";
+import Button from "../Button";
 
 const Header = () => {
   const { toggle, shown } = useNavbarMobileSidebar();
@@ -34,27 +29,6 @@ const Header = () => {
   });
   const { activeVersion } = useActiveDocContext();
 
-  const { menuItems, rightSide } = data as unknown as HeaderNavigation;
-  const mobileBtn = rightSide?.mobileButton;
-  const event = eventData ? (eventData as unknown as BannerData) : null;
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (event) {
-        document.documentElement.style.setProperty(
-          "--ifm-navbar-height",
-          headerRef.current
-            ? `${headerRef.current.getBoundingClientRect().height + document.getElementById("docs-navigation")?.getBoundingClientRect().height}px`
-            : "147px",
-        );
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   useEffect(() => {
     if (!shown) {
       setIsNavigationVisible(false);
@@ -63,8 +37,7 @@ const Header = () => {
 
   return (
     <div className={styles.header} ref={headerRef}>
-      {event && <EventBanner initialEvent={event} />}
-      <header className={`${styles.wrapper} ${event ? styles.margin : " "}`}>
+      <header className={styles.wrapper}>
         <div className={styles.leftSection}>
           <HeadlessButton
             onClick={toggleNavigation}
@@ -106,7 +79,24 @@ const Header = () => {
           />
         </div>
         <div className={styles.rightSection}>
-          {rightSide && <HeaderCTA rightSide={rightSide} />}
+          <Button
+            as="link"
+            className={styles.cta}
+            href="https://goteleport.com/support/"
+            variant="primary"
+            shape="md"
+          >
+            Try for Free
+          </Button>
+          <Button
+            as="link"
+            className={styles.cta}
+            href="https://goteleport.com/contact-sales/"
+            variant="secondary"
+            shape="md"
+          >
+            Contact Sales
+          </Button>
         </div>
       </header>
     </div>
