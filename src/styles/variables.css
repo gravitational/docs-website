@@ -33,6 +33,10 @@
   --color-tonal-primary-2: rgba(81, 47, 201, 0.25);
   --color-interactive-tonal-neutral-dark-0: rgba(255, 255, 255, 0.07);
   --color-interactive-tonal-primary-0: rgba(81, 47, 201, 0.1);
+  --color-interactive-alert-default: #ffab00;
+  --color-interactive-tonal-alert-0: #ffab001a;
+  --color-interactive-tonal-alert-1: #ffab002e;
+  --color-interactive-tonal-alert-2: #ffab0040;
 
   --color-interactive-primary: #9f85ff;
   --color-interactive-primary-hover: #4126a1;

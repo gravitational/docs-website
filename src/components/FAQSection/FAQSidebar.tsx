@@ -24,7 +24,7 @@ const useActiveFAQSection = (
     // When the user manually clicks a section, consider it active regardless of its position
     headingPositionMap.current.set(id, "active");
 
-    // Consider all other sections as below to prevent them from being active until they enter the detection zone
+    // Set all other sections as "below"
     ids.forEach((otherId) => {
       if (otherId !== id) {
         headingPositionMap.current.set(otherId, "below");
@@ -38,7 +38,7 @@ const useActiveFAQSection = (
     // Initially consider all headings as below the detection zone
     headingPositionMap.current = new Map(ids.map((id) => [id, "below"]));
 
-    function detectActive() {
+    const detectActiveHeading = () => {
       // Active = the last heading in document order that is above or inside the detection zone.
       // The section stays active after the related heading exits upward, until another heading crosses the zone.
       let active: string | null = null;
@@ -48,7 +48,7 @@ const useActiveFAQSection = (
       }
       // Default to the first section if no heading has entered the detection zone yet
       setActiveId(active ?? ids[0]);
-    }
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -61,7 +61,7 @@ const useActiveFAQSection = (
             headingPositionMap.current.set(entry.target.id, "below");
           }
         });
-        detectActive();
+        detectActiveHeading();
       },
       // A section becomes active when its heading intersects the top portion of the viewport
       { rootMargin: "0px 0px -80% 0px", threshold: 0 },

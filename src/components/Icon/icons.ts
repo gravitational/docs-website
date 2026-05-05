@@ -127,6 +127,7 @@ export { default as keyhole } from "./svg/keyhole.svg";
 export { default as robot } from "./svg/robot.svg";
 export { default as hardDrives } from "./svg/hard-drives.svg";
 export { default as magnifyEllipsis } from "./svg/magnify-ellipsis.svg";
+export { default as x } from "./svg/x.svg";
 
 // Teleport svgs
 export { default as agent } from "./teleport-svg/agent.svg";
