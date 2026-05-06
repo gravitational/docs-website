@@ -112,14 +112,19 @@
 .faqLayout {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--m-3);
   max-width: var(--lp-section-max-width);
   margin-left: auto;
+  gap: var(--m-1);
   margin-right: auto;
+  position: relative;
+
+  @media (--md-scr) {
+    row-gap: var(--m-3);
+  }
 
   .faqContent {
     grid-column: span 12 / span 12;
-    @media (--lg-scr) {
+    @media (--xl-scr) {
       grid-column: span 9 / span 9;
     }
   }
@@ -129,9 +134,13 @@
       max-width: var(--lp-section-max-width);
       margin-left: unset !important;
       margin-right: auto;
+      scroll-margin-top: calc(var(--ifm-navbar-height) + var(--m-9));
 
-      &:first-child {
-        margin-top: 0;
+      @media (--xl-scr) {
+        scroll-margin-top: calc(var(--ifm-navbar-height) + var(--m-3));
+        &:first-child {
+          margin-top: 0;
+        }
       }
     }
   }
@@ -148,10 +157,19 @@
 }
 
 .faqResultsTitle {
-  margin: 0 0 var(--m-1) 0;
-  font-size: var(--fs-header-1);
+  margin: var(--m-2) 0 var(--m-1) 0;
+  font-size: var(--fs-header-3);
   font-weight: var(--fw-bold);
   color: var(--color-black);
+
+  @media (--md-scr) {
+    font-size: 30px;
+    margin: 0 0 var(--m-1) 0;
+  }
+
+  @media (--xl-scr) {
+    font-size: 26px;
+  }
 }
 
 .faqResultsCount {
@@ -176,22 +194,35 @@
 
   p {
     margin: 0;
-    font-size: var(--fs-text-lg);
+    font-size: var(--fs-text-md);
+
+    @media (--md-scr) {
+      font-size: var(--fs-text-lg);
+    }
 
     &:first-of-type {
       font-weight: var(--fw-bold);
-      font-size: var(--fs-header-3);
+      font-size: var(--fs-header-4);
       color: var(--color-black);
+
+      @media (--md-scr) {
+        font-size: 22px;
+      }
+
+      @media (--xl-scr) {
+        font-size: var(--fs-header-3);
+      }
     }
   }
 }
 
 .faqSidebar {
-  display: none;
-  grid-column: span 3 / span 3;
-
-  @media (--lg-scr) {
-    display: block;
-    order: -1;
+  grid-column: span 12 / span 12;
+  order: -1;
+  @media (--md-scr) {
+    grid-column: span 5 / span 5;
+  }
+  @media (--xl-scr) {
+    grid-column: span 3 / span 3;
   }
 }
