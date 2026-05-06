@@ -6,6 +6,7 @@ interface TemplateConfig {
   fullWidth?: boolean;
   showDescription?: boolean;
   isLandingPage?: boolean;
+  faqSections?: boolean;
 }
 
 const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
@@ -24,6 +25,12 @@ const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
     fullWidth: true,
     showDescription: true,
   },
+  faq: {
+    removeTOCSidebar: true,
+    fullWidth: true,
+    showDescription: true,
+    faqSections: true,
+  },
 };
 
 export function useDocTemplate(): TemplateConfig {
@@ -37,5 +44,6 @@ export function useDocTemplate(): TemplateConfig {
     fullWidth: config.fullWidth ?? false,
     showDescription: config.showDescription ?? false,
     isLandingPage: config.isLandingPage ?? false,
+    faqSections: config.faqSections ?? false,
   };
 }

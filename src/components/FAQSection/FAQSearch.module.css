@@ -1,0 +1,110 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  grid-column: span 12 / span 12;
+
+  @media (--md-scr) {
+    grid-column: span 7 / span 7;
+  }
+
+  @media (--xl-scr) {
+    grid-column: span 12 / span 12;
+    order: -1;
+  }
+}
+
+.icon {
+  position: absolute;
+  left: var(--m-3);
+  pointer-events: none;
+  flex-shrink: 0;
+
+  path {
+    fill: var(--color-foreground-disabled);
+  }
+}
+
+.input {
+  width: 100%;
+  padding: 13px var(--m-5) 13px var(--m-6);
+  border: 1px solid var(--color-tonal-neutral-1);
+  border-radius: var(--r-md) 0 0 var(--r-md);
+  background-color: var(--color-background-depth-2);
+  color: var(--color-foreground-disabled);
+  line-height: 1.625;
+  outline: none;
+  transition: border-color 0.15s ease;
+
+  @media (--md-scr) {
+    font-size: var(--fs-text-lg);
+    padding: 11px var(--m-3) 11px var(--m-6);
+  }
+
+  @media (--xl-scr) {
+    border-radius: var(--r-md);
+  }
+
+  &:focus,
+  &.active {
+    border-color: var(--color-dark-purple);
+    color: var(--color-foreground-slightly-muted);
+  }
+
+  /* Hide the native clear button */
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
+}
+
+.clear {
+  position: absolute;
+  right: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--m-2);
+  height: var(--m-2);
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+
+  svg path {
+    fill: var(--color-foreground-slightly-muted);
+  }
+
+  @media (--xl-scr) {
+    right: var(--m-3);
+  }
+}
+
+.searchButton {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  padding: var(--m-1-5);
+  border: 1px solid var(--color-dark-purple);
+  border-left: none;
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  background: var(--color-dark-purple);
+  color: var(--color-white);
+  font-size: var(--fs-text-base);
+  font-weight: var(--fw-bold);
+  cursor: pointer;
+  white-space: nowrap;
+  height: 100%;
+
+  .mobileSearchButtonIcon {
+    path {
+      fill: var(--color-white);
+    }
+  }
+
+  @media (--xl-scr) {
+    display: none;
+  }
+}

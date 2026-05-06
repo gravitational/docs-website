@@ -20,7 +20,7 @@
 
   @media (--lg-scr) {
     gap: var(--m-4);
-    margin-bottom: var(--m-6);
+    margin-bottom: var(--m-5);
     & > * {
       &:not(:last-child) {
         &::after {
