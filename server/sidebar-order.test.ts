@@ -506,7 +506,7 @@ describe("orderSidebarItems", () => {
   });
 
   describe("sidebar position", () => {
-    const idToDocPage = {
+    const idToDocPage: Record<string, docPage> = {
       "page-a": {
         title: "Page A",
         id: "page-a",
@@ -761,7 +761,7 @@ describe("orderSidebarItems", () => {
   });
 
   describe("sidebar label", () => {
-    const idToDocPage = {
+    const idToDocPage: Record<string, docPage> = {
       "page-a": {
         title: "Page A",
         id: "page-a",
@@ -911,7 +911,7 @@ describe("orderSidebarItems", () => {
   });
 
   describe("ordering category index pages", () => {
-    const idToDocPage = {
+    const idToDocPage: Record<string, docPage> = {
       "section-a/section-a": {
         title: "Section A",
         id: "section-a/section-a",
@@ -1082,7 +1082,7 @@ describe("orderSidebarItems", () => {
   });
 
   test("identical sidebar positions", () => {
-    const idToDocPage = {
+    const idToDocPage: Record<string, docPage> = {
       "page-a": {
         title: "Page A",
         id: "page-a",
@@ -1134,7 +1134,7 @@ describe("orderSidebarItems", () => {
   });
 
   test("identical sidebar position with a 'category' type sidebar item", () => {
-    const idToDocPage = {
+    const idToDocPage: Record<string, docPage> = {
       "section-b/section-b": {
         title: "Section B",
         id: "section-b/section-b",
@@ -1185,7 +1185,7 @@ describe("orderSidebarItems", () => {
   });
 
   test("sidebar position out of bounds", () => {
-    const idToDocPage = {
+    const idToDocPage: Record<string, docPage> = {
       "page-a": {
         title: "Page A",
         id: "page-a",

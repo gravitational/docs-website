@@ -29,7 +29,7 @@ export const possibleMovedPages = function (
     v.docs.forEach((d) => {
       // Obtain the slug from the page ID. This is guaranteed to match the
       // expression since it comes from Docusaurus.
-      const name = d.id.match(/[^\/]+$/)[0];
+      const name = d.id.match(/[^\/]+$/)![0];
       if (!slugsToPathInfo.has(name)) {
         slugsToPathInfo.set(name, [d]);
         return;
@@ -72,7 +72,7 @@ function getPathDir(path: string): string {
 export const nearestAvailableCategoryIndex = function (
   urlpath: string,
   nav: Array<DocsVersion>,
-): DocPathInfo {
+): DocPathInfo | undefined {
   const sectionIndexMap = new Map();
   nav.forEach((v) => {
     if (!urlpath.startsWith(v.path)) {

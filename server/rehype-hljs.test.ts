@@ -20,7 +20,7 @@ describe("server/rehype-hljs-var", () => {
   const transformer = (options: VFileOptions) =>
     unified()
       .use(remarkParse as any)
-      .use(mdx)
+      .use(mdx as any)
       .use(remarkRehype as any, {
         passThrough: [
           "mdxFlowExpression",
@@ -30,7 +30,7 @@ describe("server/rehype-hljs-var", () => {
           "mdxjsEsm",
         ],
       })
-      .use(rehypeHLJS, {
+      .use(rehypeHLJS as any, {
         aliases: {
           bash: ["bsh", "systemd", "code", "powershell"],
         },

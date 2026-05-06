@@ -30,10 +30,10 @@ interface orderAttributes {
 const getOrderAttributes = (
   item: NormalizedSidebarItem,
   getter: (id: string) => docPage,
-): orderAttributes => {
+): orderAttributes | undefined => {
   let title: string;
-  let sidebarPosition: number;
-  let id: string;
+  let sidebarPosition: number | undefined;
+  let id: string | undefined;
   switch (item.type) {
     case "doc":
       const page = getter((item as SidebarItemDoc).id);
@@ -71,7 +71,7 @@ export const orderSidebarItems = (
   getter: (id: string) => docPage,
 ): Array<NormalizedSidebarItem> => {
   const newItems = new Array(items.length);
-  const unsortedItems = [];
+  const unsortedItems: Array<NormalizedSidebarItem> = [];
 
   items.forEach((item) => {
     // Start by recursively descending into items and sorting their children.
@@ -84,7 +84,7 @@ export const orderSidebarItems = (
     // If the item has a sidebar position, add it to the final array. We'll sort
     // the remaining items automatically before adding them to the empty slots
     // in the final array.
-    const { sidebarPosition, id } = getOrderAttributes(newItem, getter);
+    const { sidebarPosition, id } = getOrderAttributes(newItem, getter) ?? {};
     if (!sidebarPosition) {
       unsortedItems.push(newItem);
       return;
@@ -99,7 +99,8 @@ export const orderSidebarItems = (
     const sideBarIndex = sidebarPosition - 1;
 
     if (newItems[sideBarIndex]) {
-      const conflictingPageId = getOrderAttributes(newItems[sideBarIndex], getter)?.id ?? "[unknown]";
+      const conflictingPageId =
+        getOrderAttributes(newItems[sideBarIndex], getter)?.id ?? "[unknown]";
       throw new Error(
         `page with ID ${id} has the same sidebar_position frontmatter value as the page with ID ${conflictingPageId} in the same sidebar section`,
       );

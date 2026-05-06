@@ -14,7 +14,7 @@ const mdxNodeTypes = new Set(["mdxJsxFlowElement", "mdxJsxTextElement"]);
 interface stepNumber {
   numerator: number;
   denominator: number;
-  position: Position;
+  position: Position | undefined;
 }
 
 interface h2WithIndex {
@@ -172,11 +172,10 @@ export const remarkLintPageStructure = lintRule(
               node.position,
             );
           }
-
           // Extract the name. We know that there is a valid name parameter, so
           // the array indices are guaranteed to be in range.
-          const namePattern = `name\\s*=\\s*${varQuote[1]}([^${varQuote[1]}]+)${varQuote[1]}`;
-          const varName = v[0].match(new RegExp(namePattern))[1];
+          const namePattern = `name\\s*=\\s*${varQuote![1]}([^${varQuote![1]}]+)${varQuote![1]}`;
+          const varName = v[0].match(new RegExp(namePattern))![1];
           if (!varNames.has(varName)) {
             varNames.set(varName, 0);
             varPositions.set(varName, code.position);
