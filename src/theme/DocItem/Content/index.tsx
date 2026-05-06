@@ -1,5 +1,6 @@
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { ThemeClassNames } from "@docusaurus/theme-common";
+import { useLocation } from "@docusaurus/router";
 import PageActions from "@site/src/components/PageActions";
 import ThumbsFeedback from "@site/src/components/ThumbsFeedback";
 import VideoBar, { VideoBarProps } from "@site/src/components/VideoBar";
@@ -38,6 +39,7 @@ export function DocHeader({ className }: { className?: string }): JSX.Element {
   const syntheticTitle = useSyntheticTitle();
   const { hideTitleSection, showDescription } = useDocTemplate();
   const { frontMatter } = useDoc();
+  const { pathname } = useLocation();
 
   const { videoBanner } = frontMatter as DocFrontMatter;
 
@@ -51,7 +53,7 @@ export function DocHeader({ className }: { className?: string }): JSX.Element {
       {frontMatter.description && showDescription && (
         <p className="docItemDescription">{frontMatter.description}</p>
       )}
-      <PageActions pathname={location.pathname} />
+      <PageActions pathname={pathname} />
       {videoBanner && <VideoBar {...videoBanner} />}
     </header>
   )
