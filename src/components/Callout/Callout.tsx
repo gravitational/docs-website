@@ -27,7 +27,7 @@ const Callout: React.FC<CalloutProps> = ({
       })}
     >
       {icon && <Icon name={icon} size="xl" className={styles.icon} />}
-      <div>
+      <div className={styles.content}>
         <p className={styles.title}>{title}</p>
         {description && <p className={styles.description}>{description}</p>}
       </div>
