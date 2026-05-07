@@ -12,14 +12,14 @@ const useStickyDropdown = (
   const [isFixed, setIsFixed] = useState(false);
   const fixedStyleRef = useRef<{ left: number; width: number } | null>(null);
 
-  const documentStyle = getComputedStyle(document.documentElement);
-  const navbarHeight = parseFloat(
-    documentStyle.getPropertyValue("--ifm-navbar-height"),
-  );
-
   useEffect(() => {
     let observer: IntersectionObserver;
     const handleResize = () => {
+      const documentStyle = getComputedStyle(document.documentElement);
+      const navbarHeight = parseFloat(
+        documentStyle.getPropertyValue("--ifm-navbar-height"),
+      );
+
       const nav = navRef.current;
       const dropdown = dropdownRef.current;
       if (!nav || !dropdown) return;
@@ -46,13 +46,14 @@ const useStickyDropdown = (
 
       observer.observe(nav);
     };
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
       observer?.disconnect();
       window.removeEventListener("resize", handleResize);
     };
-  }, [navbarHeight]);
+  }, []);
 
   return { isFixed, fixedStyleRef };
 };
