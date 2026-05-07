@@ -99,7 +99,7 @@ Everything else is more or less straightforward Docusaurus code.
 - `src/utils` – client-side utils.
 - `static` - static files for the site: manifests, favicons, etc.
 - `docs`, `versioned_docs` and `versioned_sidebars` – folders for Docusaurus site content that will be automatically populated by a script (`yarn prepare-files`).
-- `data` is a folder for navigation element data pulled from goteleport.com/api/data/navigation.
+- `data` is a folder for navigation element data.
 
 ### `config.json` format
 
@@ -125,7 +125,6 @@ If no versions are marked as `current`/`latest`, last version in alphabetical or
 
 - `yarn git-update` – update git submodules.
 - `yarn prepare-files` – copy files from `content` to folders used by Docusaurus.
-- `yarn prepare-navigation-data` - fetches data required for the header and event banner
 - `yarn start` – start server in dev mode.
 - `yarn build` - buld static site.
 - `yarn swizzle` - used to eject files from the default Docusaurus theme to the `src/theme` folder. See [swizzling](https://docusaurus.io/docs/swizzling).
