@@ -53,7 +53,7 @@ export function InlineSearch({
           fallback={
             <input
               className={styles.searchInput}
-              placeholder="Search Docs or Press ⌘ + K"
+              placeholder="Search Documentation (⌘ + K)"
               readOnly
             />
           }
