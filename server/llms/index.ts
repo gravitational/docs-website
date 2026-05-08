@@ -1,5 +1,6 @@
 import type { Options as PluginOptions } from "@signalwire/docusaurus-plugin-llms-txt";
 import rehypePrepareHTML from "./rehype-prepare-html";
+import remarkInsertFrontmatter from "./remark-insert-frontmatter";
 import { buildSections } from "./build-sections";
 
 // Generate the llms.txt top-level section definitions based on the sidebars configuration.
@@ -16,6 +17,7 @@ export const llmsTxtPluginOptions: PluginOptions = {
   markdown: {
     relativePaths: false, // Whether to use relative paths or absolute path URLs in the generated markdown files
     beforeDefaultRehypePlugins: [rehypePrepareHTML], // Custom rehype plugins to clean up and reposition content for cleaner markdown output
+    beforeDefaultRemarkPlugins: [remarkInsertFrontmatter], // Insert a frontmatter block to each of the generated markdown files
     remarkStringify: {
       bullet: "-",
       rule: "-",
