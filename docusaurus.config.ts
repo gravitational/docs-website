@@ -1,6 +1,8 @@
-import type { Config } from "@docusaurus/types";
+import type { Config, LoadContext, Plugin } from "@docusaurus/types";
+
 import "dotenv/config";
 import type { VFile } from "vfile";
+import llmsTxtPlugin from "@signalwire/docusaurus-plugin-llms-txt";
 import docsNavigationConfig from "./data/docs-navigation.json";
 
 import { definer as hcl } from "highlightjs-terraform";
@@ -30,10 +32,14 @@ import {
   orderSidebarItems,
   removeRedundantItems,
 } from "./server/sidebar-order";
-import { clayTrackingPlugin, googleTagGatewayPlugin } from "./server/tracking-plugins";
+import {
+  clayTrackingPlugin,
+  googleTagGatewayPlugin,
+} from "./server/tracking-plugins";
 import { llmsTxtPluginOptions } from "./server/llms";
 import { fetchVideoMeta } from "./server/youtube-meta";
 import { getFromSecretOrEnv } from "./utils/general";
+import addTokenCounts from "./server/add-token-counts";
 
 const latestVersion = getLatestVersion();
 
@@ -355,7 +361,24 @@ const config: Config = {
     clayTrackingPlugin,
     googleTagGatewayPlugin,
     process.env.NODE_ENV !== "production" && "@docusaurus/plugin-debug",
-    ["@signalwire/docusaurus-plugin-llms-txt", llmsTxtPluginOptions],
+
+    // By default any postBuild function from plugins will run concurrently.
+    // addTokenCounts is expected to run after llmsTxtPlugin,
+    // so we chain them together in a single plugin to ensure the correct order of execution.
+    function chainllmsTxtPluginWithAddTokenCounts(
+      context: LoadContext,
+    ): Plugin<undefined> {
+      return {
+        name: "chain-llms-txt-with-add-token-counts",
+        async postBuild(props) {
+          await llmsTxtPlugin(context, llmsTxtPluginOptions).postBuild?.call(
+            this,
+            props,
+          );
+          await addTokenCounts().postBuild?.call(this);
+        },
+      };
+    },
   ].filter(Boolean),
 };
 
