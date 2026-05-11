@@ -11,7 +11,7 @@
     "docusaurus": "docusaurus",
     "dev": "bash scripts/start-dev.sh",
     "start": "yarn prepare-files && docusaurus start",
-    "build": "yarn git-update && yarn prepare-files && docusaurus build \"$@\" && yarn add-token-counts",
+    "build": "yarn git-update && yarn prepare-files && docusaurus build \"$@\"",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
