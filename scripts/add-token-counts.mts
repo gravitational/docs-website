@@ -32,7 +32,7 @@ try {
     }),
   );
 
-  console.log(`Inserted estimated token counts in ${pagesCount} Markdown files.`);
+  console.log(`Inserted token counts for ${pagesCount} Markdown pages.`);
 } catch (error: Error | unknown) {
   const YELLOW = "\x1b[33m";
   const RESET = "\x1b[0m";
