@@ -7,7 +7,6 @@
     "build-remark": "tsc --build tsconfig.node.json && tsc-esm-fix --target='.remark-build' --ext='.mjs'",
     "git-update": "scripts/update_submodules.sh",
     "prepare-files": "npx vite-node ./scripts/prepare-files.mts",
-    "add-token-counts": "npx vite-node ./scripts/add-token-counts.mts",
     "docusaurus": "docusaurus",
     "dev": "bash scripts/start-dev.sh",
     "start": "yarn prepare-files && docusaurus start",
