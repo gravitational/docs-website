@@ -47,6 +47,7 @@ function useDocTOC(removeTOCSidebar: boolean) {
     removed,
     mobile,
     desktop,
+    canRender,
   };
 }
 
@@ -62,6 +63,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   const { hideTitleSection, removeTOCSidebar, fullWidth, isLandingPage } =
     useDocTemplate();
   const docTOC = useDocTOC(removeTOCSidebar);
+
   const { exclusiveFeature } = usePageExclusivityBanner();
   const {
     metadata: { unlisted },
@@ -74,7 +76,8 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
         <div
           className={clsx(
             "col",
-            !docTOC.hidden && !docTOC.removed && styles.docItemCol,
+            styles.docItemCol,
+            docTOC.canRender && styles.docItemColWithTOC,
             fullWidth && styles.largeColumnPadding,
           )}
         >
@@ -100,8 +103,8 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
             {!fullWidth && <DocItemPaginator />}
           </div>
         </div>
-        {!docTOC.removed && (
-          <div className="col col--3">
+        {docTOC.canRender && (
+          <div className={clsx("col", styles.docItemColTOC)}>
             <div className={styles.stickySidebar}>
               <div className={styles.tocWithFeedback}>
                 <div className={styles.tocWrapper}>{docTOC.desktop}</div>

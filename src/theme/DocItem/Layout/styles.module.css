@@ -10,7 +10,12 @@
 
 @media (--nav) {
   .docItemCol {
-    max-width: 75% !important;
+    padding: var(--m-2) var(--m-5);
+  }
+
+  .docItemColWithTOC {
+    max-width: calc(100% - var(--toc-max-width)) !important;
+    padding: var(--m-2) var(--m-2) var(--m-2) var(--m-5);
   }
 
   .sidebar {
@@ -30,6 +35,10 @@
   @media (--md-scr) {
     display: flex;
   }
+}
+
+.docItemColTOC {
+  max-width: var(--toc-max-width);
 }
 
 .tocWithFeedback {

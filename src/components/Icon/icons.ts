@@ -139,3 +139,4 @@ export { default as teleportCommunity } from "./teleport-svg/teleport-community-
 export { default as teleportEnterpriseCloud } from "./teleport-svg/teleport-enterprise-cloud.svg";
 export { default as teleportEnterpriseSelfHosted } from "./teleport-svg/teleport-enterprise-self-hosted.svg";
 export { default as windowsDesktops } from "./teleport-svg/windows-desktops.svg";
+export { default as gearStack } from "./teleport-svg/teleport-gear-stack.svg";
