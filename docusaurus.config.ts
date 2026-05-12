@@ -367,15 +367,28 @@ const config: Config = {
     // so we chain them together in a single plugin to ensure the correct order of execution.
     function chainllmsTxtPluginWithAddTokenCounts(
       context: LoadContext,
-    ): Plugin<undefined> {
+    ): Plugin {
       return {
         name: "chain-llms-txt-with-add-token-counts",
-        async postBuild(props) {
+        async postBuild(props): Promise<void> {
           await llmsTxtPlugin(context, llmsTxtPluginOptions).postBuild?.call(
             this,
-            props,
+            { ...props, content: undefined },
           );
           await addTokenCounts().postBuild?.call(this);
+        },
+        // Pass the contentLoaded and extendCli from llmsTxtPlugin without modification
+        contentLoaded({ actions }): void {
+          llmsTxtPlugin(context, llmsTxtPluginOptions).contentLoaded?.call(
+            this,
+            { content: undefined, actions },
+          );
+        },
+        extendCli(cli): void {
+          llmsTxtPlugin(context, llmsTxtPluginOptions).extendCli?.call(
+            this,
+            cli,
+          );
         },
       };
     },
