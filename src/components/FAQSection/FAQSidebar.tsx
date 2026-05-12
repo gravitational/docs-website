@@ -1,7 +1,7 @@
 import Icon from "@site/src/components/Icon";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import type { FAQSection } from "./FAQSectionsContext";
+import { useFAQTemplate, type FAQSection } from "./FAQSectionsContext";
 import styles from "./FAQSidebar.module.css";
 
 const useStickyDropdown = (
@@ -60,12 +60,12 @@ const useStickyDropdown = (
 
 interface FAQSidebarProps {
   sections: FAQSection[];
-  hiddenSectionIds: Set<string>;
 }
 
 const useActiveFAQSection = (
   ids: string[],
 ): [string | null, (id: string) => void] => {
+  const { setSearchQuery, searchInputRef } = useFAQTemplate();
   const [activeId, setActiveId] = useState<string | null>(null);
   const idsKey = ids.join("|"); // Used as the useEffect dependency
   // Track each heading's position relative to the detection zone
@@ -75,6 +75,11 @@ const useActiveFAQSection = (
 
   const manuallySetActiveId = (id: string) => {
     setActiveId(id);
+
+    // Clear search query when a section is manually selected
+    setSearchQuery("");
+    searchInputRef.current!.value = "";
+
     // When the user manually clicks a section, consider it active regardless of its position
     headingPositionMap.current.set(id, "active");
 
@@ -132,12 +137,8 @@ const useActiveFAQSection = (
   return [activeId, manuallySetActiveId];
 };
 
-const FAQSidebar: React.FC<FAQSidebarProps> = ({
-  sections,
-  hiddenSectionIds,
-}) => {
-  const visibleSections = sections.filter((s) => !hiddenSectionIds.has(s.id));
-  const ids = visibleSections.map((s) => s.id);
+const FAQSidebar: React.FC<FAQSidebarProps> = ({ sections }) => {
+  const ids = sections.map((s) => s.id);
   const [activeId, setActiveId] = useActiveFAQSection(ids);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -147,7 +148,7 @@ const FAQSidebar: React.FC<FAQSidebarProps> = ({
 
   if (sections.length === 0) return null;
 
-  const activeSection = visibleSections.find((s) => s.id === activeId);
+  const activeSection = sections.find((s) => s.id === activeId);
 
   return (
     <>
@@ -194,7 +195,7 @@ const FAQSidebar: React.FC<FAQSidebarProps> = ({
             />
           </button>
           <ul className={styles.list}>
-            {visibleSections.map((section) => (
+            {sections.map((section) => (
               <li key={section.id}>
                 <a
                   href={`#${section.id}`}

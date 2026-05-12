@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import React from "react";
 import cn from "clsx";
 import { useFAQTemplate } from "./FAQSectionsContext";
 import styles from "./FAQSearch.module.css";
@@ -6,8 +6,7 @@ import Icon from "../Icon";
 import { useWindowSize } from "@docusaurus/theme-common";
 
 const FAQSearch: React.FC = () => {
-  const { searchQuery, setSearchQuery } = useFAQTemplate();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const { searchQuery, setSearchQuery, searchInputRef } = useFAQTemplate();
   const windowSize = useWindowSize();
 
   return (
@@ -19,7 +18,7 @@ const FAQSearch: React.FC = () => {
         aria-hidden="true"
       />
       <input
-        ref={inputRef}
+        ref={searchInputRef}
         type="search"
         className={cn(styles.input, { [styles.active]: searchQuery })}
         placeholder="Search for a question across FAQ"
@@ -34,8 +33,8 @@ const FAQSearch: React.FC = () => {
           className={styles.clear}
           onClick={() => {
             setSearchQuery("");
-            inputRef.current!.value = "";
-            inputRef.current?.blur();
+            searchInputRef.current!.value = "";
+            searchInputRef.current?.blur();
           }}
           aria-label="Clear FAQ search"
         >
@@ -44,7 +43,7 @@ const FAQSearch: React.FC = () => {
       )}
       <button
         className={styles.searchButton}
-        onClick={() => inputRef.current?.blur()}
+        onClick={() => searchInputRef.current?.blur()}
         aria-label="Search"
       >
         <Icon

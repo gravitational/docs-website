@@ -9,7 +9,7 @@
   }
 
   @media (--xl-scr) {
-    grid-column: span 12 / span 12;
+    grid-column: span 2 / span 2;
     order: -1;
   }
 }

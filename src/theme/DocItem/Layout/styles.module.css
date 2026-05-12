@@ -128,13 +128,18 @@
   position: relative;
 
   @media (--md-scr) {
-    row-gap: var(--m-3);
+    gap: var(--m-3);
+  }
+
+  @media (--xl-scr) {
+    grid-template-columns: 300px minmax(0, 1fr);
   }
 
   .faqContent {
     grid-column: span 12 / span 12;
+
     @media (--xl-scr) {
-      grid-column: span 9 / span 9;
+      grid-column: span 1 / span 1;
     }
   }
 
@@ -232,6 +237,6 @@
     grid-column: span 5 / span 5;
   }
   @media (--xl-scr) {
-    grid-column: span 3 / span 3;
+    grid-column: 1;
   }
 }

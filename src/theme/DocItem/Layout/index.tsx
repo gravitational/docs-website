@@ -90,10 +90,8 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
 
   const faqSectionsRef = useRef<FAQSection[]>([]);
   faqSectionsRef.current = [];
+  const faqSearchInputRef = useRef<HTMLInputElement>(null);
   const [faqQuery, setFaqQuery] = useState("");
-  const [hiddenSectionIds, setHiddenSectionIds] = useState<Set<string>>(
-    new Set(),
-  );
   const [faqMatchCount, setFaqMatchCount] = useState(0);
 
   return (
@@ -133,10 +131,9 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
                   registerSection: (s) => faqSectionsRef.current.push(s),
                   searchQuery: faqQuery,
                   setSearchQuery: setFaqQuery,
-                  hiddenSectionIds,
-                  setHiddenSectionIds,
                   matchCount: faqMatchCount,
                   setMatchCount: setFaqMatchCount,
+                  searchInputRef: faqSearchInputRef,
                 }}
               >
                 {faqSections && <FAQSearch />}
@@ -193,10 +190,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
                 </div>
                 {faqSections && (
                   <div className={styles.faqSidebar}>
-                    <FAQSidebar
-                      sections={faqSectionsRef.current}
-                      hiddenSectionIds={hiddenSectionIds}
-                    />
+                    <FAQSidebar sections={faqSectionsRef.current} />
                   </div>
                 )}
               </FAQSectionsContext.Provider>

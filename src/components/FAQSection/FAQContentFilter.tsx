@@ -107,7 +107,7 @@ interface FAQContentFilterProps {
 
 const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { searchQuery, setHiddenSectionIds, setMatchCount } = useFAQTemplate();
+  const { searchQuery, setMatchCount } = useFAQTemplate();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -131,7 +131,6 @@ const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
 
     // if search query is empty, we can skip the rest of the logic
     if (!searchQuery) {
-      setHiddenSectionIds(new Set());
       setMatchCount(0);
       return;
     }
@@ -221,8 +220,7 @@ const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
         hiddenIds.add(h2.id);
       }
     });
-    setHiddenSectionIds(hiddenIds);
-  }, [searchQuery, setHiddenSectionIds, setMatchCount]);
+  }, [searchQuery, setMatchCount]);
 
   return <div ref={containerRef}>{children}</div>;
 };
