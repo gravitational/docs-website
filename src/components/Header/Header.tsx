@@ -82,7 +82,7 @@ const Header = () => {
           <Button
             as="link"
             className={styles.cta}
-            href="https://goteleport.com/support/"
+            href="https://goteleport.com/signup/"
             variant="primary"
             shape="md"
           >
