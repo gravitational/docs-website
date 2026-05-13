@@ -4,8 +4,7 @@
 }
 
 .sidebar {
-  display: flex;
-  justify-content: space-between;
+  display: none;
 }
 
 @media (--nav) {
@@ -148,13 +147,31 @@
       max-width: var(--lp-section-max-width);
       margin-left: unset !important;
       margin-right: auto;
-      scroll-margin-top: calc(var(--ifm-navbar-height) + var(--m-9));
+      scroll-margin-top: calc(var(--ifm-navbar-height) + var(--m-3));
 
       @media (--xl-scr) {
-        scroll-margin-top: calc(var(--ifm-navbar-height) + var(--m-3));
         &:first-child {
           margin-top: 0;
         }
+      }
+    }
+
+    h3 {
+      font-size: var(--fs-text-xl);
+    }
+    h4 {
+      font-size: var(--fs-text-lg);
+    }
+
+    @media (--md-scr) {
+      h3 {
+        font-size: var(--fs-header-4);
+      }
+    }
+
+    @media (--xl-scr) {
+      h4 {
+        font-size: var(--fs-text-xl);
       }
     }
   }

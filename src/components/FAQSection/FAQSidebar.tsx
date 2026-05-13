@@ -4,60 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useFAQTemplate, type FAQSection } from "./FAQSectionsContext";
 import styles from "./FAQSidebar.module.css";
 
-const useStickyDropdown = (
-  dropdownRef: React.RefObject<HTMLElement | null>,
-  navRef: React.RefObject<HTMLDivElement | null>,
-) => {
-  const BREAKPOINT = 1401; // xl-scr breakpoint defined in src/styles.media.css
-  const [isFixed, setIsFixed] = useState(false);
-  const fixedStyleRef = useRef<{ left: number; width: number } | null>(null);
-
-  useEffect(() => {
-    let observer: IntersectionObserver;
-    const handleResize = () => {
-      const documentStyle = getComputedStyle(document.documentElement);
-      const navbarHeight = parseFloat(
-        documentStyle.getPropertyValue("--ifm-navbar-height"),
-      );
-
-      const nav = navRef.current;
-      const dropdown = dropdownRef.current;
-      if (!nav || !dropdown) return;
-
-      const dropdownToggleHeight = dropdown.getBoundingClientRect().height;
-      const fixedOffset = navbarHeight + dropdownToggleHeight + 4; // 4px is the space between the page header and the "sticky" dropdown
-
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          if (window.innerWidth >= BREAKPOINT) {
-            setIsFixed(false);
-            return;
-          }
-          if (!entry.isIntersecting) {
-            const rect = nav.getBoundingClientRect();
-            fixedStyleRef.current = { left: rect.left, width: rect.width };
-            setIsFixed(true);
-          } else {
-            setIsFixed(false);
-          }
-        },
-        { rootMargin: `-${fixedOffset}px 0px 0px 0px`, threshold: 0 },
-      );
-
-      observer.observe(nav);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      observer?.disconnect();
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  return { isFixed, fixedStyleRef };
-};
-
 interface FAQSidebarProps {
   sections: FAQSection[];
 }
@@ -144,7 +90,6 @@ const FAQSidebar: React.FC<FAQSidebarProps> = ({ sections }) => {
 
   const navRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { isFixed, fixedStyleRef } = useStickyDropdown(dropdownRef, navRef);
 
   if (sections.length === 0) return null;
 
@@ -161,16 +106,7 @@ const FAQSidebar: React.FC<FAQSidebarProps> = ({ sections }) => {
           ref={dropdownRef}
           className={clsx(styles.dropdownContainer, {
             [styles.dropdownContainerOpen]: isOpen,
-            [styles.dropdownFixed]: isFixed,
           })}
-          style={
-            isFixed && fixedStyleRef.current
-              ? {
-                  left: fixedStyleRef.current.left,
-                  width: fixedStyleRef.current.width,
-                }
-              : undefined
-          }
         >
           <button
             className={styles.dropdownToggle}
@@ -180,11 +116,15 @@ const FAQSidebar: React.FC<FAQSidebarProps> = ({ sections }) => {
             {activeSection ? (
               <Icon
                 name={activeSection.icon}
-                size="md"
+                size="sm-md"
                 className={styles.icon}
               />
             ) : (
-              <Icon name={sections[0].icon} size="md" className={styles.icon} />
+              <Icon
+                name={sections[0].icon}
+                size="sm-md"
+                className={styles.icon}
+              />
             )}
             <span className={styles.dropdownToggleLabel}>
               {activeSection?.title ?? sections[0].title}
@@ -210,7 +150,11 @@ const FAQSidebar: React.FC<FAQSidebarProps> = ({ sections }) => {
                     activeId === section.id ? "location" : undefined
                   }
                 >
-                  <Icon name={section.icon} size="md" className={styles.icon} />
+                  <Icon
+                    name={section.icon}
+                    size="sm-md"
+                    className={styles.icon}
+                  />
                   <span>{section.title}</span>
                 </a>
               </li>
