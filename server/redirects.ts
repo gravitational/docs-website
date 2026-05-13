@@ -33,7 +33,7 @@ export const validateRedirects = (redirects: Array<CustomRedirect>) => {
 };
 
 const validateRedirect = (redirect: CustomRedirect) => {
-  ["source", "destination"].forEach((p) => {
+  (["source", "destination"] as const).forEach((p) => {
     if (isIndexPage(redirect[p])) {
       throw new Error(
         `redirect ${p} includes an incorrect category index page path - remove the final path segment: ${redirect[p]}`,

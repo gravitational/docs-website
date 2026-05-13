@@ -23,13 +23,13 @@ const defaultUpdater: Updater = (href: string): string => href;
 const defaultAttributes = ["poster", "src", "href", "value"];
 
 const isNodeWithUrl = (node: unknown): node is Image | Link | Definition =>
-  node.hasOwnProperty("type") &&
+  Object.prototype.hasOwnProperty.call(node, "type") &&
   ["image", "link", "definition"].includes(
     (node as Image | Link | Definition).type,
   );
 
 const isMdxJsxElement = (node: unknown) =>
-  node.hasOwnProperty("type") &&
+  Object.prototype.hasOwnProperty.call(node, "type") &&
   ["mdxJsxFlowElement", "mdxJsxTextElement"].includes(
     (node as MdxJsxFlowElement | MdxJsxTextElement).type,
   );

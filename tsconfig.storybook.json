@@ -5,13 +5,7 @@
     "jsx": "react-jsx",
     "allowJs": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "baseUrl": ".",
-    "paths": {
-      "/src/*": ["./src/*"],
-      "/utils/*": ["./utils/*"]
-    }
+    "module": "esnext"
   },
   "include": [
     ".storybook/@types/**/*.d.ts",

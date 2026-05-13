@@ -153,7 +153,7 @@ export async function fetchVideoMeta(id: string): Promise<Meta> {
         title: rawDataItem.snippet.title,
         description: extractYouTubeVideoDescription(
           rawDataItem.snippet.description
-        ),
+        ) ?? undefined,
         thumbnail: rawDataItem.snippet.thumbnails.medium.url,
         duration: changeFormatDuration(rawDataItem.contentDetails.duration),
       };

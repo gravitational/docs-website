@@ -39,7 +39,7 @@ const RULE_ID = "code-snippet";
 const isCode =
   (langs: string[]) =>
   (node: Node): node is MdastCode =>
-    node.type === "code" && langs.includes((node as MdastCode).lang);
+    node.type === "code" && langs.includes((node as MdastCode).lang ?? "");
 
 const getTextChildren = (contentValue: string): Text => ({
   type: "text",
@@ -78,7 +78,7 @@ const getChildrenNode = (content: string): Array<Text | MdxJsxFlowElement> => {
   const nodeChildren: Array<Text | MdxJsxFlowElement> = [];
 
   if (hasVariable) {
-    const contentVars = content.match(/(?:\<Var .+?\/\>)/gm);
+    const contentVars = content.match(/(?:\<Var .+?\/\>)/gm)!;
     const firstPartLine = content.split("<Var")[0];
     nodeChildren.push(getTextChildren(firstPartLine));
     let newContent = content.replace("isGlobal", "");
@@ -86,7 +86,7 @@ const getChildrenNode = (content: string): Array<Text | MdxJsxFlowElement> => {
     for (let i = 0; i < contentVars.length; i++) {
       if (contentVars[i].includes("description=")) {
         newContent = newContent.replace(
-          contentVars[i].match(/description="(.*?)"/)[1],
+          contentVars[i].match(/description="(.*?)"/)![1],
           "",
         );
         newContent = newContent.replace('description=""', "");
@@ -97,10 +97,10 @@ const getChildrenNode = (content: string): Array<Text | MdxJsxFlowElement> => {
         nextPartLine = nextPartLine.split("<Var")[0];
       }
 
-      const varName = contentVars[i].match(/name="(.*?)"/)[1];
+      const varName = contentVars[i].match(/name="(.*?)"/)![1];
       const description =
         contentVars[i].includes("description=") &&
-        contentVars[i].match(/description="(.*?)"/)[1];
+        contentVars[i].match(/description="(.*?)"/)![1];
       const isGlobal = contentVars[i].includes("isGlobal");
       nodeChildren.push(getVariableNode(varName, isGlobal, description));
       nodeChildren.push(getTextChildren(nextPartLine));
@@ -136,7 +136,10 @@ const getCommandNode = (content: string, prefix = "$") => {
   };
 };
 
-const getLineNode = (content: string, attributes = []) => {
+const getLineNode = (
+  content: string,
+  attributes: Array<MdxJsxAttribute> = [],
+) => {
   const children = getChildrenNode(content);
 
   return {
@@ -190,7 +193,7 @@ export default function remarkCodeSnippet({
       (node: MdastCode, index, parent: MdxAnyElement) => {
         const content: string = node.value;
         const codeLines = content.split("\n");
-        const children = [];
+        const children: Array<any> = [];
 
         for (let i = 0; i < codeLines.length; i++) {
           const hasLeadingDollar = codeLines[i][0] === "$";
@@ -201,17 +204,17 @@ export default function remarkCodeSnippet({
           if (hasLeadingDollar) {
             children.push(getCommandNode(trimmedValue));
 
-            const commandArrayElem = children[children.length - 1].children;
+            const commandArrayElem = children[children.length - 1]!.children;
 
             if (codeLines[i].includes("<<")) {
-              let heredocMark = codeLines[i].match(/[^<<]*$/)[0].trim();
+              let heredocMark = codeLines[i].match(/[^<<]*$/)![0].trim();
 
               if (heredocMark.includes(">")) {
                 heredocMark = heredocMark.split(">")[0].trim();
               }
 
               if (heredocMark.includes("'")) {
-                heredocMark = heredocMark.match(/'(.*?)'/)[1];
+                heredocMark = heredocMark.match(/'(.*?)'/)![1];
               }
 
               if (heredocMark.indexOf("-") === 0) {
