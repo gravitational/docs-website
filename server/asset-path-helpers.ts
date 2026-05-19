@@ -85,8 +85,19 @@ export const updateAssetPath = (href: string, { vfile }: { vfile: VFile }) => {
     return relative(dirname(vfile.path), assetPath);
   }
 
+  // Leave external URLs untouched — their paths and fragments are
+  // case-sensitive and should not be modified.
+  if (/^https?:\/\//i.test(href) || href.startsWith("//")) {
+    return href;
+  }
+
+  // For internal links, lowercase only the fragment so it matches
+  // Docusaurus's slugified heading IDs.
   if (href.includes("#")) {
-    return href.toLowerCase();
+    const hashIndex = href.indexOf("#");
+    const path = href.slice(0, hashIndex);
+    const fragment = href.slice(hashIndex + 1);
+    return `${path}#${fragment.toLowerCase()}`;
   }
 
   return href;
