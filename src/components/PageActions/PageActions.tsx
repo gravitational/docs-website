@@ -10,8 +10,14 @@ import {
 } from "@site/src/utils/markdown";
 import { useMemo, useRef, useState } from "react";
 import { useWindowSize } from "@docusaurus/theme-common";
+import { trackEvent } from "@site/src/utils/analytics";
 
-const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
+type PageActionsProps = {
+  pathname: string;
+  emitEvent?: (name: string, params: any) => {};
+};
+
+const PageActions: React.FC<PageActionsProps> = ({ pathname, emitEvent }) => {
   const { setIsOpen, ModalSearchAndChat, inkeepModalProps } = useInkeepSearch({
     enableAIChat: true,
   });
@@ -42,6 +48,10 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
         }
         ref={copyButtonRef}
         onClick={() => {
+          trackEvent({
+            event_name: `copy_page_as_markdown`,
+            emitEvent: emitEvent,
+          });
           copyPageContentAsMarkdown(pathname);
           setCopiedMessage("Copied!");
           setTimeout(() => setCopiedMessage("Copy for LLM"), 3000);
@@ -54,6 +64,12 @@ const PageActions: React.FC<{ pathname: string }> = ({ pathname }) => {
         className={styles.askAIButton}
         href={normalizeMarkdownPathname(pathname)}
         target="_blank"
+        onClick={() => {
+          trackEvent({
+            event_name: `view_page_as_markdown`,
+            emitEvent: emitEvent,
+          });
+        }}
       >
         <Icon size="md" name="markdown" />
         <span>View as Markdown</span>
