@@ -395,6 +395,170 @@ Here's some conceptual information.
       expect(getReasons(tc.input)).toEqual(tc.expected);
     });
   });
+
+  describe("linting outcome statements in guides", () => {
+    interface testCase {
+      description: string;
+      input: string;
+      expected: Array<string>;
+    }
+
+    const testCases: Array<testCase> = [
+      {
+        description: "introductory how-to section with no outcome statement",
+        input: `---
+title: My Page
+description: This is a page.
+page_type: how-to
+---
+
+This is the introduction of this how-to guide.
+
+## Prerequisites
+
+- A computer
+`,
+        expected: [
+          `In a how-to guide, the introductory section must include an outcome statement with one of the following prefixes: "After following this guide, you will", "This guide shows you how to", "In this guide, you will". This must be a concrete objective you expect the reader to have achieved. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
+        ],
+      },
+      {
+        description:
+          'no violations with "After following this guide, you will"',
+        input: `---
+title: My Page
+description: This is a page.
+page_type: how-to
+---
+
+This is the introduction of this how-to guide.
+
+After following this guide, you will have a working implementation of our
+product.
+
+## Prerequisites
+
+- A computer
+`,
+        expected: [],
+      },
+      {
+        description: "outcome statement with code and link in paragraph",
+        input: `---
+title: My Page
+description: This is a page.
+page_type: how-to
+---
+
+This is the introduction of this how-to guide.
+
+After following this guide, you will have a working implementation of our
+product, \`example\`, which you can read about on the [main
+site](https://example.com).
+
+## Prerequisites
+
+- A computer
+`,
+        expected: [],
+      },
+      {
+        description: 'no violations with "This guide shows you how to"',
+        input: `---
+title: My Page
+description: This is a page.
+page_type: how-to
+---
+
+This is the introduction of this how-to guide.
+
+This guide shows you how to enable our product.
+
+## Prerequisites
+
+- A computer
+`,
+        expected: [],
+      },
+      {
+        description: 'no violations with "In this guide, you will"',
+        input: `---
+title: My Page
+description: This is a page.
+page_type: how-to
+---
+
+This is the introduction of this how-to guide.
+
+In this guide, you will enable our product.
+
+## Prerequisites
+
+- A computer
+`,
+        expected: [],
+      },
+      {
+        description: 'no violations with "In this guide, you will"',
+        input: `---
+title: My Page
+description: This is a page.
+page_type: how-to
+---
+
+This is the introduction of this how-to guide.
+
+In this guide, you will:
+- Install our product.
+- Roll it out across your infrastructure.
+- Enroll all of the users in your organization.
+
+## Prerequisites
+
+- A computer
+`,
+        expected: [],
+      },
+      {
+        description: "introductory reference section with no outcome statement",
+        input: `---
+title: My Page
+description: This is a page.
+page_type: reference
+---
+
+This is the introduction of this guide.
+
+## Supported fields 
+
+`,
+        expected: [
+          `In a reference page, the introductory section must include an outcome statement with the prefix, "This page lists the", plus the kinds of items that this page provides a reference for. Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`,
+        ],
+      },
+      {
+        description:
+          "introductory troubleshooting outcome statement in multiple lines",
+        input: `---
+title: Troubleshooting Apps
+description: This is a page.
+page_type: troubleshooting
+---
+
+This page describes common issues that you might encounter in managing access to applications
+with Teleport and how to work around or resolve them.
+
+## Supported fields
+
+`,
+        expected: [],
+      },
+    ];
+
+    test.each(testCases)("$description", (tc) => {
+      expect(getReasons(tc.input)).toEqual(tc.expected);
+    });
+  });
 });
 
 describe("linting improper Var component use", () => {
