@@ -56,6 +56,11 @@
           }
         }
       }
+      .githubLink,
+      .askAIButton,
+      .feedback {
+        white-space: wrap;
+      }
     }
   }
 }
