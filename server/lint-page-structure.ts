@@ -1,15 +1,9 @@
 import { lintRule } from "unified-lint-rule";
 import { visit } from "unist-util-visit";
-import type { Heading, Code, Paragraph, Text } from "mdast";
-import type {
-  MdxJsxFlowElement,
-  EsmNode,
-  MdxAnyElement,
-  MdxastNode,
-} from "./types-unist";
+import type { Code, Heading, Literal, Paragraph, Text } from "mdast";
+import type { MdxJsxFlowElement, MdxAnyElement } from "./types-unist";
 import type { Node, Parent, Position } from "unist";
-
-const mdxNodeTypes = new Set(["mdxJsxFlowElement", "mdxJsxTextElement"]);
+import { parse } from "yaml";
 
 interface stepNumber {
   numerator: number;
@@ -30,11 +24,54 @@ interface paragraphWithIndex {
 const stepNumberPattern = `^Step ([0-9]+)/([0-9]+)`;
 const messageSuffix = `Disable this warning by adding {/* lint ignore page-structure remark-lint */} before this line.`;
 
+interface OutcomePatternCheck {
+  pattern: string;
+  error: string;
+}
+
+// allowedOutcomePatterns maps values of the page_type frontmatter field to
+// rules for the content of an outcome statement. The opening paragraphs of a
+// docs page must include a paragraph that matches the pattern, providing a
+// concise description of the scope of the page.
+const allowedOutcomePatterns: Record<string, OutcomePatternCheck> = {
+  "how-to": {
+    pattern: `(After following this guide, you will|This guide shows you how to|In this guide, you will)`,
+    error: `In a how-to guide, the introductory section must include an outcome statement with one of the following prefixes: "After following this guide, you will", "This guide shows you how to", "In this guide, you will". This must be a concrete objective you expect the reader to have achieved.`,
+  },
+  troubleshooting: {
+    pattern: `This page describes common issues.+how to work around or resolve them`,
+    error: `In a troubleshooting guide, the introductory section must include an outcome statement with the pattern, "This page describes common issues...how to work around or resolve them". An example is, "This page describes common issues with connecting self-hosted MySQL databases to Teleport and how to work around or resolve them.`,
+  },
+  conceptual: {
+    pattern: `This page describes (how|what|the)`,
+    error: `In a conceptual guide, the introductory section must include an outcome statement with one of the following prefixes: "This page describes how", "This page describes what", or "This page describes the". The rest of the outcome statement consists of the concept this page sets out to explain.`,
+  },
+  faq: {
+    pattern: `This page provides answers to frequently asked questions about`,
+    error: `In a FAQ page, the introductory section must include an outcome statement with the prefix, "This page provides answers to frequently asked questions about", plus the subject of the FAQ page.`,
+  },
+  reference: {
+    pattern: `This page lists the`,
+    error: `In a reference page, the introductory section must include an outcome statement with the prefix, "This page lists the", plus the kinds of items that this page provides a reference for.`,
+  },
+};
+
 export const remarkLintPageStructure = lintRule(
   "remark-lint:page-structure",
   (root: Node, vfile) => {
     const h2s: Array<h2WithIndex> = [];
     const paras: Array<paragraphWithIndex> = [];
+    let frontmatter: Record<string, any> = {};
+    visit(root, "yaml", (node: Node) => {
+      try {
+        frontmatter = parse((node as Literal).value) ?? {};
+      } catch (err) {
+        vfile.message(
+          `page has invalid YAML in frontmatter: ${(err as Error).message}`,
+        );
+        return;
+      }
+    });
 
     // Collect paragraphs and headings from first-level children of root.
     (root as Parent).children.forEach((node, idx) => {
@@ -79,22 +116,54 @@ export const remarkLintPageStructure = lintRule(
       }
     });
 
-    // See if there is a paragraph that comes before the first H2 in root's
-    // children. We compare indices instead of line numbers because
-    // remark-includes preserves the line numbers of any partials it includes.
-    if (
-      h2s.length > 0 &&
-      !paras.some((para) => {
+    if (h2s.length > 0) {
+      const introParas = paras.filter((para) => {
         return para.rootIndex < h2s[0].rootIndex;
-      })
-    ) {
-      vfile.message(
-        "This guide is missing at least one introductory paragraph before the first H2. Use introductory paragraphs to explain the purpose and scope of this guide. " +
-          messageSuffix,
-        h2s[0].node.position,
-      );
+      });
+
+      // See if there is a paragraph that comes before the first H2 in root's
+      // children. We compare indices instead of line numbers because
+      // remark-includes preserves the line numbers of any partials it includes.
+      if (introParas.length === 0) {
+        vfile.message(
+          "This guide is missing at least one introductory paragraph before the first H2. Use introductory paragraphs to explain the purpose and scope of this guide. " +
+            messageSuffix,
+          h2s[0].node.position,
+        );
+      }
+
+      const outcome = allowedOutcomePatterns[frontmatter.page_type];
+      // If there is no intro paragraph, the error message above will have
+      // alerted the author. Otherwise, dig in further to see if there is an
+      // outcome statement.
+      if (outcome && introParas.length > 0) {
+        const outcomeRE = new RegExp(outcome.pattern);
+        const hasOutcomeParagraph = introParas.some((pwi) => {
+          const para = pwi.node;
+          // Collect text nodes from the paragraph. We expect the outcome
+          // statement pattern to match text, rather than HTML elements, so we
+          // only perform a first-level search for text nodes.
+          const txt = para.children.reduce((accum, current) => {
+            if (current.type !== "text") {
+              return accum;
+            }
+            // Put all paragraph text on a single line for evaluation.
+            return accum + current.value.replaceAll(`\n`, " ");
+          }, "");
+          return outcomeRE.test(txt);
+        });
+        if (!hasOutcomeParagraph) {
+          vfile.message(
+            outcome.error + " " + messageSuffix,
+            introParas[0].node.position,
+          );
+        }
+      }
     }
 
+    // We are using the presence of a "## Step" section as a proxy for a how-to
+    // guide until we can roll out the page_type frontmatter field to all
+    // how-to guides.
     const hasStep = h2s.some((h) => h.node.value.match(/^Step [0-9]/) !== null);
     if (hasStep && h2s[0].node.value !== "How it works") {
       vfile.message(
