@@ -25,6 +25,9 @@ const getReasons = (value: string) => {
             type: "array",
             items: {},
           },
+          kind: {
+            enum: ["kind1", "kind2", null],
+          },
         },
       })
       .processSync(new VFile({ value, path: "mypath.mdx" }) as any)
@@ -77,7 +80,9 @@ description: "Description for my page"
 labels: ["one", "two", "three"]
 ---
 This is a page.`,
-      expected: ["page frontmatter has unrecognized fields: labels"],
+      expected: [
+        'issue validating page frontmatter: unexpected property "labels"',
+      ],
     },
     {
       description: "two extra fields",
@@ -89,7 +94,8 @@ labels: ["one", "two", "three"]
 
 This is a page.`,
       expected: [
-        "page frontmatter has unrecognized fields: descrption, labels",
+        'issue validating page frontmatter: unexpected property "descrption"',
+        'issue validating page frontmatter: unexpected property "labels"',
       ],
     },
     {
@@ -115,7 +121,16 @@ title: \"My page\",
 ---
 
 This is a page.`,
-      expected: [`page frontmatter must be a YAML object`],
+      expected: [`issue validating page frontmatter: must be object`],
+    },
+    {
+      description: "enum",
+      input: `---
+kind: kind3
+---
+
+This is a page.`,
+      expected: [`issue validating page frontmatter: .kind: must be one of: kind1, kind2, null`],
     },
     {
       description: "no frontmatter",
