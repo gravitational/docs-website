@@ -12,7 +12,20 @@ const getReasons = (value: string) => {
       // remark-frontmatter is a requirement for using this plugin
       .use(remarkFrontmatter as any)
       .use(remarkLintFrontmatter as any, {
-        allowedFields: ["title", "description", "tags"],
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          title: {
+            type: "string",
+          },
+          description: {
+            type: "string",
+          },
+          tags: {
+            type: "array",
+            items: {},
+          },
+        },
       })
       .processSync(new VFile({ value, path: "mypath.mdx" }) as any)
       .messages.map((m) => m.reason)
@@ -94,6 +107,15 @@ title: \"My page\",
                 ^
 `,
       ],
+    },
+    {
+      description: "valid yaml that is not an object",
+      input: `---
+["one", "two", "three"]
+---
+
+This is a page.`,
+      expected: [`page frontmatter must be a YAML object`],
     },
     {
       description: "no frontmatter",
