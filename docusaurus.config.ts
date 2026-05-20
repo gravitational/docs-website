@@ -39,7 +39,7 @@ import {
 import { llmsTxtPluginOptions } from "./server/llms";
 import { fetchVideoMeta } from "./server/youtube-meta";
 import { getFromSecretOrEnv } from "./utils/general";
-import addTokenCounts from "./server/add-token-counts";
+import addTokenCounts from "./server/llms/add-token-counts";
 
 const latestVersion = getLatestVersion();
 
