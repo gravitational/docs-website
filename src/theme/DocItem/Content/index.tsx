@@ -1,6 +1,7 @@
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { useLocation } from "@docusaurus/router";
 import { ThemeClassNames } from "@docusaurus/theme-common";
+import ExclusivityContext from "@site/src/components/ExclusivityBanner/context";
 import PageActions from "@site/src/components/PageActions";
 import ThumbsFeedback from "@site/src/components/ThumbsFeedback";
 import ThumbsFeedbackContext from "@site/src/components/ThumbsFeedback/context";
@@ -11,7 +12,7 @@ import type { Props } from "@theme/DocItem/Content";
 import Heading from "@theme/Heading";
 import MDXContent from "@theme/MDXContent";
 import clsx from "clsx";
-import { useState, type ReactNode } from "react";
+import { useContext, useState, type ReactNode } from "react";
 
 interface DocFrontMatter {
   videoBanner: VideoBarProps;
@@ -36,11 +37,11 @@ function useSyntheticTitle(): string | null {
   }
   return metadata.title;
 }
-  
 
 export default function DocItemContent({ children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
-  const { hideTitleSection, showDescription } = useDocTemplate();
+  const { hideTitleSection, showDescription, isLandingPage } = useDocTemplate();
+  const exclusive = useContext(ExclusivityContext);
   const { frontMatter } = useDoc();
   const location = useLocation();
   const [feedback, setFeedback] = useState<FeedbackType | null>(null);
@@ -67,7 +68,15 @@ export default function DocItemContent({ children }: Props): ReactNode {
             {videoBanner && <VideoBar {...videoBanner} />}
           </header>
         )}
-        <MDXContent>{children}</MDXContent>
+        <MDXContent>
+          {exclusive?.exclusiveFeature && !isLandingPage && (
+            <p style={{ display: "none" }} aria-hidden="true">
+              {exclusive.exclusiveFeature} is available only with Teleport
+              Enterprise.
+            </p>
+          )}
+          {children}
+        </MDXContent>
         {syntheticTitle && !hideTitleSection && (
           <ThumbsFeedback
             feedbackLabel="Was this page helpful?"
