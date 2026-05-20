@@ -6,26 +6,7 @@ import type { Literal } from "mdast";
 import type { JSONSchema7 } from "json-schema";
 import Ajv from "ajv";
 
-const possibleProducts = [
-  "identity-governance",
-  "identity-security",
-  "mwi",
-  "zero-trust",
-  "platform-wide",
-];
-
-const possibleTypes = [
-  "how-to",
-  "conceptual",
-  "get-started",
-  "reference",
-  "faq",
-  "other",
-];
-
-interface LintFrontmatterOptions {
-  allowedFields: Array<string>;
-}
+const schemaErrorPrefix = "issue validating page frontmatter: ";
 
 export const remarkLintFrontmatter = lintRule(
   "remark-lint:frontmatter",
@@ -37,6 +18,7 @@ export const remarkLintFrontmatter = lintRule(
 
     let hasFrontmatter = false;
     const ajv = new Ajv({
+      // Include all errors and their messages. Critical for printing linter warnings.
       allErrors: true,
     });
     const validate = ajv.compile(options);
@@ -66,30 +48,29 @@ export const remarkLintFrontmatter = lintRule(
         return;
       }
 
-      const extraFields: Array<string> = [];
       validate.errors!.forEach((e) => {
-        switch (e.keyword) {
-          case "type":
-            // Ignore specific type errors for now. The linter focuses on
-            // additional properties and overall malformed frontmatter, so
-            // check whether the whole frontmatter document is an incorrect
-            // type.
-            if (e.instancePath !== "") {
-              return;
-            }
-            vfile.message("page frontmatter must be a YAML object");
-            return;
-
-          case "additionalProperties":
-            extraFields.push(e.params.additionalProperty);
+        let msg = schemaErrorPrefix;
+        if (e.instancePath !== "") {
+          msg += `${e.instancePath.replaceAll("/", ".")}: `;
         }
+        switch (e.keyword) {
+          case "additionalProperties":
+            msg += `unexpected property "${e.params.additionalProperty}"`;
+            break;
+          case "enum":
+            const allowed = e.params.allowedValues.map((v: unknown) => {
+              if (v === null) {
+                return "null";
+              }
+              return v;
+            });
+            msg += `must be one of: ${allowed.join(", ")}`;
+            break;
+          default:
+            msg += e.message!;
+        }
+        vfile.message(msg);
       });
-
-      if (extraFields.length > 0) {
-        vfile.message(
-          `page frontmatter has unrecognized fields: ${extraFields.join(", ")}`,
-        );
-      }
     });
 
     if (!hasFrontmatter) {

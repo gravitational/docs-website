@@ -63,8 +63,19 @@ properties:
   sidebar_custom_props:
     type: object
 
-  # The fields below are used in custom components
+  # The fields below are used in custom components and linters
   enterprise: {}
+  page_type:
+    enum:
+      # Make page_type an optional frontmatter field until we can roll it out
+      # across the docs. 
+      - null 
+      - conceptual
+      - faq
+      - how-to # Includes getting started tutorials
+      - landing
+      - reference
+      - troubleshooting
   template:
     type: string
   videoBanner:
