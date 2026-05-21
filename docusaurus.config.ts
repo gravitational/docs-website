@@ -172,7 +172,7 @@ const config: Config = {
           items: [
             {
               label: "Beams",
-              href: "/beams/",
+              href: "https://www.beams.run/",
               tag: "New",
             },
             {
