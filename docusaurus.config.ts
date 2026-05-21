@@ -94,6 +94,103 @@ const config: Config = {
     navbar: {
       items: sidebarItems,
     },
+    footer: {
+      logo: {
+        alt: "Teleport Docs",
+        src: "logo.svg",
+        href: "/",
+        width: 250,
+        height: 38,
+      },
+      copyright: `© ${new Date().getFullYear()} Gravitational Inc.; all rights reserved.`,
+      links: [
+        {
+          title: "Connect",
+          items: [
+            {
+              label: "Help & Support",
+              href: "https://goteleport.com/support/",
+            },
+            {
+              label: "Community Slack",
+              href: "https://goteleport.com/community-slack/",
+            },
+            {
+              label: "GitHub",
+              href: "https://github.com/gravitational/teleport",
+            },
+            {
+              label: "Discussions",
+              href: "https://github.com/gravitational/teleport/discussions",
+            },
+          ],
+        },
+        {
+          title: "Explore",
+          items: [
+            {
+              label: "About",
+              href: "https://goteleport.com/about/",
+            },
+            {
+              label: "Careers",
+              href: "https://goteleport.com/careers/",
+            },
+            {
+              label: "FAQs",
+              href: "/faq/",
+            },
+            {
+              label: "Trust Center",
+              href: "https://trust.goteleport.com/",
+            },
+          ],
+        },
+        {
+          title: "Learn & develop",
+          items: [
+            {
+              label: "User Guides",
+              href: "/connect-your-client/",
+            },
+            {
+              label: "Downloads",
+              href: "https://goteleport.com/downloads/",
+            },
+            {
+              label: "Status",
+              href: "https://status.goteleport.com/",
+            },
+            {
+              label: "Teleport Labs",
+              href: "https://goteleport.com/labs/",
+            },
+          ],
+        },
+        {
+          title: "See the latest",
+          items: [
+            {
+              label: "Beams",
+              href: "/beams/",
+              tag: "New",
+            },
+            {
+              label: "Teleport Feature Matrix",
+              href: "/feature-matrix/",
+            },
+            {
+              label: "Upcoming Releases",
+              href: "/upcoming-releases/",
+            },
+            {
+              label: "Changelog",
+              href: "/changelog/",
+            },
+          ],
+        },
+      ],
+    },
     image: "/og-image.png",
     colorMode: {
       defaultMode: "light",
