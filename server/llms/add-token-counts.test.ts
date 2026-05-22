@@ -9,7 +9,7 @@ let buildFolder: string;
 const originalCwd = process.cwd();
 
 // Create a fresh temp build folder before each test. This allows testing the addTokenCounts plugin in isolation
-// by simulating the post-build environment with generated markdown files containing frontmatter.
+// by simulating the post-build environment with generated markdown files.
 beforeEach(async () => {
   tempFolder = await mkdtemp(join(tmpdir(), "add-token-counts-"));
   buildFolder = join(tempFolder, "build");

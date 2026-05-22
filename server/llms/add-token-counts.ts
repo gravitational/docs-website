@@ -3,6 +3,7 @@ import { join } from "path";
 import { glob } from "glob";
 import { estimateTokenCount } from "tokenx";
 
+// This plugin is used to insert a token_count value at the top of each generated markdown file after the build is complete.
 export default function addTokenCounts() {
   return {
     name: "add-token-counts",
