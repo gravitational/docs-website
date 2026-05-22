@@ -35,6 +35,7 @@ export default function FooterLayout({
               cryptographic identity and just-in-time access — all managed as
               code.
             </p>
+            <strong>Start your free Enterprise 14-day trial today!</strong>
           </div>
           <form className={styles.footerCtaForm}>
             <input type="email" placeholder="Work email" />
@@ -43,7 +44,7 @@ export default function FooterLayout({
               type="submit"
               className={styles.footerCtaButton}
             >
-              Start your free Enterprise 14-day trial today!
+              Get an activation link
             </Button>
           </form>
         </div>
