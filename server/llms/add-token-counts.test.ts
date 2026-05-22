@@ -30,44 +30,23 @@ const readFromMarkdown = (name: string) =>
   readFile(join(buildFolder, name), "utf-8");
 
 describe("addTokenCounts", () => {
-  it("skips files without frontmatter in the start", async () => {
-    const content = "# No frontmatter here";
-    await writeToMarkdown("page.md", content);
-
-    await addTokenCounts().postBuild();
-
-    expect(await readFromMarkdown("page.md")).toBe(content);
-  });
-
-  it("skips files without a token_count field in the frontmatter", async () => {
-    const content = "---\ntitle: My Page\n---\n# Content";
-    await writeToMarkdown("page.md", content);
-
-    await addTokenCounts().postBuild();
-
-    expect(await readFromMarkdown("page.md")).toBe(content);
-  });
-
-  it("updates the token_count value in files with a valid frontmatter block", async () => {
-    await writeToMarkdown(
-      "page.md",
-      "---\ntitle: My Page\ntoken_count:\n---\n# Content",
-    );
+  it("inserts the token_count value to each markdown file", async () => {
+    await writeToMarkdown("page.md", "# Content");
 
     await addTokenCounts().postBuild();
 
     const result = await readFromMarkdown("page.md");
-    expect(result).toMatch(/^token_count: \d+$/m);
-    expect(result).not.toMatch(/^token_count: 0$/m);
+    expect(result).toMatch(/^\{"token_count": \d+\}/m);
+    expect(result).not.toMatch(/^\{"token_count": 0\}/m);
   });
 
   it("processes multiple files", async () => {
-    await writeToMarkdown("a.md", "---\ntoken_count: 0\n---\nFile one");
-    await writeToMarkdown("b.md", "---\ntoken_count: 0\n---\nFile two");
+    await writeToMarkdown("a.md", "# File one");
+    await writeToMarkdown("b.md", "# File two");
 
     await addTokenCounts().postBuild();
 
-    expect(await readFromMarkdown("a.md")).toMatch(/^token_count: \d+$/m);
-    expect(await readFromMarkdown("b.md")).toMatch(/^token_count: \d+$/m);
+    expect(await readFromMarkdown("a.md")).toMatch(/^\{"token_count": \d+\}/m);
+    expect(await readFromMarkdown("b.md")).toMatch(/^\{"token_count": \d+\}/m);
   });
 });

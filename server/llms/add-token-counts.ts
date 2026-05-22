@@ -19,23 +19,11 @@ export default function addTokenCounts() {
             const fullPath = join(BUILD_DIR, file);
             const content = await readFile(fullPath, "utf-8");
 
-            if (
-              !content.startsWith("---\n") ||
-              !content.includes("token_count:")
-            ) {
-              return;
-            }
-
             const tokens = estimateTokenCount(content) + 1; // Add 1 to include the token_count value itself
-            const updated = content.replace(
-              /^token_count:.*$/m,
-              `token_count: ${tokens}`,
-            );
+            const tokenCount = `{"token_count": ${tokens}}\n\n${content}`;
 
-            if (updated !== content) {
-              await writeFile(fullPath, updated, "utf-8");
-              pagesCount++;
-            }
+            await writeFile(fullPath, tokenCount, "utf-8");
+            pagesCount++;
           }),
         );
 
