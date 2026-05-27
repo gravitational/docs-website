@@ -10967,7 +10967,7 @@ jest-each@30.4.1:
     jest-util "30.4.1"
     pretty-format "30.4.1"
 
-jest-environment-node@30.3.0, jest-environment-node@^30.0.4:
+jest-environment-node@30.3.0:
   version "30.3.0"
   resolved "https://registry.yarnpkg.com/jest-environment-node/-/jest-environment-node-30.3.0.tgz#aa8a57c5d0c4af0f8b1f7403ba737fec6b3aabbe"
   integrity sha512-4i6HItw/JSiJVsC5q0hnKIe/hbYfZLVG9YJ/0pU9Hz2n/9qZe3Rhn5s5CUZA5ORZlcdT/vmAXRMyONXJwPrmYQ==
@@ -10980,7 +10980,7 @@ jest-environment-node@30.3.0, jest-environment-node@^30.0.4:
     jest-util "30.3.0"
     jest-validate "30.3.0"
 
-jest-environment-node@30.4.1:
+jest-environment-node@30.4.1, jest-environment-node@^30.0.4:
   version "30.4.1"
   resolved "https://registry.yarnpkg.com/jest-environment-node/-/jest-environment-node-30.4.1.tgz#43bbbee903e17d874eb1817195c50ff8b90e2fe0"
   integrity sha512-4FZYVOk85hz2AyT6BbarKy9u37g6DbrDyCdFhsnDdXqyrueYQvB+0zO4f/kqLCRD0BsPRXPMNJeQwihKZV8naw==
