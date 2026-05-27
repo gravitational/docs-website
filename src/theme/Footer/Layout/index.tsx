@@ -37,16 +37,13 @@ export default function FooterLayout({
             </p>
             <strong>Start your free Enterprise 14-day trial today!</strong>
           </div>
-          <form className={styles.footerCtaForm}>
-            <input type="email" placeholder="Work email" />
-            <Button
-              as="button"
-              type="submit"
-              className={styles.footerCtaButton}
-            >
-              Get an activation link
-            </Button>
-          </form>
+          <Button
+            as="link"
+            href="https://goteleport.com/signup/"
+            className={styles.footerCtaButton}
+          >
+            Start your free trial
+          </Button>
         </div>
         {logo && <div className={styles.footerLogo}>{logo}</div>}
         {links}
