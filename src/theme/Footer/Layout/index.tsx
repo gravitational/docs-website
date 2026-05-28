@@ -27,15 +27,14 @@ export default function FooterLayout({
         <div className={styles.footerCta}>
           <div>
             <h2 className={styles.footerCtaTitle}>
-              Stop wrangling SSH keys, VPNs, and bastion hosts.
+              Stop wrangling SSH keys, VPNs, and bastion hosts
             </h2>
             <p>
               Deploy a Teleport cluster, connect your servers, Kubernetes
               clusters, databases, and apps, and replace long-lived secrets with
               cryptographic identity and just-in-time access — all managed as
-              code.
+              code. Start your free Enterprise 14-day trial today!
             </p>
-            <strong>Start your free Enterprise 14-day trial today!</strong>
           </div>
           <Button
             as="link"

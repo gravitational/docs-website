@@ -99,7 +99,7 @@ const config: Config = {
         alt: "Teleport Docs",
         src: "logo.svg",
         href: "/",
-        width: 250,
+        width: 249,
         height: 38,
       },
       copyright: `© ${new Date().getFullYear()} Gravitational Inc.; all rights reserved.`,
