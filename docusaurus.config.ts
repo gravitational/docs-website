@@ -173,7 +173,7 @@ const config: Config = {
             {
               label: "Beams",
               href: "https://www.beams.run/",
-              tag: "New",
+              tag: "new",
             },
             {
               label: "Teleport Feature Matrix",
