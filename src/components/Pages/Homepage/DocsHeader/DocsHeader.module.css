@@ -1,10 +1,17 @@
 .docsHeader {
   position: relative;
   z-index: 1;
-  margin-left: -40px;
-  margin-right: -40px;
   margin-top: -16px !important; /* Used to align the DocsHeader with the header which is caused by padding in Docusaurus' container and col classes */
+  margin-left: -16px;
+  margin-right: -16px;
+
   margin-bottom: var(--ifm-paragraph-margin-bottom);
+
+  @media (--md-scr) {
+    margin-left: -40px;
+    margin-right: -40px;
+  }
+
   @media (--lg-scr) {
     margin-bottom: 50px;
   }
