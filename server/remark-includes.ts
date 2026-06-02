@@ -214,7 +214,7 @@ const resolveIncludes = ({
   filePath,
   rootDir,
 }: ResolveIncludesProps) => {
-  let error: string;
+  let error: string | undefined;
 
   // Assemble an object where keys are the variable keys and values are the var
   // values.
@@ -331,7 +331,7 @@ export default function remarkIncludes({
   lint,
   resolve = true,
   updatePaths,
-}: RemarkIncludesOptions = {}): Transformer {
+}: RemarkIncludesOptions = {}): Transformer<Root> {
   return (root: Root, vfile: VFile) => {
     let resolvedRootDir: string;
 
@@ -347,7 +347,7 @@ export default function remarkIncludes({
       if (node.type === "code") {
         let code = node as Code;
         const noIncludes = numIncludes(code.value);
-        for (let i = 0; i < noIncludes; i++) {
+        for (let i = 0; i < (noIncludes ?? 0); i++) {
           const { result, error } = resolveIncludes({
             value: code.value,
             filePath: vfile.path,
@@ -375,7 +375,7 @@ export default function remarkIncludes({
                 rootDir: resolvedRootDir,
               });
 
-              const includeExpr = txt.value.match(exactIncludeRegexp)[1];
+              const includeExpr = txt.value.match(exactIncludeRegexp)![1];
               const path = includeExpr.split(" ")[0];
 
               // Parse the partial as a Markdown AST and insert it into the
@@ -399,7 +399,7 @@ export default function remarkIncludes({
 
                   // Replace relative paths in the partial so they match the
                   // directory structure of the including page.
-                  updatePaths({
+                  updatePaths?.({
                     node: tree as Root,
                     versionRootDir: resolvedRootDir,
                     includePath: path,

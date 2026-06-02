@@ -15,10 +15,13 @@ export const toCopyContent = (
 ): string => {
   const lines = Array.from(
     commandNode.querySelectorAll(commandLineClasses.join(",")),
-  ).reduce((allLines, commandLine) => {
-    allLines.push(commandLine.textContent);
-    return allLines;
-  }, []);
+  ).reduce(
+    (allLines, commandLine) => {
+      allLines.push(commandLine.textContent);
+      return allLines;
+    },
+    [] as (string | null)[],
+  );
   return lines.join("\n");
 };
 
@@ -70,8 +73,8 @@ export const getFromSecretOrEnv = (name: string): string => {
  */
 export const getVersionedUrl = (
   version: PropVersionMetadata,
-  href?: string
-): string => {
+  href?: string,
+): string | undefined => {
   const { isLast, label } = version;
   const isProduction = typeof process !== "undefined" && process.env.AWS_APP_ID;
   const basePath = isProduction ? "/docs" : "";

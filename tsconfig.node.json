@@ -5,8 +5,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
-    "baseUrl": ".",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "outDir": ".remark-build"
   },

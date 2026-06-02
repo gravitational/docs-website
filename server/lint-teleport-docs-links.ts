@@ -53,7 +53,10 @@ export const remarkLintTeleportDocsLinks = lintRule(
           ({ name }) => name === "href",
         );
 
-        if (isAnAbsoluteDocsLink(hrefAttribute.value as string)) {
+        if (
+          hrefAttribute &&
+          isAnAbsoluteDocsLink(hrefAttribute.value as string)
+        ) {
           vfile.message(
             `Component href ${hrefAttribute.value} must be a relative link to an *.mdx page`,
             node.position,

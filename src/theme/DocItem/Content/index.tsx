@@ -1,6 +1,7 @@
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { ThemeClassNames } from "@docusaurus/theme-common";
 import { useLocation } from "@docusaurus/router";
+import ExclusivityContext from "@site/src/components/ExclusivityBanner/context";
 import PageActions from "@site/src/components/PageActions";
 import ThumbsFeedback from "@site/src/components/ThumbsFeedback";
 import VideoBar, { VideoBarProps } from "@site/src/components/VideoBar";
@@ -9,7 +10,7 @@ import type { Props } from "@theme/DocItem/Content";
 import Heading from "@theme/Heading";
 import MDXContent from "@theme/MDXContent";
 import clsx from "clsx";
-import { JSX, type ReactNode } from "react";
+import { JSX, useContext, useState, type ReactNode } from "react";
 
 interface DocFrontMatter {
   videoBanner: VideoBarProps;
@@ -62,12 +63,18 @@ export function DocHeader({ className }: { className?: string }): JSX.Element {
 
 export default function DocItemContent({ children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
-  const { hideTitleSection, faqSections } = useDocTemplate();
-
+  const { hideTitleSection, faqSections, isLandingPage } = useDocTemplate();
+  const exclusive = useContext(ExclusivityContext);
+  
   return (
     <div className={clsx(ThemeClassNames.docs.docMarkdown, "markdown")}>
         {syntheticTitle && !faqSections && <DocHeader />}
-        <MDXContent>{children}</MDXContent>
+        <MDXContent>          {exclusive?.exclusiveFeature && !isLandingPage && (
+            <p style={{ display: "none" }} aria-hidden="true">
+              {exclusive.exclusiveFeature} is available only with Teleport
+              Enterprise.
+            </p>
+          )}{children}</MDXContent>
         {syntheticTitle && !hideTitleSection && (
           <ThumbsFeedback
             feedbackLabel="Was this page helpful?"

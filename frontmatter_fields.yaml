@@ -1,35 +1,84 @@
-# Permitted fields for docs page frontmatter
-allowedFields:
+# Permitted fields for docs page frontmatter.
+# This is a JSON Schema document.
+type: object
+additionalProperties: false
+properties:
   # The fields below are used natively by Docusaurus. See the Docusaurus docs:
   # https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter
-  - custom_edit_url
-  - description
-  - displayed_sidebar
-  - draft
-  - hide_table_of_contents
-  - hide_title
-  - id
-  - image
-  - keywords
-  - last_update
-  - pagination_label
-  - pagination_next
-  - pagination_prev
-  - parse_number_prefixes
-  - sidebar_class_name
-  - sidebar_custom_props
-  - sidebar_key
-  - sidebar_label
-  - sidebar_position
-  - slug
-  - tags
-  - title
-  - toc_max_heading_level
-  - toc_min_heading_level
-  - unlisted
+  title:
+    type: string
+  description:
+    type: string
+  hide_title:
+    type: boolean
+  hide_table_of_contents:
+    type: boolean
+  draft:
+    type: boolean
+  unlisted:
+    type: boolean
+  parse_number_prefixes:
+    type: boolean
+  id:
+    type: string
+  slug:
+    type: string
+  sidebar_label:
+    type: string
+  sidebar_key:
+    type: string
+  sidebar_class_name:
+    type: string
+  sidebar_position:
+    type: integer
+  pagination_label:
+    type: string
+  image:
+    type: string
+  displayed_sidebar:
+    type: [string, "null"]
+  custom_edit_url:
+    type: [string, "null"]
+  pagination_next:
+    type: [string, "null"]
+  pagination_prev:
+    type: [string, "null"]
+  toc_min_heading_level:
+    type: integer
+    minimum: 2
+    maximum: 6
+  toc_max_heading_level:
+    type: integer
+    minimum: 2
+    maximum: 6
+  keywords:
+    type: array
+    items:
+      type: string
+  tags:
+    type: array
+    items: {}
+  last_update:
+    type: object
+  sidebar_custom_props:
+    type: object
 
-  # The fields below are used in custom components
-  - template
-  - videoBanner
-  - videoBannerDescription
-  - enterprise
+  # The fields below are used in custom components and linters
+  enterprise: {}
+  page_type:
+    enum:
+      # Make page_type an optional frontmatter field until we can roll it out
+      # across the docs. 
+      - null 
+      - conceptual
+      - faq
+      - how-to # Includes getting started tutorials
+      - landing
+      - reference
+      - troubleshooting
+  template:
+    type: string
+  videoBanner:
+    type: string
+  videoBannerDescription:
+    type: string
