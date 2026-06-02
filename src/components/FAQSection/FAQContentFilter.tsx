@@ -2,10 +2,9 @@ import { type ReactNode, useEffect, useRef } from "react";
 import { useFAQTemplate } from "./FAQPageContext";
 import styles from "./FAQContentFilter.module.css";
 
-// A Q&A group is defined as a heading (h3 or h4) and all content until the next heading of the same or higher level
 const collectQAGroup = (
   heading: HTMLHeadingElement,
-  groupEndingTags: string[] = [], // Optional additional tags that should be close a group
+  groupEndingTags: string[] = [], // Optional additional tags that should close a group
 ): HTMLElement[] => {
   const group: HTMLElement[] = [heading];
   let next = heading.nextElementSibling as HTMLElement | null;
@@ -20,7 +19,8 @@ const collectQAGroup = (
   return group;
 };
 
-// Collects all direct child headings of "target" level that belong to a parent heading section
+// Get the h4 sub-groups of an h3 Q&A group. Each h4 sub-group is defined as an h4 heading and all content until the next heading of the same or higher level.
+// This function is used to determine the h4 sub-groups of an h3 Q&A group, which are the units that get independently filtered and highlighted based on the search query.
 const getSubHeadings = (
   parent: HTMLHeadingElement,
   target: "H3" | "H4",
@@ -64,9 +64,9 @@ const resetHighlights = (container: HTMLElement) => {
     });
 };
 
-// Wraps the matches to a search query with <mark> elements
+// Apply highlighting styles to the parts of the content that match the search query
 const applyHighlights = (node: HTMLElement, query: string) => {
-  const q = query.toLowerCase();
+  const lowerCaseQuery = query.toLowerCase();
   const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
   const textNodes: Text[] = [];
   let n: Node | null;
@@ -76,34 +76,47 @@ const applyHighlights = (node: HTMLElement, query: string) => {
 
   textNodes.forEach((textNode) => {
     const text = textNode.textContent ?? "";
-    if (!text.toLowerCase().includes(q)) return;
+    if (!text.toLowerCase().includes(lowerCaseQuery)) return;
 
-    const frag = document.createDocumentFragment();
+    //  Create a document fragment with the same text but with the matching parts wrapped in <mark> elements, and replace the original text node with it. This way we can apply the highlighting styles via CSS.
+    const fragment = document.createDocumentFragment();
     let lastIndex = 0;
-    let idx = text.toLowerCase().indexOf(q, lastIndex);
+    const lowerText = text.toLowerCase();
+    let idx = lowerText.indexOf(lowerCaseQuery, lastIndex);
 
     while (idx !== -1) {
       if (idx > lastIndex) {
-        frag.appendChild(document.createTextNode(text.slice(lastIndex, idx)));
+        fragment.appendChild(
+          document.createTextNode(text.slice(lastIndex, idx)),
+        );
       }
       const mark = document.createElement("mark");
       mark.dataset.faqHighlight = "";
       mark.className = styles.highlight;
+      // Using query.length is safe here as case-insensitive matching preserves length
       mark.textContent = text.slice(idx, idx + query.length);
-      frag.appendChild(mark);
+      fragment.appendChild(mark);
       lastIndex = idx + query.length;
-      idx = text.toLowerCase().indexOf(q, lastIndex);
+      idx = lowerText.indexOf(lowerCaseQuery, lastIndex);
     }
     if (lastIndex < text.length) {
-      frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+      fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
     }
-    textNode.parentNode?.replaceChild(frag, textNode);
+    textNode.parentNode?.replaceChild(fragment, textNode);
   });
 };
 
 interface FAQContentFilterProps {
   children: ReactNode;
 }
+
+// FAQContentFilter is responsible for filtering and highlighting the FAQ content based on the search query. It uses the following logic:
+// A Q&A group is defined as a heading (h3 or h4) and all content until the next heading of the same or higher level.
+// Q&A groups are the units that get filtered and highlighted based on the search query. The logic is as follows:
+// 1. For each h3 Q&A group:
+//    - If it has no h4 sub-groups, treat the entire h3 group as one unit and show/hide based on whether it contains matches with the search query.
+//    - If it has h4 sub-groups, filter each h4 group independently based on the search query. The h3 heading and its intro are shown if at least one h4 group matches.
+// 2. After processing all h3 groups, hide any h2 category headings whose h3 groups are all hidden.
 
 const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -113,7 +126,7 @@ const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
     const container = containerRef.current;
     if (!container) return;
 
-    // First undo all previous DOM changes
+    // Undo any possible previous DOM changes made by this filter
     resetHighlights(container);
     container.querySelectorAll<HTMLHeadingElement>("h2").forEach((h2) => {
       h2.style.display = "";
@@ -129,17 +142,14 @@ const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
       });
     });
 
-    // if search query is empty, we can skip the rest of the logic
-    if (!searchQuery) {
+    // If the search query is empty, we can skip the rest of the function
+    if (searchQuery.length === 0) {
       setMatchCount(0);
       return;
     }
 
-    // Filter and highlight Q&A groups based on the search query. The logic is as follows:
-    // 1. For each h3 group:
-    //    - If it has no h4 sub-groups, treat the entire h3 group as one unit and show/hide based on whether it contains matches with the search query.
-    //    - If it has h4 sub-groups, filter each h4 group independently based on the search query. The h3 heading and its intro are shown if at least one h4 group matches.
-    // 2. After processing all h3 groups, hide any h2 category headings whose h3 groups are all hidden.
+    const lowerSearchQuery = searchQuery.toLowerCase();
+
     const h3Headings = Array.from(
       container.querySelectorAll<HTMLHeadingElement>("h3"),
     );
@@ -155,10 +165,10 @@ const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
           .map((el) => el.textContent ?? "")
           .join(" ")
           .toLowerCase();
-        const matches = groupText.includes(searchQuery.toLowerCase());
+        const matches = groupText.includes(lowerSearchQuery);
 
         // Add the number of matches in this group to the total count
-        if (matches) count += countMatches(groupText, searchQuery);
+        if (matches) count += countMatches(groupText, lowerSearchQuery);
 
         // Show/hide the entire group based on whether it matches the search query
         group.forEach((el) => {
@@ -180,10 +190,10 @@ const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
             .map((el) => el.textContent ?? "")
             .join(" ")
             .toLowerCase();
-          const matches = groupText.includes(searchQuery.toLowerCase());
+          const matches = groupText.includes(lowerSearchQuery);
 
           if (matches) {
-            count += countMatches(groupText, searchQuery);
+            count += countMatches(groupText, lowerSearchQuery);
             h4Matches = true;
           }
 
@@ -210,15 +220,11 @@ const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
     setMatchCount(count);
 
     // Hide h2 headings which do not have any visible Q&A groups
-    const hiddenIds = new Set<string>();
     container.querySelectorAll<HTMLHeadingElement>("h2").forEach((h2) => {
       const h3s = getSubHeadings(h2, "H3");
       const allHidden =
         h3s.length > 0 && h3s.every((h3) => h3.style.display === "none");
       h2.style.display = allHidden ? "none" : "";
-      if (allHidden && h2.id) {
-        hiddenIds.add(h2.id);
-      }
     });
   }, [searchQuery, setMatchCount]);
 

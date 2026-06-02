@@ -1,4 +1,4 @@
-import React, { JSX, useRef, useState } from "react";
+import React, { JSX, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import { useWindowSize } from "@docusaurus/theme-common";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
@@ -89,10 +89,28 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   } = useDoc();
 
   const faqSectionsRef = useRef<FAQSection[]>([]);
-  faqSectionsRef.current = [];
   const faqSearchInputRef = useRef<HTMLInputElement>(null);
   const [faqQuery, setFaqQuery] = useState("");
   const [faqMatchCount, setFaqMatchCount] = useState(0);
+
+  // The FAQ context value is memoized to avoid unnecessary re-renders.
+  // FAQSections are registered during render rather than in an effect, so for SSR the sidebar is ready in the same pass.
+  // The items are deduplicated by id to ensure the list is stable across renders.
+  const faqContextValue = useMemo(
+    () => ({
+      registerSection: (section: FAQSection) => {
+        const registeredArray = faqSectionsRef.current;
+        if (!registeredArray.some((exists) => exists.id === section.id))
+          registeredArray.push(section);
+      },
+      searchQuery: faqQuery,
+      setSearchQuery: setFaqQuery,
+      matchCount: faqMatchCount,
+      setMatchCount: setFaqMatchCount,
+      searchInputRef: faqSearchInputRef,
+    }),
+    [faqQuery, faqMatchCount],
+  );
 
   return (
     <ExclusivityContext.Provider value={{ exclusiveFeature }}>
@@ -126,16 +144,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
                 [styles.faqLayout]: faqSections,
               })}
             >
-              <FAQPageContext.Provider
-                value={{
-                  registerSection: (s) => faqSectionsRef.current.push(s),
-                  searchQuery: faqQuery,
-                  setSearchQuery: setFaqQuery,
-                  matchCount: faqMatchCount,
-                  setMatchCount: setFaqMatchCount,
-                  searchInputRef: faqSearchInputRef,
-                }}
-              >
+              <FAQPageContext.Provider value={faqContextValue}>
                 {faqSections && <FAQSearch />}
                 <div className={clsx({ [styles.faqContent]: faqSections })}>
                   <article

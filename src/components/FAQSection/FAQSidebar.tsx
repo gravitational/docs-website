@@ -29,9 +29,11 @@ const useActiveFAQSection = (
     // When the user manually clicks a section, consider it active regardless of its position
     headingPositionMap.current.set(id, "active");
 
-    // Set all other sections as "below"
-    ids.forEach((otherId) => {
-      if (otherId !== id) {
+    const activeIndex = ids.indexOf(id);
+    ids.forEach((otherId, index) => {
+      if (index < activeIndex) {
+        headingPositionMap.current.set(otherId, "above");
+      } else if (index > activeIndex) {
         headingPositionMap.current.set(otherId, "below");
       }
     });
