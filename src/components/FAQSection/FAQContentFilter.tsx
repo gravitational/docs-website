@@ -2,6 +2,7 @@ import { type ReactNode, useEffect, useRef } from "react";
 import { useFAQTemplate } from "./FAQPageContext";
 import styles from "./FAQContentFilter.module.css";
 
+// Collect the content of a Q&A group, defined as a heading (h3 or h4) and all content until the next heading of the same or higher level.
 const collectQAGroup = (
   heading: HTMLHeadingElement,
   groupEndingTags: string[] = [], // Optional additional tags that should close a group
@@ -19,8 +20,8 @@ const collectQAGroup = (
   return group;
 };
 
-// Get the h4 sub-groups of an h3 Q&A group. Each h4 sub-group is defined as an h4 heading and all content until the next heading of the same or higher level.
-// This function is used to determine the h4 sub-groups of an h3 Q&A group, which are the units that get independently filtered and highlighted based on the search query.
+// Get the sub-headings of a heading until the next heading of the same or higher level.
+// E.g. for an h3 heading, we get the following h4 headings until the next h3 or h2.
 const getSubHeadings = (
   parent: HTMLHeadingElement,
   target: "H3" | "H4",
