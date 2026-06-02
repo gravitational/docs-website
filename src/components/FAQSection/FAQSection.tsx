@@ -5,7 +5,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
-import { useFAQTemplate } from "./FAQSectionsContext";
+import { useFAQTemplate } from "./FAQPageContext";
 
 interface FAQSectionProps {
   icon: IconName;

@@ -1,7 +1,7 @@
 import Icon from "@site/src/components/Icon";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import { useFAQTemplate, type FAQSection } from "./FAQSectionsContext";
+import { useFAQTemplate, type FAQSection } from "./FAQPageContext";
 import styles from "./FAQSidebar.module.css";
 
 interface FAQSidebarProps {

@@ -1,5 +1,5 @@
 import { type ReactNode, useEffect, useRef } from "react";
-import { useFAQTemplate } from "./FAQSectionsContext";
+import { useFAQTemplate } from "./FAQPageContext";
 import styles from "./FAQContentFilter.module.css";
 
 // A Q&A group is defined as a heading (h3 or h4) and all content until the next heading of the same or higher level

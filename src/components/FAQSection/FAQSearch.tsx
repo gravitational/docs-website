@@ -1,6 +1,6 @@
 import React from "react";
 import cn from "clsx";
-import { useFAQTemplate } from "./FAQSectionsContext";
+import { useFAQTemplate } from "./FAQPageContext";
 import styles from "./FAQSearch.module.css";
 import Icon from "../Icon";
 import { useWindowSize } from "@docusaurus/theme-common";

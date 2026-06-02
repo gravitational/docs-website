@@ -16,9 +16,9 @@ import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 import { PositionProvider } from "/src/components/PositionProvider";
 import ExclusivityBanner from "@site/src/components/ExclusivityBanner";
 import ExclusivityContext from "@site/src/components/ExclusivityBanner/context";
-import FAQSectionsContext, {
+import FAQPageContext, {
   type FAQSection,
-} from "@site/src/components/FAQSection/FAQSectionsContext";
+} from "@site/src/components/FAQSection/FAQPageContext";
 import {
   FAQSidebar,
   FAQSearch,
@@ -126,7 +126,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
                 [styles.faqLayout]: faqSections,
               })}
             >
-              <FAQSectionsContext.Provider
+              <FAQPageContext.Provider
                 value={{
                   registerSection: (s) => faqSectionsRef.current.push(s),
                   searchQuery: faqQuery,
@@ -193,7 +193,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
                     <FAQSidebar sections={faqSectionsRef.current} />
                   </div>
                 )}
-              </FAQSectionsContext.Provider>
+              </FAQPageContext.Provider>
             </div>
           </ThumbsFeedbackContext.Provider>
         </div>
