@@ -28,7 +28,8 @@ const FAQSection: React.FC<FAQSectionProps> = ({ icon, children }) => {
   const h2 = Children.only(children);
   if (
     !isValidElement(h2) ||
-    (h2.type as JSXElementConstructor<any>)?.name !== "h2"
+    // Consider both lowercase 'h2' as well as custom React components named 'h2'
+    (h2.type !== "h2" && (h2.type as JSXElementConstructor<any>)?.name !== "h2")
   ) {
     throw new Error("FAQSection child must be a single h2 element");
   }

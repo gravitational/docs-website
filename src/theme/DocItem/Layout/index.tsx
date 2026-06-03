@@ -195,7 +195,7 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
                     )}
                     <DocItemFooter />
                   </article>
-                  <DocItemPaginator />
+                  {!fullWidth && <DocItemPaginator />}
                 </div>
                 {faqSections && (
                   <div className={styles.faqSidebar}>
