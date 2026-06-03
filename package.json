@@ -53,7 +53,7 @@
     "@docusaurus/theme-classic": "^3.10.1",
     "@docusaurus/theme-mermaid": "^3.10.1",
     "@docusaurus/tsconfig": "^3.10.1",
-    "@inkeep/cxkit-react": "^0.5.117",
+    "@inkeep/cxkit-react": "^0.5.119",
     "@iconify-json/carbon": "^1.2.22",
     "@iconify-json/logos": "^1.2.11",
     "@iconify/tools": "^5.0.12",
