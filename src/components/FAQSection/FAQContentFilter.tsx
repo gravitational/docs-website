@@ -1,3 +1,14 @@
+// FAQContentFilter is responsible for handling the filtering and highlighting
+// of FAQ content based on the user's search query. It operates directly on
+// the rendered DOM elements of the FAQ content, which are authored in the source
+// MDX files, compiled by Docusaurus and passed to the component as `children`.
+
+// To avoid the need to re-author the content as structured data or dedicated components,
+// FAQContentFilter uses imperative DOM manipulation to show/hide elements instead of the
+// React declarative rendering approach. It is a pragmatic choice to achieve the expected
+// filtering and highlighting behavior without adding excessive constraints on how the FAQ content
+// should be authored.
+
 import { type ReactNode, useEffect, useRef } from "react";
 import { useFAQTemplate } from "./FAQPageContext";
 import styles from "./FAQContentFilter.module.css";

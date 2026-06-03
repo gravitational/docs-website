@@ -1,3 +1,8 @@
+// The FAQSection component defines a high-level topic on a FAQ template page,
+// for example "Zero Trust Access". Each section must have a h2 heading as its
+// child, which is used to extract the section title, icon and id for usage in
+// the the FAQSidebar navigation.
+
 import type { IconName } from "@site/src/components/Icon/types";
 import {
   Children,
