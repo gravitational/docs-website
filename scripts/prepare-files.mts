@@ -1,7 +1,8 @@
-import { importDirectorySync } from '@iconify/tools';
+import { importDirectorySync } from "@iconify/tools";
 import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync } from "fs";
 import { join, resolve, dirname } from "path";
 import { glob } from "glob";
+import { spawn } from "child_process";
 import {
   getCurrentVersion,
   getLatestVersion,
@@ -73,6 +74,40 @@ versions.forEach((version) => {
 });
 
 writeVersions();
+
+const buildResourceExampleConvert = (version: string): Promise<void> => {
+  const convertResourceDir = join(
+    "content",
+    version,
+    "build.assets",
+    "tooling",
+    "cmd",
+    "convert-resource",
+  );
+  return new Promise((resolve, reject) => {
+    if (!existsSync(convertResourceDir)) {
+      console.warn(
+        `convert-resource project not found at ${convertResourceDir}. Skipping build.`,
+      );
+       return resolve();
+    }
+    const proc = spawn("go", ["build", "."], {
+      cwd: convertResourceDir,
+      stdio: "inherit",
+    });
+    proc.on("close", (code) =>
+      code === 0
+        ? resolve()
+        : reject(
+            new Error(
+              `convert-resource build failed for ${version} (exit ${code})`,
+            ),
+          ),
+    );
+  });
+};
+
+await Promise.all(versions.map(buildResourceExampleConvert));
 
 // Make sure the upcoming releases page is the same on all 3 branches.
 const versionsToOverride = getVersionNames().filter(
