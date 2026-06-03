@@ -225,6 +225,12 @@ const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
           el.style.display = h4Matches ? "" : "none";
         });
         if (h4Matches) {
+          // Check for an intro text match (there is text after the h3 heading and before the first h4).
+          const intro = introGroup
+            .map((el) => el.textContent ?? "")
+            .join(" ")
+            .toLowerCase();
+          count += countMatches(intro, lowerSearchQuery);
           introGroup.forEach((el) => applyHighlights(el, searchQuery));
         }
       }
