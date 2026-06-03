@@ -1,8 +1,9 @@
 import { importDirectorySync } from '@iconify/tools';
 import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync, readFileSync } from "fs";
-import { join, resolve, dirname } from "path";
+import { isAbsolute, join, resolve, dirname } from "path";
 import { glob } from "glob";
 import { parseSkillMarkdown } from "../server/parse-skill-md";
+import { spawn } from "child_process";
 import {
   getCurrentVersion,
   getLatestVersion,
@@ -75,6 +76,53 @@ versions.forEach((version) => {
 });
 
 writeVersions();
+
+const buildResourceExampleConvert = (version: string): Promise<void> => {
+  const convertResourceDir = join(
+    "content",
+    version,
+    "build.assets",
+    "tooling",
+    "cmd",
+    "convert-resource",
+  );
+  return new Promise((resolve, reject) => {
+    if (!existsSync(convertResourceDir)) {
+      console.warn(
+        `convert-resource project not found at ${convertResourceDir}. Skipping build.`,
+      );
+      return resolve();
+    }
+
+    // If we are on AWS Amplify, we may be caching the Go installation directory
+    // and GOPATH value. The Amplify build configuration requires placing
+    // these in a directory local to the project with a relative path.
+    // Assemble absolute paths for these values.
+    const goBinary = process.env.GO_INSTALL_DIR
+      ? join(process.cwd(), process.env.GO_INSTALL_DIR, "go", "bin", "go")
+      : "go";
+    const goPath =
+      process.env.GOPATH && isAbsolute(process.env.GOPATH)
+        ? process.env.GOPATH
+        : join(process.cwd(), process.env.GOPATH);
+    const proc = spawn(goBinary, ["build", "."], {
+      cwd: convertResourceDir,
+      stdio: "inherit",
+      env: { ...process.env, GOPATH: goPath },
+    });
+    proc.on("close", (code) =>
+      code === 0
+        ? resolve()
+        : reject(
+            new Error(
+              `convert-resource build failed for ${version} (exit ${code})`,
+            ),
+          ),
+    );
+  });
+};
+
+await Promise.all(versions.map(buildResourceExampleConvert));
 
 // Make sure the upcoming releases page is the same on all 3 branches.
 const versionsToOverride = getVersionNames().filter(

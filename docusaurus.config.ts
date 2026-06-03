@@ -40,6 +40,7 @@ import { llmsTxtPluginOptions } from "./server/llms";
 import { fetchVideoMeta } from "./server/youtube-meta";
 import { getFromSecretOrEnv } from "./utils/general";
 import addTokenCounts from "./server/llms/add-token-counts";
+import remarkConvertResource from "./server/remark-convert-resource";
 
 const latestVersion = getLatestVersion();
 
@@ -402,6 +403,14 @@ const config: Config = {
             },
           ],
           remarkNoH1,
+          [
+            remarkConvertResource,
+            {
+              binaryPath:
+                "build.assets/tooling/cmd/convert-resource/convert-resource",
+              rootDir: (vfile: VFile) => getRootDir(vfile),
+            },
+          ],
           [
             remarkCodeSnippet,
             {
