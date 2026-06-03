@@ -141,6 +141,7 @@ const FAQSidebar: React.FC<FAQSidebarProps> = ({ sections }) => {
               <li key={section.id}>
                 <a
                   href={`#${section.id}`}
+                  target="_self"
                   onClick={() => {
                     setActiveId(section.id);
                     setIsOpen(false);
