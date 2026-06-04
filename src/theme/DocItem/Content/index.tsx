@@ -3,7 +3,6 @@ import { ThemeClassNames } from "@docusaurus/theme-common";
 import { useLocation } from "@docusaurus/router";
 import ExclusivityContext from "@site/src/components/ExclusivityBanner/context";
 import PageActions from "@site/src/components/PageActions";
-import ThumbsFeedback from "@site/src/components/ThumbsFeedback";
 import VideoBar, { VideoBarProps } from "@site/src/components/VideoBar";
 import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 import type { Props } from "@theme/DocItem/Content";
@@ -63,7 +62,7 @@ export function DocHeader({ className }: { className?: string }): JSX.Element {
 
 export default function DocItemContent({ children }: Props): ReactNode {
   const syntheticTitle = useSyntheticTitle();
-  const { hideTitleSection, faqSections, isLandingPage } = useDocTemplate();
+  const { faqSections, isLandingPage } = useDocTemplate();
   const exclusive = useContext(ExclusivityContext);
   
   return (
@@ -75,12 +74,6 @@ export default function DocItemContent({ children }: Props): ReactNode {
               Enterprise.
             </p>
           )}{children}</MDXContent>
-        {syntheticTitle && !hideTitleSection && (
-          <ThumbsFeedback
-            feedbackLabel="Was this page helpful?"
-            pagePosition="bottom"
-          />
-        )}
     </div>
   );
 }

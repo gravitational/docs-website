@@ -29,6 +29,7 @@ import { DocHeader, useSyntheticTitle } from "../Content";
 import ThumbsFeedbackContext from "@site/src/components/ThumbsFeedback/context";
 import { FeedbackType } from "@site/src/components/ThumbsFeedback/types";
 import Icon from "@site/src/components/Icon";
+import ThumbsFeedback from "@site/src/components/ThumbsFeedback/ThumbsFeedback";
 
 interface ExtendedFrontMatter {
   remove_table_of_contents?: boolean;
@@ -192,6 +193,12 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
                       <DocItemContent>
                         <PositionProvider>{children}</PositionProvider>
                       </DocItemContent>
+                    )}
+                    {syntheticTitle && !hideTitleSection && (
+                      <ThumbsFeedback
+                        feedbackLabel="Was this page helpful?"
+                        pagePosition="bottom"
+                      />
                     )}
                     <DocItemFooter />
                   </article>

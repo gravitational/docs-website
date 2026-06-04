@@ -218,20 +218,32 @@ const FAQContentFilter: React.FC<FAQContentFilterProps> = ({ children }) => {
           }
         });
 
-        // Show the h3 heading and its intro (content before the first h4) only
-        // if at least one h4 group matched.
+        // The intro is the h3 heading and any content before the first h4.
+        // Show the intro if a sub-group has matches or if the intro itself contains matches.
         const introGroup = collectQAGroup(h3, ["H4"]);
+        const intro = introGroup
+          .map((el) => el.textContent ?? "")
+          .join(" ")
+          .toLowerCase();
+        const introHasMatches = intro.includes(lowerSearchQuery);
+
         introGroup.forEach((el) => {
-          el.style.display = h4Matches ? "" : "none";
+          el.style.display = h4Matches || introHasMatches ? "" : "none";
         });
-        if (h4Matches) {
-          // Check for an intro text match (there is text after the h3 heading and before the first h4).
-          const intro = introGroup
-            .map((el) => el.textContent ?? "")
-            .join(" ")
-            .toLowerCase();
+        if (h4Matches || introHasMatches) {
           count += countMatches(intro, lowerSearchQuery);
           introGroup.forEach((el) => applyHighlights(el, searchQuery));
+        }
+
+        // In the case that the intro has matches but none of the sub-groups do,
+        // we still want to show the sub-groups since they are relevant to the
+        // search query.
+        if (introHasMatches && !h4Matches) {
+          h4s.forEach((h4) => {
+            collectQAGroup(h4, ["H4"]).forEach((el) => {
+              el.style.display = "";
+            });
+          });
         }
       }
     });
