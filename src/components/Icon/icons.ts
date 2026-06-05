@@ -96,6 +96,7 @@ export { default as postgresql } from "./svg/postgresql.svg";
 export { default as presentation } from "./svg/presentation.svg";
 export { default as protocol } from "./svg/protocol.svg";
 export { default as question } from "./svg/question.svg";
+export { default as questionCircle } from "./svg/question2.svg";
 export { default as quickstart } from "./svg/quickstart.svg";
 export { default as redis } from "./svg/redis.svg";
 export { default as server } from "./svg/server-access.svg";
@@ -122,6 +123,11 @@ export { default as chat } from "./svg/chat-circle.svg";
 export { default as lightbulb } from "./svg/lightbulb.svg";
 export { default as githubLogo } from "./svg/github-logo.svg";
 export { default as markdown } from "./svg/markdown.svg";
+export { default as keyhole } from "./svg/keyhole.svg";
+export { default as robot } from "./svg/robot.svg";
+export { default as hardDrives } from "./svg/hard-drives.svg";
+export { default as magnifyEllipsis } from "./svg/magnify-ellipsis.svg";
+export { default as x } from "./svg/x.svg";
 
 // Teleport svgs
 export { default as agent } from "./teleport-svg/agent.svg";
@@ -140,3 +146,4 @@ export { default as teleportEnterpriseCloud } from "./teleport-svg/teleport-ente
 export { default as teleportEnterpriseSelfHosted } from "./teleport-svg/teleport-enterprise-self-hosted.svg";
 export { default as windowsDesktops } from "./teleport-svg/windows-desktops.svg";
 export { default as gearStack } from "./teleport-svg/teleport-gear-stack.svg";
+export { default as fingerprint } from "./teleport-svg/identity-governance.svg";

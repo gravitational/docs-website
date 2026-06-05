@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import { useWindowSize } from "@docusaurus/theme-common";
 import { useDoc } from "@docusaurus/plugin-content-docs/client";
@@ -16,7 +16,20 @@ import { useDocTemplate } from "@site/src/hooks/useDocTemplate";
 import { PositionProvider } from "/src/components/PositionProvider";
 import ExclusivityBanner from "@site/src/components/ExclusivityBanner";
 import ExclusivityContext from "@site/src/components/ExclusivityBanner/context";
+import FAQPageContext, {
+  type FAQSection,
+} from "@site/src/components/FAQSection/FAQPageContext";
+import {
+  FAQSidebar,
+  FAQSearch,
+  FAQContentFilter,
+} from "@site/src/components/FAQSection";
 import styles from "./styles.module.css";
+import { DocHeader, useSyntheticTitle } from "../Content";
+import ThumbsFeedbackContext from "@site/src/components/ThumbsFeedback/context";
+import { FeedbackType } from "@site/src/components/ThumbsFeedback/types";
+import Icon from "@site/src/components/Icon";
+import ThumbsFeedback from "@site/src/components/ThumbsFeedback/ThumbsFeedback";
 
 interface ExtendedFrontMatter {
   remove_table_of_contents?: boolean;
@@ -60,14 +73,45 @@ function usePageExclusivityBanner() {
 }
 
 export default function DocItemLayout({ children }: Props): JSX.Element {
-  const { hideTitleSection, removeTOCSidebar, fullWidth, isLandingPage } =
-    useDocTemplate();
+  const {
+    hideTitleSection,
+    removeTOCSidebar,
+    fullWidth,
+    isLandingPage,
+    faqSections,
+  } = useDocTemplate();
   const docTOC = useDocTOC(removeTOCSidebar);
-
+  const syntheticTitle = useSyntheticTitle();
   const { exclusiveFeature } = usePageExclusivityBanner();
+  const [feedback, setFeedback] = useState<FeedbackType | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const {
     metadata: { unlisted },
   } = useDoc();
+
+  const faqSectionsRef = useRef<FAQSection[]>([]);
+  const faqSearchInputRef = useRef<HTMLInputElement>(null);
+  const [faqQuery, setFaqQuery] = useState("");
+  const [faqMatchCount, setFaqMatchCount] = useState(0);
+
+  // The FAQ context value is memoized to avoid unnecessary re-renders.
+  // FAQSections are registered during render rather than in an effect, so for SSR the sidebar is ready in the same pass.
+  // The items are deduplicated by id to ensure the list is stable across renders.
+  const faqContextValue = useMemo(
+    () => ({
+      registerSection: (section: FAQSection) => {
+        const registeredArray = faqSectionsRef.current;
+        if (!registeredArray.some((exists) => exists.id === section.id))
+          registeredArray.push(section);
+      },
+      searchQuery: faqQuery,
+      setSearchQuery: setFaqQuery,
+      matchCount: faqMatchCount,
+      setMatchCount: setFaqMatchCount,
+      searchInputRef: faqSearchInputRef,
+    }),
+    [faqQuery, faqMatchCount],
+  );
 
   return (
     <ExclusivityContext.Provider value={{ exclusiveFeature }}>
@@ -86,22 +130,88 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
           )}
           {unlisted && <Unlisted />}
           <DocVersionBanner />
-          <div className={styles.docItemContainer}>
-            <article className={styles.alternateBreadcrumbs}>
-              {!hideTitleSection && <DocBreadcrumbs />}
-              {!fullWidth && (
-                <div className={styles.sidebar}>
-                  <DocVersionBadge />
+          <ThumbsFeedbackContext.Provider
+            value={{ feedback, isSubmitted, setFeedback, setIsSubmitted }}
+          >
+            {/* Alternative position for breadcrumbs and DocHeader on a FAQ template page */}
+            {syntheticTitle && faqSections && (
+              <div className={styles.alternateBreadcrumbs}>
+                {!hideTitleSection && faqSections && <DocBreadcrumbs />}
+                <DocHeader className={styles.faqHeader} />
+              </div>
+            )}
+            <div
+              className={clsx(styles.docItemContainer, {
+                [styles.faqLayout]: faqSections,
+              })}
+            >
+              <FAQPageContext.Provider value={faqContextValue}>
+                {faqSections && <FAQSearch />}
+                <div className={clsx({ [styles.faqContent]: faqSections })}>
+                  <article
+                    className={clsx({
+                      [styles.alternateBreadcrumbs]: !faqSections,
+                    })}
+                  >
+                    {!hideTitleSection && !faqSections && <DocBreadcrumbs />}
+                    <div className={styles.sidebar}>
+                      <DocVersionBadge />
+                    </div>
+                    {docTOC.mobile}
+                    {faqSections ? (
+                      <FAQContentFilter>
+                        <DocItemContent>
+                          {faqSections && faqQuery && (
+                            <div className={styles.faqResultsHeader}>
+                              <p className={styles.faqResultsTitle}>
+                                Search results for &ldquo;{faqQuery}&rdquo;
+                              </p>
+                              {faqMatchCount > 0 ? (
+                                <p className={styles.faqResultsCount}>
+                                  {faqMatchCount}{" "}
+                                  {faqMatchCount === 1 ? "result" : "results"}{" "}
+                                  found
+                                </p>
+                              ) : (
+                                <div className={styles.faqResultsEmpty}>
+                                  <div className={styles.faqResultsIcon}>
+                                    <Icon name="magnifyEllipsis" size="xl" />
+                                  </div>
+                                  <p>No results found</p>
+                                  <p>
+                                    Update your query, or browse a category that
+                                    might cover this topic
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          <PositionProvider>{children}</PositionProvider>
+                        </DocItemContent>
+                      </FAQContentFilter>
+                    ) : (
+                      <DocItemContent>
+                        <PositionProvider>{children}</PositionProvider>
+                      </DocItemContent>
+                    )}
+                    {syntheticTitle && !hideTitleSection && (
+                      <ThumbsFeedback
+                        feedbackLabel="Was this page helpful?"
+                        pagePosition="bottom"
+                      />
+                    )}
+                    <DocItemFooter />
+                  </article>
+                  {!fullWidth && <DocItemPaginator />}
                 </div>
-              )}
-              {docTOC.mobile}
-              <DocItemContent>
-                <PositionProvider>{children}</PositionProvider>
-              </DocItemContent>
-              <DocItemFooter />
-            </article>
-            {!fullWidth && <DocItemPaginator />}
-          </div>
+                {faqSections && (
+                  <div className={styles.faqSidebar}>
+                    <FAQSidebar sections={faqSectionsRef.current} />
+                  </div>
+                )}
+              </FAQPageContext.Provider>
+            </div>
+          </ThumbsFeedbackContext.Provider>
         </div>
         {docTOC.canRender && (
           <div className={clsx("col", styles.docItemColTOC)}>
