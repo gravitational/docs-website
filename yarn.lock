@@ -2672,10 +2672,10 @@
   dependencies:
     "@hapi/hoek" "^11.0.2"
 
-"@iconify-json/carbon@^1.2.22":
-  version "1.2.22"
-  resolved "https://registry.yarnpkg.com/@iconify-json/carbon/-/carbon-1.2.22.tgz#fb1ada134adcae86f67a18259fee7254c5df4074"
-  integrity sha512-x/L1tVgBp6ailSU0b8QDlxM3MLLbrmzefoqOt1gpBbywTF3xNSKDcL/PrOoLGZHwoFsNXujg2xrCvYsAWpykgA==
+"@iconify-json/carbon@^1.2.23":
+  version "1.2.23"
+  resolved "https://registry.yarnpkg.com/@iconify-json/carbon/-/carbon-1.2.23.tgz#1aed37d08c8ebaecc0676f88e14d88f5ca33aa79"
+  integrity sha512-7apXetbRmEiWDXIQyikFJZyq7pCVBKHYRzmeLdtT7wWoHYdWHwnFcBAzpuLoSh+ZEAfXZapSWEe8iuS6dUqf+Q==
   dependencies:
     "@iconify/types" "*"
 
@@ -5713,10 +5713,10 @@
     "@types/history" "^4.7.11"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^19.2.16":
-  version "19.2.16"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-19.2.16.tgz#9868b153fd9e34e0117afcd5d7e372b8179337e1"
-  integrity sha512-esJiCAnl0kfpNdE69f3So4WJUXy95dLZydX0KwK46riIHDzHM7O9Vtf9xCHW0PXIqvgqNrswl522kA/5yx+F4w==
+"@types/react@*", "@types/react@^19.2.17":
+  version "19.2.17"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-19.2.17.tgz#dccac365baa0f1734ec270ff4b51c89465e8dc7f"
+  integrity sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==
   dependencies:
     csstype "^3.2.2"
 
