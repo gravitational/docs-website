@@ -117,7 +117,7 @@
     "remark-preset-lint-markdown-style-guide": "^5.1.2",
     "remark-rehype": "^11.1.2",
     "remark-validate-links": "^11.0.2",
-    "storybook": "^8.6.18",
+    "storybook": "^10.4.2",
     "to-vfile": "^8.0.0",
     "ts-jest": "^29.4.11",
     "ts-loader": "^9.6.0",
