@@ -23,10 +23,8 @@ function DocSidebarDesktop({ path, sidebar, onCollapse, isHidden }: Props) {
       className={clsx(
         styles.sidebar,
         hideOnScroll && styles.sidebarWithHideableNavbar,
-        isHidden && styles.sidebarHidden,
+        isHidden && styles.sidebarHidden
       )}
-      role="navigation"
-      aria-label="Docs sidebar"
     >
       <div className={styles.controlsWrapper}>
         <div className={styles.versions}>
