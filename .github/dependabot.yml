@@ -43,6 +43,10 @@ updates:
       inkeep:
         patterns:
           - "@inkeep/*"
+      storybook:
+        patterns:
+          - "@storybook/*"
+          - "storybook"
       postcss:
         patterns:
           - "*postcss*"
