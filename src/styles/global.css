@@ -201,3 +201,13 @@ svg g.architecture-edges {
     word-break: normal !important;
   }
 }
+
+/* Adjust the default back to top button style */
+.theme-back-to-top-button::after {
+  mask: unset !important;
+  background-color: unset !important;
+  background-image: url("/src/components/Icon/svg/caret-up.svg");
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: center;
+}
