@@ -1,6 +1,3 @@
-import { suite } from "uvu";
-import * as assert from "uvu/assert";
-
 import { VFile, VFileOptions } from "vfile";
 import { readFileSync } from "fs";
 import { resolve } from "path";
@@ -213,35 +210,15 @@ describe("server/remark-includes", () => {
 
     cases.forEach((c) => {
       if (c.shouldThrow == true) {
-        let val: string | undefined;
-        try {
-          val = resolveParamValue(c.input);
-          assert.unreachable(
-            `${c.description}: should have thrown but returned value ${val}`,
-          );
-        } catch (err) {
-          assert.not.instance(
-            err,
-            assert.Assertion,
-            `${c.description}: should have thrown, but got: ${val}`,
-          );
-        }
+        expect(() => resolveParamValue(c.input)).toThrow();
         return;
       }
+      expect(() => resolveParamValue(c.input)).not.toThrow();
       if (!c.expected) {
         return;
       }
 
-      let val: string | undefined;
-      try {
-        val = resolveParamValue(c.input);
-      } catch (err) {
-        assert.instance(
-          err,
-          assert.Assertion,
-          `${c.description}: should not have thrown, but got error: ${err}`,
-        );
-      }
+      const val = resolveParamValue(c.input);
       expect(val).toEqual(c.expected);
     });
   });
@@ -337,38 +314,13 @@ describe("server/remark-includes", () => {
 
     test.each(cases)("$description", (c) => {
       if (c.shouldThrow) {
-        let val: ParameterAssignments | undefined;
-        try {
-          val = parsePartialParams(c.input);
-          assert.unreachable(
-            `${
-              c.description
-            }: should have thrown but returned value ${JSON.stringify(val)}`,
-          );
-        } catch (err) {
-          assert.not.instance(
-            err,
-            assert.Assertion,
-            `${c.description}: should have thrown, but got: ${JSON.stringify(
-              val,
-            )}`,
-          );
-        }
+        expect(() => parsePartialParams(c.input)).toThrow();
         return;
       }
       if (!c.expected) {
         return;
       }
-      let val: ParameterAssignments | undefined;
-      try {
-        val = parsePartialParams(c.input);
-      } catch (err) {
-        assert.instance(
-          err,
-          assert.Assertion,
-          `${c.description}: should not have thrown, but got error: ${err}`,
-        );
-      }
+      const val = parsePartialParams(c.input);
       expect(val).toEqual(c.expected);
     });
   });
@@ -450,47 +402,14 @@ This is a partial.
 
     test.each(cases)("$description", (c) => {
       if (c.shouldThrow == true) {
-        let val: ParameterAssignments | undefined;
-        try {
-          val = parseParamDefaults(c.input);
-          assert.unreachable(
-            `${
-              c.description
-            }: should have thrown but returned value ${JSON.stringify(val)}`,
-          );
-        } catch (err) {
-          assert.not.instance(
-            err,
-            assert.Assertion,
-            `${c.description}: should have thrown, but got: ${JSON.stringify(
-              val,
-            )}`,
-          );
-        }
+        expect(() => parseParamDefaults(c.input)).toThrow();
         return;
       }
       if (!c.expected) {
         return;
       }
-      let val: ParameterAssignments | undefined;
-      try {
-        val = parseParamDefaults(c.input);
-      } catch (err) {
-        assert.instance(
-          err,
-          assert.Assertion,
-          `${c.description}: should not have thrown, but got error: ${err}`,
-        );
-      }
-      assert.equal(
-        c.expected,
-        val,
-        new Error(
-          `${c.description}: expected parsed partial params:\n${JSON.stringify(
-            c.expected,
-          )}\n...but got:\n${JSON.stringify(val)}`,
-        ),
-      );
+      const val = parseParamDefaults(c.input);
+      expect(val).toEqual(c.expected);
     });
   });
 
@@ -614,17 +533,7 @@ Here is an image showing a successful installation:
         path: testCase.path,
       }).toString();
 
-      assert.equal(
-        actual,
-        testCase.expected,
-        new Error(
-          `${testCase.description}: expected the output:\n` +
-            testCase.expected +
-            "\n\n" +
-            "but got:\n" +
-            actual,
-        ),
-      );
+      expect(actual).toEqual(testCase.expected);
     });
   });
 
