@@ -1,4 +1,4 @@
-import { unified, Transformer } from "unified";
+import { Transformer } from "unified";
 import type { VFile } from "vfile";
 import rehypeHighlight, {
   Options as RehypeHighlightOptions,
@@ -7,9 +7,10 @@ import { common } from "lowlight";
 import type { Node as UnistNode, Parent as UnistParent } from "unist";
 import { visit, CONTINUE, SKIP } from "unist-util-visit";
 import { v4 as uuid } from "uuid";
-import remarkParse from "remark-parse";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import { mdxjs } from "micromark-extension-mdxjs";
+import { mdxFromMarkdown } from "mdast-util-mdx";
 import type { Text, Element, Node, Parent } from "hast";
-import remarkMDX from "remark-mdx";
 import type { MdxJsxFlowElement } from "mdast-util-mdx-jsx";
 
 const makePlaceholder = (): string => {
@@ -73,15 +74,12 @@ export const rehypeHLJS = (
         // Since the Var element was originally text, parse it so we can recover
         // its properties. The result should be a small HTML AST with a root
         // node and one child, the Var node.
-        const varParent = unified()
-          // Converting to "any" since, for some reason, the type of
-          // remarkParse doesn't match the signature of "use" despite this
-          // being a common use case in the unified documentation.
-          .use(remarkParse as any)
-          .use(remarkMDX as any)
-          // The parsed element begins with a root element, so get its first
-          // child, which is our Var.
-          .parse(match);
+        // The parsed element begins with a root element, so get its first
+        // child, which is our Var.
+        const varParent = fromMarkdown(match, {
+          extensions: [mdxjs()],
+          mdastExtensions: [mdxFromMarkdown()],
+        });
 
         const varElement = (varParent as Parent)
           .children[0] as MdxJsxFlowElement;
