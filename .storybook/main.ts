@@ -39,26 +39,11 @@ const config: StorybookConfig = {
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@docusaurus/router": path.resolve(
-        __dirname,
-        "./mocks/docusaurus-router.ts",
-      ),
-      "@docusaurus/Link": path.resolve(
-        __dirname,
-        "./mocks/docusaurus-link.tsx",
-      ),
-      "@docusaurus/BrowserOnly": path.resolve(
-        __dirname,
-        "./mocks/docusaurus-browser-only.tsx",
-      ),
-      "@docusaurus/theme-common": path.resolve(
-        __dirname,
-        "./mocks/docusaurus-theme-common.ts",
-      ),
-      "@docusaurus/useDocusaurusContext": path.resolve(
-        __dirname,
-        "./mocks/docusaurus-use-docusaurus-context.ts",
-      ),
+      "@docusaurus/router": path.resolve(__dirname, "./mocks/docusaurus-router.ts"),
+      "@docusaurus/Link": path.resolve(__dirname, "./mocks/docusaurus-link.tsx"),
+      "@docusaurus/BrowserOnly": path.resolve(__dirname, "./mocks/docusaurus-browser-only.tsx"),
+      "@docusaurus/theme-common": path.resolve(__dirname, "./mocks/docusaurus-theme-common.ts"),
+      "@docusaurus/useDocusaurusContext": path.resolve(__dirname, "./mocks/docusaurus-use-docusaurus-context.ts"),
       "@site": path.resolve(__dirname, ".."),
     };
 
