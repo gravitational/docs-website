@@ -10,7 +10,6 @@ const config: StorybookConfig = {
   framework: "@storybook/react-webpack5",
   stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
-    "@storybook/addon-docs",
     {
       name: "@storybook/addon-styling-webpack",
       options: {

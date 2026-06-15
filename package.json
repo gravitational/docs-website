@@ -84,7 +84,6 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.7.0",
     "@docusaurus/types": "^3.7.0",
-    "@storybook/addon-docs": "^10.4.4",
     "@storybook/addon-styling-webpack": "^3.0.2",
     "@storybook/addon-webpack5-compiler-swc": "^4.0.3",
     "@storybook/react-webpack5": "^10.4.4",
