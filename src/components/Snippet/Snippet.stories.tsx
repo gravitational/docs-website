@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/test";
-import { expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+import { userEvent, within } from "storybook/test";
+import { expect } from "storybook/test";
 
 import { Var } from "../Variables/Var";
 import { default as Snippet } from "./Snippet";
@@ -116,7 +116,7 @@ export const CopyCodeLineVar: Story = {
       );
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
-      	event: "code_copy_button",
+        event: "code_copy_button",
         label: "code",
         scope: "snippet",
         code_snippet_index_on_page: 0,
@@ -174,7 +174,7 @@ export const CopyCommandLineStats: Story = {
       await userEvent.click(canvas.getAllByTestId("copy-button")[2]);
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
-      	event: "code_copy_button",
+        event: "code_copy_button",
         label: "code",
         scope: "line",
         code_snippet_index_on_page: 1,

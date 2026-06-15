@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/test";
-import { expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+import { userEvent, within } from "storybook/test";
+import { expect } from "storybook/test";
 import { default as Pre } from "./Pre";
 import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
 import { Var } from "/src/components/Variables/Var";
@@ -108,7 +108,7 @@ key3:
       );
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
-      	event: "code_copy_button",
+        event: "code_copy_button",
         label: "yaml",
         // Snippet-level copy button, rather than the copy button for a code
         // line
@@ -187,7 +187,7 @@ key6:
       );
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
-      	event: "code_copy_button",
+        event: "code_copy_button",
         label: "yaml",
         // Snippet-level copy button, rather than the copy button for a code
         // line
@@ -227,7 +227,7 @@ export const PreStatsWithTwoCopyButtonClicks: Story = {
       await userEvent.click(canvas.getAllByTestId("copy-button-all")[0]);
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
-      	event: "code_copy_button",
+        event: "code_copy_button",
         label: "text",
         scope: "snippet",
         code_snippet_index_on_page: 0,
@@ -240,7 +240,7 @@ export const PreStatsWithTwoCopyButtonClicks: Story = {
       await userEvent.click(canvas.getAllByTestId("copy-button-all")[0]);
       expect(window.events).toHaveLength(2);
       expect(window.events[1]).toEqual({
-      	event: "code_copy_button",
+        event: "code_copy_button",
         label: "text",
         scope: "snippet",
         code_snippet_index_on_page: 0,

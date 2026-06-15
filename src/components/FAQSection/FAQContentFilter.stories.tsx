@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within, expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+import { userEvent, within, expect } from "storybook/test";
 import { useRef, useState } from "react";
 import FAQContentFilter from "./FAQContentFilter";
 import FAQPageContext from "./FAQPageContext";

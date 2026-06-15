@@ -1,20 +1,65 @@
+// This file has been automatically migrated to valid ESM format by Storybook.
+import { fileURLToPath } from "node:url";
 import type { StorybookConfig } from "@storybook/react-webpack5";
-import path from "path";
+import path, { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const config: StorybookConfig = {
   framework: "@storybook/react-webpack5",
   stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  addons: ["@storybook/addon-essentials"],
+  addons: [
+    "@storybook/addon-docs",
+    {
+      name: "@storybook/addon-styling-webpack",
+      options: {
+        rules: [
+          // Replaces existing CSS rules to support CSS Modules
+          {
+            test: /\.css$/,
+            use: [
+              "style-loader",
+              {
+                loader: "css-loader",
+                options: {
+                  modules: {
+                    auto: true,
+                    localIdentName: "[name]__[local]--[hash:base64:5]",
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
   webpackFinal: async (config) => {
     // Mock @docusaurus/router and @docusaurus/Link for Storybook
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@docusaurus/router": path.resolve(__dirname, "./mocks/docusaurus-router.ts"),
-      "@docusaurus/Link": path.resolve(__dirname, "./mocks/docusaurus-link.tsx"),
-      "@docusaurus/BrowserOnly": path.resolve(__dirname, "./mocks/docusaurus-browser-only.tsx"),
-      "@docusaurus/theme-common": path.resolve(__dirname, "./mocks/docusaurus-theme-common.ts"),
-      "@docusaurus/useDocusaurusContext": path.resolve(__dirname, "./mocks/docusaurus-use-docusaurus-context.ts"),
+      "@docusaurus/router": path.resolve(
+        __dirname,
+        "./mocks/docusaurus-router.ts",
+      ),
+      "@docusaurus/Link": path.resolve(
+        __dirname,
+        "./mocks/docusaurus-link.tsx",
+      ),
+      "@docusaurus/BrowserOnly": path.resolve(
+        __dirname,
+        "./mocks/docusaurus-browser-only.tsx",
+      ),
+      "@docusaurus/theme-common": path.resolve(
+        __dirname,
+        "./mocks/docusaurus-theme-common.ts",
+      ),
+      "@docusaurus/useDocusaurusContext": path.resolve(
+        __dirname,
+        "./mocks/docusaurus-use-docusaurus-context.ts",
+      ),
       "@site": path.resolve(__dirname, ".."),
     };
 

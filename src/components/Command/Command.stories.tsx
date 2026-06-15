@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { expect } from "@storybook/test";
-import { userEvent, within } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+import { expect } from "storybook/test";
+import { userEvent, within } from "storybook/test";
 import { replaceClipboardWithCopyBuffer } from "/src/utils/clipboard";
 import { collectEvents } from "/src/utils/analytics";
 import Command, { CommandLine } from "./Command";
@@ -32,7 +32,7 @@ export const CopyButton: Story = {
       expect(navigator.clipboard.readText()).toEqual(commandText);
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
-      	event: "code_copy_button",
+        event: "code_copy_button",
         label: "code",
         scope: "line",
       });

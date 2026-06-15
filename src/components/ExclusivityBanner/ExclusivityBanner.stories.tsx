@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/test";
-import { expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+import { userEvent, within } from "storybook/test";
+import { expect } from "storybook/test";
 import ExclusivityBanner from "./ExclusivityBanner";
 import ExclusivityContext from "/src/components/ExclusivityBanner/context";
 import { collectEvents } from "/src/utils/analytics";
@@ -24,7 +24,7 @@ export const WithoutExclusivity: Story = {
 
     await step("Verify exclusivity banner is not shown", async () => {
       expect(
-        canvas.queryByText(/is available only with Teleport Enterprise/)
+        canvas.queryByText(/is available only with Teleport Enterprise/),
       ).not.toBeInTheDocument();
     });
   },
@@ -42,15 +42,15 @@ export const WithExclusivity: Story = {
     await step("Verify exclusivity banner is shown", async () => {
       expect(
         canvas.getByText(
-          "Desktop Access is available only with Teleport Enterprise."
-        )
+          "Desktop Access is available only with Teleport Enterprise.",
+        ),
       ).toBeInTheDocument();
 
       const signupLink = canvas.getByText("Start your free trial.");
       expect(signupLink).toBeInTheDocument();
       expect(signupLink).toHaveAttribute(
         "href",
-        "https://goteleport.com/signup/"
+        "https://goteleport.com/signup/",
       );
     });
   },
