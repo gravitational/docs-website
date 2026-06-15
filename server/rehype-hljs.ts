@@ -6,7 +6,6 @@ import rehypeHighlight, {
 import { common } from "lowlight";
 import type { Node as UnistNode, Parent as UnistParent } from "unist";
 import { visit, CONTINUE, SKIP } from "unist-util-visit";
-import { v4 as uuid } from "uuid";
 import remarkParse from "remark-parse";
 import type { Text, Element, Node, Parent } from "hast";
 import remarkMDX from "remark-mdx";
@@ -16,7 +15,7 @@ const makePlaceholder = (): string => {
   // UUID for uniqueness, but remove hyphens since these are often parsed
   // as operators or other non-identifier tokens. Make sure the placeholder
   // begins with a letter so it gets parsed as an identifier.
-  return "var" + uuid().replaceAll("-", "");
+  return "var" + crypto.randomUUID().replaceAll("-", "");
 };
 
 const placeholderPattern = "var[a-z0-9]{32}";
