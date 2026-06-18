@@ -145,8 +145,17 @@ export async function fetchVideoMeta(id: string): Promise<Meta> {
         `${YOUTUBE_API_URL}/${REQUEST_PATH}?part=snippet&part=contentDetails&id=${id}&key=${YOUTUBE_API_KEY}`
       );
 
+      if (!response.ok) {
+        throw new Error(
+          `Error in YouTube API request for video ID ${id}: ${response.status} ${response.statusText}`,
+        );
+      }
+
       const rawData: unknown = await response.json();
-      const rawDataItem = (rawData as RawVideoMeta).items[0];
+      const rawDataItem = (rawData as RawVideoMeta).items?.[0];
+      if (!rawDataItem) {
+        throw new Error(`YouTube API: No items found for video ID ${id}`);
+      }
 
       data = {
         href: data.href,
