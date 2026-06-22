@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/test";
-import { expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+import { userEvent, within } from "storybook/test";
+import { expect } from "storybook/test";
 import EnterpriseFeatureCallout from "./EnterpriseFeatureCallout";
 import { collectEvents } from "/src/utils/analytics";
 
@@ -40,7 +40,7 @@ export const SignupLinkClick: Story = {
       expect(signupLink).toBeInTheDocument();
       expect(signupLink).toHaveAttribute(
         "href",
-        "https://goteleport.com/signup/"
+        "https://goteleport.com/signup/",
       );
 
       await userEvent.click(signupLink);

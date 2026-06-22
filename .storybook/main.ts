@@ -1,10 +1,39 @@
+// This file has been automatically migrated to valid ESM format by Storybook.
+import { fileURLToPath } from "node:url";
 import type { StorybookConfig } from "@storybook/react-webpack5";
-import path from "path";
+import path, { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const config: StorybookConfig = {
   framework: "@storybook/react-webpack5",
   stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  addons: ["@storybook/addon-essentials"],
+  addons: [
+    {
+      name: "@storybook/addon-styling-webpack",
+      options: {
+        rules: [
+          // Replaces existing CSS rules to support CSS Modules
+          {
+            test: /\.css$/,
+            use: [
+              "style-loader",
+              {
+                loader: "css-loader",
+                options: {
+                  modules: {
+                    auto: true,
+                    localIdentName: "[name]__[local]--[hash:base64:5]",
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
   webpackFinal: async (config) => {
     // Mock @docusaurus/router and @docusaurus/Link for Storybook
     config.resolve = config.resolve || {};

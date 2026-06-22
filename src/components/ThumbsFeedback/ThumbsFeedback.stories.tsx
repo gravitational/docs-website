@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/test";
-import { expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+import { userEvent, within } from "storybook/test";
+import { expect } from "storybook/test";
 import React, { useState, useMemo } from "react";
 import ThumbsFeedback from "./ThumbsFeedback";
 import ThumbsFeedbackContext from "./context";
@@ -48,7 +48,7 @@ export const PositiveFeedbackClick: Story = {
     await step("Click thumbs up button", async () => {
       await userEvent.click(canvas.getByLabelText("Yes, this page is helpful"));
       expect(
-        canvas.getByText("Great! Is there anything we can improve?")
+        canvas.getByText("Great! Is there anything we can improve?"),
       ).toBeInTheDocument();
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
@@ -73,7 +73,7 @@ export const PositiveFeedbackSubmit: Story = {
 
     await step("Enter feedback comment", async () => {
       const textarea = canvas.getByPlaceholderText(
-        "Tell us more about your experience"
+        "Tell us more about your experience",
       );
       await userEvent.type(textarea, "Great documentation!");
       expect(textarea).toHaveValue("Great documentation!");
@@ -97,10 +97,10 @@ export const NegativeFeedbackClick: Story = {
 
     await step("Click thumbs down button", async () => {
       await userEvent.click(
-        canvas.getByLabelText("No, this page is not helpful")
+        canvas.getByLabelText("No, this page is not helpful"),
       );
       expect(
-        canvas.getByText("How can we improve this page?")
+        canvas.getByText("How can we improve this page?"),
       ).toBeInTheDocument();
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
@@ -117,7 +117,7 @@ export const NegativeFeedbackSubmit: Story = {
 
     await step("Click thumbs down button", async () => {
       await userEvent.click(
-        canvas.getByLabelText("No, this page is not helpful")
+        canvas.getByLabelText("No, this page is not helpful"),
       );
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
@@ -127,7 +127,7 @@ export const NegativeFeedbackSubmit: Story = {
 
     await step("Enter feedback comment", async () => {
       const textarea = canvas.getByPlaceholderText(
-        "Tell us more about your experience"
+        "Tell us more about your experience",
       );
       await userEvent.type(textarea, "Missing examples");
       expect(textarea).toHaveValue("Missing examples");

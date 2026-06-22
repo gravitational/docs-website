@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/test";
-import { expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+import { userEvent, within } from "storybook/test";
+import { expect } from "storybook/test";
 import Checkpoint from "./Checkpoint";
 import { collectEvents } from "/src/utils/analytics";
 
@@ -36,7 +36,7 @@ export const PositiveFeedbackFlow: Story = {
     await step("Click positive feedback button", async () => {
       await userEvent.click(canvas.getByText("Yes, it is working"));
       expect(
-        canvas.getByText("That's great! What can we do to improve?")
+        canvas.getByText("That's great! What can we do to improve?"),
       ).toBeInTheDocument();
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
@@ -47,7 +47,7 @@ export const PositiveFeedbackFlow: Story = {
 
     await step("Enter feedback comment", async () => {
       const textarea = canvas.getByPlaceholderText(
-        "Could you share more about your experience?"
+        "Could you share more about your experience?",
       );
       await userEvent.type(textarea, "Great documentation!");
       expect(textarea).toHaveValue("Great documentation!");
@@ -56,7 +56,7 @@ export const PositiveFeedbackFlow: Story = {
     await step("Submit feedback", async () => {
       await userEvent.click(canvas.getByText("Submit"));
       expect(
-        canvas.getByText("Thank you. Your feedback has been submitted.")
+        canvas.getByText("Thank you. Your feedback has been submitted."),
       ).toBeInTheDocument();
       expect(window.events).toHaveLength(2);
       expect(window.events[1]).toEqual({
@@ -82,13 +82,13 @@ export const NegativeFeedbackFlow: Story = {
     await step("Click negative feedback button", async () => {
       await userEvent.click(canvas.getByText("No, it didn't work"));
       expect(
-        canvas.getByText("Thanks for letting us know!")
+        canvas.getByText("Thanks for letting us know!"),
       ).toBeInTheDocument();
       expect(
-        canvas.getByText("Here are some troubleshooting tips:")
+        canvas.getByText("Here are some troubleshooting tips:"),
       ).toBeInTheDocument();
       expect(
-        canvas.getByText("Ensure your internet connection is stable.")
+        canvas.getByText("Ensure your internet connection is stable."),
       ).toBeInTheDocument();
       expect(window.events).toHaveLength(1);
       expect(window.events[0]).toEqual({
@@ -102,17 +102,17 @@ export const NegativeFeedbackFlow: Story = {
       const supportLink = canvas.getByText("customer support");
       expect(slackLink).toHaveAttribute(
         "href",
-        "https://goteleport.com/community-slack/"
+        "https://goteleport.com/community-slack/",
       );
       expect(supportLink).toHaveAttribute(
         "href",
-        "https://support.goteleport.com/hc/en-us"
+        "https://support.goteleport.com/hc/en-us",
       );
     });
 
     await step("Enter feedback comment", async () => {
       const textarea = canvas.getByPlaceholderText(
-        "Could you share more about your experience?"
+        "Could you share more about your experience?",
       );
       await userEvent.type(textarea, "Connection timeout error");
       expect(textarea).toHaveValue("Connection timeout error");
@@ -121,7 +121,7 @@ export const NegativeFeedbackFlow: Story = {
     await step("Submit feedback", async () => {
       await userEvent.click(canvas.getByText("Submit"));
       expect(
-        canvas.getByText("Thank you. Your feedback has been submitted.")
+        canvas.getByText("Thank you. Your feedback has been submitted."),
       ).toBeInTheDocument();
       expect(window.events).toHaveLength(2);
       expect(window.events[1]).toEqual({
@@ -147,7 +147,7 @@ export const CancelFeedback: Story = {
     await step("Click positive feedback and enter comment", async () => {
       await userEvent.click(canvas.getByText("Yes, it is working"));
       const textarea = canvas.getByPlaceholderText(
-        "Could you share more about your experience?"
+        "Could you share more about your experience?",
       );
       await userEvent.type(textarea, "Works perfectly");
     });
@@ -158,8 +158,8 @@ export const CancelFeedback: Story = {
       expect(canvas.getByText("No, it didn't work")).toBeInTheDocument();
       expect(
         canvas.queryByPlaceholderText(
-          "Could you share more about your experience?"
-        )
+          "Could you share more about your experience?",
+        ),
       ).not.toBeInTheDocument();
     });
   },
@@ -188,20 +188,20 @@ export const CustomTroubleshootingContent: Story = {
     await step("Click negative feedback button", async () => {
       await userEvent.click(canvas.getByText("No, it didn't work"));
       expect(
-        canvas.getByText("Custom troubleshooting steps:")
+        canvas.getByText("Custom troubleshooting steps:"),
       ).toBeInTheDocument();
       expect(
-        canvas.getByText("Check your API key is valid")
+        canvas.getByText("Check your API key is valid"),
       ).toBeInTheDocument();
       expect(
-        canvas.getByText("Verify network connectivity")
+        canvas.getByText("Verify network connectivity"),
       ).toBeInTheDocument();
       expect(
-        canvas.getByText("Review the logs for errors")
+        canvas.getByText("Review the logs for errors"),
       ).toBeInTheDocument();
       // Default troubleshooting tip should not be shown
       expect(
-        canvas.queryByText("Ensure your internet connection is stable.")
+        canvas.queryByText("Ensure your internet connection is stable."),
       ).not.toBeInTheDocument();
     });
   },
@@ -216,7 +216,7 @@ export const WithoutDescription: Story = {
 
     await step("Verify checkpoint renders without description", async () => {
       expect(
-        canvas.getByText("Checkpoint: Simple Checkpoint")
+        canvas.getByText("Checkpoint: Simple Checkpoint"),
       ).toBeInTheDocument();
       expect(canvas.getByText("Yes, it is working")).toBeInTheDocument();
       expect(canvas.getByText("No, it didn't work")).toBeInTheDocument();

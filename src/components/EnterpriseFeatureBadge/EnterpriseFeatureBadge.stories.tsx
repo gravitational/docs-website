@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/test";
-import { expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+import { userEvent, within } from "storybook/test";
+import { expect } from "storybook/test";
 import EnterpriseFeatureBadge from "./EnterpriseFeatureBadge";
 import { collectEvents } from "/src/utils/analytics";
 
@@ -41,12 +41,12 @@ export const BadgeClick: Story = {
 
       // Wait for modal to appear
       expect(
-        canvas.getByText("Teleport Enterprise feature")
+        canvas.getByText("Teleport Enterprise feature"),
       ).toBeInTheDocument();
       expect(
         canvas.getByText(
-          "This is only available in Teleport Enterprise. Don't have an account?"
-        )
+          "This is only available in Teleport Enterprise. Don't have an account?",
+        ),
       ).toBeInTheDocument();
     });
   },
@@ -69,7 +69,7 @@ export const SignupLinkClick: Story = {
       await userEvent.click(badge);
 
       expect(
-        canvas.getByText("Teleport Enterprise feature")
+        canvas.getByText("Teleport Enterprise feature"),
       ).toBeInTheDocument();
     });
 
@@ -105,8 +105,8 @@ export const CustomMessage: Story = {
 
       expect(
         canvas.getByText(
-          "Advanced features require Teleport Enterprise subscription."
-        )
+          "Advanced features require Teleport Enterprise subscription.",
+        ),
       ).toBeInTheDocument();
 
       const signupLink = canvas.getByText("Start free trial");
