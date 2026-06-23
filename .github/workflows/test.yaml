@@ -3,12 +3,23 @@ on:
   pull_request:
   merge_group:
 
+permissions:
+  id-token: write
+
 jobs:
   run-tests:
     name: Run tests
     if: ${{ github.event_name != 'merge_group' }}
     runs-on: ubuntu-22.04-2core-arm64
     steps:
+      - name: Get runtime values from kvstore
+        id: kvstore
+        uses: gravitational/shared-workflows/tools/env-kvstore@tools/env-kvstore/v1.0.0
+        with:
+          cognito-identity-pool-id: "us-west-2:da53389e-a459-4a28-bd54-43eeb8e4b579"
+          cognito-role-arn: "arn:aws:iam::247230412011:role/github-actions-cognito-oidc"
+          existing-gh-secrets: "${{ toJSON(secrets) }}"
+          existing-gh-variables: "${{ toJSON(vars) }}"
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
