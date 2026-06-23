@@ -63,8 +63,12 @@ properties:
   sidebar_custom_props:
     type: object
 
-  # The fields below are used in custom components and linters
-  enterprise: {}
+  # The fields below are used in custom components and linters.
+  #
+  # enterprise is the name of a Teleport Enterprise feature that the current
+  # docs page pertains to. Used to populate text in page components.
+  enterprise:
+    type: string
   page_type:
     enum:
       # Make page_type an optional frontmatter field until we can roll it out
