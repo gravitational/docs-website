@@ -6,6 +6,10 @@ Teleport docs website: a multi-version Docusaurus site.
 
 Docs page content changes belong in the target version under `content/[version]/docs/pages/`. Files in `includes/` directories are reusable snippets, not standalone pages.
 
+Under `content/`, each subdirectory is a git submodule that points to a branch
+of `gravitational/teleport`. In each submodule is a nested submodule, `e`, which
+contains Teleport Enterprise source code but **not** documentation content.
+
 Docs site implementation changes belong outside `content/`, usually in `src/`, `server/`, `scripts/`, `static/`, `data/`, or root config files.
 
 Do not edit `docs/`, `versioned_docs/`, `versioned_sidebars/`, or `sidebars.json` directly for docs content changes; those files are generated from `content/[version]/` by `yarn prepare-files` based on the version structure in `config.json`.
