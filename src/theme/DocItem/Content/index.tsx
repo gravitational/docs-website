@@ -10,9 +10,11 @@ import Heading from "@theme/Heading";
 import MDXContent from "@theme/MDXContent";
 import clsx from "clsx";
 import { JSX, useContext, useState, type ReactNode } from "react";
+import Icon from "@site/src/components/Icon";
 
-interface DocFrontMatter {
+export interface DocFrontMatter {
   videoBanner: VideoBarProps;
+  skills?: string[];
 }
 
 /**
@@ -40,15 +42,22 @@ export function DocHeader({ className }: { className?: string }): JSX.Element {
   const { hideTitleSection, showDescription } = useDocTemplate();
   const { frontMatter } = useDoc();
   const { pathname } = useLocation();
+  const exclusive = useContext(ExclusivityContext);
 
   const { videoBanner } = frontMatter as DocFrontMatter;
 
   return (
     <header
-      className={clsx({"hide-title-section": hideTitleSection}, className)}
+      className={clsx({ "hide-title-section": hideTitleSection }, className)}
     >
       <Heading as="h1" className="docItemTitle">
         {syntheticTitle}
+        {(exclusive?.skillsForPage ?? []).length > 0 && (
+          <span className="skillBadge" aria-hidden="true">
+            <Icon name="lightbulb" size="sm" /> Skill
+            {(exclusive?.skillsForPage ?? []).length > 1 ? "s" : ""} Available
+          </span>
+        )}
       </Heading>
       {frontMatter.description && showDescription && (
         <p className="docItemDescription">{frontMatter.description}</p>
@@ -56,7 +65,7 @@ export function DocHeader({ className }: { className?: string }): JSX.Element {
       <PageActions pathname={pathname} />
       {videoBanner && <VideoBar {...videoBanner} />}
     </header>
-  )
+  );
 }
   
 
