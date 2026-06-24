@@ -31,6 +31,7 @@ import EnterpriseFeatureWidget from "@site/src/components/EnterpriseFeatureWidge
 import Callout from "@site/src/components/Callout";
 import FAQSection from "@site/src/components/FAQSection";
 import SkillsTable from "@site/src/components/SkillsTable/SkillsTable";
+import SkillsBanner from "@site/src/components/SkillsBanner/SkillsBanner";
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
@@ -73,6 +74,7 @@ const MDXComponents: MDXComponentsObject = {
   Callout,
   FAQSection,
   SkillsTable,
+  SkillsBanner,
 };
 
 export default MDXComponents;
