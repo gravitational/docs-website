@@ -1,5 +1,5 @@
 // emitFunc emits an event to Google Analytics or a custom sink.
-type emitFunc = (name: string, params: any) => {};
+type emitFunc = (name: string, params: any) => void;
 
 /**
  * Analytics event data structure for Google Analytics tracking

@@ -86,6 +86,7 @@ export { default as mongoDb } from "./svg/mongodb.svg";
 export { default as entraId } from "./svg/ms-entra-id.svg";
 export { default as mysql } from "./svg/mysql.svg";
 export { default as note } from "./svg/note.svg";
+export { default as note2 } from "./svg/note2.svg";
 export { default as notion } from "./svg/notion.svg";
 export { default as okta } from "./svg/okta.svg";
 export { default as oracle } from "./svg/oracle.svg";
@@ -128,6 +129,8 @@ export { default as robot } from "./svg/robot.svg";
 export { default as hardDrives } from "./svg/hard-drives.svg";
 export { default as magnifyEllipsis } from "./svg/magnify-ellipsis.svg";
 export { default as x } from "./svg/x.svg";
+export { default as caretUp } from "./svg/caret-up.svg";
+export { default as codeBlock } from "./svg/code-block.svg";
 
 // Teleport svgs
 export { default as agent } from "./teleport-svg/agent.svg";
