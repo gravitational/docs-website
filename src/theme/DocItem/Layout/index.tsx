@@ -30,9 +30,12 @@ import ThumbsFeedbackContext from "@site/src/components/ThumbsFeedback/context";
 import { FeedbackType } from "@site/src/components/ThumbsFeedback/types";
 import Icon from "@site/src/components/Icon";
 import ThumbsFeedback from "@site/src/components/ThumbsFeedback/ThumbsFeedback";
+import { SkillInfo } from "@site/scripts/prepare-files.mjs";
+import skills from "@site/data/skills.json";
 
 interface ExtendedFrontMatter {
   remove_table_of_contents?: boolean;
+  skills?: string[];
 }
 
 /**
@@ -55,12 +58,17 @@ function useDocTOC(removeTOCSidebar: boolean) {
       <DocItemTOCDesktop />
     ) : undefined;
 
+  const skillsForPage = (skills ?? []).filter((skill: SkillInfo) =>
+    (frontMatter as ExtendedFrontMatter)?.skills?.includes(skill.name),
+  );
+
   return {
     hidden,
     removed,
     mobile,
     desktop,
     canRender,
+    skillsForPage,
   };
 }
 
@@ -89,6 +97,8 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
     metadata: { unlisted },
   } = useDoc();
 
+  const { skillsForPage } = docTOC;
+
   const faqSectionsRef = useRef<FAQSection[]>([]);
   const faqSearchInputRef = useRef<HTMLInputElement>(null);
   const [faqQuery, setFaqQuery] = useState("");
@@ -114,7 +124,9 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   );
 
   return (
-    <ExclusivityContext.Provider value={{ exclusiveFeature }}>
+    <ExclusivityContext.Provider
+      value={{ exclusiveFeature, skillsForPage }}
+    >
       {exclusiveFeature && !isLandingPage && <ExclusivityBanner />}
       <div className="row">
         <div

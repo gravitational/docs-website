@@ -86,3 +86,9 @@ properties:
     type: string
   videoBannerDescription:
     type: string
+  # This field is used to specify specific agent skills that are relevant to a page. 
+  # It is an array of strings, where each string represents a skill name.
+  skills:
+    type: array
+    items:
+      type: string

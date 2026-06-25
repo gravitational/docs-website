@@ -44,7 +44,9 @@ const config: StorybookConfig = {
       "@docusaurus/BrowserOnly": path.resolve(__dirname, "./mocks/docusaurus-browser-only.tsx"),
       "@docusaurus/theme-common": path.resolve(__dirname, "./mocks/docusaurus-theme-common.ts"),
       "@docusaurus/useDocusaurusContext": path.resolve(__dirname, "./mocks/docusaurus-use-docusaurus-context.ts"),
-      "@site": path.resolve(__dirname, ".."),
+      "@site/data/skills.json": path.resolve(__dirname, "./mocks/skills.json"),
+      "@site": path.resolve(__dirname, "../"),
+      "@docusaurus/plugin-content-docs/client": path.resolve(__dirname, "./mocks/docusaurus-plugin-content-docs-client.ts"),
     };
 
     config.module?.rules?.push({

@@ -1,7 +1,12 @@
 import { importDirectorySync } from '@iconify/tools';
-import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync } from "fs";
+import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync, readFileSync } from "fs";
 import { join, resolve, dirname } from "path";
 import { glob } from "glob";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import { visit, EXIT, SKIP } from "unist-util-visit";
+import type { Text } from "mdast";
+import { toHast } from "mdast-util-to-hast";
+import { toHtml } from "hast-util-to-html";
 import {
   getCurrentVersion,
   getLatestVersion,
@@ -13,6 +18,7 @@ const DOCS_CURRENT_ROOT = "docs"
 const DOCS_PAGES_ROOT = "versioned_docs";
 const SIDEBAR_FILENAME = "sidebars.json";
 const VERSION_FILENAME = "versions.json";
+const SKILLS_FILENAME = "data/skills.json";
 const GET_VERSION_SIDEBAR_FILENAME = (version) =>
   `versioned_sidebars/version-${version}-sidebars.json`;
 
@@ -109,3 +115,85 @@ const iconSet = importDirectorySync(join("src", "mermaid-icons"),
     },
 );
 writeFileSync(iconPath, JSON.stringify(iconSet.export()));
+
+
+/*
+ * ------------------------------------------------------------------------------
+ * Populate Teleport skills data to data/skills.json based on the skills folder
+ * found in the content directory. The data is used by related components
+ * throughout the docs to display skills information and provide installation
+ * commands.
+ * ------------------------------------------------------------------------------
+ */
+export type SkillInfo = {
+  name: string;
+  readableName: string;
+  description: string;
+  installCommand: string;
+  rawSourceUrl: string;
+};
+
+const skills: SkillInfo[] = [];
+const source = resolve("content", currentVersion, "skills");
+
+const skillPaths = glob.sync(resolve(source, "**/SKILL.md"));
+
+// read each SKILL.md file, extract the relevant information, and write it to skills.json.
+skillPaths.forEach((path: string) => {
+  const skillContent = readFileSync(path);
+
+  const tree = fromMarkdown(skillContent);
+
+  // The name of the skill is the name of the folder containing the SKILL.md file.
+  const name: SkillInfo["name"] = path.replace("/SKILL.md", "").split("/").pop() ?? "";
+  let readableName: SkillInfo["readableName"] | null = null;
+  let description: SkillInfo["description"] | null = null;
+
+  // The first heading in the SKILL.md file is the readable name of the skill, and
+  // the first paragraph after that heading is the description. Traverse the markdown
+  // AST to find these elements and extract the relevant information.
+  let prevNodeWasH1: boolean = false;
+  visit(tree, undefined, (node) => {
+    if (node.type === "heading" && node.depth === 1) {
+      const textNode = node.children.find((child) => child.type === "text") as
+        | Text
+        | undefined;
+      if (textNode) {
+        readableName = textNode.value;
+        prevNodeWasH1 = true;
+        return SKIP;
+      }
+    }
+
+    if (node.type === "paragraph" && prevNodeWasH1) {
+      const hast = toHast(node as any);
+      if (hast) {
+        description = toHtml(hast);
+        return EXIT; // Stop traversing after finding the description, since that's the only thing we need after the heading.
+      }
+    }
+  });
+    skills.push({
+      name,
+      readableName: readableName ?? name,
+      description: description ?? "",
+      installCommand: `npx skills add https://github.com/gravitational/teleport/tree/master/skills/${name}`,
+      rawSourceUrl: `https://github.com/gravitational/teleport/tree/master/skills/${name}/SKILL.md`,
+    });
+});
+
+// Add an entry for installing all skills.
+skills.push({
+  name: "all-skills",
+  readableName: "all skills",
+  description:
+    "Install all available skills. This will install all skills found in the Teleport repository.",
+  installCommand: `npx skills add https://github.com/gravitational/teleport`,
+  rawSourceUrl: `https://github.com/gravitational/teleport/tree/master/skills/README.md`,
+})
+
+writeFileSync(SKILLS_FILENAME, JSON.stringify(skills, null, 2), "utf8");
+
+/*
+ *------------------------------------------------------------------------------
+ */
