@@ -19,6 +19,7 @@
   background-color: var(--color-interactive-tonal-success-0);
   color: var(--color-interactive-success-default);
   border-color: var(--color-interactive-success-default);
+  margin-left: 0;
 
   svg {
     path {
