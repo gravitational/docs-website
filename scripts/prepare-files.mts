@@ -2,11 +2,7 @@ import { importDirectorySync } from '@iconify/tools';
 import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync, readFileSync } from "fs";
 import { join, resolve, dirname } from "path";
 import { glob } from "glob";
-import { fromMarkdown } from "mdast-util-from-markdown";
-import { visit, EXIT, SKIP } from "unist-util-visit";
-import type { Text } from "mdast";
-import { toHast } from "mdast-util-to-hast";
-import { toHtml } from "hast-util-to-html";
+import { parseSkillMarkdown } from "../server/parse-skill-md";
 import {
   getCurrentVersion,
   getLatestVersion,
@@ -131,44 +127,13 @@ const source = resolve("content", currentVersion, "skills");
 
 const skillPaths = glob.sync(resolve(source, "**/SKILL.md"));
 
-// For each found SKILL.md file, extract the data for a SkillInfo object and add it to the skills array.
+// Populate the skills array with data from each SKILL.md file.
 skillPaths.forEach((path: string) => {
   const skillContent = readFileSync(path);
-
-  const tree = fromMarkdown(skillContent);
-
-  // Extract the name of the folder containing the SKILL.md file to use as the "name" of the skill field of the SkillInfo object. 
   const name: SkillInfo["name"] = path.replace("/SKILL.md", "").split("/").pop() ?? "";
-  let readableName: SkillInfo["readableName"] | null = null;
-  let description: SkillInfo["description"] | null = null;
+  // Parse the SKILL.md content to extract the readable name and description.
+  const { readableName, description } = parseSkillMarkdown(skillContent);
 
-  // The first heading in the SKILL.md file is the readable name of the skill, and
-  // the first paragraph after that heading is the description. Traverse the markdown
-  // AST to find these elements and extract the relevant information.
-  let prevNodeWasH1: boolean = false;
-  visit(tree, undefined, (node) => {
-    if (node.type === "heading" && node.depth === 1) {
-      const textNode = node.children.find((child) => child.type === "text") as
-        | Text
-        | undefined;
-      if (textNode) {
-        readableName = textNode.value;
-        prevNodeWasH1 = true;
-        return SKIP;
-      }
-    }
-
-    // The first paragraph after the first heading is the description of the skill.
-    if (node.type === "paragraph" && prevNodeWasH1) {
-      const hast = toHast(node as any);
-      if (hast) {
-        description = toHtml(hast);
-        return EXIT; // Stop traversing after finding the description, since that's the only thing we need after the heading.
-      }
-    }
-  });
-  // If the description is not found, set it to an empty string to avoid null values in the skills.json file.
-  // If the readableName is not found, set it to the name of the skill as a fallback.
     skills.push({
       name,
       readableName: readableName ?? name,
