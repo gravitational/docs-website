@@ -116,35 +116,28 @@ const iconSet = importDirectorySync(join("src", "mermaid-icons"),
 );
 writeFileSync(iconPath, JSON.stringify(iconSet.export()));
 
-
-/*
- * ------------------------------------------------------------------------------
- * Populate Teleport skills data to data/skills.json based on the skills folder
- * found in the content directory. The data is used by related components
- * throughout the docs to display skills information and provide installation
- * commands.
- * ------------------------------------------------------------------------------
- */
+// Describes the shape of a individual skill entry in the skills.json file.
 export type SkillInfo = {
-  name: string;
-  readableName: string;
-  description: string;
-  installCommand: string;
-  rawSourceUrl: string;
+  name: string; // The name of the skill in the format <skill-folder-name>.
+  readableName: string; // The human-readable name of the skill.
+  description: string; // The description of the skill. It is a HTML string.
+  installCommand: string; // The command to install the skill.
+  rawSourceUrl: string; // The URL to the raw source of the skill in GitHub.
 };
 
+// Populate Teleport skills data to data/skills.json based on the skills folder found in the content directory.
 const skills: SkillInfo[] = [];
 const source = resolve("content", currentVersion, "skills");
 
 const skillPaths = glob.sync(resolve(source, "**/SKILL.md"));
 
-// read each SKILL.md file, extract the relevant information, and write it to skills.json.
+// For each found SKILL.md file, extract the data for a SkillInfo object and add it to the skills array.
 skillPaths.forEach((path: string) => {
   const skillContent = readFileSync(path);
 
   const tree = fromMarkdown(skillContent);
 
-  // The name of the skill is the name of the folder containing the SKILL.md file.
+  // Extract the name of the folder containing the SKILL.md file to use as the "name" of the skill field of the SkillInfo object. 
   const name: SkillInfo["name"] = path.replace("/SKILL.md", "").split("/").pop() ?? "";
   let readableName: SkillInfo["readableName"] | null = null;
   let description: SkillInfo["description"] | null = null;
@@ -165,6 +158,7 @@ skillPaths.forEach((path: string) => {
       }
     }
 
+    // The first paragraph after the first heading is the description of the skill.
     if (node.type === "paragraph" && prevNodeWasH1) {
       const hast = toHast(node as any);
       if (hast) {
@@ -173,6 +167,8 @@ skillPaths.forEach((path: string) => {
       }
     }
   });
+  // If the description is not found, set it to an empty string to avoid null values in the skills.json file.
+  // If the readableName is not found, set it to the name of the skill as a fallback.
     skills.push({
       name,
       readableName: readableName ?? name,
@@ -182,7 +178,7 @@ skillPaths.forEach((path: string) => {
     });
 });
 
-// Add an entry for installing all skills.
+// Add the entry for installing all skills.
 skills.push({
   name: "all-skills",
   readableName: "all skills",
@@ -192,8 +188,5 @@ skills.push({
   rawSourceUrl: `https://github.com/gravitational/teleport/tree/master/skills/README.md`,
 })
 
+// Write the skills array to the skills.json file in the data directory.
 writeFileSync(SKILLS_FILENAME, JSON.stringify(skills, null, 2), "utf8");
-
-/*
- *------------------------------------------------------------------------------
- */
