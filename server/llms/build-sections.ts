@@ -1,5 +1,5 @@
 import fs from "fs";
-import yaml from "js-yaml";
+import { load } from "js-yaml";
 import path from "path";
 
 // the Section format from the signalwire/docusaurus-plugin-llms-txt plugin, used to define sections in the generated llms.txt file
@@ -38,7 +38,7 @@ function readFrontmatterData(filePath: string): {
     const match = content.match(/^---\n([\s\S]*?)\n---/);
     // match[1] is the captured YAML frontmatter string. Cast to a known shape to safely access named fields
     if (!match) return { title: undefined, description: undefined };
-    const frontmatter = yaml.load(match[1]) as Record<string, unknown>;
+    const frontmatter = load(match[1]) as Record<string, unknown>;
     // extract and return the title and description fields (if they exist and are strings)
     const title = frontmatter?.title;
     const description = frontmatter?.description;
