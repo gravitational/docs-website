@@ -32,7 +32,11 @@ const Modal: React.FC<{
       <div className={styles.background} />
       <div className={styles.content} ref={modalRef}>
         <div className={styles.inner}>
-          <button className={styles.closeButton} onClick={onClose}>
+          <button
+            className={styles.closeButton}
+            onClick={onClose}
+            aria-label="Close modal"
+          >
             <Icon name="x" size="sm" />
           </button>
           <div className={styles.children}>{children}</div>
