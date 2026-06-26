@@ -81,11 +81,11 @@ const PageActions: React.FC<PageActionsProps> = ({ pathname, emitEvent }) => {
               <div style={{ marginBottom: "1.5rem" }}>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: skillsForPage[0].description,
+                    __html: skill.description,
                   }}
                 />
                 <Pre className={styles.installCommand}>
-                  <div className="hljs">{skillsForPage[0].installCommand}</div>
+                  <div className="hljs">{skill.installCommand}</div>
                 </Pre>
               </div>
             </Fragment>
