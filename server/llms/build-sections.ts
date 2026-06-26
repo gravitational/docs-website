@@ -63,52 +63,46 @@ function getDocId(item: SidebarItem): string | undefined {
 // Supports both single-sidebar format ({ sidebar: [...] }) and multi-sidebar format ({ sidebar1: [...], sidebar2: [...], ... })
 // For multi-sidebar, the first item of each sidebar array is used as the section entry.
 export function buildSections(): Section[] {
-  try {
-    const sidebarsPath = path.resolve(process.cwd(), "sidebars.json");
-    const sidebars = JSON.parse(
-      fs.readFileSync(sidebarsPath, "utf8")
-    ) as Record<string, SidebarItem[]>;
+  const sidebarsPath = path.resolve(process.cwd(), "sidebars.json");
+  const sidebars = JSON.parse(
+    fs.readFileSync(sidebarsPath, "utf8")
+  ) as Record<string, SidebarItem[]>;
 
-    // Collect the sections: every top-level item for single-sidebar, the first item of each sidebar array for multi-sidebar.
-    const isSingleSidebar = "docs" in sidebars && Array.isArray(sidebars.docs);
-    const sectionCandidates: SidebarItem[] = isSingleSidebar
-      ? sidebars.docs
-      : Object.values(sidebars)
-          .filter((v): v is SidebarItem[] => Array.isArray(v))
-          .map((items) => items[0])
-          .filter(Boolean);
+  // Collect the sections: every top-level item for single-sidebar, the first item of each sidebar array for multi-sidebar.
+  const isSingleSidebar = "docs" in sidebars && Array.isArray(sidebars.docs);
+  const sectionCandidates: SidebarItem[] = isSingleSidebar
+    ? sidebars.docs
+    : Object.values(sidebars)
+        .filter((v): v is SidebarItem[] => Array.isArray(v))
+        .map((items) => items[0])
+        .filter(Boolean);
 
-    const sections: Section[] = [];
-    for (const item of sectionCandidates) {
-      const docId = getDocId(item);
-      if (!docId) continue;
+  const sections: Section[] = [];
+  for (const item of sectionCandidates) {
+    const docId = getDocId(item);
+    if (!docId) continue;
 
-      const sectionDir = docId.includes("/") ? docId.split("/")[0] : docId;
-      // Use the sidebar item label as a fallback name for the section
-      const label =
-        item.type === "category"
-          ? (item as SidebarCategory).label
-          : ((item as SidebarDoc).label ?? sectionDir);
+    const sectionDir = docId.includes("/") ? docId.split("/")[0] : docId;
+    // Use the sidebar item label as a fallback name for the section
+    const label =
+      item.type === "category"
+        ? (item as SidebarCategory).label
+        : ((item as SidebarDoc).label ?? sectionDir);
 
-      const mdxPath = path.resolve(process.cwd(), `docs/${docId}.mdx`);
-      const { title, description } = readFrontmatterData(mdxPath);
+    const mdxPath = path.resolve(process.cwd(), `docs/${docId}.mdx`);
+    const { title, description } = readFrontmatterData(mdxPath);
 
-      const section: Section = {
-        id: sectionDir,
-        name: title ?? label,
-        routes: [{ route: `/docs/${sectionDir}/**` }],
-        position: sections.length,
-      };
-      if (description) {
-        section.description = description;
-      }
-      sections.push(section);
+    const section: Section = {
+      id: sectionDir,
+      name: title ?? label,
+      routes: [{ route: `/docs/${sectionDir}/**` }],
+      position: sections.length,
+    };
+    if (description) {
+      section.description = description;
     }
-
-    return sections;
-  } catch (error) {
-    // Avoid crashing the plugin if an error occurs
-    console.warn("Failed building sections for llms.txt plugin.", error);
-    return [];
+    sections.push(section);
   }
+
+  return sections;
 }
