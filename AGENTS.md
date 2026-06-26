@@ -76,6 +76,23 @@ Special syntax:
 
 Prefer relative `.mdx` links for internal docs pages, e.g. `[Install Teleport](../installation/single-machine/single-machine.mdx)`. Do not use absolute `https://goteleport.com/docs/...` links for internal docs pages.
 
+## Working with `remark` linters
+
+`remark` linters are in `./server`. We use them to check issues with docs pages
+that require traversing an AST.
+
+Follow this section if you are helping to:
+- Build a new `remark` linter
+- Modify an existing `remark` linter
+- Get guides to pass a linter, e.g., a linter that hasn't been merged yet
+
+Always run the linter, rather than attempt to replicate the linter's rules with
+a temporary custom script. The linter config in `.remarkrc.mjs` includes some
+steps that you are likely to skip, such as expanding `(! !)` inclusion syntax.
+
+Before running the linter, run `yarn` to install dependencies or ask the user to
+do it.
+
 ## Verification
 
 For docs content verification from the docs-website root:
