@@ -296,7 +296,7 @@ export default function remarkCodeSnippet({
           }
         }
 
-        parent.children[index] = {
+        parent.children[index as number] = {
           type: "mdxJsxFlowElement",
           name: "snippet",
           attributes: [],

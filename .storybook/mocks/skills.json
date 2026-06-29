@@ -1,0 +1,23 @@
+[
+  {
+    "name": "teleport-session-review",
+    "readableName": "Teleport Session Recording Review",
+    "description": "<p>This skill helps you browse, search, and investigate Teleport session\nrecordings. It lists recent recordings (<code>tctl recordings ls</code>), runs semantic and\nkeyword search over AI-generated session summaries (<code>tctl recordings search</code>),\npresents a triage table, and — only with your confirmation — downloads a\nrecording or hands you a playback link.</p>",
+    "installCommand": "npx skills add https://github.com/gravitational/teleport/tree/master/skills/teleport-session-review",
+    "rawSourceUrl": "https://github.com/gravitational/teleport/tree/master/skills/teleport-session-review/SKILL.md"
+  },
+  {
+    "name": "teleport-investigate",
+    "readableName": "Teleport Investigate",
+    "description": "<p>This skill helps you search and explore Teleport's Identity Security activity\nlog with <code>tctl investigate</code> — finding who did what, where, and when across\nusers, resources, and integrations such as AWS, GitHub, and Okta.</p>",
+    "installCommand": "npx skills add https://github.com/gravitational/teleport/tree/master/skills/teleport-investigate",
+    "rawSourceUrl": "https://github.com/gravitational/teleport/tree/master/skills/teleport-investigate/SKILL.md"
+  },
+  {
+    "name": "teleport-acl-review",
+    "readableName": "Teleport Access List Review",
+    "description": "<p>This skill helps you perform periodic access list reviews in Teleport. It fetches\nlists due for audit, assesses risk, auto-recertifies low-risk ones (with your\napproval), and flags higher-risk ones for manual review in the web UI.</p>",
+    "installCommand": "npx skills add https://github.com/gravitational/teleport/tree/master/skills/teleport-acl-review",
+    "rawSourceUrl": "https://github.com/gravitational/teleport/tree/master/skills/teleport-acl-review/SKILL.md"
+  }
+]

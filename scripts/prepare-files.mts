@@ -1,7 +1,8 @@
 import { importDirectorySync } from '@iconify/tools';
-import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync } from "fs";
+import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync, readFileSync } from "fs";
 import { join, resolve, dirname } from "path";
 import { glob } from "glob";
+import { parseSkillMarkdown } from "../server/parse-skill-md";
 import {
   getCurrentVersion,
   getLatestVersion,
@@ -13,6 +14,7 @@ const DOCS_CURRENT_ROOT = "docs"
 const DOCS_PAGES_ROOT = "versioned_docs";
 const SIDEBAR_FILENAME = "sidebars.json";
 const VERSION_FILENAME = "versions.json";
+const SKILLS_FILENAME = "data/skills.json";
 const GET_VERSION_SIDEBAR_FILENAME = (version) =>
   `versioned_sidebars/version-${version}-sidebars.json`;
 
@@ -109,3 +111,47 @@ const iconSet = importDirectorySync(join("src", "mermaid-icons"),
     },
 );
 writeFileSync(iconPath, JSON.stringify(iconSet.export()));
+
+// Describes the shape of a individual skill entry in the skills.json file.
+export type SkillInfo = {
+  name: string; // The name of the skill in the format <skill-folder-name>.
+  readableName: string; // The human-readable name of the skill.
+  description: string; // The description of the skill. It is a HTML string.
+  installCommand: string; // The command to install the skill.
+  rawSourceUrl: string; // The URL to the raw source of the skill in GitHub.
+};
+
+// Populate Teleport skills data to data/skills.json based on the skills folder found in the content directory.
+const skills: SkillInfo[] = [];
+const source = resolve("content", currentVersion, "skills");
+
+const skillPaths = glob.sync(resolve(source, "**/SKILL.md"));
+
+// Populate the skills array with data from each SKILL.md file.
+skillPaths.forEach((path: string) => {
+  const skillContent = readFileSync(path);
+  const name: SkillInfo["name"] = path.replace("/SKILL.md", "").split("/").pop() ?? "";
+  // Parse the SKILL.md content to extract the readable name and description.
+  const { readableName, description } = parseSkillMarkdown(skillContent);
+
+    skills.push({
+      name,
+      readableName: readableName ?? name,
+      description: description ?? "",
+      installCommand: `npx skills add https://github.com/gravitational/teleport/tree/master/skills/${name}`,
+      rawSourceUrl: `https://github.com/gravitational/teleport/tree/master/skills/${name}/SKILL.md`,
+    });
+});
+
+// Add the entry for installing all skills.
+skills.push({
+  name: "all-skills",
+  readableName: "all skills",
+  description:
+    "Install all available skills. This will install all skills found in the Teleport repository.",
+  installCommand: `npx skills add https://github.com/gravitational/teleport`,
+  rawSourceUrl: `https://github.com/gravitational/teleport/tree/master/skills/README.md`,
+})
+
+// Write the skills array to the skills.json file in the data directory.
+writeFileSync(SKILLS_FILENAME, JSON.stringify(skills, null, 2), "utf8");

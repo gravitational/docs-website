@@ -69,6 +69,6 @@ tree -D -h "${DOWNLOADS_DIR}"
 
 # Extract desired paths
 echo "Extracting selected content from ${BRANCH_TAR_FILE} to $1"
-tar "${TAR_ARGS[@]}" '*/docs' '*/examples' '*/CHANGELOG.md'
+tar "${TAR_ARGS[@]}" '*/docs' '*/examples' '*/skills' '*/CHANGELOG.md'
 
 tree -L 1 "$1"
