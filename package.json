@@ -98,7 +98,7 @@
     "hast": "^1.0.0",
     "http-server": "14.1.1",
     "jest": "^30.4.2",
-    "js-yaml": "^5.1.0",
+    "js-yaml": "^4.2.0",
     "loadr": "^0.1.1",
     "mdast": "^3.0.0",
     "mdast-util-frontmatter": "^2.0.1",
