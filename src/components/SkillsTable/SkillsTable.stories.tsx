@@ -13,11 +13,19 @@ export default meta;
 type Story = StoryObj<typeof SkillsTable>;
 
 export const InitialState: Story = {
-  render: () => <SkillsTable emitEvent={collectEvents()} />,
+  render: () => (
+    <SkillsTable emitEvent={collectEvents()}>
+      <h2>Available Skills</h2>
+    </SkillsTable>
+  ),
 };
 
 export const InstallButtonOpensModal: Story = {
-  render: () => <SkillsTable emitEvent={collectEvents()} />,
+  render: () => (
+    <SkillsTable emitEvent={collectEvents()}>
+      <h2>Available Skills</h2>
+    </SkillsTable>
+  ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     const skill = skills[0];
@@ -45,7 +53,11 @@ export const InstallButtonOpensModal: Story = {
 };
 
 export const ModalClose: Story = {
-  render: () => <SkillsTable emitEvent={collectEvents()} />,
+  render: () => (
+    <SkillsTable emitEvent={collectEvents()}>
+      <h2>Available Skills</h2>
+    </SkillsTable>
+  ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     const skill = skills[0];
@@ -71,7 +83,11 @@ export const ModalClose: Story = {
 };
 
 export const ViewRawSkillClick: Story = {
-  render: () => <SkillsTable emitEvent={collectEvents()} />,
+  render: () => (
+    <SkillsTable emitEvent={collectEvents()}>
+      <h2>Available Skills</h2>
+    </SkillsTable>
+  ),
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     const skill = skills[0];
