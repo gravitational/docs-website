@@ -1,0 +1,90 @@
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  border-radius: var(--m-1);
+  color: var(--color-black);
+  line-height: 1.57143;
+  box-shadow: var(--shadow-10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-foreground-disabled);
+  }
+
+  .content {
+    background-color: var(--color-white);
+    position: absolute;
+    padding: var(--m-3);
+    width: 100%;
+    max-width: calc(100dvw - var(--m-4));
+    max-height: 100dvh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-1);
+    border-radius: var(--r-lg);
+    font-size: var(--fs-text-lg);
+
+    @media (--md-scr) {
+      max-width: 500px;
+    }
+
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-size: var(--fs-header-3) !important;
+    }
+  }
+
+  .inner {
+    position: relative;
+  }
+
+  .children {
+    > :first-child {
+      /* Add some space for the close button */
+      margin-right: var(--m-4);
+    }
+
+    pre {
+      border-radius: var(--r-md);
+      white-space: wrap;
+      margin-top: var(--m-2);
+      width: 100%;
+    }
+  }
+
+  .closeButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: max-content;
+    padding: var(--m-1);
+    border-radius: 4px;
+    background-color: unset;
+    border: unset;
+    &:hover {
+      cursor: pointer;
+      background-color: var(--color-tonal-neutral-0);
+    }
+  }
+
+  &:hover {
+    cursor: default;
+  }
+
+  p {
+    margin-bottom: var(--m-1);
+  }
+}

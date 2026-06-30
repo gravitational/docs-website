@@ -2,7 +2,7 @@
   display: none;
   top: var(--ifm-navbar-height);
   background-color: var(--color-white);
-  z-index: 200;
+  z-index: var(--ifm-z-index-fixed);
   max-width: 100vw;
   height: var(--docs-top-nav-height);
   margin-bottom: -38px;

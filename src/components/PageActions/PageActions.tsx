@@ -1,35 +1,100 @@
 import { getReportIssueURL } from "@site/src/utils/github-issue";
+import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import styles from "./PageActions.module.css";
 import Icon from "../Icon";
-import { useInkeepSearch } from "@site/src/hooks/useInkeepSearch";
-import BrowserOnly from "@docusaurus/BrowserOnly";
 import ThumbsFeedback from "../ThumbsFeedback";
 import {
   copyPageContentAsMarkdown,
   normalizeMarkdownPathname,
 } from "@site/src/utils/markdown";
-import { useMemo, useRef, useState } from "react";
-import { useWindowSize } from "@docusaurus/theme-common";
+import { Fragment, useContext, useState } from "react";
 import { trackEvent } from "@site/src/utils/analytics";
+import Dropdown, { DrodownItemProps as DropdownItem } from "./Dropdown";
+import { SkillInfo } from "@site/scripts/prepare-files.mjs";
+import Pre from "@site/src/theme/MDXComponents/Pre";
+import ExclusivityContext from "../ExclusivityBanner/context";
 
 type PageActionsProps = {
   pathname: string;
-  emitEvent?: (name: string, params: any) => {};
+  emitEvent?: (name: string, params: any) => void;
 };
 
 const PageActions: React.FC<PageActionsProps> = ({ pathname, emitEvent }) => {
-  const { setIsOpen, ModalSearchAndChat, inkeepModalProps } = useInkeepSearch({
-    enableAIChat: true,
-  });
-  const windowSize = useWindowSize();
+  const { frontMatter } = useDoc();
   const [copiedMessage, setCopiedMessage] = useState<string>("Copy for LLM");
+  const exclusivity = useContext(ExclusivityContext);
+  const skillsForPage: SkillInfo[] = exclusivity?.skillsForPage ?? [];
 
-  const copyButtonRef = useRef<HTMLButtonElement>(null);
+  const dropdownItems: DropdownItem[] = [
+    {
+      type: "button",
+      label: copiedMessage,
+      icon: "clipboard",
+      onClick: () => {
+        trackEvent({
+          event_name: `copy_page_as_markdown`,
+          emitEvent: emitEvent,
+        });
+        copyPageContentAsMarkdown(pathname);
+        setCopiedMessage("Copied!");
+        setTimeout(() => setCopiedMessage("Copy for LLM"), 3000);
+      },
+    },
+    {
+      type: "link",
+      label: "View as Markdown",
+      icon: "codeBlock",
+      href: normalizeMarkdownPathname(pathname),
+      target: "_blank",
+      onClick: () => {
+        trackEvent({
+          event_name: `view_page_as_markdown`,
+          emitEvent: emitEvent,
+        });
+      },
+    },
+    /* TODO: Enable when we have a landing page for skills
+{
+      type: "link",
+      label: "Learn more",
+      icon: "note2",
+      href: "https://goteleport.com/platform/ai-infrastructure/",
+      target: "_blank",
+    }, */
+  ];
 
-  const copyButtonWidth = useMemo(
-    () => copyButtonRef.current?.offsetWidth || 125,
-    [copyButtonRef.current?.offsetWidth],
-  );
+  if (skillsForPage.length > 0) {
+    dropdownItems.unshift({
+      type: "modal",
+      label: "Install Skills",
+      icon: "lightbulb",
+      onClick: () => {
+        trackEvent({
+          event_name: "skill_install_clicked",
+          emitEvent: emitEvent,
+        });
+      },
+      content: (
+        <>
+          {skillsForPage.map((skill: SkillInfo) => (
+            <Fragment key={skill.name}>
+              <h3>Install {skill.readableName}</h3>
+              <div style={{ marginBottom: "1.5rem" }}>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: skill.description,
+                  }}
+                />
+                <Pre className={styles.installCommand}>
+                  <div className="hljs">{skill.installCommand}</div>
+                </Pre>
+              </div>
+            </Fragment>
+          ))}
+        </>
+      ),
+    });
+  }
 
   return (
     <div className={styles.pageActions}>
@@ -41,47 +106,8 @@ const PageActions: React.FC<PageActionsProps> = ({ pathname, emitEvent }) => {
         <Icon size="md" name="githubLogo" />
         <span>Report an Issue</span>
       </a>
-      <button
-        className={styles.askAIButton}
-        style={
-          windowSize === "desktop" ? { minWidth: `${copyButtonWidth}px` } : {}
-        }
-        ref={copyButtonRef}
-        onClick={() => {
-          trackEvent({
-            event_name: `copy_page_as_markdown`,
-            emitEvent: emitEvent,
-          });
-          copyPageContentAsMarkdown(pathname);
-          setCopiedMessage("Copied!");
-          setTimeout(() => setCopiedMessage("Copy for LLM"), 3000);
-        }}
-      >
-        <Icon size="md" name="clipboard" />
-        <span>{copiedMessage}</span>
-      </button>
-      <a
-        className={styles.askAIButton}
-        href={normalizeMarkdownPathname(pathname)}
-        target="_blank"
-        onClick={() => {
-          trackEvent({
-            event_name: `view_page_as_markdown`,
-            emitEvent: emitEvent,
-          });
-        }}
-      >
-        <Icon size="md" name="markdown" />
-        <span>View as Markdown</span>
-      </a>
       <ThumbsFeedback />
-      <BrowserOnly fallback={<div />}>
-        {() => {
-          return (
-            ModalSearchAndChat && <ModalSearchAndChat {...inkeepModalProps} />
-          );
-        }}
-      </BrowserOnly>
+      <Dropdown icon="wand2" text="Build with Agents" items={dropdownItems} />
     </div>
   );
 };

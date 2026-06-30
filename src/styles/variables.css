@@ -37,6 +37,7 @@
   --color-interactive-tonal-alert-0: #ffab001a;
   --color-interactive-tonal-alert-1: #ffab002e;
   --color-interactive-tonal-alert-2: #ffab0040;
+  --color-interactive-tonal-success-0: #007d6b1a;
 
   --color-interactive-primary: #9f85ff;
   --color-interactive-primary-hover: #4126a1;
@@ -139,6 +140,8 @@
   --ifm-navbar-padding-horizontal: 0;
   --ifm-navbar-shadow: none;
 
+  --ifm-z-index-fixed: 1;
+
   --ifm-menu-link-sublist-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0.529259 0.646447C0.724521 0.451184 1.0411 0.451184 1.23637 0.646447L5.88281 5.29289L10.5293 0.646447C10.7245 0.451184 11.0411 0.451184 11.2364 0.646447C11.4316 0.841709 11.4316 1.15829 11.2364 1.35355L6.23637 6.35355C6.0411 6.54882 5.72452 6.54882 5.52926 6.35355L0.529259 1.35355C0.333997 1.15829 0.333997 0.841709 0.529259 0.646447Z' fill='black' fill-opacity='0.72'/%3E%3C/svg%3E");
 
   /* landing page font sizes */
@@ -161,6 +164,12 @@
   --lp-box-shadow-button-hover:
     0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 5px 8px 0 rgba(0, 0, 0, 0.14),
     0 1px 14px 0 rgba(0, 0, 0, 0.12);
+  --shadow-1:
+    0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  --shadow-10:
+    0 6px 6px -3px rgba(0, 0, 0, 0.2), 0 10px 14px 1px rgba(0, 0, 0, 0.14),
+    0 4px 18px 3px rgba(0, 0, 0, 0.12);
 
   /* toc */
   --toc-max-width: 316px;
