@@ -1,6 +1,6 @@
 import { importDirectorySync } from '@iconify/tools';
 import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync, readFileSync } from "fs";
-import { isAbsolute, join, resolve, dirname } from "path";
+import { join, resolve, dirname } from "path";
 import { glob } from "glob";
 import { parseSkillMarkdown } from "../server/parse-skill-md";
 import { spawn } from "child_process";
@@ -94,21 +94,13 @@ const buildResourceExampleConvert = (version: string): Promise<void> => {
       return resolve();
     }
 
-    // If we are on AWS Amplify, we may be caching the Go installation directory
-    // and GOPATH value. The Amplify build configuration requires placing
-    // these in a directory local to the project with a relative path.
-    // Assemble absolute paths for these values.
     const goBinary = process.env.GO_INSTALL_DIR
-      ? join(process.cwd(), process.env.GO_INSTALL_DIR, "go", "bin", "go")
+      ? join(process.env.GO_INSTALL_DIR, "go", "bin", "go")
       : "go";
-    const goPath =
-      process.env.GOPATH && isAbsolute(process.env.GOPATH)
-        ? process.env.GOPATH
-        : join(process.cwd(), process.env.GOPATH);
     const proc = spawn(goBinary, ["build", "."], {
       cwd: convertResourceDir,
       stdio: "inherit",
-      env: { ...process.env, GOPATH: goPath },
+      env: process.env,
     });
     proc.on("close", (code) =>
       code === 0
