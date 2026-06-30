@@ -53,6 +53,15 @@
     padding: 10px var(--m-4);
     height: auto;
     width: auto;
+    max-width: 130px;
+    min-width: 130px;
+    margin-left: auto;
+    grid-column: auto / -1;
+
+    @media (--md-scr) {
+      max-width: 200px;
+      min-width: 200px;
+    }
   }
 }
 
