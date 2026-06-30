@@ -53,13 +53,14 @@ const PageActions: React.FC<PageActionsProps> = ({ pathname, emitEvent }) => {
         });
       },
     },
-    {
+    /* TODO: Enable when we have a landing page for skills
+{
       type: "link",
       label: "Learn more",
       icon: "note2",
       href: "https://goteleport.com/platform/ai-infrastructure/",
       target: "_blank",
-    },
+    }, */
   ];
 
   if (skillsForPage.length > 0) {
