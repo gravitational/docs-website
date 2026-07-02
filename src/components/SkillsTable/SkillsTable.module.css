@@ -7,6 +7,7 @@
 }
 
 .skillsTable {
+  font-size: var(--fs-text-md);
   tbody tr {
     background-color: var(--color-white);
   }
@@ -18,11 +19,20 @@
       margin: 0;
     }
   }
+  @media (--xl-scr) {
+    font-size: var(--fs-text-lg);
+
+    td,
+    th {
+      padding: 10px var(--m-1-5);
+    }
+  }
 }
 
 .header {
   grid-column: 1 / -1;
   display: grid;
+  gap: var(--m-1);
   grid-template-columns: 1fr 130px;
   justify-content: space-between;
   align-items: center;
@@ -66,7 +76,7 @@
 }
 
 .skillNameCell {
-  @media (--md-scr) {
+  @media (--xl-scr) {
     white-space: nowrap;
   }
 }
@@ -75,6 +85,10 @@
   max-width: 130px;
 
   @media (--md-scr) {
+    max-width: 150px;
+  }
+
+  @media (--xl-scr) {
     max-width: 200px;
     min-width: 200px;
   }
