@@ -1,0 +1,126 @@
+.skillsTableContainer {
+  margin: var(--m-4) 0;
+
+  @media (--md-scr) {
+    margin: var(--m-8) 0;
+  }
+}
+
+.skillsTable {
+  font-size: var(--fs-text-md);
+  tbody tr {
+    background-color: var(--color-white);
+  }
+  td,
+  th {
+    padding: 10px var(--m-1-5);
+
+    p {
+      margin: 0;
+    }
+  }
+
+  tbody tr th {
+    font-weight: var(--fw-regular);
+    text-align: left;
+  }
+
+  @media (--xl-scr) {
+    font-size: var(--fs-text-lg);
+    td,
+    th {
+      padding: 10px var(--m-2);
+    }
+  }
+}
+
+.header {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: var(--m-1);
+  grid-template-columns: 1fr 130px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--m-2);
+
+  @media (--md-scr) {
+    grid-template-columns: 1fr 200px;
+    margin-bottom: var(--m-3);
+  }
+
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
+
+  /* apply the same heading font size as the Docusaurus defaults */
+  h2 {
+    --ifm-h2-font-size: 1.5rem;
+    @media screen and (min-width: 577px) {
+      --ifm-h2-font-size: 2rem;
+    }
+  }
+
+  .installAllButton {
+    padding: 10px var(--m-4);
+    height: auto;
+    width: auto;
+    max-width: 130px;
+    min-width: 130px;
+    margin-left: auto;
+    grid-column: auto / -1;
+
+    @media (--md-scr) {
+      max-width: 200px;
+      min-width: 200px;
+    }
+  }
+}
+
+.skillNameCell {
+  @media (--xl-scr) {
+    white-space: nowrap;
+  }
+}
+
+.actionCell {
+  max-width: 130px;
+
+  @media (--md-scr) {
+    max-width: 150px;
+  }
+
+  @media (--xl-scr) {
+    max-width: 200px;
+    min-width: 200px;
+  }
+  .button {
+    width: 100%;
+    font-size: var(--fs-text-sm) !important;
+  }
+}
+.rawSkillLink {
+  display: flex;
+  align-items: center;
+  column-gap: var(--m-1);
+  margin-top: var(--m-0-5);
+
+  svg {
+    min-width: var(--m-1-5);
+    min-height: var(--m-1-5);
+    path {
+      fill: var(--color-dark-purple);
+    }
+  }
+
+  &:hover {
+    svg {
+      path {
+        fill: var(--color-white);
+      }
+    }
+  }
+}

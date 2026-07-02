@@ -131,6 +131,7 @@ export { default as magnifyEllipsis } from "./svg/magnify-ellipsis.svg";
 export { default as x } from "./svg/x.svg";
 export { default as caretUp } from "./svg/caret-up.svg";
 export { default as codeBlock } from "./svg/code-block.svg";
+export { default as arrowSquareOut } from "./svg/arrow-square-out.svg";
 
 // Teleport svgs
 export { default as agent } from "./teleport-svg/agent.svg";
