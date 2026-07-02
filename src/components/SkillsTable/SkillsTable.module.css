@@ -13,18 +13,23 @@
   }
   td,
   th {
-    padding: 10px var(--m-2);
+    padding: 10px var(--m-1-5);
 
     p {
       margin: 0;
     }
   }
+
+  tbody tr th {
+    font-weight: var(--fw-regular);
+    text-align: left;
+  }
+
   @media (--xl-scr) {
     font-size: var(--fs-text-lg);
-
     td,
     th {
-      padding: 10px var(--m-1-5);
+      padding: 10px var(--m-2);
     }
   }
 }

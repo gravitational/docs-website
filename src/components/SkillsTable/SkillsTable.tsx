@@ -76,13 +76,14 @@ const SkillsTable: React.FC<{
             .filter((skill) => skill.name !== "all-skills")
             .map((skill) => (
               <tr key={skill.name}>
-                <td className={styles.skillNameCell}>
+                <th scope="row" className={styles.skillNameCell}>
                   <code>{skill.name}</code>
-                </td>
+                </th>
                 <td dangerouslySetInnerHTML={{ __html: skill.description }} />
                 <td className={styles.actionCell}>
                   <Button
                     as="button"
+                    aria-label={`Install ${skill.readableName}`}
                     className={styles.button}
                     variant="secondary"
                     onClick={(e) => {
@@ -101,6 +102,7 @@ const SkillsTable: React.FC<{
                   </Button>
                   <Button
                     as="link"
+                    aria-label={`View Raw Skill for ${skill.readableName}`}
                     className={cn(styles.button, styles.rawSkillLink)}
                     variant="borderless"
                     href={skill.rawSourceUrl}
