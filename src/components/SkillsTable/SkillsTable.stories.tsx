@@ -31,7 +31,7 @@ export const InstallButtonOpensModal: Story = {
     const skill = skills[0];
 
     await step("Click the 'Install' button for the first skill", async () => {
-      const installButtons = canvas.getAllByRole("button", { name: "Install" });
+      const installButtons = canvas.getAllByRole("button", { name: "Install " + skill.readableName });
       await userEvent.click(installButtons[0]);
     });
 
@@ -63,7 +63,7 @@ export const ModalClose: Story = {
     const skill = skills[0];
 
     await step("Open modal for first skill", async () => {
-      const installButtons = canvas.getAllByRole("button", { name: "Install" });
+      const installButtons = canvas.getAllByRole("button", { name: "Install " + skill.readableName });
       await userEvent.click(installButtons[0]);
       expect(
         canvas.getByText(`Install ${skill.readableName}`),

@@ -7,7 +7,6 @@
 }
 
 .skillsTable {
-  font-size: var(--fs-text-md);
   tbody tr {
     background-color: var(--color-white);
   }
@@ -26,7 +25,6 @@
   }
 
   @media (--xl-scr) {
-    font-size: var(--fs-text-lg);
     td,
     th {
       padding: 10px var(--m-2);
