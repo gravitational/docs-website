@@ -2773,10 +2773,10 @@
   dependencies:
     "@hapi/hoek" "^11.0.2"
 
-"@iconify-json/carbon@^1.2.23":
-  version "1.2.23"
-  resolved "https://registry.yarnpkg.com/@iconify-json/carbon/-/carbon-1.2.23.tgz#1aed37d08c8ebaecc0676f88e14d88f5ca33aa79"
-  integrity sha512-7apXetbRmEiWDXIQyikFJZyq7pCVBKHYRzmeLdtT7wWoHYdWHwnFcBAzpuLoSh+ZEAfXZapSWEe8iuS6dUqf+Q==
+"@iconify-json/carbon@^1.2.24":
+  version "1.2.24"
+  resolved "https://registry.yarnpkg.com/@iconify-json/carbon/-/carbon-1.2.24.tgz#c72d1bbf995de9f78f1e8f5f9996a5799487c2e5"
+  integrity sha512-b7u/eTWE3xFa7UXlRJBSEm6At1y6+F0P3imBEip5/8QeRzouxVjBf80Y2xnu1GYsFo9MYlHA0bZfxxMd5givfw==
   dependencies:
     "@iconify/types" "*"
 
