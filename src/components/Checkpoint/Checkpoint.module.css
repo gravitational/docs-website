@@ -86,6 +86,15 @@
     }
   }
 
+  /* Hidden, not unmounted. See the rationale in Checkpoint.tsx. */
+  .troubleshooting {
+    display: none;
+
+    &.troubleshootingVisible {
+      display: block;
+    }
+  }
+
   .feedbackForm {
     label {
       display: block;

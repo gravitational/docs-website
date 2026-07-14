@@ -67,13 +67,21 @@ const Checkpoint: React.FC<CheckpointProps> = ({
   };
 
   return (
-    <div className={styles.checkpoint}>
+    <div
+      className={styles.checkpoint}
+      data-checkpoint=""
+      data-checkpoint-title={title}
+    >
       <div className={styles.header}>
         <Icon name="flag2" size="md" />
         <p className={styles.heading}>Checkpoint: {title}</p>
       </div>
       <div>
-        {description && <p className={styles.description}>{description}</p>}
+        {description && (
+          <p className={styles.description} data-checkpoint-description>
+            {description}
+          </p>
+        )}
       </div>
       <>
         <div
@@ -83,44 +91,56 @@ const Checkpoint: React.FC<CheckpointProps> = ({
         >
           <div className={styles.formContainerInner}>
             {opinionGiven === FeedbackType.DOWN && (
-              <div>
-                <p className={styles.title}>Thanks for letting us know!</p>
-                {children ? (
-                  <div className={styles.content}>{children}</div>
-                ) : (
-                  <>
-                    <p>Here are some troubleshooting tips:</p>
-                    <ul>
-                      <li>Ensure your internet connection is stable.</li>
-                      <li>
-                        Make sure that the feature is supported in your active
-                        Teleport edition by checking the{" "}
-                        <Link href="https://goteleport.com/feature-matrix/">
-                          Teleport feature matrix
-                        </Link>
-                        .
-                      </li>
-                      <li>
-                        Visit our{" "}
-                        <Link href="https://goteleport.com/faq/">FAQ page</Link>{" "}
-                        for common issues and their answers.
-                      </li>
-                    </ul>
-                  </>
-                )}
-                <p className={styles.content}>
-                  You can reach out to our{" "}
-                  <Link href="https://goteleport.com/community-slack/">
-                    Slack community
-                  </Link>{" "}
-                  or{" "}
-                  <Link href="https://support.goteleport.com/hc/en-us">
-                    customer support
-                  </Link>{" "}
-                  for help.
-                </p>
-              </div>
+              <p className={styles.title}>Thanks for letting us know!</p>
             )}
+            {/* Always rendered (CSS-hidden, not unmounted) so the content
+                survives into static HTML and the agent-facing markdown
+                produced by the llms-txt plugin. */}
+            <div
+              className={cn(styles.troubleshooting, {
+                [styles.troubleshootingVisible]:
+                  opinionGiven === FeedbackType.DOWN,
+              })}
+              data-checkpoint-troubleshooting
+            >
+              {children ? (
+                <div className={styles.content}>{children}</div>
+              ) : (
+                <>
+                  <p>Here are some troubleshooting tips:</p>
+                  <ul>
+                    <li>Ensure your internet connection is stable.</li>
+                    <li>
+                      Make sure that the feature is supported in your active
+                      Teleport edition by checking the{" "}
+                      <Link href="https://goteleport.com/feature-matrix/">
+                        Teleport feature matrix
+                      </Link>
+                      .
+                    </li>
+                    <li>
+                      Visit our{" "}
+                      <Link href="https://goteleport.com/faq/">FAQ page</Link>{" "}
+                      for common issues and their answers.
+                    </li>
+                  </ul>
+                </>
+              )}
+              {/* data-checkpoint-support: human-only escalation links; the
+                  llms.txt pipeline drops this paragraph from the markdown
+                  output so it doesn't repeat at every checkpoint. */}
+              <p className={styles.content} data-checkpoint-support>
+                You can reach out to our{" "}
+                <Link href="https://goteleport.com/community-slack/">
+                  Slack community
+                </Link>{" "}
+                or{" "}
+                <Link href="https://support.goteleport.com/hc/en-us">
+                  customer support
+                </Link>{" "}
+                for help.
+              </p>
+            </div>
             {opinionGiven && !submitted && (
               <form
                 className={styles.feedbackForm}
@@ -149,7 +169,7 @@ const Checkpoint: React.FC<CheckpointProps> = ({
                     className={cn(styles.submitButton, {
                       [styles.disabled]: !isValidCommentLength(
                         comment,
-                        MAX_COMMENT_LENGTH
+                        MAX_COMMENT_LENGTH,
                       ),
                     })}
                     disabled={comment?.length > MAX_COMMENT_LENGTH}

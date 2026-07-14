@@ -146,7 +146,7 @@ describe("server/llms/rehype-prepare-html", () => {
     );
   });
 
-  test("Irrelevant components: removes thumbsFeedback and checkpoint components, preserving other content", () => {
+  test("Irrelevant components: removes thumbsFeedback and docsHeader components, preserving other content", () => {
     const result = transformer(
       readFileSync(
         resolve("server/fixtures/llms/irrelevant-components.html"),
@@ -157,6 +157,67 @@ describe("server/llms/rehype-prepare-html", () => {
     expect((result.value as string).trim()).toBe(
       readFileSync(
         resolve("server/fixtures/llms/result/irrelevant-components.html"),
+        "utf-8",
+      ).trim(),
+    );
+  });
+
+  test("Checkpoint: transforms the widget into an hr-delimited block with title, description, and custom troubleshooting content, dropping interactive markup", () => {
+    const result = transformer(
+      readFileSync(resolve("server/fixtures/llms/checkpoint.html"), "utf-8"),
+    );
+
+    expect((result.value as string).trim()).toBe(
+      readFileSync(
+        resolve("server/fixtures/llms/result/checkpoint.html"),
+        "utf-8",
+      ).trim(),
+    );
+  });
+
+  test("Checkpoint: transforms a widget with the generic (no-children) troubleshooting fallback", () => {
+    const result = transformer(
+      readFileSync(
+        resolve("server/fixtures/llms/checkpoint-generic.html"),
+        "utf-8",
+      ),
+    );
+
+    expect((result.value as string).trim()).toBe(
+      readFileSync(
+        resolve("server/fixtures/llms/result/checkpoint-generic.html"),
+        "utf-8",
+      ).trim(),
+    );
+  });
+
+  test("Checkpoint: transforms Var and code-block widgets embedded in the troubleshooting content", () => {
+    const result = transformer(
+      readFileSync(
+        resolve("server/fixtures/llms/checkpoint-with-widgets.html"),
+        "utf-8",
+      ),
+    );
+
+    expect((result.value as string).trim()).toBe(
+      readFileSync(
+        resolve("server/fixtures/llms/result/checkpoint-with-widgets.html"),
+        "utf-8",
+      ).trim(),
+    );
+  });
+
+  test("Checkpoint: omits the verify paragraph when the widget has no description", () => {
+    const result = transformer(
+      readFileSync(
+        resolve("server/fixtures/llms/checkpoint-no-description.html"),
+        "utf-8",
+      ),
+    );
+
+    expect((result.value as string).trim()).toBe(
+      readFileSync(
+        resolve("server/fixtures/llms/result/checkpoint-no-description.html"),
         "utf-8",
       ).trim(),
     );
