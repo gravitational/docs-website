@@ -1,8 +1,13 @@
 .skillsTableContainer {
   margin: var(--m-4) 0;
+  font-size: var(--fs-text-sm);
 
   @media (--md-scr) {
     margin: var(--m-8) 0;
+  }
+
+  @media (--lg-scr) {
+    font-size: var(--fs-text-lg);
   }
 }
 
@@ -96,8 +101,13 @@
     min-width: 200px;
   }
   .button {
+    padding: 0 var(--m-2);
     width: 100%;
     font-size: var(--fs-text-sm) !important;
+
+    @media (--lg-scr) {
+      padding: 0 var(--m-4);
+    }
   }
 }
 .rawSkillLink {
@@ -111,6 +121,11 @@
     min-height: var(--m-1-5);
     path {
       fill: var(--color-dark-purple);
+    }
+
+    /* Hide the icon on medium screens to avoid the table overflowing */
+    @media screen and (min-width: 997px) and (max-width: 1024px) {
+      display: none;
     }
   }
 
