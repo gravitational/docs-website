@@ -11,7 +11,11 @@ import { visitParents, SKIP } from "unist-util-visit-parents";
  * Code blocks: extract text content and replace with clean <pre><code> structure
  * Card links: prevent duplicate links in the markdown output
  * Heading anchor links: remove hash-link anchors from headings
- * Irrelevant components: remove interactive UI components (thumbsFeedback, checkpoint, docsHeader)
+ * Irrelevant components: remove interactive UI components (thumbsFeedback, docsHeader)
+ * Checkpoint: replace the interactive checkpoint widget (matched via its
+ *   data-checkpoint attribute) with an hr-delimited, markdown-friendly block
+ *   that keeps the title, success criterion, and troubleshooting content while
+ *   dropping the buttons, feedback form, and thank-you states
  * H1 repositioning: move the h1 heading to the top of the document
  */
 
@@ -28,11 +32,7 @@ type AnchorEntry = {
 
 const rehypePrepareHTML: Plugin<[], Root, Root> = function () {
   return (tree: Root) => {
-    const irrelevantClassPrefixes = [
-      "thumbsFeedback",
-      "checkpoint",
-      "docsHeader",
-    ]; // Add any other class prefixes in order to remove irrelevant components, if needed
+    const irrelevantClassPrefixes = ["thumbsFeedback", "docsHeader"]; // Add any other class prefixes in order to remove irrelevant components, if needed
 
     // --- Track nodes for post-processing ---
     const toRemove: Array<{
@@ -49,6 +49,8 @@ const rehypePrepareHTML: Plugin<[], Root, Root> = function () {
       node: Element;
       parent: Element | Root;
     }> = [];
+    const checkpointNodes: Array<{ node: Element; parent: Element | Root }> =
+      [];
     const tabNodes: Element[] = [];
 
     const codeBlocks: CodeBlockEntry[] = [];
@@ -84,6 +86,17 @@ const rehypePrepareHTML: Plugin<[], Root, Root> = function () {
       ) {
         toRemove.push({ node: element, parent });
         return SKIP; // don't traverse children (e.g. avoids capturing an h1 inside a removed node)
+      }
+
+      // *** Checkpoint ***
+      // Matched via the stable data-checkpoint attribute (independent of the
+      // hashed CSS-module class). Record the node but keep traversing: real
+      // checkpoint bodies embed Var, Tabs, and code-block widgets that must be
+      // collected and transformed in place before the checkpoint subtree is
+      // reconstructed in post-processing (which runs after those transforms).
+      if (element.properties && "dataCheckpoint" in element.properties) {
+        checkpointNodes.push({ node: element, parent });
+        return;
       }
 
       // *** Headings ***
@@ -364,6 +377,118 @@ const rehypePrepareHTML: Plugin<[], Root, Root> = function () {
         const idx = outerParent.children.indexOf(outerWrapper);
         if (idx >= 0) {
           outerParent.children.splice(idx, 1, cleanPre);
+        }
+      }
+    }
+
+    // *** Checkpoint: replace the interactive widget with a markdown-friendly block ***
+    // Must run after the Var/Tabs/code-block transforms (see the visitor note).
+    {
+      const hr = (): Element => ({
+        type: "element",
+        tagName: "hr",
+        properties: {},
+        children: [],
+      });
+
+      const paragraph = (value: string): Element => ({
+        type: "element",
+        tagName: "p",
+        properties: {},
+        children: [{ type: "text", value }],
+      });
+
+      const strongParagraph = (value: string): Element => ({
+        type: "element",
+        tagName: "p",
+        properties: {},
+        children: [
+          {
+            type: "element",
+            tagName: "strong",
+            properties: {},
+            children: [{ type: "text", value }],
+          },
+        ],
+      });
+
+      const findByDataAttr = (node: Element, attr: string): Element | null => {
+        for (const child of node.children) {
+          if (child.type !== "element") continue;
+          const childEl = child as Element;
+          if (childEl.properties && attr in childEl.properties) {
+            return childEl;
+          }
+          const nested = findByDataAttr(childEl, attr);
+          if (nested) return nested;
+        }
+        return null;
+      };
+
+      const extractText = (node: Element): string => {
+        let text = "";
+        for (const child of node.children) {
+          if (child.type === "text") {
+            text += (child as Text).value;
+          } else if (child.type === "element") {
+            text += extractText(child as Element);
+          }
+        }
+        return text;
+      };
+
+      for (const { node, parent } of checkpointNodes) {
+        const title =
+          node.properties?.dataCheckpointTitle != null
+            ? String(node.properties.dataCheckpointTitle).trim()
+            : "";
+
+        const descriptionEl = findByDataAttr(node, "dataCheckpointDescription");
+        const troubleshootingEl = findByDataAttr(
+          node,
+          "dataCheckpointTroubleshooting",
+        );
+
+        const newNodes: Array<Element | Text | Comment> = [];
+        newNodes.push(hr());
+        newNodes.push(strongParagraph(`CHECKPOINT: ${title}`));
+
+        const descriptionText = descriptionEl
+          ? extractText(descriptionEl).trim()
+          : "";
+        if (descriptionText) {
+          newNodes.push(
+            paragraph(`Before proceeding, verify: ${descriptionText}`),
+          );
+        }
+
+        const troubleshootingChildren = troubleshootingEl
+          ? troubleshootingEl.children.filter((child) => {
+              if (child.type === "text") {
+                return child.value.trim() !== "";
+              }
+              // Drop the human-only escalation paragraph (Slack/support
+              // links) so it doesn't repeat at every checkpoint.
+              if (
+                child.type === "element" &&
+                child.properties &&
+                "dataCheckpointSupport" in child.properties
+              ) {
+                return false;
+              }
+              return true;
+            })
+          : [];
+        if (troubleshootingChildren.length > 0) {
+          newNodes.push(paragraph("If the check fails, troubleshoot:"));
+          newNodes.push(...(troubleshootingChildren as Array<Element | Text>));
+        }
+
+        newNodes.push(hr());
+
+        const idx = parent.children.indexOf(node);
+        if (idx >= 0) {
+          parent.children.splice(idx, 1, ...newNodes);
         }
       }
     }
