@@ -42,6 +42,7 @@ const SkillsBanner: React.FC<{
           as="button"
           className={styles.button}
           variant="primary"
+          aria-label={`Install skill ${skill.readableName}`}
           onClick={(e) => {
             e.stopPropagation();
             setModalActive(skill.name);
@@ -62,6 +63,7 @@ const SkillsBanner: React.FC<{
           variant="borderless"
           href={skill.rawSourceUrl}
           target="_blank"
+          aria-label={`View raw skill ${skill.readableName}`}
           onClick={() => {
             trackEvent({
               event_name: "view_raw_skill_clicked",
