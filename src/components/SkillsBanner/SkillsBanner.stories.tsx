@@ -48,10 +48,14 @@ export const WithSkill: Story = {
       "Install Skill and View Raw Skill buttons are present",
       async () => {
         expect(
-          canvas.getByRole("button", { name: "Install Skill" }),
+          canvas.getByRole("button", {
+            name: `Install the ${skill.readableName} skill`,
+          }),
         ).toBeInTheDocument();
         expect(
-          canvas.getByRole("link", { name: /view raw skill/i }),
+          canvas.getByRole("link", {
+            name: `View the raw ${skill.readableName} skill`,
+          }),
         ).toBeInTheDocument();
       },
     );
@@ -69,7 +73,9 @@ export const InstallButtonOpensModal: Story = {
 
     await step("Click Install Skill button", async () => {
       await userEvent.click(
-        canvas.getByRole("button", { name: "Install Skill" }),
+        canvas.getByRole("button", {
+          name: `Install the ${skill.readableName} skill`,
+        }),
       );
     });
 
@@ -101,7 +107,9 @@ export const ModalOpenAndClose: Story = {
 
     await step("Open modal", async () => {
       await userEvent.click(
-        canvas.getByRole("button", { name: "Install Skill" }),
+        canvas.getByRole("button", {
+          name: `Install the ${skill.readableName} skill`,
+        }),
       );
       expect(
         canvas.getByText(`Install ${skill.readableName}`),
@@ -114,7 +122,7 @@ export const ModalOpenAndClose: Story = {
       ) as HTMLElement;
       await userEvent.click(closeButton);
       expect(
-        canvas.queryByText(`Install ${skill.readableName}`),
+        canvas.queryByText(`Install the ${skill.readableName} skill`),
       ).not.toBeInTheDocument();
     });
   },
@@ -131,7 +139,9 @@ export const ViewRawSkill: Story = {
 
     await step("Click the 'View Raw Skill' link", async () => {
       await userEvent.click(
-        canvas.getByRole("link", { name: /view raw skill/i }),
+        canvas.getByRole("link", {
+          name: `View the raw ${skill.readableName} skill`,
+        }),
       );
     });
 
