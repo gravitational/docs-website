@@ -41,7 +41,7 @@ const configLint = {
     ["lint-fenced-code-flag", { allowEmpty: true }],
     ["lint-file-extension", false],
     ["lint-no-duplicate-headings", false],
-    ["lint-list-item-spacing", { checkBlanks: true }],
+    ["lint-list-item-spacing", false ],
     ["lint-no-shell-dollars", false],
     ["lint-list-item-indent", "one"],
     ["lint-ordered-list-marker-value", false],
