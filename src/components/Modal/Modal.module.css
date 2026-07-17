@@ -4,7 +4,7 @@
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 3000;
   border-radius: var(--m-1);
   color: var(--color-black);
   line-height: 1.57143;
