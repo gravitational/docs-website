@@ -57,6 +57,7 @@ const DropdownItem: React.FC<DrodownItemProps> = ({
             if (type === "button" && onClick) {
               onClick();
             } else if (type === "modal") {
+              e.stopPropagation();
               onClick?.();
               setModalActive(true);
             }

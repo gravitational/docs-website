@@ -1,5 +1,6 @@
 .modal {
   position: fixed;
+  visibility: visible;
   left: 0;
   top: 0;
   width: 100%;
