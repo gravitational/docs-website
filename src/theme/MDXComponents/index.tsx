@@ -30,6 +30,7 @@ import InlineCTA from "/src/components/InlineCTA/InlineCTA";
 import EnterpriseFeatureWidget from "@site/src/components/EnterpriseFeatureWidget/EnterpriseFeatureWidget";
 import Callout from "@site/src/components/Callout";
 import FAQSection from "@site/src/components/FAQSection";
+import SkillsTable from "@site/src/components/SkillsTable/SkillsTable";
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
@@ -71,6 +72,7 @@ const MDXComponents: MDXComponentsObject = {
   InlineCTA,
   Callout,
   FAQSection,
+  SkillsTable,
 };
 
 export default MDXComponents;
