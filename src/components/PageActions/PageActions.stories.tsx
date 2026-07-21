@@ -74,7 +74,8 @@ export const ViewAsMarkdownClick: Story = {
               name: "test-skill",
               readableName: "Test Skill",
               description: "This is a test skill.",
-              installCommand: "npx skills add test-skill-url",
+              installCommand:
+                "npx skills add https://github.com/gravitational/teleport",
               rawSourceUrl:
                 "https://github.com/gravitational/teleport/tree/master/skills/test-skill/SKILL.md",
             },
@@ -114,7 +115,8 @@ export const DropdownModalOpens: Story = {
               name: "test-skill",
               readableName: "Test Skill",
               description: "This is a test skill.",
-              installCommand: "npx skills add test-skill-url",
+              installCommand:
+                "npx skills add https://github.com/gravitational/teleport",
               rawSourceUrl:
                 "https://github.com/gravitational/teleport/tree/master/skills/test-skill/SKILL.md",
             },
@@ -137,7 +139,9 @@ export const DropdownModalOpens: Story = {
       );
       await userEvent.click(canvas.getByText("Install Skills"));
       expect(
-        canvas.getByText("npx skills add test-skill-url"),
+        canvas.getByText(
+          "npx skills add https://github.com/gravitational/teleport",
+        ),
       ).toBeInTheDocument();
     });
   },
@@ -146,23 +150,8 @@ export const DropdownModalOpens: Story = {
 export const DropdownModalClosesWhenClickingOutside: Story = {
   render: () => (
     <WithFeedbackContext>
-      <ExclusivityContext.Provider
-        value={{
-          skillsForPage: [
-            {
-              name: "test-skill",
-              readableName: "Test Skill",
-              description: "This is a test skill.",
-              installCommand: "npx skills add test-skill-url",
-              rawSourceUrl:
-                "https://github.com/gravitational/teleport/tree/master/skills/test-skill/SKILL.md",
-            },
-          ],
-        }}
-      >
-        <PageActions pathname="/test" emitEvent={collectEvents()} />
-        <button>Click outside of the dropdown</button>
-      </ExclusivityContext.Provider>
+      <PageActions pathname="/test" emitEvent={collectEvents()} />
+      <button>Click outside of the dropdown</button>
     </WithFeedbackContext>
   ),
   play: async ({ canvasElement, step }) => {
@@ -180,7 +169,9 @@ export const DropdownModalClosesWhenClickingOutside: Story = {
         await userEvent.click(canvas.getByText("Install Skills"));
         await waitFor(() =>
           expect(
-            canvas.getByText("npx skills add test-skill-url"),
+            canvas.getByText(
+              "npx skills add https://github.com/gravitational/teleport",
+            ),
           ).toBeInTheDocument(),
         );
 
@@ -189,7 +180,9 @@ export const DropdownModalClosesWhenClickingOutside: Story = {
         );
         await waitFor(() =>
           expect(
-            canvas.queryByText("npx skills add test-skill-url"),
+            canvas.queryByText(
+              "npx skills add https://github.com/gravitational/teleport",
+            ),
           ).not.toBeInTheDocument(),
         );
       },

@@ -1,5 +1,4 @@
 import { getReportIssueURL } from "@site/src/utils/github-issue";
-import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import styles from "./PageActions.module.css";
 import Icon from "../Icon";
 import ThumbsFeedback from "../ThumbsFeedback";
@@ -7,12 +6,11 @@ import {
   copyPageContentAsMarkdown,
   normalizeMarkdownPathname,
 } from "@site/src/utils/markdown";
-import { Fragment, useContext, useState } from "react";
+import { useState } from "react";
 import { trackEvent } from "@site/src/utils/analytics";
 import Dropdown, { DrodownItemProps as DropdownItem } from "./Dropdown";
-import { SkillInfo } from "@site/scripts/prepare-files.mjs";
 import Pre from "@site/src/theme/MDXComponents/Pre";
-import ExclusivityContext from "../ExclusivityBanner/context";
+import skills from "@site/data/skills.json";
 
 type PageActionsProps = {
   pathname: string;
@@ -20,12 +18,45 @@ type PageActionsProps = {
 };
 
 const PageActions: React.FC<PageActionsProps> = ({ pathname, emitEvent }) => {
-  const { frontMatter } = useDoc();
   const [copiedMessage, setCopiedMessage] = useState<string>("Copy for LLM");
-  const exclusivity = useContext(ExclusivityContext);
-  const skillsForPage: SkillInfo[] = exclusivity?.skillsForPage ?? [];
+
+  const allSkills = skills.find((skill) => skill.name === "all-skills") || {
+    name: "all-skills",
+    readableName: "all skills",
+    description:
+      "Install all available skills. This will install all skills found in the Teleport repository.",
+    installCommand: "npx skills add https://github.com/gravitational/teleport",
+    rawSourceUrl:
+      "https://github.com/gravitational/teleport/tree/master/skills/README.md",
+  };
 
   const dropdownItems: DropdownItem[] = [
+    {
+      type: "modal",
+      label: "Install Skills",
+      icon: "lightbulb",
+      onClick: () => {
+        trackEvent({
+          event_name: "skill_install_clicked",
+          emitEvent: emitEvent,
+        });
+      },
+      content: (
+        <>
+          <h3>Install {allSkills.readableName}</h3>
+          <div style={{ marginBottom: "1.5rem" }}>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: allSkills.description,
+              }}
+            />
+            <Pre className={styles.installCommand}>
+              <div className="hljs">{allSkills.installCommand}</div>
+            </Pre>
+          </div>
+        </>
+      ),
+    },
     {
       type: "button",
       label: copiedMessage,
@@ -62,39 +93,6 @@ const PageActions: React.FC<PageActionsProps> = ({ pathname, emitEvent }) => {
       target: "_blank",
     }, */
   ];
-
-  if (skillsForPage.length > 0) {
-    dropdownItems.unshift({
-      type: "modal",
-      label: "Install Skills",
-      icon: "lightbulb",
-      onClick: () => {
-        trackEvent({
-          event_name: "skill_install_clicked",
-          emitEvent: emitEvent,
-        });
-      },
-      content: (
-        <>
-          {skillsForPage.map((skill: SkillInfo) => (
-            <Fragment key={skill.name}>
-              <h3>Install {skill.readableName}</h3>
-              <div style={{ marginBottom: "1.5rem" }}>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: skill.description,
-                  }}
-                />
-                <Pre className={styles.installCommand}>
-                  <div className="hljs">{skill.installCommand}</div>
-                </Pre>
-              </div>
-            </Fragment>
-          ))}
-        </>
-      ),
-    });
-  }
 
   return (
     <div className={styles.pageActions}>
