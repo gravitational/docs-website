@@ -7,6 +7,19 @@ export const normalizeMarkdownPathname = (pathname: string) => {
   return `${pathname}.md`;
 };
 
+export const markdownAlternatePath = (
+  pathname: string,
+  baseUrl: string = "/",
+) => {
+  const root = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+  // The site root under a baseUrl prefix (e.g. /docs/) maps to index.md
+  // rather than replacing the trailing slash (which would yield /docs.md).
+  if (pathname === root || pathname === root.slice(0, -1)) {
+    return `${root}index.md`;
+  }
+  return normalizeMarkdownPathname(pathname);
+};
+
 export const copyPageContentAsMarkdown = async (pathname: string) => {
   const normalizedPathname = normalizeMarkdownPathname(pathname);
 
