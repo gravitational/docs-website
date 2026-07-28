@@ -35,6 +35,7 @@ import {
 import {
   clayTrackingPlugin,
   googleTagGatewayPlugin,
+  transcendConsentPlugin,
 } from "./server/tracking-plugins";
 import { llmsTxtPluginOptions } from "./server/llms";
 import { fetchVideoMeta } from "./server/youtube-meta";
@@ -454,6 +455,7 @@ const config: Config = {
         },
       };
     },
+    transcendConsentPlugin,
     extendedPostcssConfigPlugin,
     clayTrackingPlugin,
     googleTagGatewayPlugin,
