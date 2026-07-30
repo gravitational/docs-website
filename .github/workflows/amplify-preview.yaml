@@ -21,7 +21,7 @@ jobs:
         role-to-assume: ${{ vars.IAM_ROLE }}
 
     - name: Get Amplify Preview URL
-      uses: gravitational/shared-workflows/tools/amplify-preview@02af65890b521ecdf79856c00f6d2c875bf40ea3 # tools/amplify-preview/v0.0.5
+      uses: gravitational/shared-workflows/tools/amplify-preview@986f92841a4f032e262477e5bb15f214d50b1015 # tools/amplify-preview/v0.0.6
       id: amplify_preview
       with:
         app_ids: ${{ vars.AMPLIFY_APP_IDS }}
