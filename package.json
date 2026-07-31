@@ -66,7 +66,7 @@
     "glob": "^13.0.6",
     "hast-util-to-html": "^9.0.5",
     "highlightjs-terraform": "https://github.com/highlightjs/highlightjs-terraform#eb1b9661e143a43dff6b58b391128ce5cdad31d4",
-    "js-yaml": "^5.2.1",
+    "js-yaml": "^5.2.2",
     "lowlight": "^3.1.0",
     "mdast-util-from-markdown": "^2.0.3",
     "mdast-util-to-hast": "^13.2.1",
