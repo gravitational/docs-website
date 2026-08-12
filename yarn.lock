@@ -2789,10 +2789,10 @@
   dependencies:
     "@iconify/types" "*"
 
-"@iconify-json/logos@^1.2.11":
-  version "1.2.11"
-  resolved "https://registry.yarnpkg.com/@iconify-json/logos/-/logos-1.2.11.tgz#5bd0479d0bdc2e48adb664b0fab728d4e5013f1c"
-  integrity sha512-fOo4pGEatuyuCFNL+cwquYMa2Im0oJHRHV7lt/Qqs5Ode/lPImHCQcfTtPzZj7qYMPb/h8YHN3TG54uEowrjNQ==
+"@iconify-json/logos@^1.2.12":
+  version "1.2.12"
+  resolved "https://registry.yarnpkg.com/@iconify-json/logos/-/logos-1.2.12.tgz#25c02864a5b99b5b91bdba048821e0cd3a06c3e3"
+  integrity sha512-zUi/AoezU2F3L65nPVd2smiU6Y+ZI7RjdVPlGfeAeYbPbZ9kWn7Ucxj+KshmyQRBYwLtKoqAlUyoGgMqWG1T8g==
   dependencies:
     "@iconify/types" "*"
 
@@ -17427,10 +17427,10 @@ toidentifier@1.0.1, toidentifier@~1.0.1:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.1.tgz#3be34321a88a820ed1bd80dfaa33e479fbb8dd35"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
 
-tokenx@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/tokenx/-/tokenx-2.0.0.tgz#e59194ef04999b9c890e0ca4983e20fe502465fe"
-  integrity sha512-kLZDSxJ/a8nvQEp0o6xfss4b7X8wa0YLdJfKD/TfzTCKiYR6nPckcAVdTymdo9f7ru9W/5gsWCk/BuPjpjUHwg==
+tokenx@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tokenx/-/tokenx-2.1.0.tgz#1a4f2a30dedfdc52a12f6027c5ac014ac9de6e9e"
+  integrity sha512-iHhqfDuFFbMWHGfjEnVALgatV10KqcO5W5Fl99fYJmFjhE57JXPdnFrDlp6BTFIMmbbazsCg/lZYpJ2mPsPeQQ==
 
 totalist@^3.0.0:
   version "3.0.1"

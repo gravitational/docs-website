@@ -54,7 +54,7 @@
     "@docusaurus/theme-mermaid": "^3.10.2",
     "@docusaurus/tsconfig": "^3.10.2",
     "@iconify-json/carbon": "^1.2.25",
-    "@iconify-json/logos": "^1.2.11",
+    "@iconify-json/logos": "^1.2.12",
     "@iconify/tools": "^5.0.12",
     "@inkeep/cxkit-react": "^0.5.119",
     "@mdx-js/react": "^3.1.1",
@@ -81,7 +81,7 @@
     "rehype-highlight": "^7.0.2",
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
-    "tokenx": "^2.0.0",
+    "tokenx": "^2.1.0",
     "unist-util-visit": "^5.1.0",
     "vite-node": "^6.0.0"
   },
