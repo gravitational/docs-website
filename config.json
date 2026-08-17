@@ -2,16 +2,19 @@
   "versions": [
     {
       "name": "17.x",
-      "branch": "branch/v17"
+      "branch": "branch/v17",
+      "repo_path": "gravitational/core"
     },
     {
       "name": "18.x",
       "branch": "branch/v18",
+      "repo_path": "gravitational/core",
       "isDefault": true
     },
     {
       "name": "19.x",
-      "branch": "master"
+      "branch": "master",
+      "repo_path": "gravitational/core"
     }
   ]
 }

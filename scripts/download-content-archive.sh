@@ -1,13 +1,14 @@
 #!/bin/bash
-set -o pipefail;
+set -euo pipefail;
 # This script assumes that the name of each first-level child directory in
 # content is content/v<MAJOR_VERSION>.x, e.g., content/v17.x.
 #
 # $1 is the relative path of the content directory to the project root.
 # $2 is the name of the branch on GitHub from which to fetch an archive, e.g.,
 # master or branch/v17.
-# $3 is an optional repository path in <owner>/<name> format. the default is
-# gravitational/teleport
+# $3 is an optional repository path in <owner>/<name> format. The default is
+# gravitational/teleport. Private repositories require GITHUB_TOKEN or GitHub
+# App credentials supported by scripts/get-github-token.sh.
 
 if [[ -n $(find "$1" -name "docs") ]]; then
     echo "Content directory $1 already includes a docs directory. Skipping."
@@ -21,16 +22,15 @@ CONTENT_DIR_NAME='content/([0-9]+)\.x'
 # Extract the major version from the submodule name if it follows the expected
 # format.
 
-MAJOR=$(echo "${1}" | grep -oE "$CONTENT_DIR_NAME" | sed -E "s|^${CONTENT_DIR_NAME}|\1|");
-if [[ "$?" -ne 0 ]]; then
+if ! MAJOR=$(echo "${1}" | grep -oE "$CONTENT_DIR_NAME" | sed -E "s|^${CONTENT_DIR_NAME}|\1|"); then
     echo "Invalid content version directory: \"${1}\" does not have the expected name format.";
     exit 1;
 fi
 echo "Found major version $MAJOR";
 
-if [ -z "$3" ] || [ "$3" = "null" ]; then
+if [ -z "${3:-}" ] || [ "${3:-}" = "null" ]; then
     REPO="gravitational/teleport";
-elif $(echo "$3" | grep -vqE "^[a-z-]+/[a-z-]+$"); then
+elif echo "$3" | grep -vqE "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"; then
     echo "Invalid GitHub repo: $3. Must be of the format <owner>/<name>";
     exit 1;
 else
@@ -38,21 +38,34 @@ else
 fi
 
 BRANCH_TAR_URL="https://api.github.com/repos/${REPO}/tarball/${2}"
+GITHUB_AUTH_TOKEN="$(scripts/get-github-token.sh "$REPO")"
+CURL_AUTH_ARGS=()
+if [ -n "$GITHUB_AUTH_TOKEN" ]; then
+    CURL_AUTH_ARGS=(
+        -H "Accept: application/vnd.github+json"
+        -H "Authorization: Bearer ${GITHUB_AUTH_TOKEN}"
+        -H "X-GitHub-Api-Version: 2022-11-28"
+    )
+fi
 
 # Use curl's ETag support to compare the tarball we want to download with the one in the cache. 
 # Save the tarball as .downloads/$1.tar.gz
-BRANCH_TAR_FILE="$(echo ${DOWNLOADS_DIR}/${MAJOR}.tar.gz | tr -s /)"
+BRANCH_TAR_FILE="${DOWNLOADS_DIR%/}/${MAJOR}.tar.gz"
 ETAG_FILE="${BRANCH_TAR_FILE}.etag"
 TMP_ETAG="${ETAG_FILE}.tmp"
 mkdir -p "${DOWNLOADS_DIR}"
 
-curl -sS -L --fail \
-    --retry 5 \
-    --etag-compare "$ETAG_FILE" \
-    --etag-save "$TMP_ETAG" \
-    -w '%{http_code}: Downloaded file (%header{content-disposition} with size of %{size_download}) as %{filename_effective} from %{url}\n' \
-    -o "$BRANCH_TAR_FILE" \
-    "$BRANCH_TAR_URL"
+if ! curl -sS -L --fail \
+        --retry 5 \
+        "${CURL_AUTH_ARGS[@]}" \
+        --etag-compare "$ETAG_FILE" \
+        --etag-save "$TMP_ETAG" \
+        -w '%{http_code}: Downloaded file (%header{content-disposition} with size of %{size_download}) as %{filename_effective} from %{url}\n' \
+        -o "$BRANCH_TAR_FILE" \
+        "$BRANCH_TAR_URL"; then
+    echo "Failed to download ${REPO}@${2}. Verify that the configured GitHub token has contents read access to the repository." >&2
+    exit 1
+fi
 
 # If TMP_ETAG exist and it's not empty, replace ETAG_FILE with TMP_ETAG
 # This is needed because of bug in older curl versions: https://github.com/curl/curl/issues/15728

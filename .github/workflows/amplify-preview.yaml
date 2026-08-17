@@ -59,6 +59,7 @@ jobs:
     if: ${{ github.event_name == 'merge_group'}}
     name: Amplify Preview
     runs-on: ubuntu-22.04-4core-arm64
+    environment: docs-amplify
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -76,7 +77,19 @@ jobs:
           key: tarball-downloads-${{ hashFiles('config.json') }}
           restore-keys: tarball-downloads-
 
+      - name: Create GitHub App token for core
+        id: core-app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.GITHUB_APP_CLIENT_ID }}
+          private-key: ${{ secrets.GITHUB_APP_PRIVATE_KEY }}
+          owner: gravitational
+          repositories: core
+          permission-contents: read
+
       - name: Build the docs with the latest content
+        env:
+          GITHUB_TOKEN: ${{ steps.core-app-token.outputs.token }}
         run: yarn build
 
       # Prevent a change in the linter from failing on unexpected docs content

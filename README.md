@@ -55,9 +55,14 @@ Settings for AWS Amplify are following:
 
 1. `nodejs` 20 and `yarn` v1.22.22.
 2. Build command `yarn build`
-4. Build results folder `build`
-5. Following env variables should be set: `INKEEP_API_KEY`, `YOUTUBE_API_KEY`
-6. This variable should be set increase nodejs memory `NODE_OPTIONS=--max-old-space-size=8192`
+3. Build results folder `build`
+4. Following env variables should be set: `INKEEP_API_KEY`, `YOUTUBE_API_KEY`
+5. This variable should be set increase nodejs memory `NODE_OPTIONS=--max-old-space-size=8192`
+6. To fetch private docs content from `gravitational/core`, set `GITHUB_TOKEN`
+   or set these GitHub App environment variables with repository contents read
+   access:
+    - `GITHUB_APP_CLIENT_ID`
+    - `GITHUB_APP_PRIVATE_KEY`
 7. Add the following redirect to make 404 work:
     - Source address: `/<*>` 
     - Target address: `/404.html`
@@ -71,7 +76,7 @@ To make it possible, we convert content from the orginal format to the Docusauru
 
 How it works under the hood:
 
-1. We store docs in the git submodules of the main `teleport` repo as in the original setup. Submodules are fetched inside `content` folder to the subfolders named after the teleport versions `15.x`, `16.x`, etc. Then we build the docs we update submodules to the latest version.
+1. Production and CI builds download branch archives from the repository specified by each version's `repo_path` into subfolders such as `content/17.x`. Local development can instead use the optional submodules configured through `.gitmodules.example`.
 2. Info about versions, their status and original branches are manually added to the `config.json` file. See version config description below.
 3. To make old docs work with Ducsaurus we need to move files to correct location and also generate a bunch of config files. To do it we use `scripts/prepare-files.mts` file. It does the following based on `config.json` content:
     1. Move mdx files, except `includes` to the `versioned_docs/version-{name}` folder for the non-current versions.
@@ -107,6 +112,7 @@ Everything else is more or less straightforward Docusaurus code.
 type Version = {
     name: string; // should be the same as the folder in `content`
     branch: string; // name of the original git branch
+    repo_path?: string; // optional GitHub repo path, defaults to gravitational/teleport
     deprecated: boolean; // Unsupported versions
     latest: boolean; // Last officially released version
     current: boolean; // Next version currently in development
