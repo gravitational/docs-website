@@ -60,13 +60,19 @@ Settings for AWS Amplify are following:
 5. This variable should be set increase nodejs memory `NODE_OPTIONS=--max-old-space-size=8192`
 6. To fetch private docs content from `gravitational/core`, set `GITHUB_TOKEN`
    or set these GitHub App environment variables with repository contents read
-   access:
+   access. In AWS Amplify, these can be normal environment variables or secrets:
     - `GITHUB_APP_CLIENT_ID`
     - `GITHUB_APP_PRIVATE_KEY`
 7. Add the following redirect to make 404 work:
     - Source address: `/<*>` 
     - Target address: `/404.html`
     - Type `404 (Rewrite)`
+
+Local builds use the same content download path, but local setup should not need
+GitHub App credentials. If `GITHUB_TOKEN` is not set, the download helper tries
+`gh auth token` before falling back to the GitHub App flow. Running
+`gh auth login` with an account that can read `gravitational/core` is enough for
+local archive downloads.
 
 ## Architecture overview
 

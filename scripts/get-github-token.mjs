@@ -6,6 +6,13 @@ const [repo] = process.argv.slice(2);
 const githubApiUrl = process.env.GITHUB_API_URL || "https://api.github.com";
 const coreRepo = "gravitational/core";
 
+function getFromSecretOrEnv(name) {
+  const configVars = process.env.secrets
+    ? JSON.parse(process.env.secrets)
+    : process.env;
+  return configVars[name];
+}
+
 // Helper function to make a request to the GitHub API and return the JSON response.
 async function requestJson(path, token, init = {}) {
   const response = await fetch(`${githubApiUrl}${path}`, {
@@ -76,8 +83,9 @@ async function main() {
     process.exit(1);
   }
 
-  if (process.env.GITHUB_TOKEN) {
-    process.stdout.write(process.env.GITHUB_TOKEN);
+  const githubToken = getFromSecretOrEnv("GITHUB_TOKEN");
+  if (githubToken) {
+    process.stdout.write(githubToken);
     return;
   }
 
@@ -86,15 +94,15 @@ async function main() {
     return;
   }
 
-  const clientId = process.env.GITHUB_APP_CLIENT_ID;
-  const privateKey = process.env.GITHUB_APP_PRIVATE_KEY;
+  const clientId = getFromSecretOrEnv("GITHUB_APP_CLIENT_ID");
+  const privateKey = getFromSecretOrEnv("GITHUB_APP_PRIVATE_KEY");
 
   if (!clientId || !privateKey) {
     console.error(
       "GITHUB_TOKEN is not set, and GitHub authentication is now required because docs content is fetched from the private gravitational/core repository.",
     );
     console.error(
-      "Set GITHUB_TOKEN, or set both GITHUB_APP_CLIENT_ID and GITHUB_APP_PRIVATE_KEY.",
+      "Set GITHUB_TOKEN, or set both GITHUB_APP_CLIENT_ID and GITHUB_APP_PRIVATE_KEY in the environment or Amplify secrets.",
     );
     process.exit(1);
   }
