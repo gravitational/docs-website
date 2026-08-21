@@ -63,6 +63,21 @@ Settings for AWS Amplify are following:
     - Target address: `/404.html`
     - Type `404 (Rewrite)`
 
+Production Amplify builds use a private ECR build image with Teleport docs content
+already staged under `/opt/docs-content/`. All Amplify builds will set the
+`DOCS_CONTENT_DIR` for example:
+
+```
+DOCS_CONTENT_DIR=/opt/docs-content
+```
+
+When `DOCS_CONTENT_DIR` is set, `yarn git-update` replaces the local `content/`
+contents with the preloaded image content and then exits successfully so
+`yarn build` can continue to `yarn prepare-files` and the Docusaurus build. The
+preloaded directory should contain the version folders expected by `config.json`,
+such as `content/17.x/docs`, `content/17.x/examples`, `content/18.x/docs`, and
+`content/19.x/docs` after it is copied into this repository.
+
 ## Architecture overview
 
 Current setup is made with the goal to make this project backward compatible with the original [docs engine](https://github.com/gravitational/docs) so they can run in parallel until transition period is not over.
@@ -71,7 +86,8 @@ To make it possible, we convert content from the orginal format to the Docusauru
 
 How it works under the hood:
 
-1. We store docs in the git submodules of the main `teleport` repo as in the original setup. Submodules are fetched inside `content` folder to the subfolders named after the teleport versions `15.x`, `16.x`, etc. Then we build the docs we update submodules to the latest version.
+1. We load docs into the `content` folder to the subfolders named after the teleport versions `17.x`, `18.x`, etc. Production Amplify builds use the preloaded content from `DOCS_CONTENT_DIR`. GitHub Actions and local development can 
+continue downloading GitHub archives as a fallback and local development can also optionally use git submodules.
 2. Info about versions, their status and original branches are manually added to the `config.json` file. See version config description below.
 3. To make old docs work with Ducsaurus we need to move files to correct location and also generate a bunch of config files. To do it we use `scripts/prepare-files.mts` file. It does the following based on `config.json` content:
     1. Move mdx files, except `includes` to the `versioned_docs/version-{name}` folder for the non-current versions.
