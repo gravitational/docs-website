@@ -123,7 +123,7 @@
     "ts-jest": "^29.4.12",
     "ts-loader": "^9.6.2",
     "tsc-esm-fix": "^3.1.0",
-    "typescript": "~6.0.3",
+    "typescript": "~7.0.2",
     "unified": "^11.0.5",
     "unified-lint-rule": "^3.0.0",
     "unist": "^0.0.1",
