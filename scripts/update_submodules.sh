@@ -6,10 +6,6 @@
 # no preloaded content is configured, CI and Amplify retrieve archives for the
 # latest release for each supported Teleport major version. Local development
 # uses git submodules.
-#
-# Note that, when checking docs content changes in gravitational/teleport, CI
-# jobs should clone the gravitational/teleport repository into a subdirectory of
-# content, rather than using this approach.
 DOCS_VERSIONS=$(jq -r '.versions[] | select(.deprecated != true) | .name' config.json);
 
 if [[ -n "${DOCS_CONTENT_DIR:-}" ]]; then
@@ -22,7 +18,10 @@ if [[ -n "${DOCS_CONTENT_DIR:-}" ]]; then
   # Clean out the content directory and copy the preloaded content into it.
   rm -rf content;
   mkdir content;
-  cp -a "${DOCS_CONTENT_DIR}/." content/;
+  if ! cp -a "${DOCS_CONTENT_DIR}/." content/; then
+    echo "Failed to copy docs content from DOCS_CONTENT_DIR.";
+    exit 1;
+  fi
 
   for v in $(echo "$DOCS_VERSIONS"); do
     if [[ ! -d "content/$v/docs" ]]; then
