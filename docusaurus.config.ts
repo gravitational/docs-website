@@ -156,7 +156,7 @@ const config: Config = {
             },
             {
               label: "Downloads",
-              href: "https://goteleport.com/downloads/",
+              href: "https://goteleport.com/download/client-tools/",
             },
             {
               label: "Status",
