@@ -1,4 +1,5 @@
 import type { Config, LoadContext, Plugin } from "@docusaurus/types";
+import type { RuleSetRule } from "webpack";
 
 import "dotenv/config";
 import type { VFile } from "vfile";
@@ -18,6 +19,7 @@ import {
   getCurrentVersion,
   getDocusaurusConfigVersionOptions,
   getLatestVersion,
+  getVersionNames,
 } from "./server/config-site";
 import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { getRedirects } from "./server/redirects";
@@ -51,6 +53,53 @@ const sidebarItems = (
     (item): item is { label: string; href: string } => typeof item !== "string",
   )
   .map(({ label, href }) => ({ label, href }));
+
+// Checks if a given Webpack rule is the Docusaurus MDX rule by
+// looking for the MDX loader in the rule's `use` array.
+const isDocusaurusMDXRule = (rule: unknown): rule is RuleSetRule => {
+  // First, check if the rule is a valid object and not an array.
+  if (!rule || typeof rule !== "object" || Array.isArray(rule)) {
+    return false;
+  }
+
+  const candidate = rule as RuleSetRule;
+
+  // Check that the rule's `test` property matches MDX files.
+  if (
+    !(candidate.test instanceof RegExp) ||
+    !candidate.test.test("partial.mdx")
+  ) {
+    return false;
+  }
+  // Check that the rule has a `use` array.
+  if (!Array.isArray(candidate.use)) {
+    return false;
+  }
+
+  // Finally, check if any of the loaders in the `use` array is the Docusaurus MDX loader.
+  return candidate.use.some(
+    (loader) =>
+      typeof loader === "object" &&
+      loader !== null &&
+      typeof loader.loader === "string" &&
+      loader.loader.includes("@docusaurus/mdx-loader"),
+  );
+};
+
+type MDXLoader = {
+  loader: string;
+  options: {
+    isMDXPartial?: (filePath: string) => boolean;
+  };
+};
+
+// Checks if a given loader is the Docusaurus MDX loader.
+const isDocusaurusMDXLoader = (loader: unknown): loader is MDXLoader =>
+  !!loader &&
+  typeof loader === "object" &&
+  typeof (loader as MDXLoader).loader === "string" &&
+  (loader as MDXLoader).loader.includes("@docusaurus/mdx-loader") &&
+  typeof (loader as MDXLoader).options === "object";
 
 const config: Config = {
   future: {
@@ -431,6 +480,66 @@ const config: Config = {
         onInlineTags: "throw",
       },
     ],
+    // Includes versioned MDX partials in the main MDX loader so imported partials still compile even though
+    // /docs/pages/includes is excluded from the default docs pipeline. The hook adds those directories to
+    // the MDX rule and marks them as MDX partials so the normal remark/rehype transforms still run.
+    function partialsLoader(context: LoadContext): Plugin {
+      return {
+        name: "partials-loader",
+        configureWebpack(config) {
+          const partialDirectories = getVersionNames().map((version) =>
+            path.resolve(
+              context.siteDir,
+              "content",
+              version,
+              "docs/pages/includes",
+            ),
+          );
+
+          // Find the Docusaurus MDX rule in the Webpack configuration.
+          const docsMDXRule = config.module?.rules?.find(isDocusaurusMDXRule);
+
+          if (!docsMDXRule) {
+            throw new Error("Could not find Docusaurus's MDX loader rule.");
+          }
+          const loaders = docsMDXRule.use;
+          if (!Array.isArray(loaders)) {
+            throw new Error("Could not find Docusaurus's MDX loader.");
+          }
+          // Extract the Docusaurus MDX loader from the `use` array.
+          const mdxLoader = loaders.find(isDocusaurusMDXLoader);
+
+          if (!mdxLoader) {
+            throw new Error("Could not find Docusaurus's MDX loader.");
+          }
+
+          // Get the existing content directories included in the MDX rule.
+          const contentDirectories =
+            docsMDXRule.include === undefined
+              ? []
+              : Array.isArray(docsMDXRule.include)
+                ? docsMDXRule.include
+                : [docsMDXRule.include];
+          docsMDXRule.include = [...contentDirectories, ...partialDirectories];
+
+          // Update the MDX loader's `isMDXPartial` option to include the partial directories.
+          // By default only files with the "_" prefix are considered MDX partials in Docusaurus.
+          // Reference https://docusaurus.io/docs/next/markdown-features/react#importing-markdown
+          const isDocsPartial = mdxLoader.options.isMDXPartial;
+          mdxLoader.options.isMDXPartial = (filePath: string) => {
+            if (
+              partialDirectories.some((directory) =>
+                filePath.startsWith(`${directory}${path.sep}`),
+              )
+            ) {
+              return true;
+            }
+
+            return isDocsPartial?.(filePath) ?? false;
+          };
+        },
+      };
+    },
     // This is for allowing to import images in .mdx files using the @content alias
     // TODO: create a remark plugin for processing image paths inside the attributes of MdxJsxFlowElement nodes.
     // See https://github.com/facebook/docusaurus/blob/main/packages/docusaurus-mdx-loader/src/remark/transformImage/index.ts#L267

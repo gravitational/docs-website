@@ -6,6 +6,9 @@ import type { Node } from "unist";
 import { visit, CONTINUE, SKIP } from "unist-util-visit";
 
 const versionedDocsPattern = `versioned_docs/version-([0-9]+\\.x)/`;
+// MDX-native partials are read directly from the content submodules and never
+// copied into docs/ or versioned_docs/, so they need their own version detection.
+const preMigrationContentPattern = `(?:^|/)content/([0-9]+\\.x)/`;
 
 export default function remarkVersionAlias(
   currentVersion: string,
@@ -28,6 +31,12 @@ export default function remarkVersionAlias(
       const versionedPathParts = vfile.path.match(versionedDocsPattern);
       if (versionedPathParts) {
         version = versionedPathParts[1];
+      } else {
+        // Check partials in the content folder
+        const contentPathParts = vfile.path.match(preMigrationContentPattern);
+        if (contentPathParts) {
+          version = contentPathParts[1];
+        }
       }
 
       esm.data.estree.body.forEach((decl) => {
