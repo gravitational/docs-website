@@ -112,6 +112,28 @@ This is a paragraph.
 `,
       path: "versioned_docs/version-16.x/mypage.mdx",
     },
+    {
+      description:
+        "import statement in a MDX-native partial path (content/<version>/), which is never copied into versioned_docs/",
+      input: `---
+title: My page
+description: My page
+---
+
+import NestedPartial from "@version/docs/pages/includes/nested.mdx"
+
+This is a paragraph.`,
+      expected: `---
+title: My page
+description: My page
+---
+
+import NestedPartial from '@site/content/18.x/docs/pages/includes/nested.mdx';
+
+This is a paragraph.
+`,
+      path: "content/18.x/docs/pages/includes/test.mdx",
+    },
   ];
 
   test.each(testCases)("$description", (tc) => {
