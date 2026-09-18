@@ -14,6 +14,7 @@ import MDXUl from "@theme/MDXComponents/Ul";
 import Mermaid from "@theme/Mermaid";
 import TabItem from "@theme/TabItem";
 import Tabs from "@theme/Tabs";
+import CodeBlock from "@theme/CodeBlock";
 import { type ComponentProps } from "react";
 import Checkpoint from "/src/components/Checkpoint";
 import Command, { CommandComment, CommandLine } from "/src/components/Command";
@@ -51,6 +52,7 @@ const MDXComponents: MDXComponentsObject = {
   command: Command,
   commandcomment: CommandComment,
   commandline: CommandLine,
+  CodeBlock,
   details: MDXDetails, // For MD mode support, see https://github.com/facebook/docusaurus/issues/9092#issuecomment-1602902274
   h1: (props: ComponentProps<"h1">) => <MDXHeading as="h1" {...props} />,
   h2: (props: ComponentProps<"h2">) => <MDXHeading as="h2" {...props} />,

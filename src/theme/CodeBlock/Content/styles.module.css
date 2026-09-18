@@ -1,0 +1,160 @@
+/* stylelint-disable selector-class-pattern */
+/* stylelint-disable no-descending-specificity */
+
+/* theme taken from https://github.com/highlightjs/highlight.js/blob/master/src/styles/monokai.css */
+
+.wrapper {
+  display: block;
+  overflow-x: auto;
+  margin: 0;
+  padding: var(--m-1) var(--m-2);
+  border-radius: var(--r-default);
+  font-family: var(--font-monospace);
+  line-height: var(--lh-md);
+  white-space: pre;
+  background-color: var(--color-code) !important;
+
+  @media (--sm-scr) {
+    font-size: var(--fs-text-sm);
+  }
+
+  @media (--md-scr) {
+    font-size: var(--fs-text-md);
+  }
+
+  & code {
+    font-family: inherit;
+    background-color: var(--color-code);
+    padding: 0 0 1.5rem 0;
+
+    & > :global(.token-line) {
+      :global(.token) {
+        color: #ddd !important;
+      }
+      :global(.tag),
+      :global(.keyword),
+      :global(.selector),
+      :global(.deleted),
+      :global(.boolean),
+      :global(.null) {
+        color: #f92672 !important;
+      }
+
+      :global(.number),
+      :global(.operator) {
+        color: #66d9ef !important;
+      }
+
+      :global(.class-name) {
+        color: white !important;
+      }
+
+      :global(.attr-name),
+      :global(.url),
+      :global(.namespace),
+      :global(.constant) {
+        color: #bf79db !important;
+      }
+
+      :global(.string),
+      :global(.inserted),
+      :global(.variable),
+      :global(.builtin),
+      :global(.function),
+      :global(.punctuation),
+      :global(.char),
+      :global(.plain) {
+        color: #a6e22e !important;
+      }
+
+      :global(.comment),
+      :global(.doctype) {
+        color: #75715e !important;
+      }
+
+      :global(.comment) {
+        font-style: normal !important;
+      }
+
+      :global(.keyword),
+      :global(.selector),
+      :global(.boolean),
+      :global(.doctype),
+      :global(.class-name),
+      :global(.null) {
+        font-weight: bold !important;
+      }
+    }
+  }
+
+  /* @theme/CodeBlock highlights syntax with prism-react-renderer, which
+   * applies a "token" class plus one class per grammar type (e.g.
+   * "token comment") rather than the hljs- classes highlight.js uses. */
+  &:global(.token-line) {
+    background-color: red !important;
+    & :global(.token.tag),
+    & :global(.token.keyword),
+    & :global(.token.selector),
+    & :global(.token.deleted),
+    & :global(.token.boolean) {
+      color: #f92672;
+    }
+
+    & :global(.token.number),
+    & :global(.token.operator) {
+      color: #66d9ef;
+    }
+
+    & :global(.token.class-name) {
+      color: white;
+    }
+
+    & :global(.token.attr-name),
+    & :global(.token.url),
+    & :global(.token.namespace),
+    & :global(.token.constant) {
+      color: #bf79db;
+    }
+
+    & :global(.token.string),
+    & :global(.token.inserted),
+    & :global(.token.variable),
+    & :global(.token.builtin),
+    & :global(.token.function),
+    & :global(.token.punctuation),
+    & :global(.token.char) {
+      color: #a6e22e;
+    }
+
+    & :global(.token.comment),
+    & :global(.token.doctype) {
+      color: #75715e;
+    }
+
+    & :global(.token.keyword),
+    & :global(.token.selector),
+    & :global(.token.boolean),
+    & :global(.token.doctype),
+    & :global(.token.class-name) {
+      font-weight: bold;
+    }
+  }
+}
+
+.line {
+  display: block;
+  & :global {
+    & .wrapper-input input {
+      color: var(--color-light-blue);
+      background-color: transparent;
+    }
+
+    & .wrapper-input input::placeholder {
+      color: var(--color-light-gray);
+    }
+
+    & .wrapper-input svg {
+      color: var(--color-light-blue);
+    }
+  }
+}
