@@ -62,8 +62,7 @@
       :global(.builtin),
       :global(.function),
       :global(.punctuation),
-      :global(.char),
-      :global(.plain) {
+      :global(.char) {
         color: #a6e22e !important;
       }
 
@@ -72,6 +71,7 @@
         color: #75715e !important;
       }
 
+      :global(.keyword),
       :global(.comment) {
         font-style: normal !important;
       }
@@ -83,6 +83,9 @@
       :global(.class-name),
       :global(.null) {
         font-weight: bold !important;
+      }
+      :global(.keyword.type.variable) {
+        font-weight: normal !important;
       }
     }
   }
