@@ -136,6 +136,9 @@ const config: Config = {
     "./src/styles/global.css",
   ],
   themeConfig: {
+    prism: {
+      additionalLanguages: ["hcl", "toml", "ini"],
+    },
     docs: {
       sidebar: {
         autoCollapseCategories: true,
