@@ -439,7 +439,13 @@ const config: Config = {
         versions: getDocusaurusConfigVersionOptions(),
         // Our custom plugins need to be before default plugins
         beforeDefaultRemarkPlugins: [
-          [remarkVersionAlias, getCurrentVersion()],
+          [
+            remarkVersionAlias,
+            {
+              currentVersion: getCurrentVersion(),
+              latestVersion: getLatestVersion(),
+            },
+          ],
           [
             remarkIncludes,
             {
