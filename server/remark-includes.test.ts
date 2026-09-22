@@ -75,9 +75,13 @@ describe("server/remark-includes", () => {
     const expectedErrors = [
       "Includes only works if they are the only content on the line",
       "Wrong import path non-existing.mdx in file /content/4.0/docs/pages/filename.mdx.",
+      "Legacy (!path!) include syntax is deprecated; use an MDX-native import instead.",
     ];
 
     expect(errors).toEqual(expectedErrors);
+
+    const deprecationMessage = result.messages[result.messages.length - 1];
+    expect(deprecationMessage.fatal).toBe(false);
   });
 
   describe("Removes details box summaries from the enclosing paragraph", () => {

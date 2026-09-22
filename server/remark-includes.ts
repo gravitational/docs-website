@@ -342,8 +342,11 @@ export default function remarkIncludes({
     }
 
     const lastErrorIndex = vfile.messages.length;
+    let hasDeprecatedInclude = false;
 
     visitParents(root, isInclude, (node: Node, ancestors: Parent[]) => {
+      hasDeprecatedInclude = true;
+
       if (node.type === "code") {
         let code = node as Code;
         const noIncludes = numIncludes(code.value);
@@ -446,5 +449,21 @@ export default function remarkIncludes({
       ruleId: "includes",
       source: "remark-lint",
     });
+
+    // Report the deprecated (!path!) include syntax per file as a warning
+    // until the migration to MDX-native imports has been completed.
+    // TODO: switch to error after migrating to MDX-native imports.
+    if (lint && hasDeprecatedInclude) {
+      const message = vfile.message(
+        `Legacy (!path!) include syntax will be deprecated; use MDX-native import instead:
+        import MyPartial from '@version/pages/includes/my-partial.mdx;
+
+        <MyPartial />
+        `,
+      );
+      message.fatal = false;
+      message.ruleId = "includes-deprecated";
+      message.source = "remark-lint";
+    }
   };
 }
