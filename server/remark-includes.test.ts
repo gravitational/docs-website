@@ -75,7 +75,11 @@ describe("server/remark-includes", () => {
     const expectedErrors = [
       "Includes only works if they are the only content on the line",
       "Wrong import path non-existing.mdx in file /content/4.0/docs/pages/filename.mdx.",
-      "Legacy (!path!) include syntax is deprecated; use an MDX-native import instead.",
+      `Legacy (!path!) include syntax will be deprecated; use MDX-native import instead:
+        import MyPartial from '@version/pages/includes/my-partial.mdx;
+
+        <MyPartial />
+        `,
     ];
 
     expect(errors).toEqual(expectedErrors);
