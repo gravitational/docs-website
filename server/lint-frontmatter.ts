@@ -8,20 +8,27 @@ import Ajv from "ajv";
 
 const schemaErrorPrefix = "issue validating page frontmatter: ";
 
+interface remarkLintFrontmatterOptions {
+  schema: JSONSchema7;
+  errorSuffix?: string;
+}
+
 export const remarkLintFrontmatter = lintRule(
   "remark-lint:frontmatter",
-  (root: Node, vfile, options: JSONSchema7) => {
+  (root: Node, vfile, options: remarkLintFrontmatterOptions) => {
+    const { schema, errorSuffix } = options;
+
     // Ensure additionalProperties is false. The point of this linter is to
     // prevent misspelled or removed frontmatter fields from making it into
     // the docs and causing unintended behavior or confusion for maintainers.
-    options.additionalProperties = false;
+    schema.additionalProperties = false;
 
     let hasFrontmatter = false;
     const ajv = new Ajv({
       // Include all errors and their messages. Critical for printing linter warnings.
       allErrors: true,
     });
-    const validate = ajv.compile(options);
+    const validate = ajv.compile(schema);
 
     visit(root, "yaml", (node: Node) => {
       hasFrontmatter = true;
@@ -68,6 +75,9 @@ export const remarkLintFrontmatter = lintRule(
             break;
           default:
             msg += e.message!;
+        }
+        if (errorSuffix) {
+          msg += ". " + errorSuffix;
         }
         vfile.message(msg);
       });
