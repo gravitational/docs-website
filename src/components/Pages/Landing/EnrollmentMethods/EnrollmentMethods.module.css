@@ -436,6 +436,9 @@
 
   &.referencesVariant {
     color: var(--color-foreground-slightly-muted);
+    &:hover {
+      box-shadow: var(--lp-box-shadow-hover-tag-darker);
+    }
   }
 }
 
