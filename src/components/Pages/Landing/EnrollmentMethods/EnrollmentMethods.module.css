@@ -209,6 +209,7 @@
     }
   }
 
+  &.referencesVariant,
   &.referencesVariant a {
     color: var(--color-dark-purple) !important;
     font-size: var(--fs-header-4);
