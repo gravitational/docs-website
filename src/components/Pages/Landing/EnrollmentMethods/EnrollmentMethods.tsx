@@ -24,7 +24,7 @@ interface EnrollmentMethod {
   href?: string;
   tagLists: TagList[];
   children?: React.ReactNode;
-  variant?: "default" | "rows";
+  variant?: "default" | "rows" | "references";
   innerMethod?: boolean;
   progressStatus?: "Not started" | "Started" | "In-progress" | "Completed";
   linkColor?: "black" | "purple";
@@ -37,7 +37,7 @@ interface EnrollmentMethodsProps {
   titleSize?: "md" | "lg"; // 24px or 32px, lg by default
   description?: string;
   children?: React.ReactNode;
-  variant?: "default" | "rows";
+  variant?: "default" | "rows" | "references";
   desktopColumnsCount?: 2;
   additionalNote?: any;
   additionalNoteIcon?: IconName;
@@ -87,13 +87,13 @@ export const Method: React.FC<EnrollmentMethod> = ({
   return (
     <div
       className={cn(styles.method, {
-        [styles.rowsVariant]: variant === "rows",
+        [styles.rowsVariant]: variant !== "default",
         [styles.innerMethodRowsVariant]: innerMethod && variant === "rows",
       })}
     >
       <div
         className={cn(styles.methodHeader, {
-          [styles.rowsVariant]: variant === "rows",
+          [styles.rowsVariant]: variant !== "default",
         })}
       >
         {progressStatus && (
@@ -128,6 +128,7 @@ export const Method: React.FC<EnrollmentMethod> = ({
             className={cn(styles.methodTitle, {
               [styles.innerMethodRowsVariant]:
                 innerMethod && variant === "rows",
+              [styles.referencesVariant]: variant === "references",
             })}
           >
             {href ? (
@@ -155,6 +156,7 @@ export const Method: React.FC<EnrollmentMethod> = ({
         <div
           className={cn(styles.methodContent, {
             [styles.rowsVariant]: variant === "rows" && !innerMethod,
+            [styles.referencesVariant]: variant === "references",
             [styles.innerMethodRowsVariant]: innerMethod && variant === "rows",
             [styles.xlFontSize]: fontSize === "xl",
           })}
@@ -172,15 +174,37 @@ export const Method: React.FC<EnrollmentMethod> = ({
         </div>
         {tagLists.length > 0 &&
           tagLists.map((tagList, index) => (
-            <div key={index} className={styles.tagList}>
+            <div
+              key={index}
+              className={cn(styles.tagList, {
+                [styles.referencesVariant]: variant === "references",
+                [styles.tagListGrid]:
+                  variant === "references" && !!tagList.title,
+              })}
+            >
               {tagList.title && (
-                <h4 className={styles.tagListTitle}>{tagList.title}</h4>
+                <h4
+                  className={cn(styles.tagListTitle, {
+                    [styles.referencesVariant]: variant === "references",
+                  })}
+                >
+                  {tagList.title}
+                </h4>
               )}
-              <ul className={styles.tags}>
+              <ul
+                className={cn(styles.tags, {
+                  [styles.referencesVariant]: variant === "references",
+                })}
+              >
                 {tagList.tags.map((tag, tagIndex) => (
                   <li key={tagIndex}>
                     {tag.href ? (
-                      <Link className={styles.tag} to={tag.href}>
+                      <Link
+                        className={cn(styles.tag, {
+                          [styles.referencesVariant]: variant === "references" && !tag.icon,
+                        })}
+                        to={tag.href}
+                      >
                         {tag.icon && (
                           <Icon
                             name={tag.icon}
@@ -251,7 +275,7 @@ const EnrollmentMethods: React.FC<EnrollmentMethodsProps> = ({
         )}
         <div
           className={cn(styles.methodsList, {
-            [styles.rowsVariant]: variant === "rows",
+            [styles.rowsVariant]: variant !== "default",
           })}
           style={
             {
