@@ -5,6 +5,16 @@ additionalProperties: false
 properties:
   # The fields below are used natively by Docusaurus. See the Docusaurus docs:
   # https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#markdown-front-matter
+  #
+  # Note that the Teleport docs site does not support the following
+  # Docusaurus-supported frontmatter fields:
+  #
+  # - id
+  # - slug
+  #
+  # This is because automation supporting the docs site, such as the sidebar
+  # generation logic and redirect checker in gravitational/shared-workflows,
+  # assumes that the slug and ID of each docs page are based on its file name.
   title:
     type: string
   description:
@@ -19,10 +29,6 @@ properties:
     type: boolean
   parse_number_prefixes:
     type: boolean
-  id:
-    type: string
-  slug:
-    type: string
   sidebar_label:
     type: string
   sidebar_key:
