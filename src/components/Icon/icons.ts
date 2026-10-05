@@ -132,6 +132,13 @@ export { default as x } from "./svg/x.svg";
 export { default as caretUp } from "./svg/caret-up.svg";
 export { default as codeBlock } from "./svg/code-block.svg";
 export { default as arrowSquareOut } from "./svg/arrow-square-out.svg";
+export { default as slack } from "./teleport-svg/slack.svg";
+export { default as pagerduty } from "./svg/pagerduty.svg";
+export { default as jira } from "./svg/jira.svg";
+export { default as msTeams } from "./svg/msteams.svg";
+export { default as discord } from "./svg/discord.svg";
+export { default as mattermost } from "./svg/mattermost.svg";
+export { default as email } from "./svg/email.svg";
 
 // Teleport svgs
 export { default as agent } from "./teleport-svg/agent.svg";

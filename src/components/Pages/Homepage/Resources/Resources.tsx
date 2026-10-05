@@ -55,12 +55,14 @@ const ResourceCard: React.FC<Resource> = ({
   const cardContent = (
     <>
       {editionTag && <div className={styles.editionTag}>{editionTag}</div>}
-      <IconComponent
-        className={cn(styles.iconSvg, {
-          [styles.docVariant]: variant === "doc",
-          [styles[iconsSize]]: iconsSize,
-        })}
-      />
+      {IconComponent && (
+        <IconComponent
+          className={cn(styles.iconSvg, {
+            [styles.docVariant]: variant === "doc",
+            [styles[iconsSize]]: iconsSize,
+          })}
+        />
+      )}
       <h4
         className={cn(styles.resourceTitle, {
           [styles.smallSize]: variant === "doc" && !description,
