@@ -41,7 +41,10 @@ function resolvePartialMarkdownLink(
   }
 
   const [, pathname, search = "", hash = ""] = parts;
-  if (!pathname || !markdownFileExtensionPattern.test(pathname)) {
+  // Strip a trailing slash so that paths like ./getting-started.mdx/ are
+  // treated the same as ./getting-started.mdx.
+  const normalizedPathname = pathname.replace(/\/$/, "");
+  if (!normalizedPathname || !markdownFileExtensionPattern.test(normalizedPathname)) {
     return url;
   }
 
@@ -49,7 +52,7 @@ function resolvePartialMarkdownLink(
   // Resolve the absolute filesystem path of the linked markdown file.
   const absoluteFsPath = path.posix.resolve(
     path.posix.dirname(filePath),
-    pathname,
+    normalizedPathname,
   );
   const markerIndex = absoluteFsPath.indexOf(docsPagesPath);
   if (markerIndex === -1) {
