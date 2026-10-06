@@ -1,0 +1,22 @@
+---
+title: "Fixture"
+---
+import ExamplesConfig from "!!raw-loader!@version/examples/config.yaml";
+import DocsPagesIncludesNestedDemo from "!!raw-loader!@version/docs/pages/includes/nested/demo.mdx";
+import DocsPagesIncludesNestedDemo2 from "@version/docs/pages/includes/nested/demo.mdx";
+import DocsPagesConnectYourClientIncludesConnectDemo from "@version/docs/pages/connect-your-client/includes/connect-demo.mdx";
+
+
+<DocsPagesIncludesNestedDemo2 value="caller value" iamRole="ExampleTeleportAthenaRole" db={props.dbService ?? "example-db"} dbArgs={"--db-user=" + (props.dbUser ?? "alice") + " --db-name=" + (props.mySchema ?? "mysql")} />
+(!docs/pages/includes/other.mdx!)
+<DocsPagesConnectYourClientIncludesConnectDemo />
+<CodeBlock language="yaml">
+
+  {ExamplesConfig}
+
+</CodeBlock>
+<CodeBlock language="yaml">
+
+  {DocsPagesIncludesNestedDemo}
+
+</CodeBlock>
