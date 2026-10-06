@@ -211,6 +211,20 @@ See the [testing](/ver/18.x/test/) guide.
     },
     {
       description:
+        "markdown link in a root-level content file (e.g. CHANGELOG.md) resolves to the correct doc route",
+      input: `See the [Active Directory docs](./docs/pages/enroll-resources/desktop-access/active-directory.mdx#network-level-authentication-nla).`,
+      expected: `See the [Active Directory docs](/ver/18.x/enroll-resources/desktop-access/active-directory/#network-level-authentication-nla).\n`,
+      path: "content/18.x/CHANGELOG.md",
+    },
+    {
+      description:
+        "markdown link with a trailing slash after .mdx is resolved correctly",
+      input: `See the [Getting Started](./docs/pages/enroll-resources/database-access/getting-started.mdx/).`,
+      expected: `See the [Getting Started](/ver/18.x/enroll-resources/database-access/getting-started/).\n`,
+      path: "content/18.x/CHANGELOG.md",
+    },
+    {
+      description:
         "markdown link with an .mdx extension outside a partial is left untouched",
       input: `---
 title: My page
