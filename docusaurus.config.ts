@@ -505,6 +505,12 @@ const config: Config = {
             ),
           );
 
+          // Root directories for each content version, needed for root-level
+          // partials like CHANGELOG.md that live outside docs/pages/includes/.
+          const contentVersionRoots = getVersionNames().map((version) =>
+            path.resolve(context.siteDir, "content", version),
+          );
+
           // Find the Docusaurus MDX rule in the Webpack configuration.
           const docsMDXRule = config.module?.rules?.find(isDocusaurusMDXRule);
 
@@ -544,7 +550,37 @@ const config: Config = {
               return true;
             }
 
+            // Files in the content version root but outside docs/ are imported
+            // as partials (e.g., CHANGELOG.md).
+            if (
+              contentVersionRoots.some((root) => {
+                if (!filePath.startsWith(`${root}${path.sep}`)) return false;
+                const rel = filePath.slice(root.length + path.sep.length);
+                return !rel.startsWith(`docs${path.sep}`);
+              })
+            ) {
+              return true;
+            }
+
             return isDocsPartial?.(filePath) ?? false;
+          };
+
+          // Return a new MDX rule for root-level content partials (e.g.
+          // CHANGELOG.md) so that the Docusaurus MDX fallback plugin skips
+          // these files and they go through remark-version-alias instead.
+          return {
+            module: {
+              rules: [
+                {
+                  test: /\.mdx?$/i,
+                  include: contentVersionRoots,
+                  // Exclude dirs already handled by the docs MDX rule so the
+                  // same file is never processed by two MDX loaders.
+                  exclude: partialDirectories,
+                  use: [mdxLoader],
+                },
+              ],
+            },
           };
         },
       };
