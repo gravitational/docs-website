@@ -1,6 +1,7 @@
 export const normalizeMarkdownPathname = (pathname: string) => {
-  // root path should return "index"
+  // root paths should return "index"
   if (pathname === "" || pathname === "/") return "/index.md";
+  if (pathname === "/docs/") return "/docs/index.md";
   // Remove any trailing slash for consistency
   if (pathname.endsWith("/") && pathname.length > 1)
     return `${pathname.slice(0, -1)}.md`;
