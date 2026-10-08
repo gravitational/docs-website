@@ -11,7 +11,10 @@ const transformer = (vfileOptions: VFileOptions) => {
   return remark()
     .use(mdx as any)
     .use(remarkFrontmatter) // Test cases use frontmatter
-    .use(remarkVersionAlias as any, "15.x")
+    .use(remarkVersionAlias as any, {
+      currentVersion: "15.x",
+      latestVersion: "15.x",
+    })
     .processSync(file as any);
 };
 
@@ -111,6 +114,132 @@ import CodeExample from '!!raw-loader!@site/content/16.x/examples/access-plugin-
 This is a paragraph.
 `,
       path: "versioned_docs/version-16.x/mypage.mdx",
+    },
+    {
+      description:
+        "import statement in a MDX-native partial path (content/<version>/), which is never copied into versioned_docs/",
+      input: `---
+title: My page
+description: My page
+---
+
+import NestedPartial from "@version/docs/pages/includes/nested.mdx"
+
+This is a paragraph.`,
+      expected: `---
+title: My page
+description: My page
+---
+
+import NestedPartial from '@site/content/18.x/docs/pages/includes/nested.mdx';
+
+This is a paragraph.
+`,
+      path: "content/18.x/docs/pages/includes/test.mdx",
+    },
+    {
+      description:
+        "markdown link to a folder's category-index page (same basename as its parent folder) drops the repeated segment",
+      input: `---
+title: My page
+description: My page
+---
+
+See the [testing](../test/my-test-path/my-test-path.mdx) guide.`,
+      expected: `---
+title: My page
+description: My page
+---
+
+See the [testing](/ver/18.x/test/my-test-path/) guide.
+`,
+      path: "content/18.x/docs/pages/includes/test.mdx",
+    },
+    {
+      description:
+        "markdown link in a latest-version partial resolves without a /ver/ prefix",
+      input: `---
+title: My page
+description: My page
+---
+
+See the [testing](../test/my-test-path/my-test-path.mdx) guide.`,
+      expected: `---
+title: My page
+description: My page
+---
+
+See the [testing](/test/my-test-path/) guide.
+`,
+      path: "content/15.x/docs/pages/includes/test.mdx",
+    },
+    {
+      description:
+        "markdown link to a regular (non-index) doc page keeps its full path",
+      input: `---
+title: My page
+description: My page
+---
+
+See the [testing](../test/my-test-path/linux.mdx) guide.`,
+      expected: `---
+title: My page
+description: My page
+---
+
+See the [testing](/ver/18.x/test/my-test-path/linux/) guide.
+`,
+      path: "content/18.x/docs/pages/includes/test.mdx",
+    },
+    {
+      description:
+        "markdown link to an index page in a partial drops the trailing /index segment",
+      input: `---
+title: My page
+description: My page
+---
+
+See the [testing](../test/index.mdx) guide.`,
+      expected: `---
+title: My page
+description: My page
+---
+
+See the [testing](/ver/18.x/test/) guide.
+`,
+      path: "content/18.x/docs/pages/includes/test.mdx",
+    },
+    {
+      description:
+        "markdown link in a root-level content file (e.g. CHANGELOG.md) resolves to the correct doc route",
+      input: `See the [Active Directory docs](./docs/pages/enroll-resources/desktop-access/active-directory.mdx#network-level-authentication-nla).`,
+      expected: `See the [Active Directory docs](/ver/18.x/enroll-resources/desktop-access/active-directory/#network-level-authentication-nla).\n`,
+      path: "content/18.x/CHANGELOG.md",
+    },
+    {
+      description:
+        "markdown link with a trailing slash after .mdx is resolved correctly",
+      input: `See the [Getting Started](./docs/pages/enroll-resources/database-access/getting-started.mdx/).`,
+      expected: `See the [Getting Started](/ver/18.x/enroll-resources/database-access/getting-started/).\n`,
+      path: "content/18.x/CHANGELOG.md",
+    },
+    {
+      description:
+        "markdown link with an .mdx extension outside a partial is left untouched",
+      input: `---
+title: My page
+description: My page
+---
+
+See the [testing](../test/my-test-path/my-test-path.mdx) guide.`,
+      expected: `---
+title: My page
+description: My page
+---
+
+See the [testing](../test/my-test-path/my-test-path.mdx) guide.
+`,
+      path: "docs/mypage.mdx",
     },
   ];
 

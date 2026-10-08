@@ -1,0 +1,13 @@
+---
+title: "Fixture"
+---
+
+(!includes/nested/demo.mdx value="caller value" "iam-role="ExampleTeleportAthenaRole" db="{props.dbService ?? "example-db"}" dbArgs="--db-user={props.dbUser ?? "alice"} --db-name={props.mySchema ?? "mysql"}"!)
+(!docs/pages/includes/other.mdx!)
+(!docs/pages/connect-your-client/includes/connect-demo.mdx!)
+```yaml
+(!/examples/config.yaml!)
+```
+```yaml
+(!docs/pages/includes/nested/demo.mdx!)
+````

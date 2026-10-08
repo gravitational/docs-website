@@ -1,0 +1,34 @@
+import Existing from "@version/docs/pages/includes/existing.mdx";
+import ExamplesConfig from "!!raw-loader!@version/examples/config.yaml";
+
+Value: {props.value ?? "default"}
+Role: {props.iamRole ?? "DefaultRole"}
+Scheme: {props.extraAppScheme ?? ""}
+Existing: { props.extraAppScheme ?? "" }
+Var: <Var name={props.forwarder ?? "localhost"} />
+Template: `${ props.extraAppScheme ?? "" }`
+Other: {props.missing}
+
+<Tabs>
+  <TabItem label="Mac">
+
+    <CodeBlock>
+    {`$ echo ${ props.flags }`}
+    </CodeBlock>
+
+  </TabItem>
+</Tabs>
+
+<CodeBlock language="yaml">
+
+  {ExamplesConfig}
+
+</CodeBlock>
+
+<CodeBlock>
+{`# Using macOS open utility:
+  $ open -a "Teleport Connect" --args ${ props.flags }
+  
+  # Running the executable directly:
+  $ /Applications/Teleport\\ Connect.app/Contents/MacOS/Teleport\\ Connect ${ props.flags }`}
+</CodeBlock>
