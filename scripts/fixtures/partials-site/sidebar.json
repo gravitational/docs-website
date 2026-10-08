@@ -1,0 +1,76 @@
+{
+  "docs": [
+    {
+      "type": "doc",
+      "id": "index",
+      "label": "Partials fixture site"
+    },
+    {
+      "type": "category",
+      "label": "Partials",
+      "collapsible": false,
+      "items": [
+        {
+          "type": "doc",
+          "id": "partials/positioning",
+          "label": "Positioning"
+        },
+        {
+          "type": "doc",
+          "id": "partials/nested",
+          "label": "Nested partials"
+        },
+        {
+          "type": "doc",
+          "id": "partials/params",
+          "label": "Parameters"
+        },
+        {
+          "type": "doc",
+          "id": "partials/variables",
+          "label": "Variables"
+        },
+        {
+          "type": "doc",
+          "id": "partials/code-block",
+          "label": "Code blocks"
+        },
+        {
+          "type": "doc",
+          "id": "partials/markdown",
+          "label": "Markdown content"
+        },
+        {
+          "type": "doc",
+          "id": "partials/details",
+          "label": "Details and summary"
+        },
+        {
+          "type": "doc",
+          "id": "partials/components",
+          "label": "MDX components"
+        },
+        {
+          "type": "doc",
+          "id": "partials/links",
+          "label": "Relative links"
+        },
+        {
+          "type": "doc",
+          "id": "partials/image",
+          "label": "Images"
+        },
+        {
+          "type": "doc",
+          "id": "partials/root-level",
+          "label": "Root-level partial"
+        },
+        {
+          "type": "doc",
+          "id": "partials/mixed-syntax",
+          "label": "Old and new syntax"
+        }
+      ]
+    }
+  ]
+}
