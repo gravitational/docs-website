@@ -61,6 +61,24 @@ curl -sS -L --fail \
 # Detect tar flavor and add --wildcards only for GNU tar
 TAR_VERSION_STR="$(tar --version 2>&1 | head -n1 || true)"
 TAR_ARGS=(-xf "${BRANCH_TAR_FILE}" --strip-components=1 -C "$1")
+TAR_PATHS=(
+    # Docs pages and images
+    '*/docs'
+    # Files included by docs pages as partials
+    '*/examples'
+    '*/skills'
+    '*/CHANGELOG.md'
+    # Tooling that accesses the Teleport source. The build.assets/tooling module
+    # relies on api and lib in the root gravitational/teleport module.
+    '*/build.assets/tooling'
+    '*/*.go'
+    '*/go.mod'
+    '*/go.sum'
+    '*/api'
+    '*/lib'
+    '*/session'
+)
+
 if echo "${TAR_VERSION_STR}" | grep -qi 'gnu tar'; then
     TAR_ARGS+=(--wildcards)
 fi
@@ -69,6 +87,6 @@ tree -D -h "${DOWNLOADS_DIR}"
 
 # Extract desired paths
 echo "Extracting selected content from ${BRANCH_TAR_FILE} to $1"
-tar "${TAR_ARGS[@]}" '*/docs' '*/examples' '*/skills' '*/CHANGELOG.md'
+tar "${TAR_ARGS[@]}" "${TAR_PATHS[@]}"
 
 tree -L 1 "$1"
