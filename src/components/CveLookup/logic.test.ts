@@ -1,5 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import {
+  advisoryUrl,
   buildAliasIndex,
   compareVersions,
   deepLinkQuery,
@@ -371,6 +372,46 @@ describe("descriptions", () => {
       ],
       [{ text: "Next", heading: false }],
     ]);
+  });
+});
+
+describe("advisoryUrl", () => {
+  interface testCase {
+    description: string;
+    input: string;
+    expected: string | null;
+  }
+
+  const testCases: Array<testCase> = [
+    {
+      description: "CVE links to NVD",
+      input: "cve-2099-0001",
+      expected: "https://nvd.nist.gov/vuln/detail/CVE-2099-0001",
+    },
+    {
+      description: "GHSA links to the GitHub Advisory Database",
+      input: "GHSA-BBBB-bbbb-BBBB",
+      expected: "https://github.com/advisories/GHSA-bbbb-bbbb-bbbb",
+    },
+    {
+      description: "GO ID links to the Go vulnerability database",
+      input: "go-2099-0005",
+      expected: "https://pkg.go.dev/vuln/GO-2099-0005",
+    },
+    {
+      description: "other IDs are not linked",
+      input: "DSA-1234-1",
+      expected: null,
+    },
+    {
+      description: "an ID embedded in other text is not linked",
+      input: "CVE-2099-0001 extra",
+      expected: null,
+    },
+  ];
+
+  test.each(testCases)("$description", (c) => {
+    expect(advisoryUrl(c.input)).toEqual(c.expected);
   });
 });
 

@@ -63,6 +63,17 @@ export const AliasResolvesToEveryReport: Story = {
     expect(
       canvas.getByText("GO-2099-0005 is also tracked as GHSA-bbbb-bbbb-bbbb"),
     ).toBeInTheDocument();
+    // Each heading links to the ID's own advisory database, not NVD.
+    expect(canvas.getByRole("link", { name: "GO-2099-0005" })).toHaveAttribute(
+      "href",
+      "https://pkg.go.dev/vuln/GO-2099-0005",
+    );
+    expect(
+      canvas.getByRole("link", { name: "GHSA-bbbb-bbbb-bbbb" }),
+    ).toHaveAttribute(
+      "href",
+      "https://github.com/advisories/GHSA-bbbb-bbbb-bbbb",
+    );
   },
 };
 

@@ -2,6 +2,7 @@ import cn from "clsx";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./CveLookup.module.css";
 import {
+  advisoryUrl,
   buildAliasIndex,
   deepLinkQuery,
   descriptionOf,
@@ -161,15 +162,16 @@ const ReportCard: React.FC<{
   const v = verdict(data, report);
   const images = v.falsePositive ? [] : imageStatus(data, report);
   const trust = data.trust_data?.[report.cve_id.toUpperCase()];
+  const advisory = advisoryUrl(report.cve_id);
   return (
     <div className={styles.card}>
       <div className={styles.cardHead}>
         <span className={styles.cveId}>
-          <ExternalLink
-            href={`https://nvd.nist.gov/vuln/detail/${encodeURIComponent(report.cve_id)}`}
-          >
-            {report.cve_id}
-          </ExternalLink>
+          {advisory ? (
+            <ExternalLink href={advisory}>{report.cve_id}</ExternalLink>
+          ) : (
+            report.cve_id
+          )}
         </span>
         <span className={cn(styles.pill, styles[v.tone])}>{v.label}</span>
         <span className={styles.pkg}>{report.package_name}</span>

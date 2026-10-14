@@ -105,6 +105,21 @@ export function firstSentence(s: string): string {
   return m ? m[0] : s.trim();
 }
 
+// The advisory page for an ID in its native database: NVD for CVEs, GitHub
+// for GHSAs, and the Go vulnerability database for GO IDs. Null for anything
+// else, so it is shown unlinked rather than linked to a page that doesn't
+// exist.
+export function advisoryUrl(id: string): string | null {
+  const s = String(id).trim();
+  let m = s.match(/^CVE-(\d{4}-\d+)$/i);
+  if (m) return `https://nvd.nist.gov/vuln/detail/CVE-${m[1]}`;
+  m = s.match(/^GHSA-([a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4})$/i);
+  if (m) return `https://github.com/advisories/GHSA-${m[1].toLowerCase()}`;
+  m = s.match(/^GO-(\d{4}-\d+)$/i);
+  if (m) return `https://pkg.go.dev/vuln/GO-${m[1]}`;
+  return null;
+}
+
 export function descriptionOf(r: CveReport): string {
   return r.finding_details?.[0]?.description || r.summary || "";
 }
