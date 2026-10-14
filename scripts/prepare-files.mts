@@ -1,4 +1,6 @@
 import { importDirectorySync } from '@iconify/tools';
+import { icons as logosIcons } from "@iconify-json/logos";
+import { icons as carbonIcons } from "@iconify-json/carbon";
 import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync, readFileSync } from "fs";
 import { join, resolve, dirname } from "path";
 import { glob } from "glob";
@@ -111,6 +113,57 @@ const iconSet = importDirectorySync(join("src", "mermaid-icons"),
     },
 );
 writeFileSync(iconPath, JSON.stringify(iconSet.export()));
+
+// Mermaid architecture diagrams reference Iconify icons by name, for example
+// `service db(logos-kubernetes)[Kubernetes]`. To avoid loading the full set of 
+// icons on every page, we collect only the icons that are used.
+const MERMAID_ICON_SETS: Record<
+  string,
+  { icons: Record<string, unknown>; width?: number; height?: number }
+> = {
+  logos: logosIcons,
+  carbon: carbonIcons,
+};
+const MERMAID_BLOCK = /```mermaid[\s\S]*?```/g;
+// Icon names always start with their pack prefix, for example "logos:kubernetes" or "logos-kubernetes"
+const MERMAID_ICON_REFERENCE = new RegExp(
+  `(?<![\\w-])(${Object.keys(MERMAID_ICON_SETS).join("|")})[:-]([a-z0-9][a-z0-9-]*)`,
+  "g",
+);
+const usedMermaidIcons: Record<string, Set<string>> = {};
+const docsPages = resolve("content", "*", "docs", "**", "*.{md,mdx}");
+
+glob.sync(docsPages).forEach((path: string) => {
+  const blocks = readFileSync(path, "utf8").match(MERMAID_BLOCK) ?? [];
+  blocks.forEach((block) => {
+    for (const [, prefix, name] of block.matchAll(MERMAID_ICON_REFERENCE)) {
+      if (usedMermaidIcons[prefix] === undefined) {
+        usedMermaidIcons[prefix] = new Set();
+      }
+      usedMermaidIcons[prefix].add(name);
+    }
+  });
+});
+
+Object.entries(MERMAID_ICON_SETS).forEach(([prefix, iconSetData]) => {
+  const subset: Record<string, unknown> = { prefix, icons: {} };
+  if (iconSetData.width) subset.width = iconSetData.width;
+  if (iconSetData.height) subset.height = iconSetData.height;
+  (usedMermaidIcons[prefix] ?? new Set<string>()).forEach((name) => {
+    const icon = iconSetData.icons[name];
+    if (icon) {
+      (subset.icons as Record<string, unknown>)[name] = icon;
+    } else {
+      console.warn(`Mermaid icon not found in ${prefix} set: ${name}`);
+    }
+  });
+
+  writeFileSync(
+    resolve(__dirname, join("../data", `${prefix}-icons.json`)),
+    JSON.stringify(subset),
+  );
+});
+
 
 // Describes the shape of a individual skill entry in the skills.json file.
 export type SkillInfo = {
