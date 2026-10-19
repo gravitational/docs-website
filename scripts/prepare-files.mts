@@ -5,6 +5,7 @@ import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync, readFileSy
 import { join, resolve, dirname } from "path";
 import { glob } from "glob";
 import { parseSkillMarkdown } from "../server/parse-skill-md";
+import { extractMermaidIconNames } from "../server/mermaid-icons";
 import {
   getCurrentVersion,
   getLatestVersion,
@@ -124,25 +125,18 @@ const MERMAID_ICON_SETS: Record<
   logos: logosIcons,
   carbon: carbonIcons,
 };
-const MERMAID_BLOCK = /```mermaid[\s\S]*?```/g;
-// Icon names always start with their pack prefix, for example "logos:kubernetes" or "logos-kubernetes"
-const MERMAID_ICON_REFERENCE = new RegExp(
-  `(?<![\\w-])(${Object.keys(MERMAID_ICON_SETS).join("|")})[:-]([a-z0-9][a-z0-9-]*)`,
-  "g",
-);
 const usedMermaidIcons: Record<string, Set<string>> = {};
 const docsPages = resolve("content", "*", "docs", "**", "*.{md,mdx}");
 
 glob.sync(docsPages).forEach((path: string) => {
-  const blocks = readFileSync(path, "utf8").match(MERMAID_BLOCK) ?? [];
-  blocks.forEach((block) => {
-    for (const [, prefix, name] of block.matchAll(MERMAID_ICON_REFERENCE)) {
-      if (usedMermaidIcons[prefix] === undefined) {
-        usedMermaidIcons[prefix] = new Set();
-      }
-      usedMermaidIcons[prefix].add(name);
-    }
-  });
+  const used = extractMermaidIconNames(
+    readFileSync(path, "utf8"),
+    Object.keys(MERMAID_ICON_SETS),
+  );
+  for (const [prefix, names] of Object.entries(used)) {
+    usedMermaidIcons[prefix] ??= new Set();
+    names.forEach((name) => usedMermaidIcons[prefix].add(name));
+  }
 });
 
 Object.entries(MERMAID_ICON_SETS).forEach(([prefix, iconSetData]) => {
