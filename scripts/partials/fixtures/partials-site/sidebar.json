@@ -27,6 +27,11 @@
     },
     {
       "type": "doc",
+      "id": "code-block-props",
+      "label": "CodeBlock with props"
+    },
+    {
+      "type": "doc",
       "id": "code-block",
       "label": "Code blocks"
     },

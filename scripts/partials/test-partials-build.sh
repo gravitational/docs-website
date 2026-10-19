@@ -22,7 +22,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 FIXTURE_SITE="${ROOT}/scripts/partials/fixtures/partials-site"
 # Invalid pages that must make the build fail. Each subdirectory is one case.
 ERROR_FIXTURES="${ROOT}/scripts/partials/fixtures/partials-site-errors"
-ERROR_CASES=(missing-partial circular-partial)
+ERROR_CASES=(missing-partial circular-partial code-block-markdown)
 
 # 18.x is the default version served at the site root; 19.x is the latest
 # (unreleased) version. Two versions are required because the config's

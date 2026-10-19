@@ -137,12 +137,64 @@ describe("partials with variables", () => {
 });
 
 describe("partials within code blocks", () => {
-  test("renders a raw-loader import in a CodeBlock", () => {
+  test("renders a raw-loader import in a CodeBlock with a language", () => {
     const body = pageBody("code-block");
-    assert.match(body, /theme-code-block/);
-    assert.match(body, /language-yaml/);
+    assert.match(body, /<code class="hljs language-yaml">/);
+    assert.match(body, /<span class="hljs-attr">kind:<\/span>/);
     assert.match(textOf(body), /kind: role/);
     assert.match(textOf(body), /example-role/);
+  });
+
+  test("joins several expressions on separate lines", () => {
+    const body = pageBody("code-block");
+    assert.match(textOf(body), /# comment here\nkind: role/);
+  });
+});
+
+describe("CodeBlock with props in partials", () => {
+  const body = pageBody("code-block-props");
+  // Code renders as <pre> elements: the five <CodeBlock> elements from the
+  // partial, then the same code written as fenced code blocks.
+  const pres = body.match(/<pre[\s\S]*?<\/pre>/g) ?? [""];
+
+  test("renders the same HTML as the fenced code blocks", () => {
+    assert.equal(pres.length, 10);
+    for (let i = 0; i < 5; i++) {
+      assert.equal(pres[i], pres[i + 5], `CodeBlock ${i} differs from its fenced equivalent`);
+    }
+  });
+
+  test("interpolates props and resolves variables", () => {
+    assert.match(
+      textOf(pres[0]),
+      /curl -L -O https:\/\/cdn\.teleport\.dev\/teleport-access-jira-v18\.0\.0-linux-ARCH-bin\.tar\.gz/,
+    );
+    assert.doesNotMatch(pres[0], /\(=|\$\{/);
+  });
+
+  test("renders commands, Var inputs, descriptions and output lines", () => {
+    assert.equal(countOf(pres[0], 'data-content="$ "'), 4);
+    assert.equal(countOf(pres[0], 'name="ARCH"'), 2);
+    assert.equal(countOf(pres[0], 'data-testid="copy-button"'), 4);
+    assert.match(
+      pres[1],
+      /<p[^>]*data-type="descr"[^>]*>Create a role for jira/,
+    );
+    assert.match(pres[1], /name="proxy"/);
+    assert.match(textOf(pres[1]), /Role created\./);
+  });
+
+  test("highlights code with a language like a fenced code block", () => {
+    assert.match(pres[2], /<code class="hljs language-yaml">/);
+    assert.match(pres[2], /<span class="hljs-attr">name:<\/span>/);
+    assert.match(textOf(pres[2]), /name: jira-access/);
+    assert.match(textOf(pres[2]), /roles: \[&quot;18\.0\.0&quot;\]/);
+    assert.match(pres[2], /name="login"/);
+    assert.match(pres[3], /<code class="hljs language-go">/);
+    assert.match(pres[4], /<code class="hljs language-hcl">/);
+    assert.match(pres[4], /<span class="hljs-keyword">resource<\/span>/);
+    assert.match(textOf(pres[4]), /&quot;jira&quot;/);
+    assert.match(textOf(pres[3]), /Hello, jira/);
   });
 });
 
@@ -335,5 +387,18 @@ describe("partials that import each other", () => {
   test("fails while rendering the page that uses the circular partial", () => {
     assert.match(log, /static site generation failed/);
     assert.match(log, /\/circular-partial\//);
+  });
+});
+
+describe("CodeBlock with children that are not strings", () => {
+  const { exitCode, log } = result("code-block-markdown");
+
+  test("fails the build", () => {
+    assert.notEqual(exitCode, 0);
+  });
+
+  test("explains what CodeBlock expects", () => {
+    assert.match(log, /CodeBlock expects its children to be strings/);
+    assert.match(log, /\/code-block-markdown\//);
   });
 });
