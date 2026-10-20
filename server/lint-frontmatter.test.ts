@@ -12,21 +12,24 @@ const getReasons = (value: string) => {
       // remark-frontmatter is a requirement for using this plugin
       .use(remarkFrontmatter as any)
       .use(remarkLintFrontmatter as any, {
-        type: "object",
-        additionalProperties: false,
-        properties: {
-          title: {
-            type: "string",
-          },
-          description: {
-            type: "string",
-          },
-          tags: {
-            type: "array",
-            items: {},
-          },
-          kind: {
-            enum: ["kind1", "kind2", null],
+        errorSuffix: "",
+        schema: {
+          type: "object",
+          additionalProperties: false,
+          properties: {
+            title: {
+              type: "string",
+            },
+            description: {
+              type: "string",
+            },
+            tags: {
+              type: "array",
+              items: {},
+            },
+            kind: {
+              enum: ["kind1", "kind2", null],
+            },
           },
         },
       })
@@ -130,7 +133,9 @@ kind: kind3
 ---
 
 This is a page.`,
-      expected: [`issue validating page frontmatter: .kind: must be one of: kind1, kind2, null`],
+      expected: [
+        `issue validating page frontmatter: .kind: must be one of: kind1, kind2, null`,
+      ],
     },
     {
       description: "no frontmatter",
