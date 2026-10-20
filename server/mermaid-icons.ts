@@ -38,3 +38,20 @@ export function extractMermaidIconNames(
   }
   return used;
 }
+
+const ICON_PACK_PACKAGE = /^@iconify-json\/(.+)$/;
+
+// Returns the prefixes of the Iconify icon packs available to Mermaid
+// diagrams. A pack is available when its @iconify-json/<prefix> package is
+// declared in package.json, so adding a pack only requires adding the package.
+export function getMermaidIconPackPrefixes(packageJson: {
+  dependencies?: Record<string, string>;
+}): string[] {
+  const names = Object.keys({
+    ...packageJson.dependencies,
+  });
+  return names
+    .map((name) => name.match(ICON_PACK_PACKAGE)?.[1])
+    .filter((prefix): prefix is string => prefix !== undefined)
+    .sort();
+}

@@ -1,6 +1,9 @@
 import { describe, expect, test } from "@jest/globals";
 
-import { extractMermaidIconNames } from "./mermaid-icons";
+import {
+  extractMermaidIconNames,
+  getMermaidIconPackPrefixes,
+} from "./mermaid-icons";
 
 const prefixes = ["logos", "carbon"];
 
@@ -129,5 +132,57 @@ describe("extractMermaidIconNames", () => {
     ].join("\n");
 
     expect(extractIcons(md)).toEqual({ logos: ["kubernetes"] });
+  });
+
+  test("prefers the longest matching pack prefix", () => {
+    const md = diagram(
+      [
+        "service a(material-symbols-light-home)[A]",
+        "service b(material-symbols-home)[B]",
+      ].join("\n"),
+    );
+
+    expect(
+      extractMermaidIconNames(md, [
+        "material-symbols",
+        "material-symbols-light",
+      ]),
+    ).toEqual({
+      "material-symbols-light": new Set(["home"]),
+      "material-symbols": new Set(["home"]),
+    });
+  });
+
+  test("matches pack prefixes literally", () => {
+    // "." must not act as a regex wildcard.
+    const md = diagram(
+      ["service a(my.pack-home)[A]", "service b(myXpack-user)[B]"].join("\n"),
+    );
+
+    expect(extractMermaidIconNames(md, ["my.pack"])).toEqual({
+      "my.pack": new Set(["home"]),
+    });
+  });
+});
+
+describe("getMermaidIconPackPrefixes", () => {
+  test("returns the packs declared in dependencies", () => {
+    expect(
+      getMermaidIconPackPrefixes({
+        dependencies: {
+          "@iconify-json/carbon": "^1.2.28",
+          "@iconify-json/logos": "^1.2.14",
+          "@iconify/tools": "^5.0.14",
+          react: "^19.0.0",
+        },
+      }),
+    ).toEqual(["carbon", "logos"]);
+  });
+
+  test("returns nothing when no packs are declared", () => {
+    expect(getMermaidIconPackPrefixes({})).toEqual([]);
+    expect(
+      getMermaidIconPackPrefixes({ dependencies: { react: "^19.0.0" } }),
+    ).toEqual([]);
   });
 });
