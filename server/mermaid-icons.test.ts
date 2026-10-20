@@ -1,22 +1,24 @@
 import { describe, expect, test } from "@jest/globals";
 
 import {
-  extractMermaidIconNames,
-  getMermaidIconPackPrefixes,
+  createIconSubset,
+  extractIconNames,
+  getIconPackPrefixes,
+  type IconifyJSON,
 } from "./mermaid-icons";
 
 const prefixes = ["logos", "carbon"];
 
 const diagram = (body: string) => "```mermaid\n" + body + "\n```\n";
 
-const extractIcons = (markdown: string) => {
-  const used = extractMermaidIconNames(markdown, prefixes);
+const extractIcons = (markdown: string, packs: string[] = prefixes) => {
+  const used = extractIconNames(markdown, packs);
   return Object.fromEntries(
     Object.entries(used).map(([prefix, names]) => [prefix, [...names].sort()]),
   );
 };
 
-describe("extractMermaidIconNames", () => {
+describe("extractIconNames", () => {
   test("extracts icons from an architecture diagram", () => {
     const md = diagram(
       [
@@ -72,7 +74,7 @@ describe("extractMermaidIconNames", () => {
     });
   });
 
-  test("ignores non-registered icons", () => {
+  test("ignores non-existing icons", () => {
     // teleport-* icons are loaded from a local directory instead.
     const md = diagram(
       [
@@ -143,13 +145,10 @@ describe("extractMermaidIconNames", () => {
     );
 
     expect(
-      extractMermaidIconNames(md, [
-        "material-symbols",
-        "material-symbols-light",
-      ]),
+      extractIcons(md, ["material-symbols", "material-symbols-light"]),
     ).toEqual({
-      "material-symbols-light": new Set(["home"]),
-      "material-symbols": new Set(["home"]),
+      "material-symbols-light": ["home"],
+      "material-symbols": ["home"],
     });
   });
 
@@ -159,16 +158,14 @@ describe("extractMermaidIconNames", () => {
       ["service a(my.pack-home)[A]", "service b(myXpack-user)[B]"].join("\n"),
     );
 
-    expect(extractMermaidIconNames(md, ["my.pack"])).toEqual({
-      "my.pack": new Set(["home"]),
-    });
+    expect(extractIcons(md, ["my.pack"])).toEqual({ "my.pack": ["home"] });
   });
 });
 
-describe("getMermaidIconPackPrefixes", () => {
+describe("getIconPackPrefixes", () => {
   test("returns the packs declared in dependencies", () => {
     expect(
-      getMermaidIconPackPrefixes({
+      getIconPackPrefixes({
         dependencies: {
           "@iconify-json/carbon": "^1.2.28",
           "@iconify-json/logos": "^1.2.14",
@@ -180,9 +177,73 @@ describe("getMermaidIconPackPrefixes", () => {
   });
 
   test("returns nothing when no packs are declared", () => {
-    expect(getMermaidIconPackPrefixes({})).toEqual([]);
-    expect(
-      getMermaidIconPackPrefixes({ dependencies: { react: "^19.0.0" } }),
-    ).toEqual([]);
+    expect(getIconPackPrefixes({})).toEqual([]);
+    expect(getIconPackPrefixes({ dependencies: { react: "^19.0.0" } })).toEqual(
+      [],
+    );
+  });
+});
+
+describe("createIconSubset", () => {
+  const iconSet: IconifyJSON = {
+    prefix: "test",
+    width: 32,
+    height: 32,
+    icons: {
+      flash: { body: "<path d='M1'/>" },
+      user: { body: "<path d='M2'/>" },
+      unused: { body: "<path d='M3'/>" },
+    },
+    aliases: {
+      "cloud-lightning": { parent: "flash" },
+      "cloud-storm": { parent: "cloud-lightning" },
+    },
+  };
+
+  test("copies only the requested icons and the set's dimensions", () => {
+    const { subset, notFound } = createIconSubset(iconSet, ["user"]);
+
+    expect(subset.prefix).toBe("test");
+    expect(subset.width).toBe(32);
+    expect(subset.height).toBe(32);
+    expect(Object.keys(subset.icons)).toEqual(["user"]);
+    expect(subset.aliases).toBeUndefined();
+    expect(notFound).toEqual([]);
+  });
+
+  test("copies an alias together with the icon it points to", () => {
+    const { subset, notFound } = createIconSubset(iconSet, ["cloud-lightning"]);
+
+    expect(Object.keys(subset.icons)).toEqual(["flash"]);
+    expect(subset.aliases).toEqual({
+      "cloud-lightning": { parent: "flash" },
+    });
+    expect(notFound).toEqual([]);
+  });
+
+  test("follows aliases that point to other aliases", () => {
+    const { subset } = createIconSubset(iconSet, ["cloud-storm"]);
+
+    expect(Object.keys(subset.icons)).toEqual(["flash"]);
+    expect(subset.aliases).toEqual({
+      "cloud-lightning": { parent: "flash" },
+      "cloud-storm": { parent: "cloud-lightning" },
+    });
+  });
+
+  test("reports names that are not in the icon set", () => {
+    const { subset, notFound } = createIconSubset(iconSet, ["user", "missing"]);
+
+    expect(Object.keys(subset.icons)).toEqual(["user"]);
+    expect(notFound).toEqual(["missing"]);
+    expect(subset).not.toHaveProperty("not_found");
+  });
+
+  test("returns an empty subset when no icons are used", () => {
+    const { subset, notFound } = createIconSubset(iconSet, []);
+
+    expect(subset.prefix).toBe("test");
+    expect(subset.icons).toEqual({});
+    expect(notFound).toEqual([]);
   });
 });

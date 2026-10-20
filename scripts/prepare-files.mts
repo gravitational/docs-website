@@ -5,8 +5,10 @@ import { join, resolve, dirname } from "path";
 import { glob } from "glob";
 import { parseSkillMarkdown } from "../server/parse-skill-md";
 import {
-  extractMermaidIconNames,
-  getMermaidIconPackPrefixes,
+  createIconSubset,
+  extractIconNames,
+  getIconPackPrefixes,
+  type IconifyJSON,
 } from "../server/mermaid-icons";
 import {
   getCurrentVersion,
@@ -125,16 +127,9 @@ writeFileSync(iconPath, JSON.stringify(iconSet.export()));
 // The available icon packs are the @iconify-json/<prefix> packages declared in
 // package.json. The list of packs is written to MERMAID_ICON_PACKS_FILENAME for
 // the client module that registers them with Mermaid.
-type IconifyJSON = {
-  prefix: string;
-  icons: Record<string, unknown>;
-  width?: number;
-  height?: number;
-};
-
 const requireFromHere = createRequire(import.meta.url);
 const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
-const mermaidIconPrefixes = getMermaidIconPackPrefixes(packageJson);
+const mermaidIconPrefixes = getIconPackPrefixes(packageJson);
 // Reads the full icon set of an @iconify-json/<prefix> package, making sure its
 // icons use the same prefix as the package name.
 const loadIconSet = (prefix: string): IconifyJSON => {
@@ -157,7 +152,7 @@ const usedMermaidIcons: Record<string, Set<string>> = {};
 const docsPages = resolve("content", "*", "docs", "**", "*.{md,mdx}");
 
 glob.sync(docsPages).forEach((path: string) => {
-  const used = extractMermaidIconNames(
+  const used = extractIconNames(
     readFileSync(path, "utf8"),
     mermaidIconPrefixes,
   );
@@ -168,17 +163,12 @@ glob.sync(docsPages).forEach((path: string) => {
 });
 
 Object.entries(mermaidIconSets).forEach(([prefix, iconSetData]) => {
-  const subset: Record<string, unknown> = { prefix, icons: {} };
-  if (iconSetData.width) subset.width = iconSetData.width;
-  if (iconSetData.height) subset.height = iconSetData.height;
-  (usedMermaidIcons[prefix] ?? new Set<string>()).forEach((name) => {
-    const icon = iconSetData.icons[name];
-    if (icon) {
-      (subset.icons as Record<string, unknown>)[name] = icon;
-    } else {
-      console.warn(`Mermaid icon not found in ${prefix} set: ${name}`);
-    }
-  });
+  const { subset, notFound } = createIconSubset(iconSetData, [
+    ...(usedMermaidIcons[prefix] ?? []),
+  ]);
+  notFound.forEach((name) =>
+    console.warn(`Mermaid icon not found in ${prefix} set: ${name}`),
+  );
 
   writeFileSync(
     resolve(__dirname, join("../data", `${prefix}-icons.json`)),
