@@ -137,110 +137,6 @@ This is a paragraph.
 `,
       path: "content/18.x/docs/pages/includes/test.mdx",
     },
-    {
-      description:
-        "markdown link to a folder's category-index page (same basename as its parent folder) drops the repeated segment",
-      input: `---
-title: My page
-description: My page
----
-
-See the [testing](../test/my-test-path/my-test-path.mdx) guide.`,
-      expected: `---
-title: My page
-description: My page
----
-
-See the [testing](/ver/18.x/test/my-test-path/) guide.
-`,
-      path: "content/18.x/docs/pages/includes/test.mdx",
-    },
-    {
-      description:
-        "markdown link in a latest-version partial resolves without a /ver/ prefix",
-      input: `---
-title: My page
-description: My page
----
-
-See the [testing](../test/my-test-path/my-test-path.mdx) guide.`,
-      expected: `---
-title: My page
-description: My page
----
-
-See the [testing](/test/my-test-path/) guide.
-`,
-      path: "content/15.x/docs/pages/includes/test.mdx",
-    },
-    {
-      description:
-        "markdown link to a regular (non-index) doc page keeps its full path",
-      input: `---
-title: My page
-description: My page
----
-
-See the [testing](../test/my-test-path/linux.mdx) guide.`,
-      expected: `---
-title: My page
-description: My page
----
-
-See the [testing](/ver/18.x/test/my-test-path/linux/) guide.
-`,
-      path: "content/18.x/docs/pages/includes/test.mdx",
-    },
-    {
-      description:
-        "markdown link to an index page in a partial drops the trailing /index segment",
-      input: `---
-title: My page
-description: My page
----
-
-See the [testing](../test/index.mdx) guide.`,
-      expected: `---
-title: My page
-description: My page
----
-
-See the [testing](/ver/18.x/test/) guide.
-`,
-      path: "content/18.x/docs/pages/includes/test.mdx",
-    },
-    {
-      description:
-        "markdown link in a root-level content file (e.g. CHANGELOG.md) resolves to the correct doc route",
-      input: `See the [Active Directory docs](./docs/pages/enroll-resources/desktop-access/active-directory.mdx#network-level-authentication-nla).`,
-      expected: `See the [Active Directory docs](/ver/18.x/enroll-resources/desktop-access/active-directory/#network-level-authentication-nla).\n`,
-      path: "content/18.x/CHANGELOG.md",
-    },
-    {
-      description:
-        "markdown link with a trailing slash after .mdx is resolved correctly",
-      input: `See the [Getting Started](./docs/pages/enroll-resources/database-access/getting-started.mdx/).`,
-      expected: `See the [Getting Started](/ver/18.x/enroll-resources/database-access/getting-started/).\n`,
-      path: "content/18.x/CHANGELOG.md",
-    },
-    {
-      description:
-        "markdown link with an .mdx extension outside a partial is left untouched",
-      input: `---
-title: My page
-description: My page
----
-
-See the [testing](../test/my-test-path/my-test-path.mdx) guide.`,
-      expected: `---
-title: My page
-description: My page
----
-
-See the [testing](../test/my-test-path/my-test-path.mdx) guide.
-`,
-      path: "docs/mypage.mdx",
-    },
   ];
 
   test.each(testCases)("$description", (tc) => {
@@ -250,5 +146,72 @@ See the [testing](../test/my-test-path/my-test-path.mdx) guide.
     }).toString();
 
     expect(result).toEqual(tc.expected);
+  });
+});
+
+describe("markdown links in MDX-native partials", () => {
+  const partial = "content/18.x/docs/pages/includes/test.mdx";
+  const changelog = "content/18.x/CHANGELOG.md";
+
+  test.each([
+    {
+      description: "a category-index page drops the repeated segment",
+      path: partial,
+      url: "../test/my-test-path/my-test-path.mdx",
+      expected: "/ver/18.x/test/my-test-path/",
+    },
+    {
+      description: "a link in a latest-version partial has no /ver/ prefix",
+      path: "content/15.x/docs/pages/includes/test.mdx",
+      url: "../test/my-test-path/my-test-path.mdx",
+      expected: "/test/my-test-path/",
+    },
+    {
+      description: "a regular (non-index) doc page keeps its full path",
+      path: partial,
+      url: "../test/my-test-path/linux.mdx",
+      expected: "/ver/18.x/test/my-test-path/linux/",
+    },
+    {
+      description: "an index page drops the trailing /index segment",
+      path: partial,
+      url: "../test/index.mdx",
+      expected: "/ver/18.x/test/",
+    },
+    {
+      description:
+        "a root-level content file (e.g. CHANGELOG.md) resolves to the doc route",
+      path: changelog,
+      url: "./docs/pages/enroll-resources/desktop-access/active-directory.mdx#network-level-authentication-nla",
+      expected:
+        "/ver/18.x/enroll-resources/desktop-access/active-directory/#network-level-authentication-nla",
+    },
+    {
+      description: "a trailing slash after .mdx is resolved correctly",
+      path: changelog,
+      url: "./docs/pages/enroll-resources/database-access/getting-started.mdx/",
+      expected: "/ver/18.x/enroll-resources/database-access/getting-started/",
+    },
+    {
+      description: "the docs home page resolves to the version root",
+      path: changelog,
+      url: "docs/pages/index.mdx",
+      expected: "/ver/18.x/",
+    },
+    {
+      description: "the docs home page in the latest version resolves to /",
+      path: "content/15.x/CHANGELOG.md",
+      url: "docs/pages/index.mdx",
+      expected: "/",
+    },
+    {
+      description: "a link outside a partial is left untouched",
+      path: "docs/mypage.mdx",
+      url: "../test/my-test-path/my-test-path.mdx",
+      expected: "../test/my-test-path/my-test-path.mdx",
+    },
+  ])("$description", ({ path, url, expected }) => {
+    const result = transformer({ path, value: `[link](${url})` }).toString();
+    expect(result).toEqual(`[link](${expected})\n`);
   });
 });

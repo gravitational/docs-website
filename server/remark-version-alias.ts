@@ -35,16 +35,12 @@ function resolvePartialMarkdownLink(
     return url;
   }
 
-  const parts = url.match(markdownLinkPattern);
-  if (!parts) {
-    return url;
-  }
-
-  const [, pathname, search = "", hash = ""] = parts;
+  // The pattern matches any single-line string.
+  const [, pathname, search = "", hash = ""] = url.match(markdownLinkPattern)!;
   // Strip a trailing slash so that paths like ./getting-started.mdx/ are
   // treated the same as ./getting-started.mdx.
   const normalizedPathname = pathname.replace(/\/$/, "");
-  if (!normalizedPathname || !markdownFileExtensionPattern.test(normalizedPathname)) {
+  if (!markdownFileExtensionPattern.test(normalizedPathname)) {
     return url;
   }
 
@@ -81,7 +77,10 @@ function resolvePartialMarkdownLink(
 
   const versionPrefix = version === latestVersion ? "" : `ver/${version}/`;
 
-  return `/${versionPrefix}${docID}/${search}${hash}`;
+  // The docs home page (docs/pages/index.mdx) has an empty doc ID.
+  const docRoute = docID ? `${docID}/` : "";
+
+  return `/${versionPrefix}${docRoute}${search}${hash}`;
 }
 
 export default function remarkVersionAlias({
@@ -89,18 +88,23 @@ export default function remarkVersionAlias({
   latestVersion,
 }: RemarkVersionAlias): Transformer<Root> {
   return (root: Root, vfile: VFile) => {
-    visit(root, (node: Node) => {
-      if (node.type === "link" || node.type === "definition") {
-        const contentPathParts = vfile.path.match(preMigrationContentPattern);
-        if (!contentPathParts) {
-          return CONTINUE;
-        }
+    // Set for MDX-native partials, which are read from content/<version>/.
+    const partialVersion = vfile.path.match(preMigrationContentPattern)?.[1];
+    const version =
+      vfile.path.match(versionedDocsPattern)?.[1] ??
+      partialVersion ??
+      currentVersion;
 
-        const linkNode = node as unknown as Link | Definition;
-        linkNode.url = resolvePartialMarkdownLink(
-          linkNode.url,
+    visit(root, (node: Node) => {
+      if (
+        partialVersion &&
+        (node.type === "link" || node.type === "definition")
+      ) {
+        const link = node as Link | Definition;
+        link.url = resolvePartialMarkdownLink(
+          link.url,
           vfile.path,
-          contentPathParts[1],
+          partialVersion,
           latestVersion,
         );
         return CONTINUE;
@@ -117,18 +121,7 @@ export default function remarkVersionAlias({
         return CONTINUE;
       }
 
-      let version: string = currentVersion;
       let newVal: Array<string> = [];
-      const versionedPathParts = vfile.path.match(versionedDocsPattern);
-      if (versionedPathParts) {
-        version = versionedPathParts[1];
-      } else {
-        // Check partials in the content folder
-        const contentPathParts = vfile.path.match(preMigrationContentPattern);
-        if (contentPathParts) {
-          version = contentPathParts[1];
-        }
-      }
 
       esm.data.estree.body.forEach((decl) => {
         if (
