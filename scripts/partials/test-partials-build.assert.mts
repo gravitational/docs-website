@@ -39,7 +39,17 @@ const pageBody = (route: string): string => {
     .replaceAll("<!-- -->", "");
 };
 
-const textOf = (html: string): string => html.replace(/<[^>]+>/g, "");
+// Returns the text of rendered HTML. Tags are removed until none are left,
+// because one pass can leave a tag behind.
+const textOf = (html: string): string => {
+  let previous: string;
+  let current = html;
+  do {
+    previous = current;
+    current = current.replace(/<[^>]+>/g, "");
+  } while (current !== previous);
+  return current;
+};
 
 // Asserts that each marker occurs after the previous one.
 const assertInOrder = (body: string, markers: string[]): void => {
