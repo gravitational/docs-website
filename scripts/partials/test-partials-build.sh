@@ -92,15 +92,30 @@ JSON
 JSON
   done
 
+  # The footer links in the real config point at pages that only exist on the
+  # live site, so the sandbox config clears them. Everything else comes from the
+  # real docusaurus.config.ts.
+  cat > "${SANDBOX}/docusaurus.fixture.config.ts" <<'TS'
+import config from "./docusaurus.config";
+
+export default {
+  ...config,
+  themeConfig: {
+    ...config.themeConfig,
+    footer: { ...config.themeConfig?.footer, links: [] },
+  },
+};
+TS
+
   cd "$SANDBOX"
   local bin="${ROOT}/node_modules/.bin"
 
   log "Preparing files..."
   "${bin}/vite-node" ./scripts/prepare-files.mts
 
-  log "Building the fixture site with the real Docusaurus config..."
+  log "Building the fixture site with the real Docusaurus config (footer links cleared)..."
   rm -rf build
-  "${bin}/docusaurus" build --out-dir build --no-minify
+  "${bin}/docusaurus" build --config docusaurus.fixture.config.ts --out-dir build --no-minify
 }
 
 # Adds the invalid pages of one error case to every version, builds the site
@@ -120,7 +135,7 @@ run_error_case() {
   (
     cd "$SANDBOX"
     "${ROOT}/node_modules/.bin/vite-node" ./scripts/prepare-files.mts
-    "${ROOT}/node_modules/.bin/docusaurus" build --out-dir "build-error-${name}" --no-minify
+    "${ROOT}/node_modules/.bin/docusaurus" build --config docusaurus.fixture.config.ts --out-dir "build-error-${name}" --no-minify
   ) > "${results}/${name}.log" 2>&1 || code=$?
   echo "$code" > "${results}/${name}.exit"
 
