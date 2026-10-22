@@ -9,8 +9,12 @@ import {
 
 const prefixes = ["logos", "carbon"];
 
+// Wrap diagram sources in the mermaid fence to reduce boilerplate
 const diagram = (body: string) => "```mermaid\n" + body + "\n```\n";
 
+// Calls extractIconNames with the common packs by default, and converts each
+// Set of names into a sorted array so that expectations can be written as
+// plain arrays, e.g. `{ logos: ["kubernetes"] }`.
 const extractIcons = (markdown: string, packs: string[] = prefixes) => {
   const used = extractIconNames(markdown, packs);
   return Object.fromEntries(
