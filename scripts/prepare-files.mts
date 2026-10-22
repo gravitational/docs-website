@@ -130,18 +130,13 @@ writeFileSync(iconPath, JSON.stringify(iconSet.export()));
 const requireFromHere = createRequire(import.meta.url);
 const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
 const mermaidIconPrefixes = getIconPackPrefixes(packageJson);
-// Reads the full icon set of an @iconify-json/<prefix> package, making sure its
-// icons use the same prefix as the package name.
+// Reads the full icon set of an @iconify-json/<prefix> package. Iconify names
+// each package after the prefix of its icon set.
 const loadIconSet = (prefix: string): IconifyJSON => {
-  const packageName = `@iconify-json/${prefix}`;
-  const iconSetPath = requireFromHere.resolve(`${packageName}/icons.json`);
-  const iconSet: IconifyJSON = JSON.parse(readFileSync(iconSetPath, "utf8"));
-  if (iconSet.prefix !== prefix) {
-    throw new Error(
-      `${packageName} contains icons with the prefix "${iconSet.prefix}"`,
-    );
-  }
-  return iconSet;
+  const iconSetPath = requireFromHere.resolve(
+    `@iconify-json/${prefix}/icons.json`,
+  );
+  return JSON.parse(readFileSync(iconSetPath, "utf8"));
 };
 
 const mermaidIconSets: Record<string, IconifyJSON> = Object.fromEntries(
