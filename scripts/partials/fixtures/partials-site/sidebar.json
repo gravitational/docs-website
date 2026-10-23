@@ -1,0 +1,74 @@
+{
+  "docs": [
+    {
+      "type": "doc",
+      "id": "index",
+      "label": "Partials fixture site"
+    },
+    {
+      "type": "doc",
+      "id": "positioning",
+      "label": "Positioning"
+    },
+    {
+      "type": "doc",
+      "id": "nested",
+      "label": "Nested partials"
+    },
+    {
+      "type": "doc",
+      "id": "params",
+      "label": "Parameters"
+    },
+    {
+      "type": "doc",
+      "id": "variables",
+      "label": "Variables"
+    },
+    {
+      "type": "doc",
+      "id": "code-block-props",
+      "label": "CodeBlock with props"
+    },
+    {
+      "type": "doc",
+      "id": "code-block",
+      "label": "Code blocks"
+    },
+    {
+      "type": "doc",
+      "id": "markdown",
+      "label": "Markdown content"
+    },
+    {
+      "type": "doc",
+      "id": "details",
+      "label": "Details and summary"
+    },
+    {
+      "type": "doc",
+      "id": "components",
+      "label": "MDX components"
+    },
+    {
+      "type": "doc",
+      "id": "links",
+      "label": "Relative links"
+    },
+    {
+      "type": "doc",
+      "id": "image",
+      "label": "Images"
+    },
+    {
+      "type": "doc",
+      "id": "root-level",
+      "label": "Root-level partial"
+    },
+    {
+      "type": "doc",
+      "id": "mixed-syntax",
+      "label": "Old and new syntax"
+    }
+  ]
+}

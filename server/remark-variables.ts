@@ -52,6 +52,37 @@ const replaceVars = (value: string, names: NameMap) =>
     (base: string, name: string) => names[name] || base,
   );
 
+// MDX compiles expressions from node.data.estree, not node.value.
+// Apply the same replacement to string literals and template literal parts.
+const replaceVarsInEstree = (tree: unknown, names: NameMap): void => {
+  if (Array.isArray(tree)) {
+    tree.forEach((child) => replaceVarsInEstree(child, names));
+    return;
+  }
+  if (!tree || typeof tree !== "object") return;
+
+  const estree = tree as {
+    type?: string;
+    value?: unknown;
+    raw?: string;
+    cooked?: string;
+  };
+
+  if (estree.type === "Literal" && typeof estree.value === "string") {
+    estree.value = replaceVars(estree.value, names);
+    if (estree.raw) estree.raw = replaceVars(estree.raw, names);
+  }
+  if (estree.type === "TemplateElement") {
+    const element = estree as unknown as {
+      value: { raw: string; cooked: string };
+    };
+    element.value.raw = replaceVars(element.value.raw, names);
+    element.value.cooked = replaceVars(element.value.cooked, names);
+  }
+
+  Object.values(tree).forEach((child) => replaceVarsInEstree(child, names));
+};
+
 const lintVars = (
   vfile: VFile,
   node: MdastLiteral | MdastLink | MdxJsxElement,
@@ -103,6 +134,8 @@ export default function remarkVariables({
       if (nodeHasValue(node)) {
         if (resolve) {
           node.value = replaceVars(node.value, nameMap);
+          const estree = (node as { data?: { estree?: unknown } }).data?.estree;
+          if (estree) replaceVarsInEstree(estree, nameMap);
         }
 
         if (lint) {
