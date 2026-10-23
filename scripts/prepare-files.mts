@@ -1,8 +1,15 @@
 import { importDirectorySync } from '@iconify/tools';
 import {  writeFileSync, copyFileSync, rmSync, existsSync, mkdirSync, readFileSync } from "fs";
+import { createRequire } from "module";
 import { join, resolve, dirname } from "path";
 import { glob } from "glob";
 import { parseSkillMarkdown } from "../server/parse-skill-md";
+import {
+  createIconSubset,
+  extractIconNames,
+  getIconPackPrefixes,
+  type IconifyJSON,
+} from "../server/mermaid-icons";
 import {
   getCurrentVersion,
   getLatestVersion,
@@ -15,6 +22,7 @@ const DOCS_PAGES_ROOT = "versioned_docs";
 const SIDEBAR_FILENAME = "sidebars.json";
 const VERSION_FILENAME = "versions.json";
 const SKILLS_FILENAME = "data/skills.json";
+const MERMAID_ICON_PACKS_FILENAME = "data/mermaid-icon-packs.json";
 const GET_VERSION_SIDEBAR_FILENAME = (version) =>
   `versioned_sidebars/version-${version}-sidebars.json`;
 
@@ -111,6 +119,63 @@ const iconSet = importDirectorySync(join("src", "mermaid-icons"),
     },
 );
 writeFileSync(iconPath, JSON.stringify(iconSet.export()));
+
+// Mermaid architecture diagrams reference Iconify icons by name, for example
+// `service db(logos-kubernetes)[Kubernetes]`. To avoid loading the full set of
+// icons on every page, we collect only the icons that are used.
+//
+// The available icon packs are the @iconify-json/<prefix> packages declared in
+// package.json. The list of packs is written to MERMAID_ICON_PACKS_FILENAME for
+// the client module that registers them with Mermaid.
+const requireFromHere = createRequire(import.meta.url);
+const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
+const mermaidIconPrefixes = getIconPackPrefixes(packageJson);
+// Reads the full icon set of an @iconify-json/<prefix> package. Iconify names
+// each package after the prefix of its icon set.
+const loadIconSet = (prefix: string): IconifyJSON => {
+  const iconSetPath = requireFromHere.resolve(
+    `@iconify-json/${prefix}/icons.json`,
+  );
+  return JSON.parse(readFileSync(iconSetPath, "utf8"));
+};
+
+const mermaidIconSets: Record<string, IconifyJSON> = Object.fromEntries(
+  mermaidIconPrefixes.map((prefix) => [prefix, loadIconSet(prefix)]),
+);
+
+const usedMermaidIcons: Record<string, Set<string>> = {};
+const docsPages = resolve("content", "*", "docs", "**", "*.{md,mdx}");
+
+glob.sync(docsPages).forEach((path: string) => {
+  const used = extractIconNames(
+    readFileSync(path, "utf8"),
+    mermaidIconPrefixes,
+  );
+  for (const [prefix, names] of Object.entries(used)) {
+    usedMermaidIcons[prefix] ??= new Set();
+    names.forEach((name) => usedMermaidIcons[prefix].add(name));
+  }
+});
+
+Object.entries(mermaidIconSets).forEach(([prefix, iconSetData]) => {
+  const { subset, notFound } = createIconSubset(iconSetData, [
+    ...(usedMermaidIcons[prefix] ?? []),
+  ]);
+  notFound.forEach((name) =>
+    console.warn(`Mermaid icon not found in ${prefix} set: ${name}`),
+  );
+
+  writeFileSync(
+    resolve(__dirname, join("../data", `${prefix}-icons.json`)),
+    JSON.stringify(subset),
+  );
+});
+
+writeFileSync(
+  resolve(__dirname, join("..", MERMAID_ICON_PACKS_FILENAME)),
+  JSON.stringify(mermaidIconPrefixes),
+);
+
 
 // Describes the shape of a individual skill entry in the skills.json file.
 export type SkillInfo = {
