@@ -262,7 +262,7 @@ const config: Config = {
       tagName: "link",
       attributes: {
         rel: "preconnect",
-        href: "https://img.youtube.com",
+        href: "https://i.ytimg.com",
       },
     },
     {
