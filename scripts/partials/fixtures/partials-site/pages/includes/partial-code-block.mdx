@@ -1,0 +1,51 @@
+<CodeBlock>
+{
+ `$ curl -L -O https://cdn.teleport.dev/teleport-access-${ props.name }-v(=teleport.version=)-linux-<Var name="ARCH" />-bin.tar.gz
+  $ tar -xzf teleport-access-${ props.name }-v(=teleport.version=)-linux-<Var name="ARCH" />-bin.tar.gz
+  $ cd teleport-access-${ props.name }
+  $ sudo ./install`
+}
+</CodeBlock>
+
+<CodeBlock>
+{`# Create a role for ${props.name}
+  $ curl \\
+    --cacert ca.pem \\
+    https://<Var name="proxy" />:3080
+  $ cat > role.yaml <<EOF
+  kind: role
+  spec:
+    allow:
+      logins: ["root"]
+  EOF
+  Role created.
+
+  ## A comment that is output`}
+</CodeBlock>
+
+<CodeBlock language="yaml">
+{
+ `kind: role
+  metadata:
+    name: ${props.name}-access
+  spec:
+    allow:
+      logins: ["<Var name="login" />"]
+      request:
+        roles: ["(=teleport.version=)"]`
+}
+</CodeBlock>
+
+<CodeBlock language="go">
+{
+ `fmt.Println("Hello, ${props.name}")`
+}
+</CodeBlock>
+
+<CodeBlock language="hcl">
+{
+ `resource "teleport_role" "${props.name}" {
+    version = "v7"
+  }`
+}
+</CodeBlock>
