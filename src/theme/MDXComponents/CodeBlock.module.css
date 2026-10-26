@@ -23,7 +23,7 @@
     font-size: var(--fs-text-md);
   }
 
-  & code {
+  code {
     font-family: inherit;
   }
 
