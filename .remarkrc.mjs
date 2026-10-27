@@ -1,6 +1,7 @@
 import { resolve } from "path";
 import remarkVariables from "./.remark-build/server/remark-variables.mjs";
 import remarkIncludes from "./.remark-build/server/remark-includes.mjs";
+import { remarkLintAgentFollowability } from "./.remark-build/server/lint-agent-followability.mjs";
 import remarkNoH1 from "./.remark-build/server/remark-no-h1.mjs";
 import { remarkLintTeleportDocsLinks } from "./.remark-build/server/lint-teleport-docs-links.mjs";
 import { remarkLintFrontmatter } from "./.remark-build/server/lint-frontmatter.mjs";
@@ -76,6 +77,7 @@ const configLint = {
         },
       },
     ],
+    remarkLintAgentFollowability,
     remarkNoH1,
     // validate-links must be run after remarkVariables since some links
     // include variables in their references, e.g.,
