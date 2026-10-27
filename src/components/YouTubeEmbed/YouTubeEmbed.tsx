@@ -4,6 +4,8 @@ import { useState } from "react";
 import styles from "./YouTubeEmbed.module.css";
 import Icon from "../Icon";
 
+const THUMBNAIL_BASE_URL = "https://i.ytimg.com/vi";
+
 type YouTubeEmbedProps = {
   videoId: string;
   title?: string;
@@ -47,17 +49,17 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
       <picture className={styles.videoPlaceholder}>
         <source
           media="(max-width: 480px)"
-          srcSet={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+          srcSet={`${THUMBNAIL_BASE_URL}/${videoId}/mqdefault.jpg`}
         />
         <source
           media="(max-width: 768px)"
-          srcSet={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+          srcSet={`${THUMBNAIL_BASE_URL}/${videoId}/hqdefault.jpg`}
         />
         <img
-          src={`https://img.youtube.com/vi/${videoId}/sddefault.jpg`}
+          src={`${THUMBNAIL_BASE_URL}/${videoId}/sddefault.jpg`}
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).src =
-              `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+              `${THUMBNAIL_BASE_URL}/${videoId}/hqdefault.jpg`;
           }}
           alt={title}
           width={720}
