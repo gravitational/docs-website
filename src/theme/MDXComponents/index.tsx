@@ -15,6 +15,10 @@ import Mermaid from "@theme/Mermaid";
 import TabItem from "@theme/TabItem";
 import Tabs from "@theme/Tabs";
 import { type ComponentProps } from "react";
+import Checklist, {
+  ChecklistItem,
+  ChecklistStep,
+} from "/src/components/Checklist";
 import Checkpoint from "/src/components/Checkpoint";
 import Command, { CommandComment, CommandLine } from "/src/components/Command";
 import EnterpriseFeatureBadge from "/src/components/EnterpriseFeatureBadge";
@@ -67,6 +71,9 @@ const MDXComponents: MDXComponentsObject = {
   Var: (props) => <Var {...props} />, // needed to circumvent props mismatch in types
   ThumbsFeedback,
   Checkpoint,
+  Checklist,
+  ChecklistStep,
+  ChecklistItem,
   EnterpriseFeatureBadge,
   EnterpriseFeatureCallout,
   EnterpriseFeatureWidget,
