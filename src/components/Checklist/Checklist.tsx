@@ -82,14 +82,13 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
   // Steps whose video stays mounted, so it doesn't vanish mid-collapse and
   // thumbnails only load for steps the user has opened.
   const [openedSteps, setOpenedSteps] = useState<number[]>([0]);
-  const [seek, setSeek] = useState<{
-    step: number;
-    time: number;
-    id: number;
-  }>();
+  // Latest play button click in the open step. A new object on every click,
+  // so the same timestamp can be replayed.
+  const [seek, setSeek] = useState<{ time: number }>();
 
   const toggleStep = (step: number | null) => {
     setOpenStep(step);
+    setSeek(undefined);
     if (step !== null && !openedSteps.includes(step)) {
       setOpenedSteps([...openedSteps, step]);
     }
@@ -176,14 +175,10 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
                       {/* Remounting on close resets the video to its thumbnail,
                       which stops playback. */}
                       <YouTubeEmbed
-                        key={`${isOpen}-${seek?.id}`}
+                        key={String(isOpen)}
                         videoId={step.videoId}
                         title={step.title}
-                        start={
-                          isOpen && seek?.step === stepIndex
-                            ? seek.time
-                            : undefined
-                        }
+                        seek={isOpen ? seek : undefined}
                       />
                     </div>
                   )}
@@ -235,11 +230,7 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
                               className={styles.playButton}
                               aria-label={`Play video from ${formatTime(item.timestamp)}`}
                               onClick={() =>
-                                setSeek({
-                                  step: stepIndex,
-                                  time: item.timestamp as number,
-                                  id: (seek?.id ?? 0) + 1,
-                                })
+                                setSeek({ time: item.timestamp as number })
                               }
                             >
                               <Icon name="play2" size="xs" />

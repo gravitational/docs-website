@@ -164,20 +164,25 @@ export const PlayFromTimestamp: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await step("Jump the video to the item's timestamp", async () => {
+    let player: HTMLIFrameElement | null = null;
+
+    await step("Load the player at the item's timestamp", async () => {
       await userEvent.click(
         canvas.getByRole("button", { name: "Play video from 0:42" }),
       );
-      const iframe = canvasElement.querySelector("iframe");
-      expect(iframe?.getAttribute("src")).toContain("start=42");
+      player = canvasElement.querySelector("iframe");
+      expect(player?.getAttribute("src")).toContain("start=42");
+      expect(player?.getAttribute("src")).toContain("enablejsapi=1");
     });
 
-    await step("Jump to another timestamp", async () => {
+    await step("Seek to another timestamp without reloading", async () => {
       await userEvent.click(
         canvas.getByRole("button", { name: "Play video from 1:35" }),
       );
-      const iframe = canvasElement.querySelector("iframe");
-      expect(iframe?.getAttribute("src")).toContain("start=95");
+      // The seek is sent to the existing player, so the iframe and its src
+      // stay the same.
+      expect(canvasElement.querySelector("iframe")).toBe(player);
+      expect(player?.getAttribute("src")).toContain("start=42");
     });
   },
 };

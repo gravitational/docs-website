@@ -1,6 +1,6 @@
-import { getEmbedYouTubeUrl } from "@site/src/utils";
+import { getEmbedYouTubeUrl, YOUTUBE_EMBED_ORIGIN } from "@site/src/utils";
 import cn from "clsx";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./YouTubeEmbed.module.css";
 import Icon from "../Icon";
 
@@ -11,22 +11,52 @@ type YouTubeEmbedProps = {
   title?: string;
   fetchPriority?: "high" | "low";
   className?: string;
-  // Start time in seconds. When set, the video starts playing immediately.
-  start?: number;
+  // Jumps the video to `time` seconds whenever a new object is passed.
+  seek?: { time: number };
 };
+
+// Sends a command over the same postMessage channel the YouTube IFrame API
+// uses. Requires enablejsapi=1 in the embed URL.
+const sendPlayerCommand = (
+  iframe: HTMLIFrameElement | null,
+  func: string,
+  args: unknown[] = [],
+) =>
+  iframe?.contentWindow?.postMessage(
+    JSON.stringify({ event: "command", func, args }),
+    YOUTUBE_EMBED_ORIGIN,
+  );
 
 const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
   videoId,
   title,
   fetchPriority,
   className,
-  start,
+  seek,
 }) => {
   const [videoActive, setVideoActive] = useState<boolean>(false);
+  // Set only when the player first loads, so later seeks don't change the
+  // iframe src and reload it.
+  const [start, setStart] = useState<number>();
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  if (videoActive || start !== undefined)
+  useEffect(() => {
+    if (!seek) return;
+    if (!videoActive) {
+      setStart(seek.time);
+      setVideoActive(true);
+      return;
+    }
+    sendPlayerCommand(iframeRef.current, "seekTo", [seek.time, true]);
+    sendPlayerCommand(iframeRef.current, "playVideo");
+    // Only react to new seeks, not to the player becoming active.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seek]);
+
+  if (videoActive)
     return (
       <iframe
+        ref={iframeRef}
         src={getEmbedYouTubeUrl(videoId, start)}
         title={title}
         allow="autoplay; encrypted-media"
