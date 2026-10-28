@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { userEvent, within } from "storybook/test";
 import { expect } from "storybook/test";
-import Checklist, { ChecklistItem, ChecklistStep } from "./Checklist";
+import Checklist, {
+  CHECKLIST_NAV_ID,
+  ChecklistItem,
+  ChecklistStep,
+} from "./Checklist";
 
 const STORAGE_KEY = "checklist:storybook";
 
@@ -34,6 +38,17 @@ const ChecklistExample = () => (
       <ChecklistItem>Manage roles with Terraform</ChecklistItem>
     </ChecklistStep>
   </Checklist>
+);
+
+// Mimics a page with the `checklist` template, where the doc layout renders
+// the nav element in place of the table of contents.
+const ChecklistWithNavExample = () => (
+  <div style={{ display: "flex", alignItems: "flex-start", gap: 24 }}>
+    <div style={{ flex: 1 }}>
+      <ChecklistExample />
+    </div>
+    <div id={CHECKLIST_NAV_ID} style={{ width: 280 }} />
+  </div>
 );
 
 const meta: Meta<typeof Checklist> = {
@@ -210,6 +225,44 @@ export const PlayFromTimestamp: Story = {
       // stay the same.
       expect(canvasElement.querySelector("iframe")).toBe(player);
       expect(player?.getAttribute("src")).toContain("start=42");
+    });
+  },
+};
+
+export const StepNavigation: Story = {
+  render: () => <ChecklistWithNavExample />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step("The open step is the active nav link", async () => {
+      const nav = within(
+        await canvas.findByRole("navigation", { name: "Checklist steps" }),
+      );
+      expect(nav.getByRole("link", { name: "Setup" })).toHaveAttribute(
+        "aria-current",
+        "step",
+      );
+    });
+
+    await step("Selecting a nav link opens that step", async () => {
+      const nav = within(
+        canvas.getByRole("navigation", { name: "Checklist steps" }),
+      );
+      await userEvent.click(nav.getByRole("link", { name: "Single Sign-On" }));
+      expect(
+        canvas.getByRole("button", { name: /2\. Single Sign-On/ }),
+      ).toHaveAttribute("aria-expanded", "true");
+      expect(canvas.getByRole("button", { name: /1\. Setup/ })).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+      expect(nav.getByRole("link", { name: "Single Sign-On" })).toHaveAttribute(
+        "aria-current",
+        "step",
+      );
+      expect(nav.getByRole("link", { name: "Setup" })).not.toHaveAttribute(
+        "aria-current",
+      );
     });
   },
 };

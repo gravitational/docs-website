@@ -7,6 +7,8 @@ interface TemplateConfig {
   showDescription?: boolean;
   isLandingPage?: boolean;
   faqSections?: boolean;
+  // Replaces the TOC with the navigation of the page's Checklist component.
+  checklistNav?: boolean;
 }
 
 const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
@@ -31,6 +33,10 @@ const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
     showDescription: true,
     faqSections: true,
   },
+  checklist: {
+    removeTOCSidebar: true,
+    checklistNav: true,
+  },
 };
 
 export function useDocTemplate(): TemplateConfig {
@@ -45,5 +51,6 @@ export function useDocTemplate(): TemplateConfig {
     showDescription: config.showDescription ?? false,
     isLandingPage: config.isLandingPage ?? false,
     faqSections: config.faqSections ?? false,
+    checklistNav: config.checklistNav ?? false,
   };
 }

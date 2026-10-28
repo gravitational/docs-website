@@ -30,6 +30,7 @@ import ThumbsFeedbackContext from "@site/src/components/ThumbsFeedback/context";
 import { FeedbackType } from "@site/src/components/ThumbsFeedback/types";
 import Icon from "@site/src/components/Icon";
 import ThumbsFeedback from "@site/src/components/ThumbsFeedback/ThumbsFeedback";
+import { CHECKLIST_NAV_ID } from "@site/src/components/Checklist";
 import { SkillInfo } from "@site/scripts/prepare-files.mjs";
 import skills from "@site/data/skills.json";
 
@@ -87,8 +88,10 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
     fullWidth,
     isLandingPage,
     faqSections,
+    checklistNav,
   } = useDocTemplate();
   const docTOC = useDocTOC(removeTOCSidebar);
+  const showTOCColumn = docTOC.canRender || checklistNav;
   const syntheticTitle = useSyntheticTitle();
   const { exclusiveFeature } = usePageExclusivityBanner();
   const [feedback, setFeedback] = useState<FeedbackType | null>(null);
@@ -124,16 +127,14 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
   );
 
   return (
-    <ExclusivityContext.Provider
-      value={{ exclusiveFeature, skillsForPage }}
-    >
+    <ExclusivityContext.Provider value={{ exclusiveFeature, skillsForPage }}>
       {exclusiveFeature && !isLandingPage && <ExclusivityBanner />}
       <div className="row">
         <div
           className={clsx(
             "col",
             styles.docItemCol,
-            docTOC.canRender && styles.docItemColWithTOC,
+            showTOCColumn && styles.docItemColWithTOC,
             fullWidth && styles.largeColumnPadding,
           )}
         >
@@ -225,11 +226,19 @@ export default function DocItemLayout({ children }: Props): JSX.Element {
             </div>
           </ThumbsFeedbackContext.Provider>
         </div>
-        {docTOC.canRender && (
+        {showTOCColumn && (
           <div className={clsx("col", styles.docItemColTOC)}>
             <div className={styles.stickySidebar}>
               <div className={styles.tocWithFeedback}>
-                <div className={styles.tocWrapper}>{docTOC.desktop}</div>
+                <div className={styles.tocWrapper}>
+                  {/* The Checklist component renders its navigation into
+                      this element with a portal. */}
+                  {checklistNav ? (
+                    <div id={CHECKLIST_NAV_ID} />
+                  ) : (
+                    docTOC.desktop
+                  )}
+                </div>
               </div>
             </div>
           </div>

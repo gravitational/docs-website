@@ -9,10 +9,12 @@
 }
 
 /* Disables every transition in the component, including nested rules with
-   higher specificity. */
+   higher specificity. The nav is rendered outside .checklist with a portal. */
 @media (prefers-reduced-motion: reduce) {
   .checklist,
-  .checklist * {
+  .checklist *,
+  .nav,
+  .nav * {
     transition: none !important;
   }
 }
@@ -32,6 +34,8 @@
 .step {
   /* Overrides the docs theme's spacing between list items; gap handles it. */
   margin-top: 0 !important;
+  /* Keeps the step clear of the sticky navbar when navigated to. */
+  scroll-margin-top: calc(var(--ifm-navbar-height) + var(--m-2));
   border: 1px solid var(--color-tonal-neutral-1);
   border-radius: var(--r-md);
   background-color: var(--color-white);
@@ -71,7 +75,7 @@
   gap: var(--m-0-5);
   font-size: var(--fs-header-4);
   font-weight: var(--fw-bold);
-  line-height: 1.5;
+  line-height: 150%;
   color: var(--color-black);
 
   @media (--md-scr) {
@@ -306,6 +310,53 @@
 
   &:hover {
     background-color: var(--color-lighter-gray);
+  }
+}
+
+/* Step navigation rendered in place of the table of contents. */
+.nav {
+  overflow: hidden;
+  border: 1px solid var(--color-tonal-neutral-2);
+  border-radius: var(--r-md);
+  background-color: var(--color-white);
+}
+
+.navTitle {
+  margin: 0;
+  padding: var(--m-1-5) 0 var(--m-1-5) var(--m-2);
+  font-size: var(--fs-text-sm);
+  line-height: 150%;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-foreground-disabled);
+}
+
+.navList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navLink {
+  display: block;
+  padding: var(--m-1) var(--m-2);
+  font-size: var(--fs-text-md);
+  line-height: 160%;
+  color: var(--color-foreground-slightly-muted);
+  text-decoration: none;
+  transition: background-color var(--t-fast);
+
+  &:hover {
+    color: var(--color-black);
+    text-decoration: none;
+    background-color: var(--color-tonal-neutral-0);
+  }
+
+  &.navLinkActive {
+    color: var(--color-dark-purple);
+    background-color: var(--color-tonal-primary-0);
+    box-shadow: inset 3px 0 0 var(--color-dark-purple);
+    font-weight: var(--fw-bold);
   }
 }
 

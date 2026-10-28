@@ -8,6 +8,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 import Icon from "../Icon";
 import YouTubeEmbed from "../YouTubeEmbed";
 import styles from "./Checklist.module.css";
@@ -34,6 +35,10 @@ type ChecklistProps = {
 type Step = Omit<ChecklistStepProps, "children"> & {
   items: ChecklistItemProps[];
 };
+
+// Pages with the `checklist` template render an element with this id in place
+// of the table of contents. The Checklist renders its navigation into it.
+export const CHECKLIST_NAV_ID = "checklist-nav";
 
 // ChecklistStep and ChecklistItem only carry props. Checklist reads them and
 // renders the whole list, so all state lives in one place.
@@ -72,6 +77,48 @@ const formatTime = (seconds: number) =>
 
 const padCount = (count: number) => String(count).padStart(2, "0");
 
+// Anchor id of a step, e.g. "checklist-single-sign-on".
+const getStepId = (title: string) =>
+  `checklist-${title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")}`;
+
+type ChecklistNavProps = {
+  steps: Step[];
+  openStep: number | null;
+  onSelect: (stepIndex: number) => void;
+};
+
+const ChecklistNav: React.FC<ChecklistNavProps> = ({
+  steps,
+  openStep,
+  onSelect,
+}) => (
+  <nav className={styles.nav} aria-label="Checklist steps">
+    <p className={styles.navTitle}>On this page</p>
+    <ol className={styles.navList}>
+      {steps.map((step, stepIndex) => (
+        <li key={stepIndex}>
+          <a
+            href={`#${getStepId(step.title)}`}
+            className={cn(styles.navLink, {
+              [styles.navLinkActive]: openStep === stepIndex,
+            })}
+            aria-current={openStep === stepIndex ? "step" : undefined}
+            onClick={(event) => {
+              event.preventDefault();
+              onSelect(stepIndex);
+            }}
+          >
+            {step.title}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+);
+
 const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
   const storageKey = `checklist:${id}`;
   const baseId = useId();
@@ -90,6 +137,9 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
   // Latest play button click in the open step. A new object on every click,
   // so the same timestamp can be replayed.
   const [seek, setSeek] = useState<{ time: number }>();
+  const [navRoot, setNavRoot] = useState<HTMLElement | null>(null);
+
+  const getBodyId = (stepIndex: number) => `${baseId}-step-${stepIndex}`;
 
   const toggleStep = (step: number | null) => {
     setOpenStep(step);
@@ -112,6 +162,32 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
     // Only restore progress on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storageKey]);
+
+  useEffect(() => {
+    setNavRoot(document.getElementById(CHECKLIST_NAV_ID));
+  }, []);
+
+  // Opens a step and scrolls to it. If an open step above it collapses at the
+  // same time, the target moves up by that step's body height.
+  const goToStep = (stepIndex: number) => {
+    const target = document.getElementById(getStepId(steps[stepIndex].title));
+    const collapsing =
+      openStep !== null && openStep < stepIndex
+        ? document.getElementById(getBodyId(openStep))
+        : null;
+    toggleStep(stepIndex);
+    if (!target) return;
+
+    const top =
+      target.getBoundingClientRect().top +
+      window.scrollY -
+      (collapsing?.offsetHeight ?? 0) -
+      parseFloat(getComputedStyle(target).scrollMarginTop);
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    window.scrollTo({ top, behavior: reduceMotion ? "auto" : "smooth" });
+  };
 
   const toggleItem = (key: string) => {
     const next = checked.includes(key)
@@ -137,11 +213,12 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
           const progress = step.items.length
             ? (checkedCount / step.items.length) * 100
             : 0;
-          const bodyId = `${baseId}-step-${stepIndex}`;
+          const bodyId = getBodyId(stepIndex);
 
           return (
             <li
               key={stepIndex}
+              id={getStepId(step.title)}
               className={cn(styles.step, { [styles.open]: isOpen })}
             >
               <button
@@ -255,6 +332,15 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
           );
         })}
       </ol>
+      {navRoot &&
+        createPortal(
+          <ChecklistNav
+            steps={steps}
+            openStep={openStep}
+            onSelect={goToStep}
+          />,
+          navRoot,
+        )}
     </section>
   );
 };
