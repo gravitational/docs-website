@@ -1,18 +1,26 @@
 .checklist {
   display: flex;
   flex-direction: column;
-  gap: var(--m-2);
+  gap: var(--m-1-5);
   margin-bottom: var(--m-3);
+
+  @media (--md-scr) {
+    gap: var(--m-2);
+  }
 }
 
 .step {
   border: 1px solid var(--color-tonal-neutral-1);
-  border-radius: var(--r-lg);
+  border-radius: var(--r-md);
   background-color: var(--color-white);
   transition: border-color var(--t-fast);
 
   &.open {
     border-color: var(--color-dark-purple);
+  }
+
+  @media (--md-scr) {
+    border-radius: var(--r-lg);
   }
 }
 
@@ -20,7 +28,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--m-2);
+  gap: var(--m-1-5);
   width: 100%;
   padding: var(--m-1-5);
   background: none;
@@ -30,6 +38,7 @@
   cursor: pointer;
 
   @media (--md-scr) {
+    gap: var(--m-2);
     padding: var(--m-2);
   }
 }
@@ -63,15 +72,24 @@
   justify-content: center;
   border-radius: var(--r-default);
   background-color: var(--color-tonal-neutral-0);
-  padding: 10px;
+  padding: var(--m-1);
 
   svg {
+    height: 16px;
     transform: rotate(180deg);
     transition: transform var(--t-fast);
   }
 
   .open & svg {
     transform: none;
+  }
+
+  @media (--md-scr) {
+    padding: 10px;
+
+    svg {
+      height: 20px;
+    }
   }
 }
 
@@ -110,6 +128,7 @@
   padding: 0 var(--m-1-5) var(--m-2);
 
   @media (--md-scr) {
+    gap: var(--m-4);
     padding: 0 var(--m-2) var(--m-2);
   }
 }
@@ -123,25 +142,37 @@
 .description {
   font-size: var(--fs-text-md);
   font-weight: var(--fw-regular);
-  line-height: var(--lh-sm);
+  line-height: 157.143%;
   color: var(--color-foreground-slightly-muted);
 }
 
 .video {
   aspect-ratio: 16 / 9;
-  border-radius: var(--m-1-5);
+  border-radius: var(--m-1);
   overflow: hidden;
+
+  @media (--md-scr) {
+    border-radius: var(--m-1-5);
+  }
 }
 
 .progress {
   display: flex;
   align-items: center;
   gap: var(--m-2);
+
+  @media (--md-scr) {
+    gap: var(--m-4);
+  }
 }
 
 .progressTrack {
   flex: 1;
-  height: var(--m-2);
+  height: var(--m-1-5);
+
+  @media (--md-scr) {
+    height: var(--m-2);
+  }
   border: 1px solid var(--color-tonal-primary-2);
   border-radius: var(--r-circle);
   background-color: var(--color-tonal-primary-0);
@@ -172,19 +203,25 @@
 
 .item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--m-2);
   margin-top: 0 !important;
   min-height: var(--m-4);
   font-size: var(--fs-text-md);
-  line-height: var(--lh-md);
+  line-height: 160%;
   color: var(--color-black);
 
   &.checked .label {
     a {
-      color: inherit;
+      font-weight: var(--fw-bold);
+      text-decoration: underline;
     }
+  }
+
+  @media (--md-scr) {
+    gap: var(--m-3);
+    font-size: var(--fs-text-lg);
   }
 }
 
@@ -194,6 +231,10 @@
   gap: var(--m-1-5);
   cursor: pointer;
   transition: color var(--t-fast);
+
+  @media (--md-scr) {
+    gap: var(--m-2);
+  }
 }
 
 /* Custom-drawn so the tick can be sized, which native checkboxes don't allow. */
@@ -228,6 +269,7 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  align-self: flex-start;
   padding: 10px;
   border: unset;
   border-radius: var(--r-circle);
