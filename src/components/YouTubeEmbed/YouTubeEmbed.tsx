@@ -11,6 +11,8 @@ type YouTubeEmbedProps = {
   title?: string;
   fetchPriority?: "high" | "low";
   className?: string;
+  // Start time in seconds. When set, the video starts playing immediately.
+  start?: number;
 };
 
 const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
@@ -18,13 +20,14 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
   title,
   fetchPriority,
   className,
+  start,
 }) => {
   const [videoActive, setVideoActive] = useState<boolean>(false);
 
-  if (videoActive)
+  if (videoActive || start !== undefined)
     return (
       <iframe
-        src={getEmbedYouTubeUrl(videoId)}
+        src={getEmbedYouTubeUrl(videoId, start)}
         title={title}
         allow="autoplay; encrypted-media"
         allowFullScreen
