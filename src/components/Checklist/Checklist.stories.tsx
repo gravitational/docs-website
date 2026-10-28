@@ -131,10 +131,37 @@ export const RestoresProgressFromStorage: Story = {
       const sso = canvas.getByRole("button", { name: /2\. Single Sign-On/ });
       expect(sso).toHaveAttribute("aria-expanded", "true");
       // Scoped to the step, since the previous one may still be collapsing.
-      const ssoStep = within(sso.closest("section") as HTMLElement);
+      const ssoStep = within(sso.closest("li") as HTMLElement);
       for (const checkbox of ssoStep.getAllByRole("checkbox")) {
         expect(checkbox).not.toBeChecked();
       }
+    });
+  },
+};
+
+export const LastStepCompletedOpensFirstIncomplete: Story = {
+  render: () => <ChecklistExample />,
+  beforeEach: () => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(["0-0", "0-1", "2-0", "2-1"]),
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step("The first incomplete step is opened", async () => {
+      const iac = await canvas.findByRole("button", {
+        name: /3\. Infrastructure as Code.*Completed/,
+      });
+      expect(iac).toHaveAttribute("aria-expanded", "false");
+      expect(canvas.getByRole("button", { name: /1\. Setup/ })).toHaveAttribute(
+        "aria-expanded",
+        "false",
+      );
+      expect(
+        canvas.getByRole("button", { name: /2\. Single Sign-On/ }),
+      ).toHaveAttribute("aria-expanded", "true");
     });
   },
 };

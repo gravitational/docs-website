@@ -1,8 +1,28 @@
 .checklist {
+  margin-bottom: var(--m-3);
+}
+
+.container {
+  max-width: var(--lp-section-max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Disables every transition in the component, including nested rules with
+   higher specificity. */
+@media (prefers-reduced-motion: reduce) {
+  .checklist,
+  .checklist * {
+    transition: none !important;
+  }
+}
+
+.steps {
   display: flex;
   flex-direction: column;
   gap: var(--m-1-5);
-  margin-bottom: var(--m-3);
+  padding: 0;
+  list-style: none;
 
   @media (--md-scr) {
     gap: var(--m-2);
@@ -10,6 +30,8 @@
 }
 
 .step {
+  /* Overrides the docs theme's spacing between list items; gap handles it. */
+  margin-top: 0 !important;
   border: 1px solid var(--color-tonal-neutral-1);
   border-radius: var(--r-md);
   background-color: var(--color-white);
@@ -109,10 +131,6 @@
     grid-template-rows: 0fr;
     opacity: 0;
     visibility: hidden;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
   }
 }
 
