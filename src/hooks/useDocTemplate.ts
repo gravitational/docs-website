@@ -36,6 +36,7 @@ const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
   checklist: {
     removeTOCSidebar: true,
     checklistNav: true,
+    showDescription: true,
   },
 };
 
