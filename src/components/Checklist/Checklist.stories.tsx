@@ -97,7 +97,6 @@ export const CheckingItemsCompletesStep: Story = {
     await step("Check the first item", async () => {
       await userEvent.click(first);
       expect(first).toBeChecked();
-      expect(first.closest("li")?.className).toMatch(/checked/);
       expect(canvas.getByText("01/02 completed")).toBeInTheDocument();
       expect(
         canvas.getByRole("button", { name: /1\. Setup/ }),
@@ -146,8 +145,12 @@ export const RestoresProgressFromStorage: Story = {
       const sso = canvas.getByRole("button", { name: /2\. Single Sign-On/ });
       expect(sso).toHaveAttribute("aria-expanded", "true");
       // Scoped to the step, since the previous one may still be collapsing.
+      // hidden: true includes checkboxes that are still hidden in the first
+      // frame of the step's opening animation.
       const ssoStep = within(sso.closest("li") as HTMLElement);
-      for (const checkbox of ssoStep.getAllByRole("checkbox")) {
+      for (const checkbox of ssoStep.getAllByRole("checkbox", {
+        hidden: true,
+      })) {
         expect(checkbox).not.toBeChecked();
       }
     });

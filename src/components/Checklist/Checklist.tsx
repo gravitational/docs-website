@@ -294,12 +294,7 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
                         const isChecked = checked.includes(key);
 
                         return (
-                          <li
-                            key={key}
-                            className={cn(styles.item, {
-                              [styles.checked]: isChecked,
-                            })}
-                          >
+                          <li key={key} className={styles.item}>
                             <label className={styles.label}>
                               <input
                                 type="checkbox"
