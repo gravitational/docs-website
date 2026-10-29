@@ -234,7 +234,7 @@
   line-height: 160%;
   color: var(--color-black);
 
-  &.checked .label {
+  .label {
     a {
       font-weight: var(--fw-bold);
       text-decoration: underline;
