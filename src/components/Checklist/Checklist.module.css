@@ -236,7 +236,6 @@
 
   .label {
     a {
-      font-weight: var(--fw-bold);
       text-decoration: underline;
     }
   }
