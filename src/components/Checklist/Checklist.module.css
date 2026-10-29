@@ -287,6 +287,7 @@
 }
 
 .playButton {
+  position: relative;
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -311,6 +312,28 @@
   &:hover {
     background-color: var(--color-lighter-gray);
   }
+
+  &:hover .tooltip,
+  &:focus-visible .tooltip {
+    opacity: 1;
+  }
+}
+
+.tooltip {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + var(--m-1));
+  transform: translateY(-50%);
+  padding: var(--m-0-5) var(--m-1);
+  border-radius: var(--r-default);
+  background-color: var(--color-foreground-tooltip);
+  color: var(--color-white);
+  font-size: var(--fs-text-sm);
+  line-height: 150%;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--t-fast);
 }
 
 /* Step navigation rendered in place of the table of contents. */

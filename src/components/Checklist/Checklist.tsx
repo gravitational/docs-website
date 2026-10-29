@@ -72,8 +72,11 @@ const getOpenStep = (steps: Step[], checked: string[]) => {
   return firstIncomplete === -1 ? null : firstIncomplete;
 };
 
-const formatTime = (seconds: number) =>
-  `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+const formatTime = (seconds: number) => {
+  const mins = Math.floor(seconds / 60);
+  const secs = String(seconds % 60).padStart(2, "0");
+  return `${mins}:${secs}`;
+};
 
 const padCount = (count: number) => String(count).padStart(2, "0");
 
@@ -292,6 +295,10 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
                       {step.items.map((item, itemIndex) => {
                         const key = itemKey(stepIndex, itemIndex);
                         const isChecked = checked.includes(key);
+                        const playLabel =
+                          item.timestamp !== undefined
+                            ? `Play video from ${formatTime(item.timestamp)}`
+                            : undefined;
 
                         return (
                           <li key={key} className={styles.item}>
@@ -304,16 +311,23 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
                               />
                               <span>{item.children}</span>
                             </label>
-                            {item.timestamp !== undefined && step.videoId && (
+                            {playLabel && step.videoId && (
                               <button
                                 type="button"
                                 className={styles.playButton}
-                                aria-label={`Play video from ${formatTime(item.timestamp)}`}
+                                aria-label={playLabel}
                                 onClick={() =>
                                   setSeek({ time: item.timestamp as number })
                                 }
                               >
                                 <Icon name="play2" size="xs" />
+                                {/* Visual only; aria-label already gives screen readers the same text. */}
+                                <span
+                                  className={styles.tooltip}
+                                  aria-hidden="true"
+                                >
+                                  {playLabel}
+                                </span>
                               </button>
                             )}
                           </li>
