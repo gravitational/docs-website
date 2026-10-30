@@ -159,11 +159,7 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
       );
       setChecked(saved);
       toggleStep(getOpenStep(steps, saved));
-    } catch {
-      // Ignore unavailable or malformed storage and keep the defaults.
-    }
-    // Only restore progress on mount.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    } catch {}
   }, [storageKey]);
 
   useEffect(() => {

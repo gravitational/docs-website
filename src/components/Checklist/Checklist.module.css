@@ -8,8 +8,7 @@
   padding: 0 1rem;
 }
 
-/* Disables every transition in the component, including nested rules with
-   higher specificity. The nav is rendered outside .checklist with a portal. */
+/* Disable animations for users with preferred reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   .checklist,
   .checklist *,
@@ -32,9 +31,7 @@
 }
 
 .step {
-  /* Overrides the docs theme's spacing between list items; gap handles it. */
   margin-top: 0 !important;
-  /* Keeps the step clear of the sticky navbar when navigated to. */
   scroll-margin-top: calc(var(--ifm-navbar-height) + var(--m-2));
   border: 1px solid var(--color-tonal-neutral-1);
   border-radius: var(--r-md);
@@ -266,7 +263,7 @@
   }
 }
 
-/* Custom-drawn so the tick can be sized, which native checkboxes don't allow. */
+/* Custom-drawn so the tick can be sized */
 .checkbox {
   appearance: none;
   flex-shrink: 0;
@@ -275,7 +272,8 @@
   margin: var(--m-0-5) 0 0;
   border: 1px solid var(--color-foreground-muted);
   border-radius: var(--r-default);
-  background: var(--color-white) no-repeat center / 8px 5.5px;
+  /* Aspect ratio for the tick is 23:16 in the design */
+  background: var(--color-white) no-repeat center / 8px calc(8px * 16 / 23);
   cursor: pointer;
   transition:
     background-color var(--t-fast),
@@ -284,7 +282,7 @@
   &:checked {
     border-color: var(--color-dark-purple);
     background-color: var(--color-dark-purple);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 5.5' fill='none'%3E%3Cpath d='M0.75 2.75 3 4.75 7.25 0.75' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7.906 5.5' fill='none'%3E%3Cpath d='M6.51 0.21967C6.8294 -0.0732233 7.34713 -0.0732233 7.66653 0.21967C7.98594 0.512563 7.98594 0.987324 7.66653 1.28022L3.30449 5.28022C2.98508 5.57311 2.46735 5.57311 2.14795 5.28022L0.239553 3.53022C-0.0798509 3.23732 -0.0798509 2.76256 0.239553 2.46967C0.558956 2.17678 1.07669 2.17678 1.39609 2.46967L2.72622 3.6894L6.51 0.21967Z' fill='white'/%3E%3C/svg%3E");
   }
 
   &:focus-visible {
