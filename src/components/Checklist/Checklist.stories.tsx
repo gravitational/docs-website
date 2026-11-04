@@ -85,7 +85,10 @@ export const CheckingItemsCompletesStep: Story = {
         JSON.parse(
           localStorage.getItem(STORAGE_KEY) || "{checked: [], open: 0}",
         ),
-      ).toEqual({ checked: ["0-0", "0-1"], open: 0 });
+      ).toEqual({
+        checked: ["checklist-setup-0", "checklist-setup-1"],
+        open: 0,
+      });
     });
 
     await step("Uncheck an item", async () => {

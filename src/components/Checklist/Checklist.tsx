@@ -45,12 +45,12 @@ const getChildProps = <T,>(children: ReactNode): T[] =>
     .filter((child): child is ReactElement<T> => isValidElement(child))
     .map((child) => child.props);
 
-const itemKey = (stepIndex: number, itemIndex: number) =>
-  `${stepIndex}-${itemIndex}`;
+const itemKey = (stepTitle: string, itemIndex: number) =>
+  `${getStepId(stepTitle)}-${itemIndex}`;
 
-const isStepComplete = (step: Step, stepIndex: number, checked: string[]) =>
+const isStepComplete = (step: Step, checked: string[]) =>
   step.items.every((_, itemIndex) =>
-    checked.includes(itemKey(stepIndex, itemIndex)),
+    checked.includes(itemKey(step.title, itemIndex)),
   );
 
 // Make sure the opened step is a valid index.
@@ -173,9 +173,9 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
       <ol className={cn(styles.steps, styles.container)}>
         {steps.map((step, stepIndex) => {
           const isOpen = openStep === stepIndex;
-          const isComplete = isStepComplete(step, stepIndex, checked);
+          const isComplete = isStepComplete(step, checked);
           const checkedCount = step.items.filter((_, itemIndex) =>
-            checked.includes(itemKey(stepIndex, itemIndex)),
+            checked.includes(itemKey(step.title, itemIndex)),
           ).length;
           const progress = step.items.length
             ? (checkedCount / step.items.length) * 100
@@ -268,7 +268,7 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
 
                     <ul className={styles.items}>
                       {step.items.map((item, itemIndex) => {
-                        const key = itemKey(stepIndex, itemIndex);
+                        const key = itemKey(step.title, itemIndex);
                         const isChecked = checked.includes(key);
                         const playLabel =
                           item.timestamp !== undefined
