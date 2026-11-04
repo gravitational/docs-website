@@ -19,13 +19,9 @@
 .steps {
   display: flex;
   flex-direction: column;
-  gap: var(--m-1-5);
+  gap: var(--m-2);
   padding: 0;
   list-style: none;
-
-  @media (--md-scr) {
-    gap: var(--m-2);
-  }
 }
 
 .step {
@@ -62,16 +58,19 @@
   justify-content: space-between;
   gap: var(--m-1-5);
   width: 100%;
-  padding: var(--m-1-5);
+  padding: var(--m-1-5) var(--m-2);
   background: none;
   border: none;
   font-family: inherit;
   text-align: left;
   cursor: pointer;
 
+  &.isOpen {
+    padding-bottom: var(--m-2);
+  }
+
   @media (--md-scr) {
     gap: var(--m-2);
-    padding: var(--m-1-5) var(--m-2);
   }
 }
 
@@ -79,13 +78,17 @@
   display: flex;
   align-items: center;
   gap: var(--m-1-5);
-  font-size: var(--fs-header-4);
+  font-size: var(--fs-text-xl);
   font-weight: var(--fw-bold);
   line-height: 150%;
   color: var(--color-black);
 
   &.isOpen {
     color: var(--color-dark-purple);
+  }
+
+  @media (--md-scr) {
+    font-size: var(--fs-header-4);
   }
 }
 
@@ -156,17 +159,18 @@
 .bodyInner {
   min-height: 0;
   overflow: hidden;
+  container-type: inline-size;
+  container-name: checklist-body;
 }
 
 .bodyContent {
   display: flex;
   flex-direction: column;
   gap: var(--m-2);
-  padding: 0 var(--m-1-5) var(--m-2);
+  padding: 0 var(--m-2) var(--m-1-5) var(--m-2);
 
-  @media (--md-scr) {
-    gap: var(--m-4);
-    padding: 0 var(--m-2) var(--m-2);
+  @container checklist-body (width > 800px) {
+    display: block;
   }
 }
 
@@ -183,6 +187,12 @@
 
   @media (--md-scr) {
     border-radius: var(--m-1-5);
+  }
+  @container checklist-body (width > 800px) {
+    float: right;
+    aspect-ratio: 16/9;
+    min-width: 50%;
+    margin: 0 0 var(--m-2) var(--m-2);
   }
 }
 
@@ -229,6 +239,10 @@
   margin: 0;
   padding: 0;
   list-style: none;
+
+  @container checklist-body (width > 800px) {
+    display: block;
+  }
 }
 
 .item {
@@ -251,6 +265,13 @@
   @media (--md-scr) {
     gap: var(--m-3);
     font-size: var(--fs-text-lg);
+  }
+
+  @container checklist-body (width > 800px) {
+    margin-top: var(--m-0-5) !important;
+    &:first-child {
+      margin-top: var(--m-2) !important;
+    }
   }
 }
 

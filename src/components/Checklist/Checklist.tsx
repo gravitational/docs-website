@@ -193,7 +193,7 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
             >
               <button
                 type="button"
-                className={styles.header}
+                className={cn(styles.header, { [styles.isOpen]: isOpen })}
                 aria-expanded={isOpen}
                 aria-controls={bodyId}
                 onClick={() => toggleStep(isOpen ? null : stepIndex)}
