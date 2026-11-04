@@ -84,28 +84,10 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
     }),
   );
 
-  const [checked, setChecked] = useState<string[]>(() => {
-    try {
-      const saved: { checked: string[]; open: number } = JSON.parse(
-        localStorage.getItem(storageKey) || '{"checked": [], "open": 0}',
-      );
-      return saved.checked ?? [];
-    } catch {
-      return [];
-    }
-  });
+  const [checked, setChecked] = useState<string[]>([]);
   const [initialized, setInitialized] = useState<boolean>(false);
   const [animate, setAnimate] = useState<boolean>(false);
-  const [openStep, setOpenStep] = useState<number | null>(() => {
-    try {
-      const saved: { checked: string[]; open: number } = JSON.parse(
-        localStorage.getItem(storageKey) || '{"checked": [], "open": 0}',
-      );
-      return getOpenStep(steps, saved.open);
-    } catch {
-      return 0;
-    }
-  });
+  const [openStep, setOpenStep] = useState<number | null>(0);
   // Steps whose video stays mounted, so it doesn't vanish mid-collapse and
   // thumbnails only load for steps the user has opened.
   const [openedSteps, setOpenedSteps] = useState<number[]>([0]);
