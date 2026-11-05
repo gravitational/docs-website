@@ -65,13 +65,13 @@ export const buildDocsWebSiteNode = (): JsonLdNode => ({
   isPartOf: { "@id": "https://goteleport.com/#website" },
 });
 
-export type DocArticleType = "TechArticle" | "HowTo";
+type DocArticleType = "TechArticle" | "HowTo";
 
 /** Maps the `page_type` frontmatter field to a schema.org article type. */
 export const getDocArticleType = (pageType: unknown): DocArticleType =>
   pageType === "how-to" ? "HowTo" : "TechArticle";
 
-export interface DocArticleInput {
+interface DocArticleInput {
   type: DocArticleType;
   url: string;
   headline: string;
@@ -109,7 +109,7 @@ export interface BreadcrumbInput {
   href?: string;
 }
 
-export interface BreadcrumbListInput {
+interface BreadcrumbListInput {
   // Origin used to absolutize breadcrumb hrefs, e.g. https://goteleport.com
   siteUrl: string;
   // Absolute URL of the docs site root, used as the first breadcrumb.
@@ -148,7 +148,7 @@ export const buildBreadcrumbListNode = ({
   };
 };
 
-export interface DocDateSources {
+interface DocDateSources {
   // Frontmatter `date_published`, set by authors.
   frontMatterDatePublished?: unknown;
   // Frontmatter `last_update.date`, natively supported by Docusaurus.
@@ -160,7 +160,7 @@ export interface DocDateSources {
   versionReleaseDate?: string;
 }
 
-export interface DocDates {
+interface DocDates {
   datePublished?: string;
   dateModified?: string;
 }
