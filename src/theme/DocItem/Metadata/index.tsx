@@ -1,20 +1,70 @@
 import Head from "@docusaurus/Head";
 import { useLocation } from "@docusaurus/router";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { useDoc } from "@docusaurus/plugin-content-docs/client";
 import { markdownAlternatePath } from "@site/src/utils/markdown";
+import {
+  applyTrailingSlash,
+  buildDocArticleNode,
+  buildDocsWebSiteNode,
+  getDocArticleType,
+  serializeJsonLd,
+  toIsoDate,
+  toJsonLdDocument,
+  type JsonLdNode,
+} from "@site/src/utils/structuredData";
 import Metadata from "@theme-original/DocItem/Metadata";
 import type { ReactNode } from "react";
 
+interface StructuredDataFrontMatter {
+  page_type?: string;
+  // Explicit author override, natively supported by Docusaurus.
+  last_update?: { date?: unknown };
+}
+
+function useDocStructuredData(): JsonLdNode {
+  const { siteConfig } = useDocusaurusContext();
+  const { metadata, frontMatter } = useDoc();
+  const fm = frontMatter as StructuredDataFrontMatter;
+
+  const url = `${siteConfig.url}${applyTrailingSlash(metadata.permalink)}`;
+  const dateModified = toIsoDate(metadata.lastUpdatedAt);
+
+  const nodes: JsonLdNode[] =
+    metadata.permalink === siteConfig.baseUrl
+      ? []
+      : [
+          buildDocArticleNode({
+            type: getDocArticleType(fm.page_type),
+            url,
+            headline: metadata.title,
+            description: metadata.description,
+            dateModified,
+          }),
+        ];
+
+  // The docs WebSite node is declared once, on the docs home page. All other
+  // pages reference it by @id via the article's isPartOf.
+  if (metadata.permalink === siteConfig.baseUrl) {
+    nodes.unshift(buildDocsWebSiteNode());
+  }
+
+  return toJsonLdDocument(nodes);
+}
+
 /**
- * Wraps the default DocItem metadata to advertise the generated Markdown
- * variant of each docs page. Every docs page has a corresponding .md file
- * produced by the llms-txt plugin, so the tag renders on all doc routes
- * (and only on doc routes). The href is relative so it resolves against
- * whichever host serves the page (production, preview, or local).
+ * Wraps the default DocItem metadata to:
+ * - advertise the generated Markdown variant of each docs page. Every docs
+ *   page has a corresponding .md file produced by the llms-txt plugin, so the
+ *   tag renders on all doc routes (and only on doc routes). The href is
+ *   relative so it resolves against whichever host serves the page
+ *   (production, preview, or local).
+ * - emit the page's TechArticle/HowTo JSON-LD node.
  */
 export default function MetadataWrapper(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
   const { pathname } = useLocation();
+  const structuredData = useDocStructuredData();
 
   return (
     <>
@@ -25,6 +75,9 @@ export default function MetadataWrapper(): ReactNode {
           type="text/markdown"
           href={markdownAlternatePath(pathname, siteConfig.baseUrl)}
         />
+        <script type="application/ld+json">
+          {serializeJsonLd(structuredData)}
+        </script>
       </Head>
     </>
   );
