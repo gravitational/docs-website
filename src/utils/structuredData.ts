@@ -41,9 +41,7 @@ export const toIsoDate = (value: unknown): string | undefined => {
  * URLs match the canonical URLs Docusaurus emits. Doc permalinks and sidebar
  * breadcrumb hrefs do not always include the trailing slash.
  */
-export const applyTrailingSlash = (
-  path: string,
-): string => {
+export const applyTrailingSlash = (path: string): string => {
   const [pathname, suffix = ""] = path.split(/(?=[?#])/, 2);
   if (!pathname.endsWith("/")) {
     return `${pathname}/${suffix}`;
@@ -147,4 +145,53 @@ export const buildBreadcrumbListNode = ({
       ...entry,
     })),
   };
+};
+
+export interface DocDateSources {
+  // Frontmatter `date_published`, set by authors.
+  frontMatterDatePublished?: unknown;
+  // Frontmatter `last_update.date`, natively supported by Docusaurus.
+  frontMatterLastUpdate?: unknown;
+  // Docusaurus `metadata.lastUpdatedAt`. Only populated when the docs plugin's
+  // `showLastUpdateTime` option is enabled and git history is available.
+  lastUpdatedAt?: number | null;
+  // Newest release date of the page's Teleport version, from CHANGELOG.md.
+  versionReleaseDate?: string;
+}
+
+export interface DocDates {
+  datePublished?: string;
+  dateModified?: string;
+}
+
+/**
+ * Resolves datePublished and dateModified for a docs page.
+ *
+ * datePublished: frontmatter `date_published`. Otherwise omitted.
+ * dateModified, first valid value wins:
+ *   1. frontmatter `last_update.date`
+ *   2. Docusaurus `metadata.lastUpdatedAt`
+ *   3. the version's newest release date (CHANGELOG.md)
+ *
+ * dateModified is never earlier than datePublished. For example, a page
+ * published after the latest release of its version would otherwise get a
+ * release-date fallback that predates it.
+ */
+export const resolveDocDates = ({
+  frontMatterDatePublished,
+  frontMatterLastUpdate,
+  lastUpdatedAt,
+  versionReleaseDate,
+}: DocDateSources): DocDates => {
+  const datePublished = toIsoDate(frontMatterDatePublished);
+  let dateModified =
+    toIsoDate(frontMatterLastUpdate) ??
+    toIsoDate(lastUpdatedAt) ??
+    toIsoDate(versionReleaseDate);
+
+  if (datePublished && dateModified && dateModified < datePublished) {
+    dateModified = datePublished;
+  }
+
+  return { datePublished, dateModified };
 };

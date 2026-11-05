@@ -4,6 +4,7 @@ import { createRequire } from "module";
 import { join, resolve, dirname } from "path";
 import { glob } from "glob";
 import { parseSkillMarkdown } from "../server/parse-skill-md";
+import { readChangelogReleaseDate } from "../server/changelog-release-date";
 import {
   createIconSubset,
   extractIconNames,
@@ -23,6 +24,7 @@ const SIDEBAR_FILENAME = "sidebars.json";
 const VERSION_FILENAME = "versions.json";
 const SKILLS_FILENAME = "data/skills.json";
 const MERMAID_ICON_PACKS_FILENAME = "data/mermaid-icon-packs.json";
+const VERSION_RELEASE_DATES_FILENAME = "data/version-release-dates.json";
 const GET_VERSION_SIDEBAR_FILENAME = (version) =>
   `versioned_sidebars/version-${version}-sidebars.json`;
 
@@ -83,6 +85,31 @@ versions.forEach((version) => {
 });
 
 writeVersions();
+
+// Newest release date of each docs version, taken from its CHANGELOG.md. Used
+// as the dateModified fallback in JSON-LD structured data. Keys are Docusaurus
+// version names ("current" for the edge version) to match the version in doc
+// metadata.
+const versionReleaseDates: Record<string, string> = {};
+versions.forEach((version) => {
+  const releaseDate = readChangelogReleaseDate(
+    resolve("content", version),
+    version,
+  );
+  if (releaseDate) {
+    versionReleaseDates[version === currentVersion ? "current" : version] =
+      releaseDate;
+  } else {
+    console.warn(
+      `No release date found in content/${version}/CHANGELOG.md; structured data for ${version} pages falls back to frontmatter dates only.`,
+    );
+  }
+});
+writeFileSync(
+  VERSION_RELEASE_DATES_FILENAME,
+  JSON.stringify(versionReleaseDates),
+  "utf8",
+);
 
 // Make sure the upcoming releases page is the same on all 3 branches.
 const versionsToOverride = getVersionNames().filter(

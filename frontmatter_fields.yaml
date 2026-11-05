@@ -86,6 +86,12 @@ properties:
     type: string
   videoBannerDescription:
     type: string
+  # The date the page was first published, used as datePublished in the page's
+  # JSON-LD structured data. Format: YYYY-MM-DD or a full ISO 8601 timestamp.
+  # To set dateModified, use the native Docusaurus field `last_update.date`.
+  date_published:
+    type: string
+    pattern: "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?(Z|[+-]\\d{2}:\\d{2})?)?$"
   # This field is used to specify specific agent skills that are relevant to a page. 
   # It is an array of strings, where each string represents a skill name.
   skills:

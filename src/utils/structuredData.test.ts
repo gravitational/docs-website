@@ -8,6 +8,7 @@ import {
   buildDocArticleNode,
   buildDocsWebSiteNode,
   getDocArticleType,
+  resolveDocDates,
   serializeJsonLd,
   toIsoDate,
   toJsonLdDocument,
@@ -170,5 +171,77 @@ describe("applyTrailingSlash", () => {
     ["/docs/a", "/docs/a"],
   ])("%s (%p) -> %s", (path, expected) => {
     expect(applyTrailingSlash(path)).toBe(expected);
+  });
+});
+
+describe("resolveDocDates", () => {
+  const release = "2026-08-25T00:00:00.000Z";
+
+  test("returns nothing when no source is available", () => {
+    expect(resolveDocDates({})).toEqual({
+      datePublished: undefined,
+      dateModified: undefined,
+    });
+  });
+
+  test("uses frontmatter date_published", () => {
+    expect(
+      resolveDocDates({ frontMatterDatePublished: "2023-04-12" }).datePublished,
+    ).toBe("2023-04-12T00:00:00.000Z");
+  });
+
+  test("accepts Date objects parsed from unquoted YAML dates", () => {
+    expect(
+      resolveDocDates({
+        frontMatterDatePublished: new Date("2023-04-12T00:00:00Z"),
+      }).datePublished,
+    ).toBe("2023-04-12T00:00:00.000Z");
+  });
+
+  test("prefers frontmatter last_update.date for dateModified", () => {
+    expect(
+      resolveDocDates({
+        frontMatterLastUpdate: "2026-06-11",
+        lastUpdatedAt: Date.UTC(2026, 0, 1),
+        versionReleaseDate: release,
+      }).dateModified,
+    ).toBe("2026-06-11T00:00:00.000Z");
+  });
+
+  test("falls back to Docusaurus lastUpdatedAt", () => {
+    expect(
+      resolveDocDates({
+        lastUpdatedAt: Date.UTC(2026, 0, 1),
+        versionReleaseDate: release,
+      }).dateModified,
+    ).toBe("2026-01-01T00:00:00.000Z");
+  });
+
+  test("falls back to the version release date", () => {
+    expect(
+      resolveDocDates({ lastUpdatedAt: null, versionReleaseDate: release })
+        .dateModified,
+    ).toBe(release);
+  });
+
+  test("skips invalid values", () => {
+    expect(
+      resolveDocDates({
+        frontMatterLastUpdate: "not a date",
+        versionReleaseDate: release,
+      }).dateModified,
+    ).toBe(release);
+  });
+
+  test("never returns dateModified earlier than datePublished", () => {
+    expect(
+      resolveDocDates({
+        frontMatterDatePublished: "2026-10-01",
+        versionReleaseDate: release,
+      }),
+    ).toEqual({
+      datePublished: "2026-10-01T00:00:00.000Z",
+      dateModified: "2026-10-01T00:00:00.000Z",
+    });
   });
 });
