@@ -58,7 +58,14 @@ const configLint = {
     ["lint-maximum-heading-length", false],
     ["lint-no-shortcut-reference-link", false],
     ["lint-no-file-name-irregular-characters", false],
-    [remarkLintFrontmatter, yaml.parse(allowedFrontmatterConfig)],
+    [
+      remarkLintFrontmatter,
+      {
+        schema: yaml.parse(allowedFrontmatterConfig),
+        errorSuffix:
+          "For allowed frontmatter fields, see: https://github.com/gravitational/docs-website/blob/main/frontmatter_fields.yaml",
+      },
+    ],
     [
       remarkIncludes, // Lints (!include.ext!) syntax
       {
