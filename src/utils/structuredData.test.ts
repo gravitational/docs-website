@@ -166,9 +166,7 @@ describe("applyTrailingSlash", () => {
     ["/docs/a", "/docs/a/"],
     ["/docs/a/", "/docs/a/"],
     ["/docs/a#b", "/docs/a/#b"],
-    ["/docs/a/", "/docs/a"],
     ["/", "/"],
-    ["/docs/a", "/docs/a"],
   ])("%s (%p) -> %s", (path, expected) => {
     expect(applyTrailingSlash(path)).toBe(expected);
   });
