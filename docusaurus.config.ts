@@ -367,18 +367,6 @@ const config: Config = {
       }),
     },
     {
-      tagName: "script",
-      attributes: {
-        type: "application/ld+json",
-      },
-      innerHTML: JSON.stringify({
-        "@context": "https://schema.org/",
-        "@type": "WebSite",
-        name: "Teleport Docs",
-        url: "https://goteleport.com/docs/",
-      }),
-    },
-    {
       tagName: "link",
       attributes: {
         rel: "preload",
