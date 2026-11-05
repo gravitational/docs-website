@@ -124,6 +124,7 @@ export const buildBreadcrumbListNode = ({
   breadcrumbs,
 }: BreadcrumbListInput): JsonLdNode => {
   const items = [
+    { name: "Home", item: "https://goteleport.com/" },
     { name: DOCS_WEBSITE_NAME, item: rootUrl },
     ...breadcrumbs
       // Breadcrumb items without links are not allowed in a BreadcrumbList.
