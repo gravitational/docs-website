@@ -92,18 +92,24 @@ describe("buildBreadcrumbListNode", () => {
       {
         "@type": "ListItem",
         position: 1,
+        name: "Home",
+        item: `https://goteleport.com/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
         name: "Teleport Docs",
         item: rootUrl,
       },
       {
         "@type": "ListItem",
-        position: 2,
+        position: 3,
         name: "Category",
         item: "https://goteleport.com/docs/cat/",
       },
       {
         "@type": "ListItem",
-        position: 3,
+        position: 4,
         name: "Page",
         item: "https://goteleport.com/docs/cat/page/",
       },
@@ -117,7 +123,7 @@ describe("buildBreadcrumbListNode", () => {
       breadcrumbs: [{ label: "Page", href: "/docs/page" }],
       trailingSlash: true,
     });
-    expect((node.itemListElement as { item: string }[])[1].item).toBe(
+    expect((node.itemListElement as { item: string }[])[2].item).toBe(
       "https://goteleport.com/docs/page/",
     );
   });
@@ -128,7 +134,7 @@ describe("buildBreadcrumbListNode", () => {
       rootUrl,
       breadcrumbs: [{ label: "Home", href: "/docs/" }],
     });
-    expect(node.itemListElement).toHaveLength(1);
+    expect(node.itemListElement).toHaveLength(2);
   });
 });
 
