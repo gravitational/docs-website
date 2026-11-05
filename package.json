@@ -64,7 +64,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "dotenv": "^18.0.9",
-    "glob": "^13.0.6",
+    "glob": "^14.0.3",
     "hast-util-to-html": "^9.0.5",
     "highlightjs-terraform": "https://github.com/highlightjs/highlightjs-terraform#eb1b9661e143a43dff6b58b391128ce5cdad31d4",
     "js-yaml": "^5.5.0",
