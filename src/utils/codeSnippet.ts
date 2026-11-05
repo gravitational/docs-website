@@ -1,5 +1,9 @@
 // Parser for the "code" snippet format: commands prefixed with "$", comments
 // prefixed with "#", multiline and heredoc commands, and inline <Var /> tags.
+//
+// The same parser backs the remark-code-snippet plugin (fenced ```code blocks)
+// and the CodeBlock MDX component, so both produce the same structure.
+// This module has no dependencies so it can run in the build and the browser.
 
 export interface TextPart {
   type: "text";
@@ -220,3 +224,22 @@ export const parseCodeSnippet = (content: string): ParsedSnippet => {
 
   return { nodes, diagnostics };
 };
+
+// Prepares text that is written in JSX. It converts Windows line endings and
+// removes the blank lines before and after the text, which appear when the
+// text starts and ends on its own line:
+//
+//   <CodeBlock>
+//   {`
+//     $ tsh ls
+//   `}
+//   </CodeBlock>
+//
+// The indentation of the lines is not changed. MDX removes up to two leading
+// spaces from each line after the first of an expression, which is why the
+// lines of a multiline template literal are indented by two spaces.
+export const normalizeSource = (source: string): string =>
+  source
+    .replace(/\r\n?/g, "\n")
+    .replace(/^(?:[ \t]*\n)+/, "")
+    .replace(/(?:\n[ \t]*)+$/, "");

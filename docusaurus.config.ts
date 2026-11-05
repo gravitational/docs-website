@@ -5,7 +5,6 @@ import type { VFile } from "vfile";
 import llmsTxtPlugin from "@signalwire/docusaurus-plugin-llms-txt";
 import docsNavigationConfig from "./data/docs-navigation.json";
 
-import { definer as hcl } from "highlightjs-terraform";
 import path from "path";
 import {
   getRootDir,
@@ -22,6 +21,7 @@ import {
 import { extendedPostcssConfigPlugin } from "./server/postcss";
 import { getRedirects } from "./server/redirects";
 import { rehypeHLJS } from "./server/rehype-hljs";
+import { HLJS_ALIASES, HLJS_LANGUAGES } from "./src/utils/hljs";
 import remarkCodeSnippet from "./server/remark-code-snippet";
 import remarkIncludes from "./server/remark-includes";
 import remarkNoH1 from "./server/remark-no-h1";
@@ -419,13 +419,9 @@ const config: Config = {
         beforeDefaultRehypePlugins: [
           [
             rehypeHLJS,
-            {
-              aliases: {
-                bash: ["bsh", "systemd", "code", "powershell"],
-                yaml: ["conf", "toml"],
-              },
-              languages: { hcl: hcl },
-            },
+            // Shared with the CodeBlock component, which highlights the same way
+            // at runtime.
+            { aliases: HLJS_ALIASES, languages: HLJS_LANGUAGES },
           ],
         ],
         onInlineTags: "throw",
@@ -450,6 +446,28 @@ const config: Config = {
               alias: {
                 "@content": alias,
               },
+            },
+          };
+        },
+      };
+    },
+    // Makes highlightjs-terraform importable in the bundle. Its exports are
+    // lost without this, see the loader for details.
+    function hljsTerraform() {
+      return {
+        name: "hljs-terraform",
+        configureWebpack() {
+          return {
+            module: {
+              rules: [
+                {
+                  test: /highlightjs-terraform[\\/]terraform\.js$/,
+                  loader: path.resolve(
+                    __dirname,
+                    "server/strip-hljs-terraform-shim.cjs",
+                  ),
+                },
+              ],
             },
           };
         },
