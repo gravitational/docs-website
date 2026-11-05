@@ -26,13 +26,13 @@
 import type { Transformer } from "unified";
 import type { Code as MdastCode, Text } from "mdast";
 import type { Node } from "unist";
-import type {
-  MdxastNode,
-  MdxJsxAttribute,
-  MdxJsxFlowElement,
-  MdxAnyElement,
-} from "./types-unist";
+import type { MdxJsxFlowElement, MdxAnyElement } from "./types-unist";
 import { visit } from "unist-util-visit";
+import {
+  parseCodeSnippet,
+  type InlinePart,
+  type SnippetNode,
+} from "../src/utils/codeSnippet";
 
 const RULE_ID = "code-snippet";
 
@@ -49,131 +49,77 @@ const getTextChildren = (contentValue: string): Text => ({
 const getVariableNode = (
   value: string,
   isGlobal: boolean,
-  description: string | boolean,
-): MdxJsxFlowElement => {
-  const descriptionValue = description ? description : "";
-
-  return {
-    type: "mdxJsxFlowElement",
-    name: "Var",
-    attributes: [
-      { type: "mdxJsxAttribute", name: "name", value },
-      {
-        type: "mdxJsxAttribute",
-        name: "isGlobal",
-        value: isGlobal.toString(),
-      },
-      {
-        type: "mdxJsxAttribute",
-        name: "description",
-        value: `${descriptionValue}`,
-      },
-    ],
-    children: [],
-  };
-};
-
-const getChildrenNode = (content: string): Array<Text | MdxJsxFlowElement> => {
-  const hasVariable = content?.includes("<Var");
-  const nodeChildren: Array<Text | MdxJsxFlowElement> = [];
-
-  if (hasVariable) {
-    const contentVars = content.match(/(?:\<Var .+?\/\>)/gm)!;
-    const firstPartLine = content.split("<Var")[0];
-    nodeChildren.push(getTextChildren(firstPartLine));
-    let newContent = content.replace("isGlobal", "");
-
-    for (let i = 0; i < contentVars.length; i++) {
-      if (contentVars[i].includes("description=")) {
-        newContent = newContent.replace(
-          contentVars[i].match(/description="(.*?)"/)![1],
-          "",
-        );
-        newContent = newContent.replace('description=""', "");
-      }
-
-      let nextPartLine = newContent.split("/>")[i + 1];
-      if (nextPartLine?.includes("<Var")) {
-        nextPartLine = nextPartLine.split("<Var")[0];
-      }
-
-      const varName = contentVars[i].match(/name="(.*?)"/)![1];
-      const description =
-        contentVars[i].includes("description=") &&
-        contentVars[i].match(/description="(.*?)"/)![1];
-      const isGlobal = contentVars[i].includes("isGlobal");
-      nodeChildren.push(getVariableNode(varName, isGlobal, description));
-      nodeChildren.push(getTextChildren(nextPartLine));
-    }
-  } else {
-    nodeChildren.push(getTextChildren(content));
-  }
-
-  return nodeChildren;
-};
-
-const getCommandNode = (content: string, prefix = "$") => {
-  const children = getChildrenNode(content);
-
-  return {
-    type: "mdxJsxFlowElement",
-    name: "command",
-    attributes: [],
-    children: [
-      {
-        type: "mdxJsxFlowElement",
-        name: "commandline",
-        attributes: [
-          {
-            type: "mdxJsxAttribute",
-            name: "data-content",
-            value: `${prefix} `,
-          },
-        ],
-        children: children,
-      },
-    ],
-  };
-};
-
-const getLineNode = (
-  content: string,
-  attributes: Array<MdxJsxAttribute> = [],
-) => {
-  const children = getChildrenNode(content);
-
-  return {
-    type: "mdxJsxFlowElement",
-    name: "commandline",
-    attributes,
-    children: children,
-  };
-};
-
-const getCommentNode = (
-  content: string,
-  attributes: MdxJsxAttribute[] = [],
-) => ({
+  description: string,
+): MdxJsxFlowElement => ({
   type: "mdxJsxFlowElement",
-  name: "commandcomment",
-  attributes,
-  children: [
+  name: "Var",
+  attributes: [
+    { type: "mdxJsxAttribute", name: "name", value },
     {
-      type: "text",
-      value: content,
+      type: "mdxJsxAttribute",
+      name: "isGlobal",
+      value: isGlobal.toString(),
+    },
+    {
+      type: "mdxJsxAttribute",
+      name: "description",
+      value: description,
     },
   ],
+  children: [],
 });
 
-const getCodeLine = (content: string, attributes: MdxJsxAttribute[] = []) => {
-  const children = getChildrenNode(content);
+const getChildrenNode = (
+  parts: InlinePart[],
+): Array<Text | MdxJsxFlowElement> =>
+  parts.map((part) =>
+    part.type === "text"
+      ? getTextChildren(part.value)
+      : getVariableNode(part.name, part.isGlobal, part.description),
+  );
 
-  return {
-    type: "mdxJsxFlowElement",
-    name: "codeline",
-    attributes,
-    children: children,
-  };
+const getSnippetChild = (node: SnippetNode) => {
+  switch (node.type) {
+    case "command":
+      return {
+        type: "mdxJsxFlowElement",
+        name: "command",
+        attributes: [],
+        children: node.lines.map((line, index) => ({
+          type: "mdxJsxFlowElement",
+          name: "commandline",
+          attributes:
+            index === 0
+              ? [
+                  {
+                    type: "mdxJsxAttribute",
+                    name: "data-content",
+                    value: node.prefix,
+                  },
+                ]
+              : [],
+          children: getChildrenNode(line),
+        })),
+      };
+    case "comment":
+      return {
+        type: "mdxJsxFlowElement",
+        name: "commandcomment",
+        attributes: node.description
+          ? [{ type: "mdxJsxAttribute", name: "data-type", value: "descr" }]
+          : [],
+        children: [{ type: "text", value: node.value }],
+      };
+    case "codeline":
+      return {
+        type: "mdxJsxFlowElement",
+        name: "codeline",
+        attributes: [],
+        children: getChildrenNode(node.parts),
+      };
+    case "br":
+      return { type: "mdxJsxFlowElement", name: "br", attributes: [] };
+  }
 };
 
 export interface RemarkCodeSnippetOptions {
@@ -191,108 +137,13 @@ export default function remarkCodeSnippet({
       root,
       isCode(langs),
       (node: MdastCode, index, parent: MdxAnyElement) => {
-        const content: string = node.value;
-        const codeLines = content.split("\n");
-        const children: Array<any> = [];
+        const { nodes, diagnostics } = parseCodeSnippet(node.value);
 
-        for (let i = 0; i < codeLines.length; i++) {
-          const hasLeadingDollar = codeLines[i][0] === "$";
-          const hasHost = codeLines[i][0] === ">" && codeLines[i].includes("$");
-          const hasGrate = codeLines[i][0] === "#";
-          const trimmedValue = codeLines[i].slice(1).trim();
-
-          if (hasLeadingDollar) {
-            children.push(getCommandNode(trimmedValue));
-
-            const commandArrayElem = children[children.length - 1]!.children;
-
-            if (codeLines[i].includes("<<")) {
-              let heredocMark = codeLines[i].match(/[^<<]*$/)![0].trim();
-
-              if (heredocMark.includes(">")) {
-                heredocMark = heredocMark.split(">")[0].trim();
-              }
-
-              if (heredocMark.includes("'")) {
-                heredocMark = heredocMark.match(/'(.*?)'/)![1];
-              }
-
-              if (heredocMark.indexOf("-") === 0) {
-                heredocMark = heredocMark.slice(1);
-              }
-
-              while (codeLines[i] && codeLines[i] !== heredocMark) {
-                commandArrayElem.push(getLineNode(codeLines[i + 1]));
-
-                i++;
-              }
-
-              if (codeLines.every((line) => line !== heredocMark)) {
-                if (lint) {
-                  vfile.fail(
-                    "No closing line for heredoc format",
-                    node,
-                    RULE_ID,
-                  );
-                } else {
-                  console.error(
-                    `ERROR: no closing line ${heredocMark} in the file ${vfile.path}`,
-                  );
-                }
-              }
-            }
-
-            let hasNextLine = codeLines[i]?.[codeLines[i]?.length - 1] === "\\";
-
-            while (hasNextLine) {
-              commandArrayElem.push(getLineNode(codeLines[i + 1]));
-
-              i++;
-              hasNextLine =
-                Boolean(codeLines[i]) &&
-                codeLines[i][codeLines[i].length - 1] === "\\";
-
-              if (lint && !codeLines[i]) {
-                vfile.fail(
-                  "The last string in the multiline command has to be without symbol \\",
-                  node,
-                  RULE_ID,
-                );
-              }
-            }
-          } else if (hasHost) {
-            const parts = codeLines[i].split("$");
-            const ghostText = `${parts[0].slice(1).trim()} $`;
-            const commandText = parts[1].trim();
-
-            children.push(getCommandNode(commandText, ghostText));
-          } else if (hasGrate) {
-            if (codeLines[i][1] === "#") {
-              children.push(getCommentNode(codeLines[i].slice(1)));
-            } else {
-              children.push(
-                getCommentNode(trimmedValue, [
-                  {
-                    type: "mdxJsxAttribute",
-                    name: "data-type",
-                    value: "descr",
-                  },
-                ]),
-              );
-            }
-          } else {
-            children.push(getCodeLine(codeLines[i]));
-            // This is an empty code line. Make sure it renders correctly by
-            // pushing a <br> element after it. Otherwise, this becomes an
-            // empty "CodeLine" element that does not display unless we apply
-            // styling that could have unintended effects on other CodeLines.
-            if (codeLines[i] == "") {
-              children.push({
-                type: "mdxJsxFlowElement",
-                name: "br",
-                attributes: [],
-              });
-            }
+        for (const { severity, message } of diagnostics) {
+          if (lint) {
+            vfile.fail(message, node, RULE_ID);
+          } else if (severity === "error") {
+            console.error(`ERROR: ${message} in the file ${vfile.path}`);
           }
         }
 
@@ -300,7 +151,7 @@ export default function remarkCodeSnippet({
           type: "mdxJsxFlowElement",
           name: "snippet",
           attributes: [],
-          children,
+          children: nodes.map(getSnippetChild),
         } as MdxJsxFlowElement;
       },
     );
