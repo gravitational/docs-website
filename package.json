@@ -142,7 +142,8 @@
     "@storybook/test-runner/**/uuid": "11.1.1",
     "**/sockjs/uuid": "11.1.1",
     "tinypool": "2.1.2",
-    "katex": "0.18.2"
+    "katex": "0.18.2",
+    "**/@storybook/builder-webpack5/webpack-dev-middleware": "7.4.6"
   },
   "browserslist": {
     "production": [
