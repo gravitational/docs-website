@@ -29,6 +29,7 @@ export { default as card } from "./svg/card.svg";
 export { default as checkCircle } from "./svg/check-circle.svg";
 export { default as checkRound } from "./svg/check-round.svg";
 export { default as check } from "./svg/check.svg";
+export { default as checkWhite } from "./svg/check-white.svg";
 export { default as chip } from "./svg/chip.svg";
 export { default as circleci } from "./svg/circleci.svg";
 export { default as clickhouse } from "./svg/clickhouse.svg";
