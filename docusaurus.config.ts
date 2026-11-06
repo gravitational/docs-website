@@ -38,9 +38,9 @@ import {
   transcendConsentPlugin,
 } from "./server/tracking-plugins";
 import { llmsTxtPluginOptions } from "./server/llms";
-import { fetchVideoMeta } from "./server/youtube-meta";
 import { getFromSecretOrEnv } from "./utils/general";
 import addTokenCounts from "./server/llms/add-token-counts";
+import { parseFrontMatter } from "./server/parse-frontmatter";
 
 const latestVersion = getLatestVersion();
 
@@ -224,30 +224,12 @@ const config: Config = {
         type: "application/ld+json",
       },
       innerHTML: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Corporation",
-        name: "Teleport",
-        alternateName: "Gravitational Inc.",
-        url: "https://goteleport.com/",
-        logo: "https://goteleport.com/static/og-image.png",
-        sameAs: [
-          "https://www.youtube.com/channel/UCmtTJaeEKYxCjfNGiijOyJw",
-          "https://twitter.com/goteleport/",
-          "https://www.linkedin.com/company/go-teleport/",
-          "https://en.wikipedia.org/wiki/Teleport_(software)",
-        ],
-      }),
-    },
-    {
-      tagName: "script",
-      attributes: {
-        type: "application/ld+json",
-      },
-      innerHTML: JSON.stringify({
         "@context": "https://schema.org/",
         "@type": "WebSite",
-        name: "Teleport Docs",
-        url: "https://goteleport.com/docs/",
+        "@id": "https://goteleport.com/#website",
+        publisher: {
+          "@id": "https://goteleport.com/#organization",
+        },
       }),
     },
     {
@@ -289,22 +271,7 @@ const config: Config = {
 
   markdown: {
     mermaid: true,
-    parseFrontMatter: async (params) => {
-      const result = await params.defaultParseFrontMatter(params);
-
-      // If we have videoBanner file in config, we load this vide data through YouTube API.
-      const { videoBanner, videoBannerDescription } = result.frontMatter;
-
-      if (typeof videoBanner === "string") {
-        const videoBannerData = await fetchVideoMeta(videoBanner);
-        if (videoBannerDescription) {
-          videoBannerData.description = videoBannerDescription as string;
-        }
-        result.frontMatter.videoBanner = videoBannerData;
-      }
-
-      return result;
-    },
+    parseFrontMatter,
     hooks: {
       onBrokenMarkdownLinks: "throw",
     },
