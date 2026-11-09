@@ -26,9 +26,9 @@ export default function FooterLayout({
       <div className={styles.footerLayout}>
         <div className={styles.footerCta}>
           <div>
-            <h2 className={styles.footerCtaTitle}>
+            <p className={styles.footerCtaTitle}>
               Stop wrangling SSH keys, VPNs, and bastion hosts
-            </h2>
+            </p>
             <p>
               Deploy a Teleport cluster, connect your servers, Kubernetes
               clusters, databases, and apps, and replace long-lived secrets with

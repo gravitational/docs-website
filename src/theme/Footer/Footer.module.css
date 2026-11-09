@@ -34,7 +34,7 @@
   gap: var(--m-2);
   color: var(--color-foreground-slightly-muted);
 
-  p {
+  p:not(:first-child) {
     margin-bottom: 0;
   }
 
@@ -51,6 +51,8 @@
 
 .footerCtaTitle {
   font-size: var(--fs-header-3);
+  font-weight: var(--fw-bold);
+  line-height: var(--ifm-heading-line-height);
   margin-bottom: var(--m-1);
   color: var(--color-black);
 }
