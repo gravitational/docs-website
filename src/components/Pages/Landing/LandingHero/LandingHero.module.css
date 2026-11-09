@@ -87,6 +87,7 @@
   }
 
   .title {
+    font-weight: var(--fw-bold);
     font-size: var(--lp-header-2);
     margin-bottom: var(--m-1) !important;
     line-height: 1.3;
