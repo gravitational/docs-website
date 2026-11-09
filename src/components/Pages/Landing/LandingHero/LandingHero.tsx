@@ -68,7 +68,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({
           )}
           <div className={styles.main}>
             <div className={styles.content}>
-              <h1 className={styles.title}>{title}</h1>
+              <p className={styles.title}>{title}</p>
               {subTitle && <p className={styles.subTitle}>{subTitle}</p>}
               <div className={styles.description}>{children}</div>
             </div>
