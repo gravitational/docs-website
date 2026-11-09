@@ -67,6 +67,7 @@ const Header = () => {
           <Link
             to={activeVersion ? getVersionedUrl(activeVersion, "/") : "/"}
             className={styles["logo-link"]}
+            aria-label="Teleport documentation"
           >
             <DocsLogo className={styles.logo} />
           </Link>
