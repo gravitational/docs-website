@@ -7,6 +7,7 @@ interface TileGridProps {
     icon: React.ReactNode;
     to: string;
     name: string;
+    tooltip?: string;
   }[];
 }
 
@@ -14,7 +15,7 @@ export default function TileGrid({ tiles }: TileGridProps) {
   return (
     <div className={styles.gridContainer}>
       {tiles.map((tile, index) => (
-        <Tile key={index} icon={tile.icon} to={tile.to} name={tile.name} />
+        <Tile key={index} icon={tile.icon} to={tile.to} name={tile.name} tooltip={tile.tooltip} />
       ))}
     </div>
   );
