@@ -6,6 +6,7 @@ export interface TextPart {
   value: string;
 }
 
+// A <Var /> component within a line. The fields come from the component's attributes.
 export interface VarPart {
   type: "var";
   name: string;
@@ -14,6 +15,7 @@ export interface VarPart {
   initial?: string;
 }
 
+// One piece of a line: plain text or a variable.
 export type InlinePart = TextPart | VarPart;
 
 // A command, such as "$ tsh ls". Heredoc and multiline commands span several
@@ -44,8 +46,10 @@ export interface BreakNode {
   type: "br";
 }
 
+// Any item the parser can produce from a snippet.
 export type SnippetNode = CommandNode | CommentNode | CodeLineNode | BreakNode;
 
+// A problem found while parsing, such as a heredoc with no closing line.
 export interface SnippetDiagnostic {
   // "error" diagnostics are always reported. "warning" diagnostics are only
   // reported by linters.
@@ -53,6 +57,7 @@ export interface SnippetDiagnostic {
   message: string;
 }
 
+// The result of parsing a snippet: its items in order, plus any problems.
 export interface ParsedSnippet {
   nodes: SnippetNode[];
   diagnostics: SnippetDiagnostic[];
@@ -60,9 +65,13 @@ export interface ParsedSnippet {
 
 // Matches a self-closing <Var ... /> tag, such as <Var name="variable" />.
 const VAR_TAG = /<Var .+?\/>/g;
+
+// Matches one attribute in a tag: its name, then optionally a value in double
+// quotes, single quotes, or braces (name="x", name='x', name={x}).
 const VAR_ATTRIBUTE =
   /([A-Za-z_][\w-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|\{([^}]*)\}))?/g;
 
+// Reads a <Var /> tag into a VarPart. Returns undefined if the tag has no name attribute.
 const parseVarTag = (tag: string): VarPart | undefined => {
   const attributes: Record<string, string | true> = {};
   const body = tag.slice("<Var".length, -"/>".length);
@@ -119,9 +128,14 @@ export const parseInline = (
   return parts;
 };
 
+// Warning for a multiline command whose last line still ends with "\", so
+// the command continues into an empty line or past the end of the snippet.
 export const MULTILINE_ERROR =
   "The last string in the multiline command has to be without symbol \\";
 
+// Returns the word that ends a heredoc, e.g. "EOF" in "$ cat <<EOF > file".
+// The parser adds every line up to that word to the same command, so the
+// whole heredoc is copied together. Also works with <<'EOF' and <<-EOF.
 const getHeredocMark = (line: string): string => {
   let mark = line.match(/[^<<]*$/)![0].trim();
 
@@ -140,6 +154,19 @@ const getHeredocMark = (line: string): string => {
   return mark;
 };
 
+// Parses the raw text of a code snippet. It goes through the text one line
+// at a time and decides what each line is from how it starts:
+// - A line starting with "$" is a command. If the command opens a heredoc,
+//   or a line ends with "\" to continue on the next line, the following
+//   lines are added to the same command.
+// - A line starting with "> host $" is a command run on that host.
+// - A line starting with "#" is a description, which isn't copied. A line
+//   starting with "##" is a comment shown as a regular line.
+// - Any other line is plain code, such as example output. An empty line also
+//   gets a line break after it so it stays visible.
+//
+// Returns the parsed items in order, along with any problems found, such as
+// a heredoc that is never closed.
 export const parseCodeSnippet = (content: string): ParsedSnippet => {
   const codeLines = content.split("\n");
   const nodes: SnippetNode[] = [];

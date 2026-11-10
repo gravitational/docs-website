@@ -69,15 +69,20 @@ const getVariableNode = (
   children: [],
 });
 
-const getChildrenNode = (
-  parts: InlinePart[],
-): Array<Text | MdxJsxFlowElement> =>
+// Builds the content of a single line in a snippet. Each line is a list
+// of inline parts, and each part is either plain text or a variable.
+// Plain text is kept as text. Each variable definition becomes a <Var>
+// element to render it with the Var component. The pieces keep their
+// original order. Used for both command lines and code lines.
+const getChildNodes = (parts: InlinePart[]): Array<Text | MdxJsxFlowElement> =>
   parts.map((part) =>
     part.type === "text"
       ? getTextChildren(part.value)
       : getVariableNode(part.name, part.isGlobal, part.description),
   );
 
+// Converts a part of the parsed snippet (a command, comment, code line, or line break)
+// into the equivalent element that renders it inside the <snippet> widget.
 const getSnippetChild = (node: SnippetNode) => {
   switch (node.type) {
     case "command":
@@ -98,7 +103,7 @@ const getSnippetChild = (node: SnippetNode) => {
                   },
                 ]
               : [],
-          children: getChildrenNode(line),
+          children: getChildNodes(line),
         })),
       };
     case "comment":
@@ -115,7 +120,7 @@ const getSnippetChild = (node: SnippetNode) => {
         type: "mdxJsxFlowElement",
         name: "codeline",
         attributes: [],
-        children: getChildrenNode(node.parts),
+        children: getChildNodes(node.parts),
       };
     case "br":
       return { type: "mdxJsxFlowElement", name: "br", attributes: [] };
