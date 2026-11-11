@@ -2,7 +2,8 @@
   "versions": [
     {
       "name": "17.x",
-      "branch": "branch/v17"
+      "branch": "branch/v17",
+      "deprecated": true
     },
     {
       "name": "18.x",
@@ -11,6 +12,10 @@
     },
     {
       "name": "19.x",
+      "branch": "branch/v19"
+    },
+    {
+      "name": "20.x",
       "branch": "master"
     }
   ]
