@@ -224,30 +224,12 @@ const config: Config = {
         type: "application/ld+json",
       },
       innerHTML: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Corporation",
-        name: "Teleport",
-        alternateName: "Gravitational Inc.",
-        url: "https://goteleport.com/",
-        logo: "https://goteleport.com/static/og-image.png",
-        sameAs: [
-          "https://www.youtube.com/channel/UCmtTJaeEKYxCjfNGiijOyJw",
-          "https://twitter.com/goteleport/",
-          "https://www.linkedin.com/company/go-teleport/",
-          "https://en.wikipedia.org/wiki/Teleport_(software)",
-        ],
-      }),
-    },
-    {
-      tagName: "script",
-      attributes: {
-        type: "application/ld+json",
-      },
-      innerHTML: JSON.stringify({
         "@context": "https://schema.org/",
         "@type": "WebSite",
-        name: "Teleport Docs",
-        url: "https://goteleport.com/docs/",
+        "@id": "https://goteleport.com/#website",
+        publisher: {
+          "@id": "https://goteleport.com/#organization",
+        },
       }),
     },
     {
