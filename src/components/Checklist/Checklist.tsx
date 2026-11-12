@@ -22,6 +22,7 @@ type ChecklistItemProps = {
 type ChecklistStepProps = {
   title: string;
   videoId?: string;
+  image?: string; // A placeholder image in case there is no YouTube video available.
   children: ReactNode;
 };
 
@@ -216,19 +217,31 @@ const Checklist: React.FC<ChecklistProps> = ({ id, children }) => {
               >
                 <div className={styles.bodyInner}>
                   <div className={styles.bodyContent}>
-                    {step.videoId && openedSteps.includes(stepIndex) && (
-                      <div className={styles.video}>
-                        {/* Remounting on close resets the video to its thumbnail,
+                    {openedSteps.includes(stepIndex) && (
+                      <>
+                        {step.image && !step.videoId && (
+                          <img
+                            className={styles.image}
+                            src={step.image}
+                            alt={step.title}
+                            width={445}
+                            height={250}
+                          />
+                        )}
+                        {step.videoId && (
+                          <div className={styles.video}>
+                            {/* Remounting on close resets the video to its thumbnail,
                       which stops playback. */}
-                        <YouTubeEmbed
-                          key={String(isOpen)}
-                          videoId={step.videoId}
-                          title={step.title}
-                          seek={isOpen ? seek : undefined}
-                        />
-                      </div>
+                            <YouTubeEmbed
+                              key={String(isOpen)}
+                              videoId={step.videoId}
+                              title={step.title}
+                              seek={isOpen ? seek : undefined}
+                            />
+                          </div>
+                        )}
+                      </>
                     )}
-
                     <div className={styles.progress}>
                       <div
                         className={styles.progressTrack}
