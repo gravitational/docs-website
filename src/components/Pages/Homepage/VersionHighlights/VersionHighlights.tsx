@@ -116,7 +116,7 @@ const VersionHighlights: React.FC<VersionHighlightsProps> = ({
                   <div className={styles.video}>
                     <YouTubeEmbed
                       videoId={highlight.videoId}
-                      title={title}
+                      title={highlight.title}
                       fetchPriority="high"
                       playButtonSize="md"
                     />
