@@ -1,0 +1,7 @@
+kind: role
+metadata:
+  name: example-role
+spec:
+  allow:
+    logins: ["root"]
+version: v7

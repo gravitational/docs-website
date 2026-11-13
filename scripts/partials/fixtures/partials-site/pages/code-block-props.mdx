@@ -1,0 +1,54 @@
+---
+title: "CodeBlock with props"
+description: "Fixture page for CodeBlock with props"
+---
+
+import Install from "@version/docs/pages/includes/partial-code-block.mdx";
+
+<Install name="jira" />
+
+The same code as fenced code blocks:
+
+```code
+$ curl -L -O https://cdn.teleport.dev/teleport-access-jira-v(=teleport.version=)-linux-<Var name="ARCH" />-bin.tar.gz
+$ tar -xzf teleport-access-jira-v(=teleport.version=)-linux-<Var name="ARCH" />-bin.tar.gz
+$ cd teleport-access-jira
+$ sudo ./install
+```
+
+```code
+# Create a role for jira
+$ curl \
+  --cacert ca.pem \
+  https://<Var name="proxy" />:3080
+$ cat > role.yaml <<EOF
+kind: role
+spec:
+  allow:
+    logins: ["root"]
+EOF
+Role created.
+
+## A comment that is output
+```
+
+```yaml
+kind: role
+metadata:
+  name: jira-access
+spec:
+  allow:
+    logins: ["<Var name="login" />"]
+    request:
+      roles: ["(=teleport.version=)"]
+```
+
+```go
+fmt.Println("Hello, jira")
+```
+
+```hcl
+resource "teleport_role" "jira" {
+  version = "v7"
+}
+```
