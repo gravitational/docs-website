@@ -36,6 +36,7 @@ import Callout from "@site/src/components/Callout";
 import FAQSection from "@site/src/components/FAQSection";
 import SkillsTable from "@site/src/components/SkillsTable/SkillsTable";
 import SkillsBanner from "@site/src/components/SkillsBanner/SkillsBanner";
+import ReadMore from "@site/src/components/ReadMore";
 
 const MDXComponents: MDXComponentsObject = {
   ...OriginalMDXComponents,
@@ -82,6 +83,7 @@ const MDXComponents: MDXComponentsObject = {
   FAQSection,
   SkillsTable,
   SkillsBanner,
+  ReadMore,
 };
 
 export default MDXComponents;

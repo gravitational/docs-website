@@ -41,7 +41,7 @@ type Step = Omit<ChecklistStepProps, "children"> & {
 export const ChecklistStep: React.FC<ChecklistStepProps> = () => null;
 export const ChecklistItem: React.FC<ChecklistItemProps> = () => null;
 
-const getChildProps = <T,>(children: ReactNode): T[] =>
+export const getChildProps = <T,>(children: ReactNode): T[] =>
   Children.toArray(children)
     .filter((child): child is ReactElement<T> => isValidElement(child))
     .map((child) => child.props);
