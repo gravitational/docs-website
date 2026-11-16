@@ -12,7 +12,7 @@
 
   @media (--nav) {
     display: flex;
-    position: fixed;
+    position: sticky;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 
