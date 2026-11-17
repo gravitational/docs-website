@@ -10,7 +10,7 @@ interface Integration {
   href?: string;
   iconColor?: string;
   iconComponent: any;
-  layout: "row" | "column";
+  layout: Pick<IntegrationsProps, "layout">;
 }
 
 interface AdditionalLinks {
@@ -21,7 +21,7 @@ interface AdditionalLinks {
 interface IntegrationsProps {
   title?: string;
   secondaryTitle?: string;
-  layout: "row" | "column";
+  layout: "row" | "column" | "row-condensed";
   className?: string;
   integrations: Integration[];
   mainLink?: { title: string; href: string };
@@ -40,12 +40,15 @@ const IntegrationCard: React.FC<Integration> = ({
   layout = "column",
 }) => {
   const Icon = iconComponent;
+  const isRowLayout = (layout as string).includes("row");
   const cardContent = (
     <>
       <div
         className={cn(styles.integrationIcon, {
-          [styles.defaultIcon]: !iconColor,
-          [styles.iconRow]: layout === "row",
+          [styles.defaultIcon]: !iconColor && !isRowLayout,
+          [styles.iconRow]: isRowLayout,
+          [styles.iconRowCondensed]: layout === "row-condensed",
+          [styles.bgColor]: iconColor,
         })}
         style={{ backgroundColor: iconColor }}
       >
@@ -54,7 +57,8 @@ const IntegrationCard: React.FC<Integration> = ({
       <div
         className={cn(styles.integrationItemContent, {
           [styles.hasDescription]: description,
-          [styles.rowLayout]: layout === "row",
+          [styles.rowLayout]: isRowLayout,
+          [styles.iconRowCondensed]: layout === "row-condensed",
         })}
       >
         <h3 className={styles.integrationTitle}>{title}</h3>
@@ -69,12 +73,13 @@ const IntegrationCard: React.FC<Integration> = ({
     <Link
       to={href}
       className={cn(styles.integrationItem, {
-        [styles.defaultIcon]: !iconColor,
-        [styles.rowLayout]: layout === "row",
+        [styles.defaultIcon]: !iconColor && !isRowLayout,
+        [styles.rowLayout]: isRowLayout,
+        [styles.iconRowCondensed]: layout === "row-condensed",
       })}
       style={
         {
-          "--layout": layout,
+          "--layout": (layout as string).replace("-condensed", ""),
         } as React.CSSProperties
       }
     >
@@ -82,12 +87,14 @@ const IntegrationCard: React.FC<Integration> = ({
     </Link>
   ) : (
     <div
-      className={cn(styles.integrationItem, {
-        [styles.defaultIcon]: !iconColor,
+      className={cn(styles.integrationItem, styles.integrationItemNoLink, {
+        [styles.defaultIcon]: !iconColor && !isRowLayout,
+        [styles.rowLayout]: isRowLayout,
+        [styles.iconRowCondensed]: layout === "row-condensed",
       })}
       style={
         {
-          "--layout": layout,
+          "--layout": (layout as string).replace("-condensed", ""),
         } as React.CSSProperties
       }
     >
