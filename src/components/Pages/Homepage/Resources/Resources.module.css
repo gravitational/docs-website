@@ -193,17 +193,14 @@
   }
 
   &.docVariant {
-    width: 40px !important;
     height: 40px !important;
     margin-bottom: var(--m-1) !important;
   }
   &.small {
-    width: 48px !important;
     height: 48px !important;
     margin-bottom: var(--m-2) !important;
   }
   &.large {
-    width: 72px !important;
     height: 72px !important;
   }
 }
