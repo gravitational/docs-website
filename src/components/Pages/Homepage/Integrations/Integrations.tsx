@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./Integrations.module.css";
 import cn from "classnames";
 import ArrowRightSvg from "@site/src/components/Icon/teleport-svg/arrow-circle-right.svg";
 import Link from "@docusaurus/Link";
+import Icon from "@site/src/components/Icon";
+import SearchInput from "@site/src/components/SearchInput";
+import {
+  ALL_FILTER_ID,
+  groupIntegrations,
+  searchIntegrations,
+  type IntegrationFilter,
+} from "./filterIntegrations";
 
 interface Integration {
   title: string;
@@ -10,7 +18,8 @@ interface Integration {
   href?: string;
   iconColor?: string;
   iconComponent: any;
-  layout: Pick<IntegrationsProps, "layout">;
+  // Ids of the filters this integration belongs to
+  tags?: string[];
 }
 
 interface AdditionalLinks {
@@ -29,9 +38,17 @@ interface IntegrationsProps {
   desktopColumnsCount?: number;
   noBackgroundColor?: boolean;
   narrowPadding?: boolean;
+  // Display a search input that filters integrations by title and description
+  enableSearch?: boolean;
+  // Groups integrations into categories based on their tags and shows a dropdown for selecting a category.
+  filters: IntegrationFilter[];
 }
 
-const IntegrationCard: React.FC<Integration> = ({
+interface IntegrationCardProps extends Integration {
+  layout?: IntegrationsProps["layout"];
+}
+
+const IntegrationCard: React.FC<IntegrationCardProps> = ({
   title,
   description,
   href,
@@ -114,7 +131,48 @@ const Integrations: React.FC<IntegrationsProps> = ({
   desktopColumnsCount = 5,
   noBackgroundColor = false,
   narrowPadding = false,
+  enableSearch = false,
+  filters = [],
 }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilterId, setSelectedFilterId] = useState(ALL_FILTER_ID);
+  const hasFilters = filters.length > 0;
+
+  const matchingIntegrations = useMemo(
+    () => searchIntegrations(integrations, searchQuery),
+    [integrations, searchQuery],
+  );
+
+  const groups = useMemo(
+    () =>
+      hasFilters
+        ? groupIntegrations(matchingIntegrations, filters, selectedFilterId)
+        : [],
+    [hasFilters, matchingIntegrations, filters, selectedFilterId],
+  );
+
+  const hasResults = hasFilters
+    ? groups.length > 0
+    : matchingIntegrations.length > 0;
+
+  const renderGrid = (items: Integration[]) => (
+    <div
+      className={styles.grid}
+      style={
+        {
+          "--desktop-column-count": desktopColumnsCount,
+        } as React.CSSProperties
+      }
+    >
+      {items.map((integration) => (
+        <IntegrationCard
+          key={`${integration.title}-${integration.href ?? ""}`}
+          layout={layout}
+          {...integration}
+        />
+      ))}
+    </div>
+  );
   return (
     <section
       className={cn(styles.integrations, className, {
@@ -136,18 +194,71 @@ const Integrations: React.FC<IntegrationsProps> = ({
             </Link>
           )}
         </div>
-        <div
-          className={styles.grid}
-          style={
-            {
-              "--desktop-column-count": desktopColumnsCount,
-            } as React.CSSProperties
-          }
-        >
-          {integrations.map((integration, i) => (
-            <IntegrationCard key={i} layout={layout} {...integration} />
-          ))}
-        </div>
+        {(enableSearch || hasFilters) && (
+          <div className={styles.controls}>
+            {hasFilters && (
+              <div className={styles.filter}>
+                <select
+                  className={styles.filterSelect}
+                  value={selectedFilterId}
+                  onChange={(e) => setSelectedFilterId(e.target.value)}
+                  aria-label="Filter integrations by category"
+                >
+                  <option value={ALL_FILTER_ID}>All</option>
+                  {filters.map((filter) => (
+                    <option key={filter.id} value={filter.id}>
+                      {filter.name}
+                    </option>
+                  ))}
+                </select>
+                <Icon
+                  name="caretUp"
+                  size="md"
+                  className={styles.filterCaret}
+                  aria-hidden="true"
+                />
+              </div>
+            )}
+            {enableSearch && (
+              <SearchInput
+                className={cn(styles.search, {
+                  [styles.searchWithFilter]: hasFilters,
+                })}
+                query={searchQuery}
+                onQueryChange={setSearchQuery}
+                placeholder="Search integrations"
+                label="Search integrations"
+                clearButtonLabel="Clear integrations search"
+              />
+            )}
+          </div>
+        )}
+        {!hasResults && (enableSearch || hasFilters) ? (
+          <p className={styles.noResults} role="status">
+            {searchQuery.trim() ? (
+              <>No integrations found for &ldquo;{searchQuery.trim()}&rdquo;.</>
+            ) : (
+              "No integrations found."
+            )}
+          </p>
+        ) : hasFilters ? (
+          groups.map((group) => (
+            <div key={group.id} className={styles.group}>
+              <div className={styles.groupHeader}>
+                <h3 className={styles.groupTitle}>{group.name}</h3>
+                <span className={styles.groupCount}>
+                  {group.integrations.length}{" "}
+                  {group.integrations.length === 1
+                    ? "integration"
+                    : "integrations"}
+                </span>
+              </div>
+              {renderGrid(group.integrations)}
+            </div>
+          ))
+        ) : (
+          renderGrid(matchingIntegrations)
+        )}
         {additionalLinks && (
           <div className={styles.additionalLinks}>
             {additionalLinks.title && (
