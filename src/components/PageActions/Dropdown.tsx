@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import cn from "clsx";
 import Icon, { IconName } from "../Icon";
 import styles from "./Dropdown.module.css";
@@ -67,11 +68,15 @@ const DropdownItem: React.FC<DrodownItemProps> = ({
           {label}
         </button>
       )}
-      {type === "modal" && content && modalActive && (
-        <Modal className={styles.modal} onClose={() => setModalActive(false)}>
-          {content}
-        </Modal>
-      )}
+      {type === "modal" &&
+        content &&
+        modalActive &&
+        createPortal(
+          <Modal className={styles.modal} onClose={() => setModalActive(false)}>
+            {content}
+          </Modal>,
+          document.body,
+        )}
     </div>
   );
 };

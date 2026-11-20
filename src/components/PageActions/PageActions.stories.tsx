@@ -138,8 +138,10 @@ export const DropdownModalOpens: Story = {
         ),
       );
       await userEvent.click(canvas.getByText("Install Skills"));
+      // The modal is portaled to document.body, outside of canvasElement.
+      const body = within(canvasElement.ownerDocument.body);
       expect(
-        canvas.getByText(
+        body.getByText(
           "npx skills add https://github.com/gravitational/teleport",
         ),
       ).toBeInTheDocument();
@@ -167,9 +169,11 @@ export const DropdownModalClosesWhenClickingOutside: Story = {
           ),
         );
         await userEvent.click(canvas.getByText("Install Skills"));
+        // The modal is portaled to document.body, outside of canvasElement.
+        const body = within(canvasElement.ownerDocument.body);
         await waitFor(() =>
           expect(
-            canvas.getByText(
+            body.getByText(
               "npx skills add https://github.com/gravitational/teleport",
             ),
           ).toBeInTheDocument(),
@@ -180,7 +184,7 @@ export const DropdownModalClosesWhenClickingOutside: Story = {
         );
         await waitFor(() =>
           expect(
-            canvas.queryByText(
+            body.queryByText(
               "npx skills add https://github.com/gravitational/teleport",
             ),
           ).not.toBeInTheDocument(),
