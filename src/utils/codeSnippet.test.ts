@@ -1,6 +1,11 @@
 import { describe, expect, it } from "@jest/globals";
 
-import { MULTILINE_ERROR, parseCodeSnippet, parseInline } from "./codeSnippet";
+import {
+  MULTILINE_ERROR,
+  normalizeSource,
+  parseCodeSnippet,
+  parseInline,
+} from "./codeSnippet";
 
 const text = (value: string) => ({ type: "text", value });
 
@@ -163,5 +168,27 @@ describe("parseCodeSnippet", () => {
       type: "codeline",
       parts: [text("b "), { type: "var", name: "y" }, text("")],
     });
+  });
+});
+
+describe("normalizeSource", () => {
+  it("returns text without blank lines around it unchanged", () => {
+    expect(normalizeSource("$ a\n  $ b")).toBe("$ a\n  $ b");
+  });
+
+  it("removes blank lines before and after the text", () => {
+    expect(normalizeSource("\n\n  $ a\n    b\n  \n")).toBe("  $ a\n    b");
+  });
+
+  it("keeps blank lines between lines of text", () => {
+    expect(normalizeSource("a\n\nb")).toBe("a\n\nb");
+  });
+
+  it("does not change the indentation of any line", () => {
+    expect(normalizeSource("a:\n  b: 1\n  c: 2")).toBe("a:\n  b: 1\n  c: 2");
+  });
+
+  it("converts Windows line endings", () => {
+    expect(normalizeSource("$ a\r\n  $ b")).toBe("$ a\n  $ b");
   });
 });
