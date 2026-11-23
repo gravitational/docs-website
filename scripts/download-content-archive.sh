@@ -65,10 +65,10 @@ if echo "${TAR_VERSION_STR}" | grep -qi 'gnu tar'; then
     TAR_ARGS+=(--wildcards)
 fi
 
-tree -D -h "${DOWNLOADS_DIR}"
+ls -lh "${DOWNLOADS_DIR}"
 
 # Extract desired paths
 echo "Extracting selected content from ${BRANCH_TAR_FILE} to $1"
 tar "${TAR_ARGS[@]}" '*/docs' '*/examples' '*/skills' '*/CHANGELOG.md'
 
-tree -L 1 "$1"
+ls -lh "$1"
