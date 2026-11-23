@@ -4,6 +4,7 @@ import { createRequire } from "module";
 import { join, resolve, dirname } from "path";
 import { glob } from "glob";
 import { parseSkillMarkdown } from "../server/parse-skill-md";
+import { spawn } from "child_process";
 import {
   createIconSubset,
   extractIconNames,
@@ -83,6 +84,45 @@ versions.forEach((version) => {
 });
 
 writeVersions();
+
+const buildResourceExampleConvert = (version: string): Promise<void> => {
+  const convertResourceDir = join(
+    "content",
+    version,
+    "build.assets",
+    "tooling",
+    "cmd",
+    "convert-resource",
+  );
+  return new Promise((resolve, reject) => {
+    if (!existsSync(convertResourceDir)) {
+      console.warn(
+        `convert-resource project not found at ${convertResourceDir}. Skipping build.`,
+      );
+      return resolve();
+    }
+
+    const goBinary = process.env.GO_INSTALL_DIR
+      ? join(process.env.GO_INSTALL_DIR, "go", "bin", "go")
+      : "go";
+    const proc = spawn(goBinary, ["build", "."], {
+      cwd: convertResourceDir,
+      stdio: "inherit",
+      env: process.env,
+    });
+    proc.on("close", (code) =>
+      code === 0
+        ? resolve()
+        : reject(
+            new Error(
+              `convert-resource build failed for ${version} (exit ${code})`,
+            ),
+          ),
+    );
+  });
+};
+
+await Promise.all(versions.map(buildResourceExampleConvert));
 
 // Make sure the upcoming releases page is the same on all 3 branches.
 const versionsToOverride = getVersionNames().filter(
