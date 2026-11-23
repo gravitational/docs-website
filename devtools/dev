@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Thin launcher for the docs-website dev tool. Ensures we always run from the
+# repo root (so relative paths in prepare-files / docusaurus resolve correctly)
+# regardless of where this is invoked from.
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+exec node devtools/dev.mjs "$@"
