@@ -8,7 +8,10 @@
 # uses git submodules.
 DOCS_VERSIONS=$(jq -r '.versions[] | select(.deprecated != true) | .name' config.json);
 
-if [[ -n "${DOCS_CONTENT_DIR:-}" ]]; then
+# Ignore DOCS_CONTENT_DIR if any version in config.json defines repo_path.
+HAS_REPO_PATH=$(jq -r 'any(.versions[]; (.repo_path // "") != "")' config.json);
+
+if [[ -n "${DOCS_CONTENT_DIR:-}" && "${HAS_REPO_PATH}" != "true" ]]; then
   if [[ ! -d "${DOCS_CONTENT_DIR}" ]]; then
     echo "DOCS_CONTENT_DIR is set to '${DOCS_CONTENT_DIR}', but that directory does not exist.";
     exit 1;
