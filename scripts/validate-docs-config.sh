@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Make sure the repo_path override is unset
-if [ $(jq -r '.versions | any(.repo_name)' config.json) = 'true' ]; then
-  echo "config.json must not include a repo_name override in production.";
+if [ $(jq -r '.versions | any(.repo_path)' config.json) = 'true' ]; then
+  echo "config.json must not include a repo_path override in production.";
   exit 1
 fi
 
