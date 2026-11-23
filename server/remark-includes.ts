@@ -265,6 +265,17 @@ const isInclude = (node: Node) => {
   return typeof valNode.value === "string" && includeRegexp.test(valNode.value);
 };
 
+// Original markdown for a node. Offsets point at vfile.value, which still
+// has the http(s) URL as text even after GFM has turned it into a link.
+const nodeSource = (node: Node, file: VFile): string | undefined => {
+  const start = node.position?.start.offset;
+  const end = node.position?.end.offset;
+  if (start == null || end == null || typeof file.value !== "string") {
+    return undefined;
+  }
+  return file.value.slice(start, end);
+};
+
 type UpdatePathsOptions = {
   node: Node;
   versionRootDir: string;
@@ -342,6 +353,25 @@ export default function remarkIncludes({
     }
 
     const lastErrorIndex = vfile.messages.length;
+
+    // An include that is the only thing on the line must stay one text node.
+    // remark-gfm splits http:// and https:// parameter values into link nodes,
+    // and the include is then skipped (#46).
+    visit(root, "paragraph", (node: Node) => {
+      const paragraph = node as Parent;
+      if (!paragraph.children || paragraph.children.length <= 1) {
+        return;
+      }
+      const raw = nodeSource(paragraph, vfile);
+      if (raw == null) {
+        return;
+      }
+      const trimmed = raw.trim();
+      if (!exactIncludeRegexp.test(trimmed)) {
+        return;
+      }
+      paragraph.children = [{ type: "text", value: trimmed } as Text];
+    });
 
     visitParents(root, isInclude, (node: Node, ancestors: Parent[]) => {
       if (node.type === "code") {

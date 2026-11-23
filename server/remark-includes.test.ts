@@ -432,6 +432,20 @@ This is a partial.
     expect(result).toEqual(expected);
   });
 
+  test("Resolves an include when a parameter value is an https URL", () => {
+    const actual = transformer({
+      value: `(!url-value.mdx databaseAddress="https://abc12345.snowflakecomputing.com"!)
+`,
+      path: "server/fixtures/includes/url-page.mdx",
+    }).toString();
+
+    // remark-gfm autolinks the substituted URL, so stringify emits a link.
+    expect(actual).toEqual(
+      `Address: [https://abc12345.snowflakecomputing.com](https://abc12345.snowflakecomputing.com)
+`,
+    );
+  });
+
   describe("Resolves relative links in partials based on the path of the partial", () => {
     const includingRelativeLink = `Here are instructions on installing the software:
 
