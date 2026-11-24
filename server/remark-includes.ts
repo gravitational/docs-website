@@ -41,6 +41,8 @@ interface ResolveIncludesProps {
   value: string;
   filePath: string;
   rootDir: string;
+  // Partials already being expanded. A partial that includes itself stops here.
+  stack?: string[];
 }
 
 export interface ParameterAssignments {
@@ -213,6 +215,7 @@ const resolveIncludes = ({
   value,
   filePath,
   rootDir,
+  stack = [],
 }: ResolveIncludesProps) => {
   let error: string | undefined;
 
@@ -223,6 +226,14 @@ const resolveIncludes = ({
   const result = value.replace(includeRegexp, (fullInclude, includeExpr) => {
     const includePath = includeExpr.split(" ")[0];
     const fullImportPath = join(rootDir, includePath);
+
+    // The included file is read as text and parsed once. An include inside that
+    // text is expanded here. Otherwise the first block of the parsed partial is
+    // never visited, so a partial that starts with another partial stays literal.
+    if (stack.includes(fullImportPath)) {
+      error = `Circular include ${includePath} in file ${filePath}.`;
+      return `(!${includePath}!)`;
+    }
 
     if (existsSync(fullImportPath)) {
       let content = readFileSync(fullImportPath, "utf-8");
@@ -247,7 +258,16 @@ const resolveIncludes = ({
         content = content.replace(varRegexp, finalVal);
       }
 
-      return content;
+      const nested = resolveIncludes({
+        value: content,
+        filePath: fullImportPath,
+        rootDir,
+        stack: [...stack, fullImportPath],
+      });
+      if (nested.error) {
+        error = nested.error;
+      }
+      return nested.result;
     } else {
       error = `Wrong import path ${includePath} in file ${filePath}.`;
 
