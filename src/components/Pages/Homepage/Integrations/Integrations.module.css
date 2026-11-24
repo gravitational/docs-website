@@ -386,6 +386,7 @@
     }
 
     &:focus {
+      color: var(--color-black);
       border-color: var(--color-dark-purple);
       box-shadow: 0 5px 25px 0 rgba(81, 47, 201, 0.2);
       background-color: var(--color-background-depth-2);
