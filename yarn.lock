@@ -17272,10 +17272,10 @@ toidentifier@1.0.1, toidentifier@~1.0.1:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.1.tgz#3be34321a88a820ed1bd80dfaa33e479fbb8dd35"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
 
-tokenx@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/tokenx/-/tokenx-2.2.1.tgz#d63403ff9b6d9bb9f6de7185f3c6a768f771190a"
-  integrity sha512-SUJNDK3y8yv9R3eHgo1HmtfOq1hUFNac3syYwtJ8xKbzKsc1Mbr54fduWceYWFsBIRwTG26GuL7N1AkyomONwg==
+tokenx@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/tokenx/-/tokenx-2.2.0.tgz#6bec7fdfcf32a61900220badd741049e7f826994"
+  integrity sha512-VdOqWPybBSlPVATvuxkoa8XfrYOPmOUkpp1xesb0LZjmUBmXDVND2lPlm4tiEc5MHP1OlswxCY4s2KXkc5p3JA==
 
 totalist@^3.0.0:
   version "3.0.1"
