@@ -224,12 +224,17 @@ export const updatePathsInIncludesTests = ({
     ) {
       return href;
     }
+    // A leading slash means "from the version root", which is how path.join
+    // loads the partial. path.resolve would treat that slash as the filesystem
+    // root and walk the link out of the repo (#72).
+    const partialDir = dirname(includePath.replace(/^\/+/, ""));
+
     if (node.type === "link") {
       // We find the relative link from the directory containing the partial to
       // the path of the link target.
       const absMdxPath = dirname(vfile.path);
 
-      const absTargetPath = resolve(versionRootDir, dirname(includePath), href);
+      const absTargetPath = resolve(versionRootDir, partialDir, href);
 
       (node as Link | Image | Definition).url = relative(
         absMdxPath,
@@ -238,7 +243,7 @@ export const updatePathsInIncludesTests = ({
     } else {
       const absMdxPath = resolve(vfile.path);
 
-      const absTargetPath = resolve(versionRootDir, dirname(includePath), href);
+      const absTargetPath = resolve(versionRootDir, partialDir, href);
 
       (node as Link | Image | Definition).url = relative(
         dirname(absMdxPath),
