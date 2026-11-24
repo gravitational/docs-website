@@ -120,6 +120,33 @@ describe("server/remark-includes", () => {
     });
   });
 
+  test("Lifts a page details summary that shares its paragraph with the following text", () => {
+    const result = transformerAsJSON({
+      value: `<details>
+<summary>Under the hood: Lock resource and expiration</summary>
+Note that without specifying ttl the lock remains.
+</details>
+`,
+      path: "/content/4.0/docs/pages/filename.mdx",
+    });
+    const tree = JSON.parse(result);
+    const details = tree.children.find(
+      (child: { name?: string }) => child.name === "details",
+    );
+    expect(details.children[0].name).toBe("summary");
+    const paragraph = details.children.find(
+      (child: { type?: string }) => child.type === "paragraph",
+    );
+    const paragraphHasSummary = paragraph.children.some(
+      (child: { name?: string }) => child.name === "summary",
+    );
+    expect(paragraphHasSummary).toBe(false);
+    const text = paragraph.children
+      .map((child: { value?: string }) => child.value ?? "")
+      .join("");
+    expect(text).toContain("Note that without specifying ttl the lock remains.");
+  });
+
   test("Leave includes in place on { resolve: false }", () => {
     const value = readFileSync(
       resolve("server/fixtures/includes-source.mdx"),

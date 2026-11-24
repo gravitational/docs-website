@@ -440,6 +440,11 @@ export default function remarkIncludes({
       }
     });
 
+    // Page-level <details> are not partials. Without a blank line, remark-mdx
+    // keeps <summary> and the following paragraph in one <p>, so MDXDetails
+    // never sees a direct summary child and renders the fallback "Details".
+    visit(root as unknown as Node, elevateSummary as Visitor);
+
     updateMessages({
       vfile,
       startIndex: lastErrorIndex,
