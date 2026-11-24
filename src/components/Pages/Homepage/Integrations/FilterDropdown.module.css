@@ -97,10 +97,11 @@
   cursor: pointer;
 
   &.active {
-    background-color: var(--color-tonal-neutral-0);
+    background-color: var(--color-background-depth-4);
   }
 
   &.selected {
     font-weight: var(--fw-bold);
+    background-color: var(--color-background-depth-2);
   }
 }
