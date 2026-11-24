@@ -13,6 +13,7 @@ type YouTubeEmbedProps = {
   className?: string;
   // Jumps the video to `time` seconds whenever a new object is passed.
   seek?: { time: number };
+  playButtonSize?: "md" | "lg";
 };
 
 // Sends a command over the same postMessage channel the YouTube IFrame API
@@ -33,6 +34,7 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
   fetchPriority,
   className,
   seek,
+  playButtonSize = "lg",
 }) => {
   const [videoActive, setVideoActive] = useState<boolean>(false);
   // Set only when the player first loads, so later seeks don't change the
@@ -100,8 +102,12 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
           fetchPriority={fetchPriority}
         />
       </picture>
-      <div className={styles.playButton}>
-        <Icon name="play2" size="lg" />
+      <div
+        className={cn(styles.playButton, {
+          [styles.mediumButton]: playButtonSize === "md",
+        })}
+      >
+        <Icon name="play2" size={playButtonSize} />
       </div>
     </div>
   );
