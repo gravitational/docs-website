@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { userEvent, within, expect, waitFor } from "storybook/test";
-import type { ComponentProps } from "react";
 import Integrations from "./Integrations";
 import snowflakeSvg from "@site/src/components/Icon/teleport-svg/snowflake.svg";
 
@@ -17,9 +16,10 @@ const integrations = [
   { tags: ["ci-cd"], title: "Ansible", href: "#ansible" },
   { tags: ["ci-cd"], title: "Argo CD", href: "#argo-cd" },
   { tags: ["ci-cd"], title: "GitHub Actions", href: "#github-actions" },
+  // Shown under "Other": no tags, and a tag that matches none of the filters
+  { title: "Untagged", href: "#untagged" },
+  { tags: ["unknown"], title: "Unknown tag", href: "#unknown-tag" },
 ].map((integration) => ({ ...integration, iconComponent: snowflakeSvg }));
-
-type IntegrationsProps = ComponentProps<typeof Integrations>;
 
 const meta: Meta<typeof Integrations> = {
   title: "components/Integrations",
@@ -29,7 +29,7 @@ const meta: Meta<typeof Integrations> = {
     layout: "row-condensed",
     noBackgroundColor: true,
     desktopColumnsCount: 3,
-    integrations: integrations as IntegrationsProps["integrations"],
+    integrations,
   },
 };
 
@@ -45,59 +45,103 @@ export const WithSearchAndFilters: Story = {
   },
 };
 
-const groupHeadings = (canvas: ReturnType<typeof within>) =>
-  canvas
-    .queryAllByRole("heading", { level: 3 })
-    .map((h: HTMLElement) => h.textContent);
+const filterButton = (canvas: ReturnType<typeof within>) =>
+  canvas.getByRole("button", { name: /Filter integrations by category/ });
 
-// Integrations are grouped by filter, and empty groups are not shown.
-// Selecting a filter only shows the matching group.
-
-export const SelectingAFilterShowsOnlyThatGroup: Story = {
+// The dropdown lists the categories with their number of integrations, and
+// selecting one shows only the integrations tagged with it.
+export const SelectingAFilter: Story = {
   args: WithSearchAndFilters.args,
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    await step("All non-empty groups are shown initially", async () => {
-      expect(groupHeadings(canvas)).toEqual(
-        expect.arrayContaining(["Users & Login", "CI/CD & Automation"]),
-      );
-      expect(groupHeadings(canvas)).not.toContain("Observability");
-      expect(canvas.getAllByText("3 integrations")).toHaveLength(2);
-    });
-
-    await step("Selecting a filter shows only that group", async () => {
-      await userEvent.selectOptions(
-        canvas.getByLabelText("Filter integrations by category"),
-        "ci-cd",
-      );
-      expect(
-        canvas.queryByRole("heading", {
-          name: "Users & Login",
-        }),
-      ).toBeNull();
-      expect(
-        canvas.queryByRole("heading", {
-          name: "CI/CD & Automation",
-        }),
-      ).toBeVisible();
+    await step("All integrations are shown initially", async () => {
+      expect(filterButton(canvas)).toHaveTextContent("All");
+      expect(canvas.getByText("AWS CLI")).toBeVisible();
       expect(canvas.getByText("Ansible")).toBeVisible();
     });
 
-    await step("Selecting an empty filter shows the empty state", async () => {
-      await userEvent.selectOptions(
-        canvas.getByLabelText("Filter integrations by category"),
-        "observability",
+    await step("Opening the dropdown lists the categories", async () => {
+      await userEvent.click(filterButton(canvas));
+      const options = canvas
+        .getAllByRole("option")
+        .map((option: HTMLElement) => option.textContent);
+      // Categories without integrations are not listed, and integrations
+      // outside the categories are listed under "Other"
+      expect(options).toEqual([
+        "All",
+        "Users & Login (3)",
+        "CI/CD & Automation (3)",
+        "Other (2)",
+      ]);
+    });
+
+    await step("Selecting a category filters the integrations", async () => {
+      await userEvent.click(
+        canvas.getByRole("option", { name: "CI/CD & Automation (3)" }),
       );
-      expect(canvas.getByRole("status")).toHaveTextContent(
-        "No integrations found.",
-      );
+      expect(canvas.queryByRole("listbox")).toBeNull();
+      expect(filterButton(canvas)).toHaveTextContent("CI/CD & Automation (3)");
+      expect(canvas.queryByText("AWS CLI")).toBeNull();
+      expect(canvas.getByText("Ansible")).toBeVisible();
+    });
+
+    await step("The search applies within the selected category", async () => {
+      await userEvent.type(canvas.getByLabelText("Search integrations"), "aws");
+      await waitFor(() => {
+        expect(canvas.getByRole("status")).toHaveTextContent(
+          "No integrations found for “aws”.",
+        );
+      });
+      // The selected category stays selected, with its count updated
+      expect(filterButton(canvas)).toHaveTextContent("CI/CD & Automation (0)");
+    });
+
+    await step(
+      "Selecting other shows the uncategorized integrations",
+      async () => {
+        await userEvent.clear(canvas.getByLabelText("Search integrations"));
+        await userEvent.click(filterButton(canvas));
+        await userEvent.click(
+          canvas.getByRole("option", { name: "Other (2)" }),
+        );
+        expect(canvas.getByText("Untagged")).toBeVisible();
+        expect(canvas.getByText("Unknown tag")).toBeVisible();
+        expect(canvas.queryByText("Ansible")).toBeNull();
+      },
+    );
+  },
+};
+
+// The dropdown can be operated with the keyboard.
+export const SelectingAFilterWithKeyboard: Story = {
+  args: WithSearchAndFilters.args,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step("Arrow keys open the list and move the selection", async () => {
+      filterButton(canvas).focus();
+      await userEvent.keyboard("{ArrowDown}");
+      expect(canvas.getByRole("listbox")).toHaveFocus();
+      await userEvent.keyboard("{ArrowDown}");
+      await userEvent.keyboard("{Enter}");
+      expect(canvas.queryByRole("listbox")).toBeNull();
+      expect(filterButton(canvas)).toHaveFocus();
+      expect(filterButton(canvas)).toHaveTextContent("Users & Login (3)");
+      expect(canvas.queryByText("Ansible")).toBeNull();
+    });
+
+    await step("Escape closes the list without changing it", async () => {
+      await userEvent.keyboard("{ArrowDown}");
+      await userEvent.keyboard("{End}");
+      await userEvent.keyboard("{Escape}");
+      expect(canvas.queryByRole("listbox")).toBeNull();
+      expect(filterButton(canvas)).toHaveTextContent("Users & Login (3)");
     });
   },
 };
 
-// Searching narrows down the integrations within each group, and clearing
-// the search restores them.
+// Searching narrows down the integrations, and clearing the search restores them.
 export const SearchingFiltersIntegrations: Story = {
   args: WithSearchAndFilters.args,
   play: async ({ canvasElement, step }) => {
@@ -113,6 +157,21 @@ export const SearchingFiltersIntegrations: Story = {
       });
       expect(canvas.getByText("GitHub")).toBeVisible();
       expect(canvas.getByText("GitHub Actions")).toBeVisible();
+    });
+
+    await step("The category counts reflect the search", async () => {
+      await userEvent.click(filterButton(canvas));
+      expect(
+        canvas
+          .getAllByRole("option")
+          .map((option: HTMLElement) => option.textContent),
+      ).toEqual([
+        "All",
+        "Users & Login (1)",
+        "CI/CD & Automation (1)",
+        "Other (0)",
+      ]);
+      await userEvent.keyboard("{Escape}");
     });
 
     await step("A query without matches shows the empty state", async () => {

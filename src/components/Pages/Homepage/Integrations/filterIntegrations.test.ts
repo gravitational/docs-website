@@ -1,9 +1,11 @@
 import { describe, expect, test } from "@jest/globals";
 import {
   ALL_FILTER_ID,
-  groupIntegrations,
+  OTHER_FILTER_ID,
+  countIntegrationsByFilter,
+  filterIntegrations,
+  matchesFilter,
   matchesQuery,
-  searchIntegrations,
 } from "./filterIntegrations";
 
 const filters = [
@@ -21,7 +23,10 @@ const integrations = [
   },
   { title: "Amazon RDS", tags: ["databases", "users-login"] },
   { title: "Untagged" },
+  { title: "Typo", tags: ["database"] },
 ];
+
+const titles = (items: { title: string }[]) => items.map((i) => i.title);
 
 describe("matchesQuery", () => {
   test.each([
@@ -39,46 +44,103 @@ describe("matchesQuery", () => {
   });
 });
 
-describe("searchIntegrations", () => {
-  test("returns all integrations for an empty query", () => {
-    expect(searchIntegrations(integrations, "")).toEqual(integrations);
+describe("matchesFilter", () => {
+  test("every integration matches the all filter", () => {
+    expect(
+      integrations.every((i) => matchesFilter(i, ALL_FILTER_ID, filters)),
+    ).toBe(true);
   });
 
-  test("returns only the matching integrations", () => {
-    expect(searchIntegrations(integrations, "sql").map((i) => i.title)).toEqual(
-      ["PostgreSQL"],
-    );
+  test("matches integrations tagged with the filter", () => {
+    expect(matchesFilter(integrations[2], "users-login", filters)).toBe(true);
+    expect(matchesFilter(integrations[1], "users-login", filters)).toBe(false);
+    expect(matchesFilter(integrations[3], "users-login", filters)).toBe(false);
+  });
+
+  test("the other filter matches integrations outside the filters", () => {
+    expect(
+      integrations
+        .filter((i) => matchesFilter(i, OTHER_FILTER_ID, filters))
+        .map((i) => i.title),
+    ).toEqual(["Untagged", "Typo"]);
   });
 });
 
-describe("groupIntegrations", () => {
-  test("groups by filter order and omits empty groups", () => {
-    const groups = groupIntegrations(integrations, filters, ALL_FILTER_ID);
-    expect(
-      groups.map((g) => [g.id, g.integrations.map((i) => i.title)]),
-    ).toEqual([
-      ["users-login", ["GitHub", "Amazon RDS"]],
-      ["databases", ["PostgreSQL", "Amazon RDS"]],
-    ]);
+describe("filterIntegrations", () => {
+  test("returns all integrations by default", () => {
+    expect(filterIntegrations(integrations, {})).toEqual(integrations);
   });
 
-  test("defaults to all filters", () => {
-    expect(groupIntegrations(integrations, filters)).toHaveLength(2);
-  });
-
-  test("returns only the selected group", () => {
-    const groups = groupIntegrations(integrations, filters, "databases");
-    expect(groups).toHaveLength(1);
-    expect(groups[0].name).toBe("Databases");
-    expect(groups[0].integrations.map((i) => i.title)).toEqual([
+  test("filters by search query", () => {
+    expect(titles(filterIntegrations(integrations, { query: "sql" }))).toEqual([
       "PostgreSQL",
-      "Amazon RDS",
     ]);
   });
 
-  test("returns nothing when the selected group has no integrations", () => {
-    expect(groupIntegrations(integrations, filters, "observability")).toEqual(
-      [],
-    );
+  test("filters by tag, keeping the original order", () => {
+    expect(
+      titles(
+        filterIntegrations(integrations, { filterId: "databases", filters }),
+      ),
+    ).toEqual(["PostgreSQL", "Amazon RDS"]);
+  });
+
+  test("combines the filter and the search query", () => {
+    expect(
+      titles(
+        filterIntegrations(integrations, {
+          filterId: "users-login",
+          query: "amazon",
+          filters,
+        }),
+      ),
+    ).toEqual(["Amazon RDS"]);
+  });
+
+  test("filters by the other filter", () => {
+    expect(
+      titles(
+        filterIntegrations(integrations, {
+          filterId: OTHER_FILTER_ID,
+          filters,
+        }),
+      ),
+    ).toEqual(["Untagged", "Typo"]);
+  });
+
+  test("returns nothing for a filter without integrations", () => {
+    expect(
+      filterIntegrations(integrations, { filterId: "observability", filters }),
+    ).toEqual([]);
+  });
+});
+
+describe("countIntegrationsByFilter", () => {
+  test("counts integrations per filter, adds other and omits empty filters", () => {
+    expect(countIntegrationsByFilter(integrations, filters)).toEqual([
+      { name: "Users & Login", id: "users-login", count: 2 },
+      { name: "Databases", id: "databases", count: 2 },
+      { name: "Other", id: OTHER_FILTER_ID, count: 2 },
+    ]);
+  });
+
+  test("counts only integrations matching the search query", () => {
+    expect(countIntegrationsByFilter(integrations, filters, "amazon")).toEqual([
+      { name: "Users & Login", id: "users-login", count: 1 },
+      { name: "Databases", id: "databases", count: 1 },
+      { name: "Other", id: OTHER_FILTER_ID, count: 0 },
+    ]);
+  });
+
+  test("omits other when every integration belongs to a filter", () => {
+    expect(
+      countIntegrationsByFilter(integrations.slice(0, 3), filters).map(
+        (f) => f.id,
+      ),
+    ).toEqual(["users-login", "databases"]);
+  });
+
+  test("returns nothing without filters", () => {
+    expect(countIntegrationsByFilter(integrations, [])).toEqual([]);
   });
 });

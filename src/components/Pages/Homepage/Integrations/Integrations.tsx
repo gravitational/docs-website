@@ -5,10 +5,11 @@ import ArrowRightSvg from "@site/src/components/Icon/teleport-svg/arrow-circle-r
 import Link from "@docusaurus/Link";
 import Icon from "@site/src/components/Icon";
 import SearchInput from "@site/src/components/SearchInput";
+import FilterDropdown from "./FilterDropdown";
 import {
   ALL_FILTER_ID,
-  groupIntegrations,
-  searchIntegrations,
+  countIntegrationsByFilter,
+  filterIntegrations,
   type IntegrationFilter,
 } from "./filterIntegrations";
 
@@ -40,7 +41,9 @@ interface IntegrationsProps {
   narrowPadding?: boolean;
   // Display a search input that filters integrations by title and description
   enableSearch?: boolean;
-  // Groups integrations into categories based on their tags and shows a dropdown for selecting a category.
+  // Categories shown in a dropdown, along with the number of integrations
+  // in each. Selecting one shows only the integrations tagged with its id.
+  // Integrations without a matching tag are listed under "Other".
   filters: IntegrationFilter[];
 }
 
@@ -136,43 +139,34 @@ const Integrations: React.FC<IntegrationsProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilterId, setSelectedFilterId] = useState(ALL_FILTER_ID);
-  const hasFilters = filters.length > 0;
 
-  const matchingIntegrations = useMemo(
-    () => searchIntegrations(integrations, searchQuery),
-    [integrations, searchQuery],
+  // "All" followed by each category with its number of integrations matching
+  // the search, and "Other" for integrations outside the categories.
+  // Categories without any integrations are left out.
+  const filterOptions = useMemo(
+    () => [
+      { value: ALL_FILTER_ID, label: "All" },
+      ...countIntegrationsByFilter(integrations, filters, searchQuery).map(
+        (filter) => ({
+          value: filter.id,
+          label: `${filter.name} (${filter.count})`,
+        }),
+      ),
+    ],
+    [integrations, filters, searchQuery],
   );
+  const hasFilters = filterOptions.length > 1;
 
-  const groups = useMemo(
+  const visibleIntegrations = useMemo(
     () =>
-      hasFilters
-        ? groupIntegrations(matchingIntegrations, filters, selectedFilterId)
-        : [],
-    [hasFilters, matchingIntegrations, filters, selectedFilterId],
+      filterIntegrations(integrations, {
+        query: searchQuery,
+        filterId: selectedFilterId,
+        filters,
+      }),
+    [integrations, searchQuery, selectedFilterId, filters],
   );
 
-  const hasResults = hasFilters
-    ? groups.length > 0
-    : matchingIntegrations.length > 0;
-
-  const renderGrid = (items: Integration[]) => (
-    <div
-      className={styles.grid}
-      style={
-        {
-          "--desktop-column-count": desktopColumnsCount,
-        } as React.CSSProperties
-      }
-    >
-      {items.map((integration) => (
-        <IntegrationCard
-          key={`${integration.title}-${integration.href ?? ""}`}
-          layout={layout}
-          {...integration}
-        />
-      ))}
-    </div>
-  );
   return (
     <section
       className={cn(styles.integrations, className, {
@@ -197,33 +191,21 @@ const Integrations: React.FC<IntegrationsProps> = ({
         {(enableSearch || hasFilters) && (
           <div className={styles.controls}>
             {hasFilters && (
-              <div className={styles.filter}>
-                <select
-                  className={styles.filterSelect}
-                  value={selectedFilterId}
-                  onChange={(e) => setSelectedFilterId(e.target.value)}
-                  aria-label="Filter integrations by category"
-                >
-                  <option value={ALL_FILTER_ID}>All</option>
-                  {filters.map((filter) => (
-                    <option key={filter.id} value={filter.id}>
-                      {filter.name}
-                    </option>
-                  ))}
-                </select>
-                <Icon
-                  name="caretUp"
-                  size="md"
-                  className={styles.filterCaret}
-                  aria-hidden="true"
-                />
-              </div>
+              <FilterDropdown
+                className={styles.filter}
+                triggerClassName={styles.filterTrigger}
+                options={filterOptions}
+                value={selectedFilterId}
+                onChange={setSelectedFilterId}
+                label="Filter integrations by category"
+              />
             )}
             {enableSearch && (
               <SearchInput
                 className={cn(styles.search, {
                   [styles.searchWithFilter]: hasFilters,
                 })}
+                inputClassName={styles.searchInput}
                 query={searchQuery}
                 onQueryChange={setSearchQuery}
                 placeholder="Search integrations"
@@ -233,7 +215,7 @@ const Integrations: React.FC<IntegrationsProps> = ({
             )}
           </div>
         )}
-        {!hasResults && (enableSearch || hasFilters) ? (
+        {visibleIntegrations.length === 0 && (enableSearch || hasFilters) ? (
           <p className={styles.noResults} role="status">
             {searchQuery.trim() ? (
               <>No integrations found for &ldquo;{searchQuery.trim()}&rdquo;.</>
@@ -241,23 +223,23 @@ const Integrations: React.FC<IntegrationsProps> = ({
               "No integrations found."
             )}
           </p>
-        ) : hasFilters ? (
-          groups.map((group) => (
-            <div key={group.id} className={styles.group}>
-              <div className={styles.groupHeader}>
-                <h3 className={styles.groupTitle}>{group.name}</h3>
-                <span className={styles.groupCount}>
-                  {group.integrations.length}{" "}
-                  {group.integrations.length === 1
-                    ? "integration"
-                    : "integrations"}
-                </span>
-              </div>
-              {renderGrid(group.integrations)}
-            </div>
-          ))
         ) : (
-          renderGrid(matchingIntegrations)
+          <div
+            className={styles.grid}
+            style={
+              {
+                "--desktop-column-count": desktopColumnsCount,
+              } as React.CSSProperties
+            }
+          >
+            {visibleIntegrations.map((integration) => (
+              <IntegrationCard
+                key={`${integration.title}-${integration.href ?? ""}`}
+                layout={layout}
+                {...integration}
+              />
+            ))}
+          </div>
         )}
         {additionalLinks && (
           <div className={styles.additionalLinks}>
