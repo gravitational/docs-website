@@ -34,6 +34,7 @@ import ThumbsFeedback from "@site/src/components/ThumbsFeedback/ThumbsFeedback";
 import { SkillInfo } from "@site/scripts/prepare-files.mjs";
 import skills from "@site/data/skills.json";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import { useFilteredAndTreeifiedTOC } from "@docusaurus/theme-common/internal";
 
 interface ExtendedFrontMatter {
   remove_table_of_contents?: boolean;
@@ -46,12 +47,21 @@ interface ExtendedFrontMatter {
 function useDocTOC(removeTOCSidebar: boolean) {
   const { frontMatter, toc } = useDoc();
   const windowSize = useWindowSize();
+  const tocTree = useFilteredAndTreeifiedTOC({
+    toc,
+    minHeadingLevel: frontMatter.toc_min_heading_level || 2,
+    maxHeadingLevel: frontMatter.toc_max_heading_level || 3,
+  });
 
   const hidden = frontMatter.hide_table_of_contents;
   const removed =
     (frontMatter as ExtendedFrontMatter).remove_table_of_contents ||
     removeTOCSidebar;
-  const canRender = !hidden && !removed && toc.length > 0;
+  const canRender =
+    !hidden &&
+    !removed &&
+    (tocTree.length > 1 ||
+      (tocTree.length === 1 && tocTree[0].children.length > 0));
 
   const mobile = canRender ? <DocItemTOCMobile /> : undefined;
 
