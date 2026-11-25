@@ -4,13 +4,13 @@
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    flex-direction: row-reverse;
+    justify-content: flex-start;
+    flex-direction: row;
     gap: 6px;
-    padding-right: 0;
 
     &::before {
       content: var(--tag-content);
+      order: 1;
       display: flex;
       padding: var(--m-0-5) var(--m-1-5);
       align-items: center;
@@ -21,6 +21,12 @@
       border-radius: 37px;
       background: linear-gradient(90deg, #03806e 0%, #00a28b 100%);
       transform: none !important;
+    }
+
+    /* The caret is ::after. Keep it at the trailing edge, same as untagged rows. */
+    &::after {
+      order: 2;
+      margin-left: auto;
     }
   }
 }
