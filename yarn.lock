@@ -10103,10 +10103,10 @@ hast-util-to-estree@^3.0.0:
     unist-util-position "^5.0.0"
     zwitch "^2.0.0"
 
-hast-util-to-html@^9.0.0, hast-util-to-html@^9.0.5, hast-util-to-html@^9.0.6:
-  version "9.0.6"
-  resolved "https://registry.yarnpkg.com/hast-util-to-html/-/hast-util-to-html-9.0.6.tgz#249d71c9d2549b4c4953230e9327e5e6d6a22025"
-  integrity sha512-1SZUxCN3TtJAE7e2BQN2MBHsoZ1gnmi9GoCP5Di59CSWptIezSAW09yDZyVbanb78V9eCwrKqdQsjtfVTxYHWA==
+hast-util-to-html@^9.0.0, hast-util-to-html@^9.0.5, hast-util-to-html@^9.0.7:
+  version "9.0.7"
+  resolved "https://registry.yarnpkg.com/hast-util-to-html/-/hast-util-to-html-9.0.7.tgz#c57ebbf2ccd2cf8f441f59fc4f0c9ec7376d4f03"
+  integrity sha512-HYNDA3qdnzUPitY/LcQm1nWs8z0cWFNH1Nz09jdI/tXifAqF7h3+jrLl4S/b9Mi4VSjn0Dsn54ctuTV6zhBthA==
   dependencies:
     "@types/hast" "^3.0.0"
     "@types/unist" "^3.0.0"
@@ -17277,10 +17277,10 @@ toidentifier@1.0.1, toidentifier@~1.0.1:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.1.tgz#3be34321a88a820ed1bd80dfaa33e479fbb8dd35"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
 
-tokenx@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/tokenx/-/tokenx-2.2.0.tgz#6bec7fdfcf32a61900220badd741049e7f826994"
-  integrity sha512-VdOqWPybBSlPVATvuxkoa8XfrYOPmOUkpp1xesb0LZjmUBmXDVND2lPlm4tiEc5MHP1OlswxCY4s2KXkc5p3JA==
+tokenx@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/tokenx/-/tokenx-2.2.1.tgz#d63403ff9b6d9bb9f6de7185f3c6a768f771190a"
+  integrity sha512-SUJNDK3y8yv9R3eHgo1HmtfOq1hUFNac3syYwtJ8xKbzKsc1Mbr54fduWceYWFsBIRwTG26GuL7N1AkyomONwg==
 
 totalist@^3.0.0:
   version "3.0.1"
