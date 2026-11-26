@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./Integrations.module.css";
 import cn from "classnames";
 import ArrowRightSvg from "@site/src/components/Icon/teleport-svg/arrow-circle-right.svg";
 import Link from "@docusaurus/Link";
+import Icon from "@site/src/components/Icon";
+import SearchInput from "@site/src/components/SearchInput";
+import FilterDropdown from "./FilterDropdown";
+import {
+  ALL_FILTER_ID,
+  countIntegrationsByFilter,
+  filterIntegrations,
+  type IntegrationFilter,
+} from "./filterIntegrations";
 
 interface Integration {
   title: string;
@@ -10,7 +19,8 @@ interface Integration {
   href?: string;
   iconColor?: string;
   iconComponent: any;
-  layout: Pick<IntegrationsProps, "layout">;
+  // Ids of the filters this integration belongs to
+  tags?: string[];
 }
 
 interface AdditionalLinks {
@@ -29,9 +39,19 @@ interface IntegrationsProps {
   desktopColumnsCount?: number;
   noBackgroundColor?: boolean;
   narrowPadding?: boolean;
+  // Display a search input that filters integrations by title and description
+  enableSearch?: boolean;
+  // Categories shown in a dropdown, along with the number of integrations
+  // in each. Selecting one shows only the integrations tagged with its id.
+  // Integrations without a matching tag are listed under "Other".
+  filters: IntegrationFilter[];
 }
 
-const IntegrationCard: React.FC<Integration> = ({
+interface IntegrationCardProps extends Integration {
+  layout?: IntegrationsProps["layout"];
+}
+
+const IntegrationCard: React.FC<IntegrationCardProps> = ({
   title,
   description,
   href,
@@ -114,7 +134,39 @@ const Integrations: React.FC<IntegrationsProps> = ({
   desktopColumnsCount = 5,
   noBackgroundColor = false,
   narrowPadding = false,
+  enableSearch = false,
+  filters = [],
 }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilterId, setSelectedFilterId] = useState(ALL_FILTER_ID);
+
+  // "All" followed by each category with its number of integrations matching
+  // the search, and "Other" for integrations outside the categories.
+  // Categories without any integrations are left out.
+  const filterOptions = useMemo(
+    () => [
+      { value: ALL_FILTER_ID, label: "All" },
+      ...countIntegrationsByFilter(integrations, filters, searchQuery).map(
+        (filter) => ({
+          value: filter.id,
+          label: `${filter.name} (${filter.count})`,
+        }),
+      ),
+    ],
+    [integrations, filters, searchQuery],
+  );
+  const hasFilters = filterOptions.length > 1;
+
+  const visibleIntegrations = useMemo(
+    () =>
+      filterIntegrations(integrations, {
+        query: searchQuery,
+        filterId: selectedFilterId,
+        filters,
+      }),
+    [integrations, searchQuery, selectedFilterId, filters],
+  );
+
   return (
     <section
       className={cn(styles.integrations, className, {
@@ -136,18 +188,59 @@ const Integrations: React.FC<IntegrationsProps> = ({
             </Link>
           )}
         </div>
-        <div
-          className={styles.grid}
-          style={
-            {
-              "--desktop-column-count": desktopColumnsCount,
-            } as React.CSSProperties
-          }
-        >
-          {integrations.map((integration, i) => (
-            <IntegrationCard key={i} layout={layout} {...integration} />
-          ))}
-        </div>
+        {(enableSearch || hasFilters) && (
+          <div className={styles.controls}>
+            {hasFilters && (
+              <FilterDropdown
+                className={styles.filter}
+                triggerClassName={styles.filterTrigger}
+                options={filterOptions}
+                value={selectedFilterId}
+                onChange={setSelectedFilterId}
+                label="Filter integrations by category"
+              />
+            )}
+            {enableSearch && (
+              <SearchInput
+                className={cn(styles.search, {
+                  [styles.searchWithFilter]: hasFilters,
+                })}
+                inputClassName={styles.searchInput}
+                query={searchQuery}
+                onQueryChange={setSearchQuery}
+                placeholder="Search integrations"
+                label="Search integrations"
+                clearButtonLabel="Clear integrations search"
+              />
+            )}
+          </div>
+        )}
+        {visibleIntegrations.length === 0 && (enableSearch || hasFilters) ? (
+          <p className={styles.noResults} role="status">
+            {searchQuery.trim() ? (
+              <>No integrations found for &ldquo;{searchQuery.trim()}&rdquo;.</>
+            ) : (
+              "No integrations found."
+            )}
+          </p>
+        ) : (
+          <div
+            className={styles.grid}
+            style={
+              {
+                "--desktop-column-count": desktopColumnsCount,
+              } as React.CSSProperties
+            }
+          >
+            {visibleIntegrations.map((integration) => (
+              <IntegrationCard
+                key={`${integration.title}-${integration.href ?? ""}`}
+                layout={layout}
+                {...integration}
+              />
+            ))}
+          </div>
+        )}
         {additionalLinks && (
           <div className={styles.additionalLinks}>
             {additionalLinks.title && (

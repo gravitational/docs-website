@@ -1,0 +1,107 @@
+.dropdown {
+  position: relative;
+  display: flex;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--m-1);
+  width: 100%;
+  padding: 11px var(--m-2);
+  border: 1px solid var(--color-tonal-neutral-1);
+  border-radius: var(--r-md);
+  background-color: var(--color-white);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--fs-text-lg);
+  font-weight: var(--fw-bold);
+  line-height: 1.625;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color var(--t-fast) ease,
+    box-shadow var(--t-fast) ease;
+
+  &:hover {
+    background-color: var(--color-background-depth-2);
+    box-shadow: 0 5px 30px 0 rgba(19, 19, 19, 0.15);
+  }
+}
+
+/* Lift the trigger above the adjacent search input so its focus border is fully visible */
+.trigger:focus-visible,
+.open .trigger {
+  position: relative;
+  z-index: 1;
+  border-color: var(--color-dark-purple);
+  box-shadow: 0 5px 25px 0 rgba(81, 47, 201, 0.2);
+  background-color: var(--color-background-depth-2);
+}
+
+.triggerLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.caret {
+  flex-shrink: 0;
+  transform: rotate(180deg);
+
+  path {
+    fill: var(--color-foreground-slightly-muted);
+  }
+}
+
+.dropdown .menu {
+  position: absolute;
+  top: calc(100% + var(--m-0-5));
+  left: 0;
+  z-index: 10;
+  width: max-content;
+  min-width: 100%;
+  max-width: calc(100vw - 2 * var(--m-2));
+  max-height: min(60vh, 540px);
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: var(--color-white);
+  border-radius: var(--m-0-5);
+  box-shadow: var(--shadow-8);
+  outline: none;
+}
+
+.menu .option {
+  margin: 0;
+  padding: var(--m-1-5) var(--m-2);
+  color: var(--color-text);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-text-md);
+  line-height: 1.5;
+  cursor: pointer;
+
+  &.active {
+    background-color: var(--color-background-depth-4);
+  }
+
+  &.selected {
+    font-weight: var(--fw-bold);
+    background-color: var(--color-background-depth-2);
+  }
+}
