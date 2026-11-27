@@ -525,6 +525,18 @@ Here is an image showing a successful installation:
 [Successful installation](../installation.png)
 `,
       },
+      {
+        includingPage: `(!/include-relative-link.mdx!)`,
+        description:
+          "rooted partial path still rebases relative links onto the including page",
+        path: "server/fixtures/dir/dir2/below.mdx",
+        expected: `Check out our [instructions](../../installation.mdx).
+
+Here is an image showing a successful installation:
+
+[Successful installation](../../installation.png)
+`,
+      },
     ];
 
     test.each(testCases)("$description", (testCase) => {
