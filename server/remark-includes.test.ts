@@ -120,6 +120,28 @@ describe("server/remark-includes", () => {
     });
   });
 
+  test("resolves a partial that begins with another include", () => {
+    const result = transformer({
+      value: "(!starts-with-include.mdx!)\n",
+      path: "/content/4.0/docs/pages/filename.mdx",
+    }).toString();
+
+    expect(result).toContain("Lorem ipsum dolor sit amet");
+    expect(result).toContain("Tail after the nested include.");
+    expect(result).not.toMatch(/\(!/);
+  });
+
+  test("resolves a chain of partials that each begin with an include", () => {
+    const result = transformer({
+      value: "(!starts-with-include-chain.mdx!)\n",
+      path: "/content/4.0/docs/pages/filename.mdx",
+    }).toString();
+
+    expect(result).toContain("Lorem ipsum dolor sit amet");
+    expect(result).toContain("Tail after the nested include.");
+    expect(result).not.toMatch(/\(!/);
+  });
+
   test("Leave includes in place on { resolve: false }", () => {
     const value = readFileSync(
       resolve("server/fixtures/includes-source.mdx"),

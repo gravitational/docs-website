@@ -265,6 +265,19 @@ const isInclude = (node: Node) => {
   return typeof valNode.value === "string" && includeRegexp.test(valNode.value);
 };
 
+// Text of every include still in the tree. Used to tell a pass that resolved
+// something from one that only rewrote a partial into the same include.
+const includeSignature = (tree: Node): string => {
+  const parts: string[] = [];
+  visit(tree, (node: Node) => {
+    const value = (node as Text | Code).value;
+    if (typeof value === "string" && includeRegexp.test(value)) {
+      parts.push(value);
+    }
+  });
+  return parts.join("\0");
+};
+
 type UpdatePathsOptions = {
   node: Node;
   versionRootDir: string;
@@ -343,7 +356,58 @@ export default function remarkIncludes({
 
     const lastErrorIndex = vfile.messages.length;
 
+    // Splicing a partial replaces the include node while its parent is being
+    // walked, so the parent's index advances past the partial's first block.
+    // An include on that first line stays in the tree (#650, #44). Another
+    // pass starts at the root and resolves it. Stop when a pass changes
+    // nothing, and cap the repeats so a partial that includes itself cannot
+    // loop.
+    const maxPasses = 8;
+    const visited = new WeakSet<Node>();
+    let previous = includeSignature(root);
+    for (let pass = 0; pass < maxPasses; pass++) {
+      resolveIncludePass(
+        root,
+        vfile,
+        resolvedRootDir,
+        lint,
+        resolve,
+        updatePaths,
+        visited,
+      );
+      const next = includeSignature(root);
+      if (next === previous) {
+        break;
+      }
+      previous = next;
+    }
+
+    updateMessages({
+      vfile,
+      startIndex: lastErrorIndex,
+      ruleId: "includes",
+      source: "remark-lint",
+    });
+  };
+}
+
+function resolveIncludePass(
+  root: Root,
+  vfile: VFile,
+  resolvedRootDir: string,
+  lint: boolean | undefined,
+  resolve: boolean,
+  updatePaths: RemarkIncludesOptions["updatePaths"],
+  visited: WeakSet<Node>,
+) {
     visitParents(root, isInclude, (node: Node, ancestors: Parent[]) => {
+      // A later pass must not lint the same node again. Nodes spliced in
+      // from a partial are new, so an include on the first line is still seen.
+      if (visited.has(node)) {
+        return;
+      }
+      visited.add(node);
+
       if (node.type === "code") {
         let code = node as Code;
         const noIncludes = numIncludes(code.value);
@@ -439,12 +503,4 @@ export default function remarkIncludes({
         vfile.message("Includes only work in paragraphs and code blocks", node);
       }
     });
-
-    updateMessages({
-      vfile,
-      startIndex: lastErrorIndex,
-      ruleId: "includes",
-      source: "remark-lint",
-    });
-  };
 }
